@@ -1,0 +1,295 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 在 Azure 虚拟机中创建和配置 SQL Server 2012 数据库</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-DeployingSQLServer" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-DeployingSQLServer" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="Title"></a></p>
+
+<h1 id="Creating_and_configuring_SQL_Server_2012_Database_in_an_Azure_VM">在 Azure 虚拟机中创建和配置 SQL Server 2012 数据库</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>在此动手实验中，您将学习如何创建和配置 SQL Server 2012 数据库。</p>
+
+<p>首先，您将在 Windows Azure 门户中设置虚拟机，然后了解如何在 SQL Server 中应用配置。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ol>
+<li>使用 Windows Azure 门户创建虚拟机</li>
+<li>配置 SQL Server 2012 虚拟机</li>
+</ol>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li>启用了虚拟机预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>本实验设计为使用 Windows 7 操作系统。</p>
+</blockquote>
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#Exercise1">使用 Windows Azure 门户创建和配置带有 SQL Server 2012 的 Windows Server 虚拟机。</a></li>
+</ol>
+
+<p>完成此实验的估计时间：<strong>30 分钟</strong>。</p>
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Creating_and_configuring_Windows_Server_VM_with_SQL_Server_2012_using_the_Windows_Azure_portal">练习 1：使用 Windows Azure 门户创建和配置带有 SQL Server 2012 的 Windows Server 虚拟机。</h3>
+
+<p>现在您将创建 Windows Server 虚拟机并配置 SQL Server。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_the_VM_in_the_Windows_Azure_Portal">任务 1 - 在 Windows Azure 门户中创建虚拟机</h4>
+
+<ol>
+<li><p>使用 Web 浏览器导航到 <a href="http://manage.windowsazure.com/"><a href="http://manage.windowsazure.com/">http://manage.windowsazure.com/</a></a>，然后使用与您的 Windows Azure 帐户关联的 Microsoft 帐户进行登录。</p>
+
+<p><img src="images/sign-in.png?raw=true" alt="登录" title="登录" />
+</p>
+
+<p><em>登录</em></p></li>
+<li><p>单击位于页面底部的<strong>“新建”</strong>链接，选择<strong>“虚拟机”</strong>|<strong>“从库中”</strong>。</p>
+
+<p><img src="images/new-vm-from-gallery.png?raw=true" alt="从库中新建虚拟机" title="从库中新建虚拟机" />
+</p>
+
+<p><em>从库中新建虚拟机</em></p></li>
+<li><p>在<strong>“选择虚拟机操作系统”</strong>页中，单击<strong>“平台映像”</strong>并从操作系统的列表中选择 <strong>SQL Server 2012 Release Candidate</strong>。然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/vm-os-selection.png?raw=true" alt="选择虚拟机操作系统" title="选择虚拟机操作系统" />
+</p>
+
+<p><em>选择虚拟机操作系统</em></p></li>
+<li><p>在<strong>“虚拟机配置”</strong>页中，将虚拟机的名称设置为 <em>SqlServer2012VM</em>，填写<strong>“新密码”</strong>和<strong>“确认密码”</strong>字段，以便为虚拟机的管理员设置新密码。将<strong>“大小”</strong>设置为<em>“中”</em>，然后单击<strong>“下一步”</strong>按钮。</p>
+
+<p><img src="images/new-vm-configuration.png?raw=true" alt="新虚拟机配置" title="新虚拟机配置" />
+</p>
+
+<p><em>新虚拟机配置</em></p></li>
+<li><p>在<strong>“虚拟机模式”</strong>页中，将模式保留为<em>“独立虚拟机”</em>，将<strong>“DNS 名称”</strong>设置为 <em>SQLServerVM1</em> 并且设置所需的区域。然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/configuring-the-vm-mode.png?raw=true" alt="配置虚拟机模式" title="配置虚拟机模式" />
+</p>
+
+<p><em>配置虚拟机模式</em></p></li>
+<li><p>在<strong>“虚拟机选项”</strong>页中，保留默认值并单击<strong>“完成”</strong>完成操作。</p></li>
+<li><p>在<strong>“虚拟机”</strong>部分，可以看到您创建的虚拟机处于<em>“正在设置”</em>状态。等待其状态变为<em>“正在运行”</em>，以便继续下一个任务。</p>
+
+<p><img src="images/vm-provisioned.png?raw=true" alt="虚拟机已设置" title="虚拟机已设置" />
+</p>
+
+<p><em>虚拟机已设置</em></p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Configuring_Disks_for_SQL_Server">任务 2 - 为 SQL Server 配置磁盘</h4>
+
+<ol>
+<li><p>在 <strong>Windows Azure 门户</strong>中，单击您在任务 1 中创建的 <em>SQLServerVM1</em> 虚拟机<strong>名称</strong>以打开其面板。</p>
+
+<p><img src="images/opening-vm-dashboard.png?raw=true" alt="打开虚拟机面板" title="打开虚拟机面板" />
+</p>
+
+<p><em>打开虚拟机面板</em></p></li>
+<li><p>在底部菜单中，选择<strong>“附加”</strong>|<strong>“附加空磁盘”</strong>并选择 50 GB。</p>
+
+<p><img src="images/attachemptydisk.png?raw=true" alt="附加空磁盘" />
+</p>
+
+<p><em>附加磁盘</em></p></li>
+<li><p>在<strong>“将空磁盘附加到虚拟机”</strong>页中，将虚拟机<strong>“大小”</strong>设置为 <em>50 GB</em>，然后单击<strong>“完成”</strong>。</p>
+
+<p><img src="images/attach-empty-disk-to-virtual-machine.png?raw=true" alt="将空磁盘附加到虚拟机" title="将空磁盘附加到虚拟机" />
+</p>
+
+<p><em>将空磁盘附加到虚拟机</em></p></li>
+<li><p>等待磁盘完成设置，重复前面的步骤创建并附加第二个空磁盘。</p>
+
+<p><img src="images/two-empty-disks-attached.png?raw=true" alt="两个空磁盘已附加" title="两个空磁盘已附加" />
+</p>
+
+<p><em>两个空磁盘已附加</em></p></li>
+<li><p>现在应该有两个 50 GB 数据磁盘附加到您的虚拟机。</p>
+
+<p><img src="images/disks-section-in-dashboard.png?raw=true" alt="在面板中选择磁盘" title="在面板中选择磁盘" />
+</p>
+
+<p><em>在面板中选择磁盘</em></p></li>
+<li><p>在底部菜单中，单击<strong>“连接”</strong>，使用远程桌面 (RDP) 登录到虚拟机。使用管理员凭据登录。</p>
+
+<p><img src="images/connect-to-the-vm.png?raw=true" alt="连接到虚拟机" title="连接到虚拟机" />
+</p>
+
+<p><em>连接到虚拟机</em></p></li>
+<li><p>登录后，从<strong>“开始”</strong>|<strong>“管理工具”</strong>中启动<strong>“计算机管理”</strong>，然后在<strong>“存储”</strong>下单击<strong>“磁盘管理”</strong>。</p>
+
+<p><img src="images/rawdisks.png?raw=true" alt="原始磁盘" />
+</p></li>
+<li><p>右键单击每个磁盘（位于左侧），将其标记为<strong>联机</strong>。</p></li>
+<li><p>这些磁盘联机后，右键单击一个磁盘（左侧）并单击<strong>“初始化”</strong>。</p>
+
+<p><img src="images/initializedisk.png?raw=true" alt="初始化磁盘" />
+</p></li>
+<li><p>磁盘初始化后，右键单击右侧并选择<strong>“创建简单卷”</strong>（也支持软件 RAID，因此这些也是可用选项）。通过<strong>创建简单卷</strong>向导可以格式化磁盘，并且装载磁盘以备使用。</p>
+
+<p><img src="images/initializeddisks.png?raw=true" alt="初始化的磁盘" />
+</p></li>
+<li><p>配置数据库默认位置。为此，启动 <strong>SQL Server Management Studio</strong>。</p></li>
+<li><p>右键单击服务器名称并选择<strong>“属性”</strong>。然后选择<strong>“数据库设置”</strong>。</p></li>
+<li><p>为默认数据、日志和备份文件夹指定新数据磁盘，然后单击<strong>“确定”</strong>关闭。</p>
+
+<p><img src="images/dbsettings.png?raw=true" alt="数据库设置" />
+</p>
+
+<p><em>数据库设置</em></p></li>
+</ol>
+
+<p><a name="Ex1Task3"></a></p>
+
+<h4 id="Task_3_-_Updating_SQL_Server_Network_Configuration">任务 3 - 更新 SQL Server 网络配置</h4>
+
+<ol>
+<li><p>如果尚未连接，请连接到 <em>SQLServerVM</em> 虚拟机。为此，在 <strong>Windows Azure 门户</strong>中，打开 <em>SQLServerVM</em> 虚拟机的<strong>面板</strong>。</p>
+
+<p><img src="images/opening-vm-dashboard.png?raw=true" alt="打开虚拟机面板" title="打开虚拟机面板" />
+</p>
+
+<p><em>打开虚拟机面板</em></p></li>
+<li><p>然后，单击<strong>“连接”</strong>并使用远程桌面 (RDP) 登录到虚拟机。使用管理员凭据登录。</p>
+
+<p><img src="images/connect-to-the-vm.png?raw=true" alt="连接到虚拟机" title="连接到虚拟机" />
+</p>
+
+<p><em>连接到虚拟机</em></p></li>
+<li><p>在虚拟机中，从<strong>“开始”|“所有程序”|“Microsoft SQL Server 2012”|“配置工具”</strong>中打开<strong>“SQL Server 配置管理器”</strong>。</p></li>
+<li><p>展开<strong>“SQL Server 网络配置”</strong>节点并选择<strong>“MSSQLServer 的协议”</strong>（如果在安装 SQL Server 时使用了不同的实例名称，此选项可能有所不同）。确保启用了 <strong>Shared Memory</strong>、<strong>Named Pipes</strong> 和 <strong>TCP/IP</strong> 协议。要启用某一协议，请右键单击协议名称并选择<strong>“启用”</strong>。</p>
+
+<p><img src="images/enabling-sql-server-protocols.png?raw=true" alt="启用 SQL Server 协议" title="启用 SQL Server 协议" />
+</p></li>
+<li><p>关闭 <strong>SQL Server 配置管理器</strong>。</p></li>
+<li><p>从<strong>“开始”|“所有程序”|“管理工具”</strong>中打开<strong>“高级安全 Windows 防火墙”</strong>。</p></li>
+<li><p>右键单击<strong>“入站规则”</strong>节点并选择<strong>“新建规则”</strong>以打开<strong>“新建入站规则向导”</strong>。</p>
+
+<p><img src="./images/Creating-an-Inbound-Rule.png?raw=true" alt="创建入站规则" title="创建入站规则" />
+</p>
+
+<p><em>创建入站规则</em></p>
+
+<ol>
+<li><p>在<strong>“规则类型”</strong>页中，选择<strong>“端口”</strong>，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/new-inbound-rule-wizard2.png?raw=true" alt="新建入站规则向导" />
+</p>
+
+<p><em>新建入站规则向导</em></p></li>
+<li><p>在<strong>“协议和端口”</strong>页中，保持 TCP 的选中状态，选择<strong>“特定本地端口”</strong>，将其值设置为 <em>1433</em>。单击<strong>“下一步”</strong>继续。</p>
+
+<p><img src="images/new-inbound-rule-wizard.png?raw=true" alt="新建入站规则向导" />
+</p>
+
+<p><em>新建入站规则向导</em></p></li>
+<li><p>在<strong>“操作”</strong>页中，确保选中<strong>“允许连接”</strong>并单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/new-inbound-rule-wizard3.png?raw=true" alt="新建入站规则向导 (3)" />
+</p>
+
+<p><em>新建入站规则向导</em></p></li>
+<li><p>在<strong>“配置文件”</strong>页中，保留默认值并单击<strong>“下一步”</strong>。</p></li>
+<li><p>在<strong>“名称”</strong>页中，将入站规则的<strong>“名称”</strong>设置为 <em>SQLServerRule</em>，然后单击<strong>“完成”</strong>。</p>
+
+<p><img src="images/new-inbound-rule-wizard4.png?raw=true" alt="新建入站规则向导 (4)" />
+</p></li>
+</ol>
+
+<p><em>新建入站规则向导</em></p></li>
+<li><p>关闭<strong>“高级安全 Windows 防火墙”</strong>窗口。</p></li>
+<li><p>现在，您可以开始利用虚拟机云中承载的 <strong>SQL Server 2012</strong>。</p></li>
+<li><p>关闭<strong>远程桌面连接</strong>。</p></li>
+</ol>
+
+<p><a name="summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>在此实验中，您学习了如何通过在 Windows Azure 门户中设置虚拟机，然后在 SQL Server 中应用配置，从而创建和配置 SQL Server 2012 数据库。您可以方便地添加其他虚拟机，可以使用连接到虚拟机功能在虚拟机之间进行连接。</p> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-DeployingSQLServer/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

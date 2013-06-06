@@ -1,0 +1,910 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - Windows Azure 访问控制服务简介</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /><span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-IntroAccessControlService" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-IntroAccessControlService" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="HOLTop"></a></p>
+
+<h1 id="Introduction_to_the_Windows_Azure_Access_Control_Service">Windows Azure 访问控制服务简介</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>对于任何解决方案，无论是部署在本地、云端还是同时部署在两地，将云服务连接至用户都是最基本的一个要求。各种标准的出现正帮助打破不同网站和业务实体所存储的帐户之间由来已久的隔离屏障，然而，为多方来源的用户提供云服务访问仍然困难重重。如今，若要向来自 Facebook、Live ID、Google 和业务用户资料库的用户开放云服务，最直接的方式是依赖并实现四种不同的身份验证协议。然而，如今瞬息万变的环境又迫使您必须随时更新协议的实现方式，才能跟上用户存储库身份验证机制的最新发展步伐。所有这一切可能需要消耗更大比例的资源，使处理业务的资源捉襟见肘。</p>
+
+<p><img src="images/a-functional-view-of-the-access-control-servi.png?raw=true" alt="访问控制服务的功能视图" title="访问控制服务的功能视图" />
+</p>
+
+<p><em>访问控制服务的功能视图</em></p>
+
+<p>通过 Windows Azure 访问控制服务 (ACS)，您可以将身份验证功能外包，并免除云服务与所用全部标识提供者之间维持直接关系的复杂工作。ACS 可以采纳使用各自身份验证协议的每个标识提供者，无论用户来自何处，均可在 .NET Framework 工具（即 Windows Identity Foundation 技术，简称 WIF）所支持的协议中对身份验证结果进行规范化转换。借助 WIF，您只须几次点击操作即可选择 ACS 作为云服务的身份验证管理器；此后，所有操作即由 ACS 接管，包括为用户提供 UI 供其在所有已识别标识提供者中进行选择。不仅如此，ACS 还可以让您更好地控制为每个身份验证事件分配哪些用户属性；结合 WIF 技术，很容易访问这些属性（称为“声明”）以便作出授权决策，而开发人员不必真正理解身份验证协议所涉及的底层机制，甚至对此一无所知也无妨。通过这个引导性动手实验，您将学习如何利用 ACS 外包身份验证、管理多个标识来源、执行一些简单的授权任务，以及掌控身份验证过程。您会发现，做比说还要容易！</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>配置云服务以便将身份验证外包给 ACS</li>
+<li>配置 ACS 以便包含要利用的标识提供者</li>
+<li>配置 ACS 以便处理传入的标识并添加新声明</li>
+<li>修改云服务以便使用来自 ACS 的声明并帮助作出授权决策</li>
+<li>自定义 ACS 所提供的默认身份验证用户体验</li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li>Microsoft Internet Information Services (IIS) 7.0</li>
+<li><a href="http://go.microsoft.com/fwlink/?linkid=186916">Microsoft .NET Framework 4</a></li>
+<li><a href="http://www.microsoft.com/visualstudio/en-us/products/2010-editions">Microsoft Visual Studio 2010</a></li>
+<li><a href="http://support.microsoft.com/kb/974405">Microsoft Windows Identity Foundation Runtime</a></li>
+<li><a href="http://www.microsoft.com/downloads/details.aspx?FamilyID=c148b2df-c7af-46bb-9162-2c9422208504">Microsoft Windows Identity Foundation SDK</a></li>
+<li>Microsoft Windows PowerShell</li>
+<li>Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>本实验设计为使用 Windows 7 操作系统。</p>
+</blockquote>
+<p><a name="Setup"></a></p>
+
+<h3 id="Setup">设置</h3>
+
+<p>为了执行此动手实验中的各项练习，需要对环境进行设置。</p>
+
+<ol>
+<li>打开 Windows 资源管理器窗口，浏览到此实验的 <strong>Source</strong> 文件夹。</li>
+<li>双击此文件夹中的 <strong>Setup.cmd</strong> 文件以启动设置过程，该过程将为您配置环境，并安装此实验所需的 Visual Studio 代码段。</li>
+<li>如果显示“用户帐户控制”对话框，请确认操作以继续。</li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>请务必在运行安装程序前检查此实验的所有依赖项。</p>
+
+<p>如果计算机上以前从未运行过 Visual Studio，请务必在安装本实验之前先运行一次。</p>
+
+<p>您首次启动 Visual Studio 时，必须选择一个预定义的设置集合。每个预定义的集合在设计上都对应于特定的开发风格，能够确定窗口布局、编辑器行为、IntelliSense 代码段和对话框选项。此实验中的过程介绍了在使用<strong>“常规开发设置”</strong>集合时，在 Visual Studio 中完成指定任务所需的操作。如果您为开发环境选择其他设置集合，需要考虑可能的过程差异。</p>
+</blockquote>
+<p><a name="Snippets"></a></p>
+
+<h3 id="Using_the_Code_Snippets">使用代码段</h3>
+
+<p>实验文档将指导您插入代码块。为方便起见，大部分代码是以 Visual Studio 代码段的形式提供的，您可以在 Visual Studio 2010 中使用而不必手动添加。</p>
+<blockquote>
+<p><strong>注意</strong>：每个练习都附带一个起始解决方案，它位于练习的 Begin 文件夹中，允许您独立执行每个练习。请注意，在练习期间添加的代码段不包含在这些起始解决方案中，在您完成练习前，这些代码段不一定起作用。在练习的源代码内，您还会看到一个 End 文件夹，其中包含在完成相应练习中的步骤之后所生成的 Visual Studio 解决方案代码。如果在进行此动手实验时需要更多帮助，可以使用这些解决方案作为指南。</p>
+</blockquote>
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#Exercise1">使用访问控制服务接受来自多个标识提供者的用户</a></li>
+<li><a href="#Exercise2">使用声明为用户授权</a></li>
+<li><a href="#Exercise3">控制用户登录体验</a></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>每个练习都伴有一个起步解决方案。这些解决方案中缺少部分代码段，您需要随着练习的进行完成缺失的部分，因此这些代码开始时不一定能直接运行。每个练习中都有一个 <strong>end</strong> 文件夹，其中包含完成练习之后应当得到的结果解决方案。在做练习时如需额外帮助，可以参阅这些解决方案。</p>
+</blockquote>
+<p>完成此实验的估计时间：<strong>45 分钟</strong></p>
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Use_Access_Control_Service_for_Accepting_Users_from_Multiple_Identity_Providers">练习 1：使用访问控制服务接受来自多个标识提供者的用户</h3>
+
+<p>在练习 1 中，您将熟悉 ACS 的基本设置和术语。您的任务是安全地访问一个新创建的 ASP.NET 网站。该网站将接受来自 Google、Yahoo! 和 Windows Live ID 的用户。很快您将看到，ACS 让这一切变得相当简单。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_the_Initial_Solution">任务 1 - 创建初始解决方案</h4>
+
+<ol>
+<li>以管理员权限打开 Microsoft Visual Studio 2010。在<strong>“开始”|“所有程序”|“Microsoft Visual Studio 2010”</strong>菜单中，右键单击 <strong>Microsoft Visual Studio 2010</strong>，选择<strong>“以管理员身份运行”</strong>。</li>
+<li>打开位于本实验 <strong>\Source\Ex1-AcceptUsersFromMultipleIPs\Begin</strong> 文件夹中的空白解决方案文件 <strong>WebSiteACS.sln</strong>。</li>
+<li><p>创建新的空白网站。为此，请右键单击 <strong>WebSiteACS</strong> 解决方案，选择<strong>“添加”|“新网站”</strong>，在<strong>“已安装的模板”</strong>区域选择 <strong>Visual C#</strong>，然后单击<strong>“ASP.NET 网站”</strong>。将<strong>“Web 位置”</strong>字段更改为使用 <strong>HTTP</strong>，并将字段值设为 <strong>https://localhost/WebSiteACS</strong>，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="images/add-new-web-site.png?raw=true" alt="添加新网站" title="添加新网站" />
+</p>
+
+<p><em>添加新网站</em></p></li>
+<li><p>进入解决方案资源管理器，从网站中删除以下文件夹和文件：</p>
+
+<ul>
+<li>文件夹：<strong>Account</strong>、<strong>Scripts</strong></li>
+<li>文件：<strong>About.aspx</strong>、<strong>Global.asax</strong></li>
+</ul>
+
+<p><img src="images/solution-explorer.png?raw=true" alt="解决方案资源管理器" title="解决方案资源管理器" />
+</p>
+
+<p><em>解决方案资源管理器</em></p></li>
+<li><p>打开 <strong>Site.master</strong> 文件，删除类名为 <strong>&quot;loginDisplay&quot;</strong> 的 <strong>DIV</strong> 以及 <strong>NavigationMenu</strong> 菜单控件。</p>
+
+<!-- mark: 9-19, 21-26; strike: 9-19, 21-26 -->
+
+<span class="codelanguage">ASP.NET</span><pre><code class="ASP.NET">...
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;page&quot;</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;header&quot;</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;title&quot;</span><span style="color:#0000FF">&gt;</span>
+      <span style="color:#0000FF">&lt;</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span>
+        My ASP.NET Application
+      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;loginDisplay&quot;</span><span style="color:#0000FF">&gt;</span></strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LoginView</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;HeadLoginView&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">EnableViewState</span>=<span style="color:#0000FF">&quot;false&quot;</span><span style="color:#0000FF">&gt;</span></strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">AnonymousTemplate</span><span style="color:#0000FF">&gt;</span></strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">        [ <span style="color:#0000FF">&lt;</span><span style="color:#800000">a</span> <span style="color:#FF0000">href</span>=<span style="color:#0000FF">&quot;~/Account/Login.aspx&quot;</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;HeadLoginStatus&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span><span style="color:#0000FF">&gt;</span>Log In<span style="color:#0000FF">&lt;/</span><span style="color:#800000">a</span><span style="color:#0000FF">&gt;</span> ]</strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">AnonymousTemplate</span><span style="color:#0000FF">&gt;</span></strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">LoggedInTemplate</span><span style="color:#0000FF">&gt;</span></strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">        Welcome <span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;bold&quot;</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LoginName</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;HeadLoginName&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#0000FF">/&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span>!</strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">        [ <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LoginStatus</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;HeadLoginStatus&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">LogoutAction</span>=<span style="color:#0000FF">&quot;Redirect&quot;</span> <span style="color:#FF0000">LogoutText</span>=<span style="color:#0000FF">&quot;Log Out&quot;</span> <span style="color:#FF0000">LogoutPageUrl</span>=<span style="color:#0000FF">&quot;~/&quot;</span><span style="color:#0000FF">/&gt;</span> ]</strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">LoggedInTemplate</span><span style="color:#0000FF">&gt;</span></strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LoginView</span><span style="color:#0000FF">&gt;</span></strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span></strong></span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;clear hideSkiplink&quot;</span><span style="color:#0000FF">&gt;</span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Menu</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;NavigationMenu&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">CssClass</span>=<span style="color:#0000FF">&quot;menu&quot;</span> <span style="color:#FF0000">EnableViewState</span>=<span style="color:#0000FF">&quot;false&quot;</span> <span style="color:#FF0000">IncludeStyleBlock</span>=<span style="color:#0000FF">&quot;false&quot;</span> <span style="color:#FF0000">Orientation</span>=<span style="color:#0000FF">&quot;Horizontal&quot;</span><span style="color:#0000FF">&gt;</span></strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">Items</span><span style="color:#0000FF">&gt;</span></strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">MenuItem</span> <span style="color:#FF0000">NavigateUrl</span>=<span style="color:#0000FF">&quot;~/Default.aspx&quot;</span> <span style="color:#FF0000">Text</span>=<span style="color:#0000FF">&quot;Home&quot;</span><span style="color:#0000FF">/&gt;</span></strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">MenuItem</span> <span style="color:#FF0000">NavigateUrl</span>=<span style="color:#0000FF">&quot;~/About.aspx&quot;</span> <span style="color:#FF0000">Text</span>=<span style="color:#0000FF">&quot;About&quot;</span><span style="color:#0000FF">/&gt;</span></strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">Items</span><span style="color:#0000FF">&gt;</span></strong></span>
+<span class="strikeLine" style="text-decoration:line-through;"><strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Menu</span><span style="color:#0000FF">&gt;</span></strong></span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span>
+...
+</code></pre>
+
+<p>代码应该如下所示：</p>
+
+<!-- mark:2-11 -->
+
+<span class="codelanguage">ASP.NET</span><pre><code class="ASP.NET">...
+<strong class="markLine"><span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;page&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;header&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;title&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        My ASP.NET Application</strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;clear hideSkiplink&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span></strong>
+...
+</code></pre></li>
+<li><p>打开 <strong>Web.config</strong> 文件并删除以下部分：</p>
+
+<ul>
+<li><strong>connectionStrings</strong></li>
+<li><strong>system.web/authentication</strong></li>
+<li><strong>system.web/membership</strong></li>
+<li><strong>system.web/profile</strong></li>
+<li><strong>system.web/roleManager</strong></li>
+</ul>
+
+<p>最终的 <strong>Web.config</strong> 代码应该如下所示：</p>
+
+<!-- mark: 1-15 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><strong class="markLine"> <span style="color:#0000FF">&lt;?</span>xml version=&quot;1.0&quot;<span style="color:#0000FF">?&gt;</span></strong>
+<strong class="markLine">    <span style="color:#008000">&lt;!--</span></strong>
+<strong class="markLine">      For more information on how to configure your ASP.NET application, please visit</strong>
+<strong class="markLine">      http://go.microsoft.com/fwlink/?LinkId=169433</strong>
+<strong class="markLine">      --&gt;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">compilation</span> <span style="color:#FF0000">debug</span>=<span style="color:#0000FF">&quot;false&quot;</span> <span style="color:#FF0000">targetFramework</span>=<span style="color:#0000FF">&quot;4.0&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.webServer</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">         <span style="color:#0000FF">&lt;</span><span style="color:#800000">modules</span> <span style="color:#FF0000">runAllManagedModulesForAllRequests</span>=<span style="color:#0000FF">&quot;true&quot;</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.webServer</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span></strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>所有这些清理并不是必须的，但这么做有助于保持简单化，并突出强调了与 ACS 集成所需的代码。</p>
+</blockquote></li>
+<li><p>按 <strong>F5</strong> 以运行网站，并确保它按预期工作。如果出现<strong>“未启用调试”</strong>提示，请选择<strong>“修改 Web.config 文件以启用调试”</strong>，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="images/debugging-not-enabled-alert.png?raw=true" alt="" debugging="" not="" _enabled22_="" _alert22_="" title="" />
+</p>
+
+<p><em>“未启用调试”提示</em></p>
+
+<p><img src="images/running-application.png?raw=true" alt="运行云服务" title="运行云服务" />
+</p>
+
+<p><em>运行云服务</em></p></li>
+<li><p>网站目前正如预期的那样，没有任何访问控制机制。此时可以关闭浏览器。</p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Signing-up_for_Windows_Azure_Access_Control_Service_and_Creating_the_Service_Namespace">任务 2 - 登录 Windows Azure 访问控制服务，并创建服务命名空间</h4>
+
+<p>现在您将要订阅 ACS。</p>
+
+<ol>
+<li>导航至 https://manage.windowsazure.com。如果您尚未登录，系统会提示您输入 Microsoft 帐户凭据。</li>
+<li><p>由于新门户中尚无<strong>“访问控制”</strong>功能，因此您需要访问旧门户。为此，请将鼠标悬停在主页面标题的<strong>“预览”</strong>上，然后单击<strong>“返回旧门户”</strong>。</p>
+
+<p><img src="images/navigating-to-the-production-portal.png?raw=true" alt="导航到旧门户" title="导航到旧门户" />
+</p>
+
+<p><em>导航到旧门户</em></p></li>
+<li><p>单击左下角的<strong>“服务总线、访问控制和缓存”</strong>按钮。您将进入到下面的网页。</p>
+
+<p><img src="images/portal-access-control-service.png?raw=true" alt="门户访问控制服务" title="门户访问控制服务" />
+</p>
+
+<p><em>门户访问控制服务</em></p></li>
+<li><p>此时将要添加新的<strong>访问控制服务命名空间</strong>。访问控制服务命名空间是地址的一个独特组成部分，在此可以使用访问控制服务上您的所有端点。为此，请确保在左侧窗格中选中了<strong>“访问控制”</strong>根元素，然后单击左上角的<strong>“新建”</strong>按钮。</p>
+
+<p><img src="images/adding-a-namespace.png?raw=true" alt="添加命名空间" title="添加命名空间" />
+</p>
+
+<p><em>添加命名空间</em></p></li>
+<li><p>门户显示一个对话框。在<strong>“命名空间”</strong>中输入一个<strong>名称</strong>，并选择<strong>“国家/地区”</strong>，然后单击<strong>“创建命名空间”</strong>按钮。首先请务必验证名称的可用性。服务名称必须<strong>全局唯一</strong>，因为它们部署在云环境中，可由经过授权的任何用户访问。</p>
+
+<p><img src="images/creating-new-service-namespace.png?raw=true" alt="创建新服务命名空间" />
+</p>
+
+<p><em>创建新服务命名空间</em></p></li>
+<li><p>服务正在激活，请耐心等待。设置所有必要的资源可能需要几分钟时间。</p>
+
+<p><img src="images/active-service-namespace.png?raw=true" alt="活动的服务命名空间" title="活动的服务命名空间" />
+</p>
+
+<p><em>活动的服务命名空间</em></p></li>
+</ol>
+
+<p><a name="Ex1Task3"></a></p>
+
+<h4 id="Task_3_-_Configuring_the_Allowed_Identity_Providers_the_Relying_Party_and_the_Signing_Certificate">任务 3 - 配置允许的标识提供者、信赖方和签名证书</h4>
+
+<ol>
+<li><p>选中该<strong>命名空间</strong>后，单击顶部工具栏的<strong>“访问控制服务 - 管理”</strong>按钮。请确保您的浏览器允许 appservices.azure.com 站点显示弹出窗口。</p>
+
+<p><img src="images/click-the-access-control-service---manage-but.png?raw=true" alt="单击“访问控制服务 - 管理”按钮" title="单击“访问控制服务 - 管理”按钮" />
+</p>
+
+<p><em>单击“访问控制服务 - 管理”按钮</em></p></li>
+<li><p>这将在一个单独的浏览器窗口或选项卡中启动<strong>访问控制服务管理门户</strong>，如下图所示。</p>
+
+<p><img src="images/access-control-service-management-portal.png?raw=true" alt="访问控制服务管理门户" title="访问控制服务管理门户" />
+</p>
+
+<p><em>访问控制服务管理门户</em></p></li>
+<li><p>这个管理门户（特别是左侧的导航菜单）提供了 ACS 中可修改的所有配置的全局视图。在典型的应用程序开发流程中（例如在本练习创建的流程中），可以遵循一个自然顺序为 ACS 提供设置身份验证所需的信息。单击菜单中<strong>“信任关系”</strong>区域的<strong>“标识提供者”</strong>链接。该管理门户的主要工作区将显示一个有助于管理云服务用户使用的标识提供者的页面。</p>
+
+<p><img src="images/identity-providers.png?raw=true" alt="标识提供者" title="标识提供者" />
+</p>
+
+<p><em>标识提供者</em></p></li>
+<li><p>单击“标识提供者”表格上面的<strong>“添加”</strong>链接，选择要加入访问控制服务命名空间的标识提供者，然后单击<strong>“下一步”</strong>。此处默认情况下会使用 Windows Live ID。在此练习中，也请选择 Google 和 Yahoo!。</p>
+
+<p><img src="images/adding-an-identity-provider.png?raw=true" alt="添加标识提供者" title="添加标识提供者" />
+</p>
+
+<p><em>添加标识提供者</em></p></li>
+<li><p>保留默认设置，然后单击<strong>“保存”</strong>。</p>
+
+<p><img src="images/the-yahoo-identity-provider-configuration-pag.png?raw=true" alt="Yahoo 标识提供者配置页" title="Yahoo 标识提供者配置页" />
+</p>
+
+<p><em>Yahoo 标识提供者配置页</em></p></li>
+<li><p>您可以按照相同的步骤将 Google 添加为标识提供者。最终的“标识提供者”列表将如下所示。</p>
+
+<p><img src="images/identity-providers-configured.png?raw=true" alt="配置完成的标识提供者" title="配置完成的标识提供者" />
+</p>
+
+<p><em>配置完成的标识提供者</em></p></li>
+<li><p>单击导航菜单中的<strong>“信赖方应用程序”</strong>链接，以便向 ACS 注册您的网站。“信赖方”是代表云服务的标识，是使用标识的实体；另外，您可能也猜到了，“标识提供者”是指负责存储标识并能够对用户进行身份验证的实体。</p>
+
+<p><img src="images/relying-party-applications.png?raw=true" alt="信赖方应用程序" title="信赖方应用程序" />
+</p>
+
+<p><em>信赖方应用程序</em></p></li>
+<li><p>单击“信赖方应用程序”表格上方的<strong>“添加”</strong>链接，并将表单内容填写如下：</p>
+
+<ul>
+<li><strong>名称：</strong>WebSiteACS<br/></li>
+<li><strong>模式：</strong>手动输入设置</li>
+<li><strong>领域：</strong>https://localhost/WebSiteACS/<br/></li>
+<li><strong>返回 URL：</strong>https://localhost/WebSiteACS/Default.aspx</li>
+<li><strong>错误 URL：</strong>字段保留为空白<br/></li>
+<li><strong>令牌格式：</strong>SAML 1.1</li>
+<li><strong>令牌加密策略：</strong>无</li>
+<li><strong>令牌生存期(秒)：</strong>600</li>
+<li><strong>标识提供者：</strong>Google、Windows Live ID、Yahoo!</li>
+<li><strong>规则组：</strong>创建新规则组</li>
+<li><strong>令牌签名：</strong>使用服务命名空间证书（标准）<br/></li>
+</ul>
+
+<p><img src="images/add-relying-party-application.png?raw=true" alt="添加信赖方应用程序" title="添加信赖方应用程序" />
+</p>
+
+<p><em>添加信赖方应用程序</em></p></li>
+<li><p>单击<strong>“保存”</strong>按钮。</p></li>
+<li><p>在导航菜单的<strong>“信任关系”</strong>区域，单击<strong>“规则组”</strong>链接，以便为您的应用程序选择默认的规则组。</p>
+
+<p><img src="images/the-current-rule-groups-list-contains-just-th.png?raw=true" alt="当前规则组列表仅包含默认规则组" title="当前规则组列表仅包含默认规则组" />
+</p>
+
+<p><em>当前规则组列表仅包含默认规则组</em></p>
+
+<p><img src="images/an-example-of-how-acs-receives-a-token-as-pro.png?raw=true" alt="示例：ACS 接收令牌作为身份验证证明（本例中来自 Google，但实际可以来自任何已知 IP）并为云服务发出包含原始声明的令牌" title="示例：ACS 接收令牌作为身份验证证明（本例中来自 Google，但实际可以来自任何已知 IP）并为云服务发出包含原始声明的令牌" />
+</p>
+
+<p><em>示例：ACS 接收令牌作为身份验证证明（本例中来自 Google，但实际可以来自任何已知 IP）并为云服务发出包含原始声明的令牌</em></p>
+<blockquote>
+<p><strong>注意：</strong>当用户向某标识提供者成功进行身份验证之后，ACS 即从该标识提供者收到一个项目（称为“安全令牌”），证明身份验证已完成。您无须了解安全令牌的细节：此时唯一需要关心的信息是该令牌包含有关通过验证的用户（即“声明”）的信息，以帮助 ACS 确定当前用户的身份。ACS 可以用各种方式来处理传入的声明，下个练习将展示简单示例。在本练习中，我们将 ACS 配置为强制采取默认行为，也就是说，当声明来自原始标识提供者时，确保云服务接收这些声明。这是怎么做到的？ACS 自己发出云服务所配置使用的令牌（下文即将看到）。它只须将传入的声明复制到发出的令牌中即可。</p>
+</blockquote></li>
+<li><p>单击<strong>“用于 WebSiteACS 的默认规则组”</strong>，然后单击<strong>“生成”</strong>链接。然后，根据声明类型，选中您要为其自动生成规则的所有三个标识提供者，然后单击<strong>“生成”</strong>。不同的标识提供者的声明也各有不同：ACS 理解这一点，并生成相应的默认规则。最后再次单击<strong>“保存”</strong>。</p>
+
+<p><img src="images/generating-rules.png?raw=true" alt="生成规则" title="生成规则" />
+</p>
+
+<p><em>生成规则</em></p>
+
+<p><img src="images/default-rules-generated.png?raw=true" alt="生成的默认规则" title="生成的默认规则" />
+</p>
+
+<p><em>生成的默认规则</em></p></li>
+<li><p>在导航菜单的<strong>“开发”</strong>区域，单击<strong>“应用程序集成”</strong>链接。当配置云服务以利用 ACS 时，此处提供了各种便利的 URI。</p></li>
+<li><p>进入<strong>“端点引用”</strong>区域并复制 <strong>WS 联合身份验证元数据</strong>的值。在下一步一开始，您就会明白它是什么以及它用来做什么。</p>
+
+<p><img src="images/copying-ws-federation-metadata.png?raw=true" alt="复制 WS 联合身份验证元数据" title="复制 WS 联合身份验证元数据" />
+</p>
+
+<p><em>复制 WS 联合身份验证元数据</em></p></li>
+</ol>
+
+<p><a name="Ex1Task4"></a></p>
+
+<h4 id="Task_4_-_Configuring_a_Website_to_Accept_Tokens_from_Access_Control_Service">任务 4 - 配置网站以接受来自访问控制服务的令牌</h4>
+
+<p>至此，您已经知道 ACS 负责以不同格式通过不同协议接受来自许多潜在标识提供者的令牌，并将传入信息按照网站能够使用的另一种令牌格式进行规范化转换。ACS 可以用各种协议发出不同类型的令牌。对于网站来说，默认协议是 WS 联合身份验证。无须深入太多细节，只须知道一点就足够了：WS 联合身份验证是一种 Windows Identity Foundation (WIF) 本身能够理解的协议，它是 .NET Framework 的扩展，可以用来将云服务身份验证轻松地外包给令牌源，例如 ACS 本身。具体来说，WIF 用向导对 Visual Studio 进行扩展，无须您写任何代码，该向导即可自动配置云服务将身份验证外包。它唯一需要的就是待用令牌源的以机器可读形式描述的地址：在本例中，该描述为任务 3 最后步骤所保存的 WS 联合身份验证元数据地址。在此任务中，您将使用 WIF 向导将身份验证外包给 ACS。</p>
+
+<ol>
+<li> 回到 Visual Studio 的<strong>解决方案资源管理器</strong>，右键单击 <strong>https://localhost/WebSiteACS/</strong> 项目，并选择<strong>“添加 STS 引用”</strong>。</li>
+<li><p>当显示 <strong>Federation Utility</strong> 窗口时，请按向导的每个步骤完成以下任务。</p>
+
+<ol>
+<li><p>在<strong>“欢迎”</strong>页面单击<strong>“下一步”</strong>，以继续使用预填的字段值。</p>
+
+<p><img src="images/welcome.png?raw=true" alt="欢迎" title="欢迎" />
+</p>
+
+<p><em>欢迎</em></p></li>
+<li><p>在<strong>“STS 选项”</strong>页面，选择第三个单选框<strong>“使用现有 STS”</strong>选项，将从<strong>任务 3 的步骤 13</strong> 中获得端点地址粘贴到<strong>“端点引用”</strong>和<strong>“WS 联合身份验证元数据”</strong>字段，并单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/use-an-existing-sts-option.png?raw=true" alt="使用现有 STS 选项" title="使用现有 STS 选项" />
+</p>
+
+<p><em>使用现有 STS 选项</em></p></li>
+<li><p>在<strong>“STS 签名证书链验证错误”</strong>页面，选择<strong>“禁用证书链验证”</strong>并单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/disable-certificate-chain-validation-option.png?raw=true" alt="禁用证书链验证选项" title="禁用证书链验证选项" />
+</p>
+
+<p><em>禁用证书链验证选项</em></p></li>
+<li><p>在<strong>“安全令牌加密”</strong>页面，选择<strong>“无加密”</strong>并单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/security-token-encryption.png?raw=true" alt="安全令牌加密" title="安全令牌加密" />
+</p>
+
+<p><em>安全令牌加密</em></p></li>
+<li><p>在<strong>“提供的声明”</strong>页面，单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/offered-claims.png?raw=true" alt="提供的声明" />
+</p>
+
+<p><em>提供的声明</em></p>
+<blockquote>
+<p><strong>注意：</strong>WS 联合身份验证元数据可以包含对端点所提供声明的描述。向导显示这些描述信息，以便您了解在云服务中将可以处理的传入用户的什么信息。在本例中，ACS 声明它可以发布信息说明身份验证实际使用了哪个标识提供者，并指出用户标识符。</p>
+</blockquote></li>
+<li><p>在<strong>“摘要”</strong>页检查要做的修改，然后单击<strong>“完成”</strong>。</p></li>
+</ol></li>
+</ol>
+
+<p><a name="Ex1Verification"></a></p>
+
+<h4 id="Exercise_1_Verification">练习 1：验证</h4>
+
+<p>是时候让您安全加固的网站运行起来了。为了验证练习一中的步骤是否已正确执行，请执行以下操作：</p>
+
+<ol>
+<li> 按 <strong>F5</strong> 开始调试。信赖方 (https://localhost/WebSiteACS/) 将重定向到访问控制服务进行身份验证。</li>
+<li><p>选择一个标识提供者，您将被重定向到该标识提供者的网站，您将在那里按提示输入凭据。在本例中我们将使用 Windows Live ID：选择其他选项的体验类似。</p>
+
+<p><img src="images/choosing-your-favorite-identity-provider.png?raw=true" alt="选择您偏爱的标识提供者" title="选择您偏爱的标识提供者" />
+     </p>
+
+<p><em>选择您偏爱的标识提供者</em></p></li>
+<li><p>在 Windows Live ID 网站，输入您的 Live ID 和密码。</p>
+
+<p><img src="images/login-with-windows-live-id.png?raw=true" alt="用 Windows Live ID 登录" title="用 Windows Live ID 登录" />
+</p>
+
+<p><em>用 Windows Live ID 登录</em></p></li>
+<li><p>身份验证成功后，浏览器将被重定向到 ACS（请观察地址栏）做简要处理并返回您的网站。</p></li>
+<li><p>这一过程对用户完全透明，但经过配置的网站现在确认该调用包含了 ACS 提供的有效令牌：这正符合本例的情况，因此将允许访问，最终浏览器将显示网站的默认页面。</p>
+
+<p><img src="images/user-authenticated.png?raw=true" alt="用户通过身份验证" title="用户通过身份验证" />
+</p>
+
+<p><em>用户通过身份验证</em></p></li>
+<li><p>关闭浏览器。</p></li>
+</ol>
+
+<p><a name="Ex1Summary"></a></p>
+
+<h4 id="Exercise_1_Summary">练习 1：摘要</h4>
+
+<p>在练习 1 中您了解了用 ACS 代为处理身份验证的机制。同时，您也了解了如何用 WIF 自动配置网站以便将身份验证外包给外部实体。无论云服务配置指向的是 ACS，还是诸如 ADFS2 之类的内部标识提供者，或是符合 WS 联合身份验证的任何产品，这一过程都是相同的。一旦将身份验证外包给 ACS，即可开始在 ACS 门户中直接更改设置（例如更改应使用的标识提供者），无须修改云服务的代码。</p>
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Use_Claims_for_Authorizing_Users">练习 2：使用声明为用户授权</h3>
+
+<p>练习 1 的核心是对来自多个标识提供者的用户进行访问授权，但未对传入的声明做什么处理。而在此练习中，您将体会可以对 ACS 执行哪些操作，以便丰富用户相关信息驱动授权决策，而无须将任何永久信息存储到云服务本身。您的任务很简单：为特定用户分配角色，然后据此向用户授予对网站执行特定操作的权限。</p>
+
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_-_Visualizing_the_Claims_from_the_Access_Control_Service">任务 1 - 将来自访问控制服务的声明可视化</h4>
+
+<p>WIF 在隐藏底层协议协商细节方面做得非常好。在创建用于处理声明的规则之前，简单了解幕后机制，弄清云服务从 ACS 具体接收什么信息会很有用处。为此，您要使用一个调试组件，该组件能够在网站页面上直接可视化传入的令牌。</p>
+
+<ol>
+<li><p>将 <strong>Ex1</strong> 文件夹中完成的解决方案复制到 <strong>Ex2-EasyAuthorizationWithACS\Begin</strong> 文件夹中。</p>
+
+<p><img src="images/copying-the-solution.png?raw=true" alt="复制解决方案" title="复制解决方案" />
+</p>
+
+<p><em>复制解决方案</em></p>
+<blockquote>
+<p><strong>注意：</strong>尽管本动手实验中的练习一般相互独立，但在本例中有些配置是在云中共享的，因此复制这些配置意义不大。如果您没有做过练习 1，未设置 ACS 帐户、命名空间和其他类似内容，则在继续执行练习 2 的操作之前，须先执行练习 1 任务 2、3、4 的各项操作。</p>
+</blockquote></li>
+<li><p>以管理员权限打开 Microsoft Visual Studio 2010。在<strong>“开始”|“所有程序”|“Microsoft Visual Studio 2010”</strong>菜单中，右键单击 <strong>Microsoft Visual Studio 2010</strong>，选择<strong>“以管理员身份运行”</strong>。</p></li>
+<li><p>打开位于本实验 <strong>Ex2-EasyAuthorizationWithACS\Begin</strong> 文件夹中的 <strong>WebSiteACS.sln</strong> 解决方案文件（从步骤 1 复制而来）。</p></li>
+<li><p>进入<strong>解决方案资源管理器</strong>，打开 <strong>Default.aspx</strong> 文件。</p></li>
+<li><p>从 <strong>Visual Studio 工具箱</strong>中将一个<strong>“安全令牌可视化程序控件”</strong>拖放到主内容控件的底部：</p>
+
+<p><img src="images/security-token-visualizer-control-in-toolbox.png?raw=true" alt="工具箱中的安全令牌可视化程序控件" title="工具箱中的安全令牌可视化程序控件" />
+</p>
+
+<p><em>工具箱中的安全令牌可视化程序控件</em></p>
+
+<!-- mark: 1 -->
+
+<span class="codelanguage">ASP.NET</span><pre><code class="ASP.NET"><strong class="markLine"> <span style="color:#0000FF">&lt;</span><span style="color:#800000">cc1</span>:<span style="color:#FF0000">SecurityTokenVisualizerControl</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;SecurityTokenVisualizerControl1&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>将该控件拖放到页面上之后，如果没有出现任何代码，请关闭 Visual Studio，重新运行安装程序，再重新启动 Visual Studio。</p>
+</blockquote></li>
+<li><p>打开 <strong>Web.config</strong> 文件，将 <strong>saveBootstrapTokens</strong> 属性加到 <strong>microsoft.identityModel</strong> 中的 <strong>service</strong> 元素。</p>
+
+<!-- mark: 2 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">microsoft.identityModel</span><span style="color:#0000FF">&gt;</span>
+<strong class="markLine">  <span style="color:#0000FF">&lt;</span><span style="color:#800000">service</span> <span style="color:#FF0000">saveBootstrapTokens</span>=<span style="color:#0000FF">&quot;true&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">audienceUris</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>按 <strong>F5</strong> 开始调试。云服务将执行由练习 1 启用的相同身份验证例程。</p></li>
+<li><p>请按练习 1 所示选择 Windows Live ID 并进行身份验证。</p></li>
+<li><p>展开安全令牌可视化程序控件。</p>
+
+<p><img src="images/security-token-visualizer-control.png?raw=true" alt="安全令牌可视化程序控件" title="安全令牌可视化程序控件" />
+</p>
+
+<p><em>安全令牌可视化程序控件</em></p>
+<blockquote>
+<p><strong>注意：</strong>安全令牌可视化程序控件显示了 ACS 颁发的安全令牌的内容。为本练习的目的，可忽略其中的大部分内容，唯一需要关心的是开头的第一个表，即标签为“已颁发标识”的表。该表包含了根据默认规则确立的由传入令牌所持有的声明。在使用 Windows Live ID 的情况下，这些声明就是标识提供者（表明 ACS 从哪个标识提供者接收身份验证令牌）和 <strong>nameidentifier</strong>（为用户提供在 ACS 命名空间上下文中的唯一标识）。<strong>nameidentifier</strong> 的值是非常重要的，因为它用来区分不同的用户。更具体地说，<strong>nameidentifier</strong> 的值可用作负责向特定用户分配新声明的转换规则的输入声明。</p>
+</blockquote></li>
+<li><p>进入<strong>“已颁发标识”</strong>部分，并在记事本中保存 <strong>nameidentifier</strong> 声明的值（声明类型和声明值）。<strong>identityprovider</strong> 声明的值会因上一步骤所选的标识提供者而异。</p>
+
+<p><img src="images/copying-the-nameidentifier-claim.png?raw=true" alt="复制 nameidentifier 声明" title="复制 nameidentifier 声明" />
+</p>
+
+<p><em>复制 nameidentifier 声明</em></p></li>
+<li><p>关闭浏览器。</p></li>
+</ol>
+
+<p><a name="Ex2Task2"></a></p>
+
+<h4 id="Task_2_-_Creating_Authorization_Rules">任务 2 - 创建授权规则</h4>
+
+<ol>
+<li> 导航至 <a href="https://windows.azure.com/">https://windows.azure.com/</a>。如果您尚未登录，系统将提示您输入您的 Windows Live ID 凭据。</li>
+<li> 在导航窗格选中<strong>“访问控制”</strong>，然后单击在练习一中创建的服务命名空间。</li>
+<li> 单击功能区栏中的<strong>“访问控制服务”</strong>按钮。</li>
+<li><p>在导航菜单的<strong>“信任关系”</strong>区域，单击<strong>“规则组”</strong>链接。</p>
+
+<p><img src="images/rule-groups.png?raw=true" alt="规则组" title="规则组" />
+</p>
+
+<p><em>规则组</em></p></li>
+<li><p>单击<strong>“用于 WebSiteACS 的默认规则组”</strong>。</p></li>
+<li><p>点击规则表上方的<strong>“添加”</strong>链接以配置新规则。</p></li>
+<li><p>用下列值填写表单：</p>
+
+<ul>
+<li><strong>如果</strong>
+
+<ul>
+<li><strong>声明颁发者 / 标识提供者：</strong>Windows Live ID</li>
+<li><strong>（并且）输入声明类型/选择类型：</strong><a href="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier">http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier</a></li>
+<li><strong>（并且）输入声明值/输入值：</strong>来自<strong>任务 1 的步骤 10</strong> 的声明值令牌</li>
+</ul></li>
+<li><strong>则</strong>
+
+<ul>
+<li><strong>输出声明类型/选择类型：</strong><a href="http://schemas.microsoft.com/ws/2008/06/identity/claims/role">http://schemas.microsoft.com/ws/2008/06/identity/claims/role</a></li>
+<li><strong>输出声明值/输入值：</strong>Administrator</li>
+<li><strong>规则信息</strong></li>
+<li><strong>描述：</strong>Administrator 声明规则</li>
+</ul></li>
+</ul>
+
+<p><img src="images/adding-rule.png?raw=true" alt="添加规则" />
+</p>
+
+<p><em>添加规则</em></p></li>
+<li><p>单击<strong>“保存”</strong>按钮。</p>
+<blockquote>
+<p><strong>注意：</strong>刚刚输入的规则将角色声明“administrator”分配给用来登录前面练习中云服务的 Microsoft 帐户。您在下个任务即将看到：用于指示角色的特定声明类型将由 WIF 自动映射到传统 Windows 角色。</p>
+
+<p>请注意，也可以为其他标识提供者创建相似的规则。我们在此实验中之所以选择 Windows Live ID，是因为登录 ACS 时已经要求您使用该帐户，这并不表示 ACS 和 Windows Live ID 有何特别之处：实际上，只要有唯一的用户标识符声明，使用其他任何标识提供者都能得到完全相同的结果。</p>
+</blockquote></li>
+</ol>
+
+<p><a name="Ex2Task3"></a></p>
+
+<h4 id="Task_3_-_Authorizing_Based_on_the_Claims_Provided_by_Access_Control_Service">任务 3 - 根据访问控制服务提供的声明进行授权</h4>
+
+<p>此时新规则已添加，网站将接收到包含附加角色声明的令牌。我们可以利用角色信息来允许或拒绝用户访问某些网站功能，例如访问某页面的特定区域。</p>
+
+<ol>
+<li> 回到 Visual Studio 的解决方案资源管理器，打开 <strong>Styles\Site.css</strong> 文件。</li>
+<li><p>添加以下 CSS 类：</p>
+
+<!-- mark: 1-7 -->
+
+<span class="codelanguage">CSS</span><pre><code class="CSS"><strong class="markLine">.<span style="color:#800000">secretContent</span></strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">  <span style="color:#FF0000">border-style</span>: <span style="color:#0000FF">solid</span>; </strong>
+<strong class="markLine">  <span style="color:#FF0000">background-color</span>: <span style="color:#0000FF">Red</span>; </strong>
+<strong class="markLine">  <span style="color:#FF0000">padding</span>: <span style="color:#0000FF">5px</span>;</strong>
+<strong class="markLine">  <span style="color:#FF0000">color</span>: <span style="color:#0000FF">White</span>;</strong>
+<strong class="markLine">}</strong>
+</code></pre></li>
+<li><p>打开 <strong>Default.aspx</strong> 并将以下 ASP.NET 面板控件添加到主内容控件的底部：</p>
+
+<!-- mark: 5-7 -->
+
+<span class="codelanguage">ASP.NET</span><pre><code class="ASP.NET"><span style="color:#0000FF">&lt;</span><span style="color:#800000">p</span><span style="color:#0000FF">&gt;</span>
+    You can also find <span style="color:#0000FF">&lt;</span><span style="color:#800000">a</span> <span style="color:#FF0000">href</span>=<span style="color:#0000FF">&quot;http://go.microsoft.com/fwlink/?LinkID=152368&amp;amp;clcid=0x804&quot;</span>
+        <span style="color:#FF0000">title</span>=<span style="color:#0000FF">&quot;MSDN ASP.NET Docs&quot;</span><span style="color:#0000FF">&gt;</span>documentation on ASP.NET at MSDN<span style="color:#0000FF">&lt;/</span><span style="color:#800000">a</span><span style="color:#0000FF">&gt;</span>.
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">p</span><span style="color:#0000FF">&gt;</span>    
+<strong class="markLine"><span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Panel</span> <span style="color:#FF0000">Visible</span>=<span style="color:#0000FF">&quot;false&quot;</span> <span style="color:#FF0000">CssClass</span>=<span style="color:#0000FF">&quot;secretContent&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;SecretContent&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    Secret Content (Only administrators can access this section)</strong>
+<strong class="markLine"><span style="color:#0000FF">&lt;/</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Panel</span><span style="color:#0000FF">&gt;</span></strong>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">cc1</span>:<span style="color:#FF0000">SecurityTokenVisualizerControl</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;SecurityTokenVisualizerControl1&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#0000FF">/&gt;</span>
+
+</code></pre></li>
+<li><p>打开 <strong>Default.aspx.cs</strong> 并添加以下 using 语句：</p>
+
+<p>（代码段 - <em>Introduction to ACS2 Lab - Ex02 Default.aspx.cs Usings</em> - C#）</p>
+
+<!-- mark: 1 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> System.Threading;</strong>
+</code></pre></li>
+<li><p>此时我们添加了一些额外的 UI 元素，下面我们要确保只有管理员才能看到这些元素。在 <strong>Page_Load</strong> 方中添加以下验证：</p>
+
+<p>（代码段 - <em>Introduction to ACS2 Lab - Ex02 Page_Load - </em>C#<em>）</em></p>
+
+<!-- mark: 1-4 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">if</span> (Thread.CurrentPrincipal.IsInRole(<span style="color:#8B0000">&quot;Administrator&quot;</span>))</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">  <span style="color:#0000FF">this</span>.SecretContent.Visible = <span style="color:#0000FF">true</span>;</strong>
+<strong class="markLine">}</strong>
+</code></pre></li>
+</ol>
+
+<p><a name="Ex2Verification"></a></p>
+
+<h4 id="Exercise_2_Verification">练习 2：验证</h4>
+
+<p>为了验证练习二中的步骤是否已正确执行，请执行以下操作：</p>
+
+<ol>
+<li> 按 <strong>F5</strong> 开始调试。信赖方 (https://localhost/WebSiteACS/) 将重定向到访问控制服务进行身份验证。</li>
+<li> 选择 Windows Live ID 标识提供者并提交凭据。此时将执行正常的重定向操作，随后用户通过身份验证。</li>
+<li><p>由于当前用户是管理员角色，因此将显示保密内容区域。</p>
+
+<p><img src="images/administrator-role-seeing-secret-content.png?raw=true" alt="管理员角色可看到保密内容" title="管理员角色可看到保密内容" />
+</p>
+
+<p><em>管理员角色可看到保密内容</em></p></li>
+<li><p>关闭浏览器。</p></li>
+<li><p>按 <strong>F5</strong> 再次启动调试。</p></li>
+<li><p>另外选择一个标识提供者，或者使用其他 Microsoft 帐户。</p></li>
+<li><p>此时保密内容区域不再可见。</p>
+
+<p><img src="images/other-role-not-seeing-secret-content.png?raw=true" alt="其他角色看不到保密内容" title="其他角色看不到保密内容" />
+</p>
+
+<p><em>其他角色看不到保密内容</em></p></li>
+<li><p>关闭浏览器。</p></li>
+</ol>
+
+<p><a name="Ex2Summary"></a></p>
+
+<h4 id="Exercise_2_Summary">练习 2：小结</h4>
+
+<p>在练习 2 中，您学会了如何操作 ACS 为云服务颁发的声明，以及如何利用这些信息帮助作出授权决策。此练习只是将角色分配给特定用户，虽然操作非常简单，却展示了声明转换规则方法的强大作用，并可轻松地扩展为更复杂的情况。</p>
+
+<p><a name="Exercise3"></a></p>
+
+<h3 id="Exercise_3_Take_control_of_the_Sign-In_experience">练习 3：控制用户登录体验</h3>
+
+<p>使用 WIF 向导将身份验证外包给 ACS 会形成常称为“覆盖保护”的效应：从此时开始，任何未验证用户对网站任何页面的访问请求都将触发向 ACS 的重定向操作。这种效果在很多情况下并不一定符合您的需要：例如您可能希望某些页面同时能供非验证用户访问，或想对身份验证体验进行更精细的控制。如果您想自己制作身份验证页面，通过 ACS 做起来非常简单，它提供了样板 HTML 代码，这些代码已经经过调整，可以使用您自己的命名空间中的端点。您只需通过复制粘贴将这些代码放入自己的应用程序，并与任何合适的 UI 元素集成。此介绍性实验的最后一个练习将展示具体的操作方法。</p>
+
+<p><a name="Ex3Task1"></a> </p>
+
+<h4 id="Task_1_-_Hosting_a_Login_Page_as_Part_of_your_Cloud_Service">任务 1 - 在云服务中承载登录页面</h4>
+
+<ol>
+<li><p>将 <strong>Ex2</strong> 文件夹中完成的解决方案复制到 <strong>Ex3-CustomSignInExperience\Begin</strong> 文件夹中。</p>
+
+<p><img src="images/copying-the-completed-solution-from-the-previ.png?raw=true" alt="复制上一练习中完成的解决方案" title="复制上一练习中完成的解决方案" />
+</p>
+
+<p><em>复制上一练习中完成的解决方案</em></p>
+<blockquote>
+<p><strong>注意：</strong>尽管本动手实验中的练习一般相互独立，但在本例中有些配置是在云中共享的，因此复制这些配置意义不大。如果您没有做过练习 1，未设置 ACS 帐户、命名空间和其他类似内容，则在继续执行练习 3 的操作之前，须先执行练习 1 任务 2、3、4 的各项操作。</p>
+</blockquote></li>
+<li><p>导航至 <a href="https://windows.azure.com/">https://windows.azure.com/</a>。如果您尚未登录，系统将提示您输入您的 Windows Live ID 凭据。</p></li>
+<li><p>在导航窗格中选择<strong>“访问控制”</strong>。单击在练习一中创建的服务命名空间。单击功能区栏中的<strong>“访问控制服务”</strong>按钮。</p></li>
+<li><p>进入<strong>“开发”</strong>区域，并单击<strong>“应用程序集成”</strong>链接。</p></li>
+<li><p>单击<strong>“登录页面”</strong>链接，并选择信赖方服务 (<strong>WebSiteACS</strong>)。</p>
+
+<p><img src="images/login-page-integration.png?raw=true" alt="登录页面集成" title="登录页面集成" />
+</p>
+
+<p><em>应用程序集成 - 登录页面</em></p></li>
+<li><p>在<strong>“选项 2：在应用程序中承载登录页面”</strong>区域，单击<strong>“下载示例登录页面”</strong>。</p>
+
+<p><img src="images/login-page-integration-2.png?raw=true" alt="登录页面集成" title="登录页面集成" />
+</p>
+
+<p><em>登录页面集成</em></p></li>
+<li><p>将 HTML 文件保存到 <strong>%SystemDrive%\inetpub\wwwroot\WebSiteACS</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>如果您没有保存该文件的权限，请改为将其下载到“我的文档”文件夹，然后再将其移到 <strong>%SystemDrive%\inetpub\wwwroot\WebSiteACS</strong>。如果出现<strong>“目标文件夹访问被拒绝”</strong>提示，请单击<strong>“继续”</strong>按钮。</p>
+
+<p><img src="images/save-as-file.png?raw=true" alt="保存为文件" title="保存为文件" />
+</p>
+</blockquote></li>
+<li><p>以管理员权限打开 Microsoft Visual Studio 2010。在<strong>“开始”|“所有程序”|“Microsoft Visual Studio 2010”</strong>菜单中，右键单击 <strong>Microsoft Visual Studio 2010</strong>，选择<strong>“以管理员身份运行”</strong>。</p></li>
+<li><p>打开位于本实验 <strong>Ex3-EasyAuthorizationWithACS\Begin</strong> 文件夹中的 <strong>WebSiteACS.sln</strong> 解决方案文件（从步骤 1 复制而来）。</p></li>
+<li><p>进入<strong>解决方案资源管理器</strong>，右键单击 <strong>https://localhost/WebSiteACS/</strong> 并选择<strong>“添加现有项目”</strong>，选中在<strong>步骤 7</strong> 下载的 HTML 文件 (<strong>WebSiteACSLoginPageCode.html</strong>)，然后单击<strong>“添加”</strong>。</p></li>
+<li><p>双击在<strong>步骤 7</strong> 中下载的 HTML 文件 (<strong>WebSiteACSLoginPageCode.html</strong>) 以在 <strong>Microsoft Visual Studio 2010</strong> 中将其打开。</p></li>
+<li><p>找到带有 <strong>ID=&quot;Banner&quot;</strong> 的 DIV 标记，并将文本 <strong>Sign in to WebSiteACS</strong>（登录到 WebSiteACS）替换为 <strong>My custom login page for WebSiteACS</strong>（我的自定义 WebSiteACS 登录页）。</p>
+
+<!-- mark: 1-2 -->
+
+<span class="codelanguage">HTML</span><pre><code class="HTML"><strong class="markLine"> <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">id</span>=<span style="color:#0000FF">&quot;Main&quot;</span> <span style="color:#FF0000">style</span>=<span style="color:#0000FF">&quot;display:none&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">id</span>=<span style="color:#0000FF">&quot;Banner&quot;</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;Banner&quot;</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;</span><span style="color:#800000">b</span><span style="color:#0000FF">&gt;</span>My custom login page for WebSiteACS<span style="color:#0000FF">&lt;/</span><span style="color:#800000">b</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span></strong>
+</code></pre></li>
+<li><p>进入 <strong>&lt;style&gt;</strong> 部分，并更新以下 CSS 类：</p>
+
+<ul>
+<li><strong>div.SignInContent</strong>
+
+<ul>
+<li>width: 1020px;</li>
+<li>height: 170px;</li>
+</ul></li>
+<li><strong>div.Banner</strong>
+
+<ul>
+<li>width: 1020px;</li>
+<li>background: none repeat scroll 0 0 #4B6C9E;</li>
+<li>color: #F9F9F9;</li>
+</ul></li>
+<li><strong>div.LeftArea</strong>
+
+<ul>
+<li>width: 960px;</li>
+</ul></li>
+</ul>
+
+<!-- mark: 7-8, 18, 22-23, 29 -->
+
+<span class="codelanguage">CSS</span><pre><code class="CSS">    <span style="color:#800000">div</span>.<span style="color:#800000">SignInContent</span>
+    {
+      <span style="color:#FF0000">text-align</span>: <span style="color:#0000FF">center</span>;
+      <span style="color:#FF0000">margin-right</span>: <span style="color:#0000FF">auto</span>;
+      <span style="color:#FF0000">border</span>: <span style="color:#0000FF">solid 1px #BBBBBB</span>;
+      <span style="color:#FF0000">position</span>: <span style="color:#0000FF">relative</span>;
+<strong class="markLine">      <span style="color:#FF0000">width</span>: <span style="color:#0000FF">1020px</span>;</strong>
+<strong class="markLine">      <span style="color:#FF0000">height</span>: <span style="color:#0000FF">170px</span>;</strong>
+    }
+
+    <span style="color:#800000">div</span>.<span style="color:#800000">Banner</span>
+    {
+      <span style="color:#FF0000">padding-top</span>:<span style="color:#0000FF">10px</span>;
+      <span style="color:#FF0000">padding-bottom</span>:<span style="color:#0000FF">10px</span>;
+      <span style="color:#FF0000">text-align</span>: <span style="color:#0000FF">center</span>;
+      <span style="color:#FF0000">margin-left</span>: <span style="color:#0000FF">auto</span>;
+      <span style="color:#FF0000">margin-right</span>: <span style="color:#0000FF">auto</span>;
+<strong class="markLine">      <span style="color:#FF0000">background</span>: <span style="color:#0000FF">none repeat scroll 0 0 #4B6C9E</span>;</strong>
+      <span style="color:#FF0000">border-top</span>: <span style="color:#0000FF">solid 1px #BBBBBB</span>;
+      <span style="color:#FF0000">border-left</span>: <span style="color:#0000FF">solid 1px #BBBBBB</span>;
+      <span style="color:#FF0000">border-right</span>: <span style="color:#0000FF">solid 1px #BBBBBB</span>;
+<strong class="markLine">      <span style="color:#FF0000">width</span>: <span style="color:#0000FF">1020px</span>;</strong>
+<strong class="markLine">      <span style="color:#FF0000">color</span>: <span style="color:#0000FF">#F9F9F9</span>;</strong>
+    }
+
+    <span style="color:#800000">div</span>.<span style="color:#800000">LeftArea</span>
+    {
+      <span style="color:#FF0000">padding</span>:<span style="color:#0000FF">15px 15px</span>;
+<strong class="markLine">      <span style="color:#FF0000">width</span>: <span style="color:#0000FF">960px</span>; </strong>
+      <span style="color:#FF0000">height</span>: <span style="color:#0000FF">100%</span>;
+      <span style="color:#FF0000">position</span>: <span style="color:#0000FF">absolute</span>;
+      <span style="color:#FF0000">top</span>: <span style="color:#0000FF">0px</span>;
+      <span style="color:#FF0000">left</span>: <span style="color:#0000FF">0px</span>; }
+</code></pre></li>
+<li><p>进入<strong>解决方案资源管理器</strong>，打开 <strong>Web.config</strong> 文件。</p></li>
+<li><p>在 <strong>&lt;configuration&gt;</strong> 节点中添加以下部分：</p>
+
+<p>（代码段 - <em>Introduction to ACS2 Lab - Ex03 Location - </em>XML）</p>
+
+<!-- mark: 5-11 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"> <span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+       <span style="color:#0000FF">&lt;</span><span style="color:#800000">configSections</span><span style="color:#0000FF">&gt;</span>
+       ...
+       <span style="color:#0000FF">&lt;/</span><span style="color:#800000">configSections</span><span style="color:#0000FF">&gt;</span>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">location</span> <span style="color:#FF0000">path</span>=<span style="color:#0000FF">&quot;WebSiteACSLoginPageCode.html&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">          <span style="color:#0000FF">&lt;</span><span style="color:#800000">authorization</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">            <span style="color:#0000FF">&lt;</span><span style="color:#800000">allow</span> <span style="color:#FF0000">users</span>=<span style="color:#0000FF">&quot;*&quot;</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">authorization</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">location</span><span style="color:#0000FF">&gt;</span></strong>
+      <span style="color:#0000FF">&lt;</span><span style="color:#800000">location</span> <span style="color:#FF0000">path</span>=<span style="color:#0000FF">&quot;FederationMetadata&quot;</span><span style="color:#0000FF">&gt;</span>
+      .
+      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">location</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>找到 microsoft.identityModel/service/federatedAuthentication/wsFederation 部分，并将 issuer 属性更新为 <strong>https://localhost/WebSiteACS/WebSiteACSLoginPageCode.html</strong>。最终的 <strong>web.config</strong> 代码应该如下所示：</p>
+
+<!-- mark: 5 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">microsoft.identityModel</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">service</span> <span style="color:#FF0000">saveBootstrapTokens</span>=<span style="color:#0000FF">&quot;true&quot;</span><span style="color:#0000FF">&gt;</span>
+    ...
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">federatedAuthentication</span><span style="color:#0000FF">&gt;</span>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">wsFederation</span> <span style="color:#FF0000">passiveRedirectEnabled</span>=<span style="color:#0000FF">&quot;true&quot;</span> <span style="color:#FF0000">issuer</span>=<span style="color:#0000FF">&quot;https://localhost/WebSiteACS/WebSiteACSLoginPageCode.html&quot;</span> <span style="color:#FF0000">realm</span>=<span style="color:#0000FF">&quot;https://localhost/WebSiteACS/&quot;</span> <span style="color:#FF0000">requireHttps</span>=<span style="color:#0000FF">&quot;true&quot;</span><span style="color:#0000FF">/&gt;</span></strong>
+      <span style="color:#0000FF">&lt;</span><span style="color:#800000">cookieHandler</span> <span style="color:#FF0000">requireSsl</span>=<span style="color:#0000FF">&quot;true&quot;</span><span style="color:#0000FF">/&gt;</span>
+    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">federatedAuthentication</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>保存并关闭 <strong>Web.config</strong> 文件。</p></li>
+</ol>
+
+<p><a name="Ex3Verification"></a></p>
+
+<h4 id="Exercise_3_Verification">练习 3：验证</h4>
+
+<p>为了验证练习三中的步骤是否已正确执行，请执行以下操作：</p>
+
+<ol>
+<li> 按 <strong>F5</strong> 开始调试。信赖方 (https://localhost/WebSiteACS/) 将重定向到访问控制服务进行身份验证。</li>
+<li><p>从自定义登录页面选择要使用的标识提供者（例如 Live ID）并提交凭据。</p>
+
+<p><img src="images/custom-login-page.png?raw=true" alt="自定义登录页面" title="自定义登录页面" />
+</p>
+
+<p><em>自定义登录页面</em></p></li>
+<li><p>访问控制向云服务发送它预期的声明，此时我们通过身份验证。</p></li>
+<li><p>关闭浏览器。</p></li>
+</ol>
+
+<p><a name="Ex3Summary"></a>   </p>
+
+<h4 id="Exercise_3_Summary">练习 3：小结</h4>
+
+<p>此实验的最后一个练习演示了如何在您的网站中无缝集成 ACS 身份验证元素，说明无需打破云服务的既有体验和风格即可利用 ACS 的高级功能。</p>
+
+<hr />
+
+<p><a name="Summary"></a>  </p>
+
+<h2 id="Summary">小结</h2>
+
+<p>通过完成此动手实验，您学习了如何：</p>
+
+<ul>
+<li>配置云服务以便将身份验证外包给 ACS</li>
+<li>配置 ACS 以便包含要利用的标识提供者</li>
+<li>配置 ACS 以便处理传入的标识并添加新声明</li>
+<li>修改云服务以便使用来自 ACS 的声明并帮助作出授权决策</li>
+<li>自定义 ACS 所提供的默认身份验证用户体验</li>
+</ul>
+
+<p>将身份验证外包给外部实体而非由自己处理所有细节是一种非常高效的做法。Windows Identity Foundation 让我们可以轻松地配置 .NET 云服务，将其身份验证的需要委托给外部机构。Windows Azure 访问控制服务是承接身份验证外包的理想服务，因为它可以将处理多个标识提供者（例如 Windows Live ID、Facebook、Google、Yahoo!）甚至业务提供程序（例如由 Active Directory 联合身份验证或类似服务所增强的目录）的复杂性抽象屏蔽掉。此外，ACS 还提供强大的工具，可以控制用户标识在抵达云服务之前的处理方式。这个介绍性的动手实验只是 ACS 功能的入门探索。在此我们重点考察了网站，但 ACS 也可以处理 SOAP 和 REST 等 Web 服务；在此我们使用的是门户，但 ACS 还提供可自动执行配置任务的丰富管理 API；在此我们重点考察了 Web 标识，但 ACS 还提供为商业标识提供程序提供全面的支持，并针对这些提供程序所生成的更多声明提供处理能力。如果您有意进一步了解这些功能，请参阅即将发布的中级和高级动手实验。</p> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-IntroAccessControlService/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

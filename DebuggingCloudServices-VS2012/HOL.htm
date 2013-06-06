@@ -1,0 +1,935 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 在 Windows Azure 中调试应用程序</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-DebuggingCloudServices-VS2012" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-DebuggingCloudServices-VS2012" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="HOLTop"></a></p>
+
+<h1 id="Debugging_Applications_in_Windows_Azure">在 Windows Azure 中调试应用程序</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>使用 Visual Studio，您可以通过单步执行代码、设置断点并检查程序变量的值，在本地计算机上调试应用程序。对于 Windows Azure 应用程序，可使用计算模拟器在本地运行代码，使用上述功能和方法进行调试，从而使这一过程相对简单明了。</p>
+
+<p>理想情况下，应利用计算模拟器并使用 Visual Studio 发现和修复代码中的大多数 Bug，这样可以实现效率最高的调试环境。尽管如此，某些 Bug 仍可能检测不到，要在应用程序部署到云后才会显示出来。这些 Bug 常常是缺少依赖项的结果，或者由执行环境中的差异引起。有关环境问题的其他信息，请参阅<a href="http://msdn.microsoft.com/zh-CN/library/windowsazure/gg432960.aspx">计算模拟器与 Windows Azure 之间的差异</a>。</p>
+
+<p>在应用程序部署到云之后，不再能够附加调试器，需要依赖写入日志的调试信息才能对应用程序失败进行诊断和故障排除。Windows Azure 提供了全面的诊断工具，可用来从不同来源捕获信息，包括 Windows Azure 应用程序日志、IIS 日志、失败的请求跟踪、Windows 事件日志、自定义错误日志和故障转储。这种诊断信息的可用性依赖于 Windows Azure 诊断监视器从各角色实例收集数据，并将这些信息传输到 Windows Azure 存储以进行聚合。只要这些信息在存储中，就可以对其进行检索和分析。</p>
+
+<p>有时，应用程序发生崩溃时可能还未能生成有助于确定失败原因的日志。通过 IntelliTrace 调试（Visual Studio 2012 Ultimate 中的功能），可以对正在 Windows Azure 中运行的角色实例记录大量调试信息。本实验讨论如何针对 Azure 部署启用 IntelliTrace，以及如何对角色启动失败情况进行调试。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在本动手实验中，您将：</p>
+
+<ul>
+<li><p>了解 Visual Studio 和 Windows Azure 中可对部署到 Windows Azure 的应用程序进行调试的功能和方法。</p></li>
+<li><p>使用简单的 <strong>TraceListener</strong> 直接记录到表存储，使用查看器对这些日志进行检索。</p></li>
+<li><p>了解如何启用和使用 IntelliTrace 来跟踪和调试应用程序。</p></li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li><p>IIS（带有 ASP.NET、WCF HTTP 激活）</p></li>
+<li><p><a href="http://www.microsoft.com/visualstudio/">Visual Studio Express 2012 for Web</a> 或更高版本。</p></li>
+<li><p><a href="http://www.microsoft.com/windowsazure/sdk/">Windows Azure Tools for Microsoft Visual Studio 1.8</a></p></li>
+<li><p><a href="http://www.microsoft.com/express/sql/download/">SQL Server 2012 Express Edition（或更高版本）</a></p></li>
+<li><p>Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></p></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>此实验针对 Windows 8 而设计</p>
+</blockquote>
+<p><a name="Setup"></a></p>
+
+<h3 id="Setup">设置</h3>
+
+<p>为了执行此动手实验中的各项练习，需要对环境进行设置。</p>
+
+<ol>
+<li><p>打开 Windows 资源管理器窗口，浏览到此实验的 <strong>Source</strong> 文件夹。</p></li>
+<li><p>右键单击 <strong>Setup.cmd</strong> 文件，然后单击<strong>“以管理员身份运行”</strong>。这将启动安装过程，该过程将配置环境并安装此实验的 Visual Studio 代码段。</p></li>
+<li><p>如果显示“用户帐户控制”对话框，请确认操作以继续。</p></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>请务必在运行安装程序前检查此实验的所有依赖项。</p>
+</blockquote>
+<p><a name="UsingCodeSnippets"></a></p>
+
+<h3 id="Using_the_Code_Snippets">使用代码段</h3>
+
+<p>实验文档将指导您插入代码块。为方便起见，大部分代码是以 Visual Studio 代码段的形式提供的，您可以在 Visual Studio 2012 中使用而不必手动添加。</p>
+
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ul>
+<li><p><a href="#Exercise1">了解 Visual Studio 和 Windows Azure 中提供的功能和方法</a></p></li>
+<li><p><a href="#Exercise2">添加诊断跟踪</a></p></li>
+<li><p><a href="#Exercise3">使用 IntelliTrace 诊断角色启动失败</a>（Visual Studio 2012 Ultimate 的可选功能）</p></li>
+</ul>
+
+<p>本实验的估计完成时间：<strong>40 分钟</strong>。</p>
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Learn_What_Features_and_Techniques_are_Available_in_Visual_Studio_and_Windows_Azure">练习 1：了解 Visual Studio 和 Windows Azure 中提供的功能和方法</h3>
+
+<p>因为 Windows Azure 诊断面向运行监视，必须从多个角色实例收集信息，所以需要首先将诊断数据从每个角色中的本地存储传输到 Windows Azure 存储进行聚合。这就需要以编程方式对诊断监视器的传输进行计划，以便定期将日志数据复制到 Windows Azure 存储，或者按需请求传输日志。而且，以这种方式获得的信息会提供传输时可用的诊断数据快照。为了检索更新数据，需要进行新传输。在调试单个角色时（尤其在开发阶段），这些操作会向过程添加不必要的麻烦。为简化从部署的角色检索诊断数据的过程，直接从 Windows Azure 存储读取信息而不执行其他步骤会更加简单。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Exploring_the_Fabrikam_Insurance_Application">任务 1 - 了解 Fabrikam Insurance 应用程序</h4>
+
+<p>在本任务中，您将在 Web 开发服务器中生成和运行 Fabrikam Insurance 应用程序以熟悉其操作。</p>
+
+<ol>
+<li><p>通过右键单击 <strong>Microsoft Visual Studio Express 2012 for Web</strong> 快捷方式并选择<strong>“以管理员身份运行”</strong>，在提升的管理员模式下打开 Visual Studio。</p></li>
+<li><p>在<strong>“文件”</strong>菜单中，选择<strong>“打开项目”</strong>，浏览到实验的 <strong>Source</strong> 文件夹中的 <strong>Ex1-LoggingToAzureStorage</strong>，在 <strong>Begin</strong> 文件夹中选择 <strong>Begin.sln</strong>，然后单击<strong>“打开”</strong>。</p></li>
+<li><p>设置项目的启动操作。为此，在<strong>解决方案资源管理器</strong>中右键单击 <strong>FabrikamInsurance</strong> 项目，然后选择<strong>“属性”</strong>。在属性窗口中，切换到 <strong>Web</strong> 选项卡，然后在<strong>“启动操作”</strong>下面，选择<strong>“特定页”</strong>选项。将页值保留为空白。</p>
+
+<p><img src="Images/configuring-the-start-action-of-the-project.png?raw=true" alt="配置项目的启动操作" title="配置项目的启动操作" />
+</p>
+
+<p><em>配置项目的启动操作</em></p></li>
+<li><p>按 <strong>F5</strong> 生成并运行解决方案。应用程序应在 Web 开发服务器中启动，并在浏览器中打开 <strong>Auto Insurance Quotes</strong>（汽车保险报价单）页面。</p></li>
+<li><p>若要浏览其操作，请通过从 <strong>Vehicle Details</strong>（车辆详细信息）下拉列表中选择任意值组合来填写该表单，然后单击 <strong>Calculate</strong> （计算）获得保险费报价单。请注意，在提交表单后，该页会刷新并显示计算的金额。</p>
+
+<p><img src="Images/exploring-the-fabrikam-insurance-application.png?raw=true" alt="了解 Fabrikam Insurance 应用程序" title="了解 Fabrikam Insurance 应用程序" />
+</p>
+
+<p><em>了解 Fabrikam Insurance 应用程序</em></p></li>
+<li><p>返回到 Visual Studio，然后按 <strong>Shift+F5</strong> 停止调试并关闭应用程序。</p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Running_the_Application_as_a_Windows_Azure_Project">任务 2 - 将应用程序作为 Windows Azure 项目运行</h4>
+
+<p>在本任务中，您将创建一个新的 Windows Azure 项目，以准备将该应用程序部署到 Windows Azure。</p>
+
+<ol>
+<li><p>向解决方案添加新的 Windows Azure 项目。为此，在<strong>“文件”</strong>菜单中，指向<strong>“添加”</strong>，然后选择<strong>“新建项目”</strong>。在<strong>“添加新项目”</strong><strong></strong>对话框中，展开<strong>“已安装的模板”</strong>列表中的 <strong>Visual C#</strong>，然后选择<strong>“云”</strong>。选择<strong>“Windows Azure 云服务”</strong>模板。将项目的<strong>“名称”</strong>设置为 <strong>FabrikamInsuranceService</strong>，并接受在解决方案的文件夹中的建议位置。单击<strong>“确定”</strong>创建项目。</p>
+
+<p><img src="Images/creating-a-new-windows-azure-project-c.png?raw=true" alt="创建新的 windows azure 项目" />
+</p>
+
+<p><em>创建新的 Windows Azure 项目</em></p></li>
+<li><p>在<strong>“新建 Windows Azure 项目”</strong>对话框中，单击<strong>“确定”</strong>，不向解决方案添加任何新角色。</p></li>
+<li><p>现在，在<strong>解决方案资源管理器</strong>中，右键单击新的 <strong>FabrikamInsuranceService</strong> 项目中的<strong>“角色”</strong>节点，指向<strong>“添加”</strong>，然后选择<strong>“解决方案中的 Web 角色项目”</strong>。然后，在<strong>“与角色项目关联”</strong>对话框中，选择 <strong>FabrikamInsurance</strong> 项目，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="Images/associating-the-mvc-application-with-the-azure-project.png?raw=true" alt="将 MVC 应用程序与 Windows Azure 项目关联" title="将 MVC 应用程序与 Windows Azure 项目关联" />
+</p>
+
+<p><em>将 MVC 应用程序与 Windows Azure 项目关联</em></p></li>
+<li><p>现在，向 MVC 应用程序添加角色入口点。为此，在<strong>解决方案资源管理器</strong>中，右键单击 <strong>FabrikamInsurance</strong> 项目，指向<strong>“添加”</strong>，然后选择<strong>“现有项”</strong>。在<strong>“添加现有项”</strong>对话框中，浏览到实验的 <strong>Source</strong> 文件夹中的 <strong>Assets</strong>。在此文件夹中，选择 <strong>WebRole.cs</strong>，然后单击<strong>“添加”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong><strong>WebRole</strong> 类是一个 <strong>RoleEntryPoint</strong> 派生类，它包含 Windows Azure 启动、运行或停止角色时所调用的方法。所提供的代码与新建 Windows Azure 项目时 Visual Studio 所生成的代码相同。</p>
+</blockquote></li>
+<li><p>您现在已做好测试 Windows Azure 项目应用程序的准备。若要在计算模拟器中启动应用程序，请将 <strong>FabrikamInsuranceService</strong> 云项目设置为启动项目，然后按 <strong>F5</strong>。等待部署完成且浏览器打开并显示主页。</p></li>
+<li><p>同样，通过从下拉列表中选择值的组合来完成输入表单，然后单击 <strong>Calculate</strong>（计算）。确保您已收到有效响应，其中含有计算的保险费。</p></li>
+<li><p>在确认计算模拟器中一切正常之后（就像由 Web 开发服务器托管一样），您将通过让应用程序处理它无法正确处理的错误数据来引发异常。为此，通过将 <strong>Make</strong>（制造商）设置为 <em>PORSCHE</em> 并将 <strong>Model</strong>（车型）设置为 <em>BOXSTER (BAD DATA)</em>，更改用于计算的值。</p>
+
+<p><img src="Images/choosing-make-and-model-for-the-insurance-premium-calculation.png?raw=true" alt="选择用于保险费计算的制造商和车型" title="选择用于保险费计算的制造商和车型" />
+</p>
+
+<p><em>选择用于保险费计算的制造商和车型</em></p></li>
+<li><p>单击 <strong>Calculate</strong>（计算）重新提交含有新值的表单。请注意，Visual Studio 调试器中会发生未处理的异常，并且会在引起错误的行停止执行。</p>
+
+<p><img src="Images/unhandled-exception-in-the-application-caused-by-bad-data.png?raw=true" alt="应用程序中由错误数据引起的未处理异常" title="应用程序中由错误数据引起的未处理异常" />
+</p>
+
+<p><em>应用程序中由错误数据引起的未处理异常</em></p>
+<blockquote>
+<p><strong>注意：</strong>在 Visual Studio 调试器中，您可以单步执行代码、设置断点并检查程序变量的值。对在计算模拟器中托管的应用程序进行调试，其体验与在调试可附加 Visual Studio 调试器的其他程序是一样的。在这些条件下使用调试器的情况已有大量介绍，此处不进行详述。有关详细信息，请参阅<a href="http://msdn.microsoft.com/zh-CN/library/sc65sadd.aspx">使用 Visual Studio 进行调试</a>。</p>
+</blockquote></li>
+<li><p>按 <strong>F5</strong> 可继续执行并让 ASP.NET 处理异常。请注意，未处理的异常处理程序会提供有关该异常的详细信息，包括引发该异常的源代码中的行。</p>
+
+<p><img src="Images/aspnet-default-unhandled-exception-handler.png?raw=true" alt="ASP.NET 默认的未处理异常处理程序" title="ASP.NET 默认的未处理异常处理程序" />
+</p>
+
+<p><em>ASP.NET 默认的未处理异常处理程序</em></p>
+<blockquote>
+<p><strong>注意：</strong>未处理的异常通常由 ASP.NET 进行处理。ASP.NET 在其响应中报告错误，包括有关错误的详细信息以及源代码中引发异常的位置。但是，对于公开可用的应用程序，建议不要公开这种信息，以免不必要地披露应用程序的内部详细信息，从而损害安全性。相反，应该将错误和其他诊断输出写入一个只有经过适当授权才能检索的日志中。</p>
+
+<p>您可以配置在执行 Web 请求期间发生未处理的错误时 ASP.NET 显示信息的方式。</p>
+
+<p>在这种情况下，未处理的异常错误页包含有关错误的完整详细信息，因为 <strong>customErrors</strong> 元素的默认模式为 <em>remoteOnly</em>，而您是从本地访问该页的。在将应用程序部署到云并对其远程访问时，该页会显示一个一般错误消息。</p>
+</blockquote></li>
+<li><p>返回到 Visual Studio，然后按 <strong>Shift+F5</strong> 停止调试并关闭应用程序。</p></li>
+</ol>
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Adding_diagnostic_trace">练习 2：添加诊断跟踪</h3>
+
+<p>在本练习中，您将通过配置一个专门的跟踪侦听器来调试一个简单应用程序，该侦听器可将输出直接写入 Windows Azure 存储模拟器中的一个表中。为了生成诊断数据，应检测应用程序，以使用 System.Diagnostics 命名空间中的标准方法写入跟踪信息。最后，需要创建一个可检索和显示诊断表内容的简单日志查看器应用程序。</p>
+
+<p>本练习中要使用的应用程序将模拟一个在线自动保险单计算器。它有一个简单的表单，用户可在其中输入有关其车辆的详细信息，然后提交表单获得保险费的估算值。在后台，对该表单进行处理的控制器操作使用一个单独的程序集，基于用户的输入来计算保险费。该程序集包含一个 Bug，如果输入值在预期范围之外会引发异常。</p>
+
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_-_Adding_Tracing_Support_to_the_Application">任务 1 - 向应用程序添加跟踪支持</h4>
+
+<p>在上一个练习中，概要介绍了如何使用 Visual Studio 调试在计算模拟器中本地执行的应用程序。若要在应用程序部署到云之后对其进行调试，需要将调试信息写入日志，以便对应用程序失败进行诊断。</p>
+
+<p>在本任务中，将向项目中添加 TraceListener，以便能够将诊断数据直接记录到表存储中，而且能够使用简单查询方便地检索这些诊断数据。实验的 <strong>Assets</strong> 文件夹中已提供此项目的源代码。有关跟踪侦听器的详细信息，请参阅：<a href="http://msdn.microsoft.com/zh-CN/library/system.diagnostics.tracelistener.aspx"><a href="http://msdn.microsoft.com/zh-CN/library/system.diagnostics.tracelistener.aspx">http://msdn.microsoft.com/zh-CN/library/system.diagnostics.tracelistener.aspx</a></a></p>
+
+<ol>
+<li><p>如果 Visual Studio 尚未打开，请通过右键单击 <strong>Microsoft Visual Studio Express 2012 for Web</strong> 快捷方式并选择<strong>“以管理员身份运行”</strong>，在提升的管理员模式下将其打开。</p></li>
+<li><p>在<strong>“文件”</strong>菜单中，选择<strong>“打开项目”</strong>，浏览到实验的 <strong>Source</strong> 文件夹中的 <strong>Ex2-AddingDiagnosticTrace</strong>，在 <strong>Begin</strong> 文件夹中选择 <strong>Begin.sln</strong>，然后单击<strong>“打开”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>也可以在完成上一个练习后继续使用所获得的解决方案。</p>
+</blockquote></li>
+<li><p>在<strong>解决方案资源管理器</strong>中，右键单击 <strong>Begin</strong> 解决方案，指向<strong>“添加”</strong>，然后选择<strong>“现有项目”</strong>。在<strong>“添加现有项目”</strong>对话框中，浏览到实验的 <strong>Source</strong> 文件夹中的 <strong>Assets</strong>，导航到此文件夹中的 <strong>AzureDiagnostics</strong>，选择 <strong>AzureDiagnostics</strong> 项目文件，然后单击<strong>“打开”</strong>。</p></li>
+<li><p>在 Web 角色项目中添加对 <strong>AzureDiagnostics</strong> 库的引用。为此，在<strong>解决方案资源管理器</strong>中右键单击 <strong>FabrikamInsurance</strong> 项目，然后选择<strong>“添加引用”</strong>。在<strong>“添加引用”</strong>对话框中，切换到<strong>“解决方案”</strong>面板下的<strong>“项目”</strong>选项卡，在项目列表中选择 <strong>AzureDiagnostics</strong>，然后单击<strong>“确定”</strong>。</p></li>
+<li><p>打开 <strong>FabrikamInsurance</strong> 项目中的 <strong>Global.asax.cs</strong>，插入以下命名空间指令。</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure;
+<span style="color:#0000FF">using</span> Microsoft.WindowsAzure.ServiceRuntime;
+</code></pre></li>
+<li><p>在 <strong>MvcApplication</strong> 类中添加以下（突出显示的）方法。</p>
+
+<p>（代码段 - WindowsAzureDebugging-Ex2-ConfigureTraceListener-CS）</p>
+
+<!-- mark:3-25 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> MvcApplication : System.Web.HttpApplication {
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">static</span> <span style="color:#0000FF">void</span> ConfigureTraceListener()</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">bool</span> enableTraceListener = <span style="color:#0000FF">false</span>;</strong>
+<strong class="markLine">    <span style="color:#0000FF">string</span> enableTraceListenerSetting = RoleEnvironment.GetConfigurationSettingValue(<span style="color:#8B0000">&quot;EnableTableStorageTraceListener&quot;</span>);</strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (<span style="color:#0000FF">bool</span>.TryParse(enableTraceListenerSetting, <span style="color:#0000FF">out</span> enableTraceListener))</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">if</span> (enableTraceListener)</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        AzureDiagnostics.TableStorageTraceListener listener =</strong>
+<strong class="markLine">          <span style="color:#0000FF">new</span> AzureDiagnostics.TableStorageTraceListener(<span style="color:#8B0000">&quot;Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString&quot;</span>)</strong>
+<strong class="markLine">          {</strong>
+<strong class="markLine">            Name = <span style="color:#8B0000">&quot;TableStorageTraceListener&quot;</span></strong>
+<strong class="markLine">          };</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        System.Diagnostics.Trace.Listeners.Add(listener);</strong>
+<strong class="markLine">        System.Diagnostics.Trace.AutoFlush = <span style="color:#0000FF">true</span>;</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine">      <span style="color:#0000FF">else</span></strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        System.Diagnostics.Trace.Listeners.Remove(<span style="color:#8B0000">&quot;TableStorageTraceListener&quot;</span>);</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">  }</strong>
+
+  ... }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong> <strong>ConfigureTraceListener</strong> 方法检索 <em>EnableTableStorageTraceListener</em> 配置设置，如果其值为 <em>true</em>，则它会创建 <strong>TableStorageTraceListener</strong> 类（在之前添加到解决方案的项目中定义）的新实例，然后将该实例添加到可用跟踪侦听器的集合。请注意，该方法还会启用 <strong>Trace</strong> 对象的 <strong>AutoFlush</strong> 属性，以确保立即将跟踪消息写入表存储，从而可在跟踪消息产生时进行检索。</p>
+</blockquote></li>
+<li><p>现在，在 <strong>Application_Start</strong> 方法中插入以下（突出显示的）代码，以设置 Windows Azure 存储配置设置发布服务器并启用 <strong>TableStorageTraceListener</strong>。</p>
+
+<p>（代码段 - WindowsAzureDebugging-Ex2- Application_Start-CS）</p>
+
+<!-- mark:7-12 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> MvcApplication : System.Web.HttpApplication { ...
+
+  <span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Application_Start() {
+<strong class="markLine">    CloudStorageAccount.SetConfigurationSettingPublisher((configName, configSetter) =&gt;</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        configSetter(RoleEnvironment.GetConfigurationSettingValue(configName));</strong>
+<strong class="markLine">      });</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    ConfigureTraceListener();</strong>
+
+    AreaRegistration.RegisterAllAreas(); WebApiConfig.Register(GlobalConfiguration.Configuration); FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters); RouteConfig.RegisterRoutes(RouteTable.Routes); BundleConfig.RegisterBundles(BundleTable.Bundles); } }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>通过在配置文件的 <strong>system.diagnostics</strong> 节中配置 TraceListener 可以添加 TraceListener。但是，在这种情况下，角色以编程方式创建侦听器，您可以仅在需要侦听器且服务正在运行时启用该侦听器。</p>
+
+<p><img src="Images/enabling-the-tablestoragetracelistener-in-the-configuration-file.png?raw=true" alt="在配置文件中启用 TableStorageTraceListener" title="在配置文件中启用 TableStorageTraceListener" />
+</p>
+</blockquote></li>
+<li><p>接下来，定义一个配置设置以使用 <strong>TableStorageTraceListener</strong> 来控制诊断记录。若要创建该设置，请展开 <strong>FabrikamInsuranceService</strong> 项目中的“角色”节点，然后双击 <strong>FabrikamInsurance</strong> 角色。在角色属性窗口中，切换到<strong>“设置”</strong>页，单击<strong>“添加设置”</strong>，然后将新设置的名称设置为 <em>EnableTableStorageTraceListener</em>，将类型设置为 <em>String</em>，并将值设置为 <em>false</em>。</p>
+
+<p><img src="Images/creating-a-configuration-setting-to-enable-the-trace-listener.png?raw=true" alt="创建用于启用跟踪侦听器的配置设置" title="创建用于启用跟踪侦听器的配置设置" />
+</p>
+
+<p><em>创建用于启用跟踪侦听器的配置设置</em></p></li>
+<li><p>找到 <strong>WebRole</strong> 类中的 <strong>RoleEnvironmentChanging</strong> 事件处理程序，然后用以下（突出显示的）代码替换其正文。</p>
+
+<p>（代码段 - WindowsAzureDebugging-Ex2-WebRole RoleEnvironmentChanging-CS）</p>
+
+<!-- mark:7-12 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> WebRole : RoleEntryPoint { ...
+
+  <span style="color:#0000FF">private</span> <span style="color:#0000FF">void</span> RoleEnvironmentChanging(<span style="color:#0000FF">object</span> sender, RoleEnvironmentChangingEventArgs e) {
+<strong class="markLine">    <span style="color:#008000">// for any configuration setting change except EnableTableStorageTraceListener</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (e.Changes.OfType&lt;RoleEnvironmentConfigurationSettingChange&gt;().Any(change =&gt; change.ConfigurationSettingName != <span style="color:#8B0000">&quot;EnableTableStorageTraceListener&quot;</span>))</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#008000">// Set e.Cancel to true to restart this role instance</span></strong>
+<strong class="markLine">      e.Cancel = <span style="color:#0000FF">true</span>;</strong>
+<strong class="markLine">    }</strong>
+  } }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>RoleEnvironmentChanging</strong> 事件发生在对服务配置的更改应用于角色的运行实例之前。更新后的处理程序扫描更改集合，并针对任何配置设置更改重新启动角色实例，除非更改仅涉及 <em>EnableTableStorageTraceListener</em> 设置的值。如果此特定设置发生更改，则角色实例可以应用更改而不会重新启动。</p>
+</blockquote></li>
+<li><p>现在，将以下（突出显示的）代码添加到 <strong>Global.asax.cs</strong> 中，以便为 <strong>RoleEnvironmentChanged</strong> 事件定义一个处理程序。</p>
+
+<p>（代码段 - WindowsAzureDebugging-Ex2-Global RoleEnvironmentChanged event handler-CS）</p>
+
+<!-- mark:5-12 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> MvcApplication : System.Web.HttpApplication { ...
+
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">void</span> RoleEnvironmentChanged(<span style="color:#0000FF">object</span> sender, RoleEnvironmentChangedEventArgs e)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#008000">// configure trace listener for any changes to EnableTableStorageTraceListener </span></strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (e.Changes.OfType&lt;RoleEnvironmentConfigurationSettingChange&gt;().Any(change =&gt; change.ConfigurationSettingName == <span style="color:#8B0000">&quot;EnableTableStorageTraceListener&quot;</span>))</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      ConfigureTraceListener();</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">  }</strong>
+
+  ... }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>RoleEnvironmentChanged</strong> 事件发生在对服务配置的更改已应用于角色的运行实例之后。如果此更改涉及 <em>EnableTableStorageTraceListener</em> 配置设置，则处理程序会调用 <strong>ConfigureTraceListener</strong> 方法来启用或禁用跟踪侦听器。</p>
+</blockquote></li>
+<li><p>最后，在调用 <strong>ConfigureTraceListener</strong> 方法后，紧接着将以下（突出显示的）代码行插入到 <strong>Application_Start</strong> 方法中，以订阅 <strong>RoleEnvironment</strong> 的 <strong>Changed</strong> 事件。</p>
+
+<!-- mark:14 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> MvcApplication : System.Web.HttpApplication { ...
+
+  <span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Application_Start() { CloudStorageAccount.SetConfigurationSettingPublisher((configName, configSetter) =&gt; { configSetter(RoleEnvironment.GetConfigurationSettingValue(configName)); }); ConfigureTraceListener();           
+
+<strong class="markLine">    RoleEnvironment.Changed += <span style="color:#0000FF">this</span>.RoleEnvironmentChanged;</strong>
+
+    AreaRegistration.RegisterAllAreas(); WebApiConfig.Register(GlobalConfiguration.Configuration); FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters); RouteConfig.RegisterRoutes(RouteTable.Routes); BundleConfig.RegisterBundles(BundleTable.Bundles); } }
+</code></pre></li>
+<li><p>若要检测应用程序并将诊断信息写入错误日志，请向应用程序添加全局错误处理程序。为此，将以下方法插入 <strong>MVCApplication</strong> 类中。</p>
+
+<p>（代码段 - WindowsAzureDebugging-Ex2-Application_Error-CS）</p>
+
+<!-- mark:5-9 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> MvcApplication : System.Web.HttpApplication { ...
+
+<strong class="markLine">  <span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Application_Error()</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> lastError = Server.GetLastError();</strong>
+<strong class="markLine">    System.Diagnostics.Trace.TraceError(lastError.Message);</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>处理请求时，会引发 <strong>Application_Error</strong> 事件以捕获任何未处理的 ASP.NET 错误。上面所示的事件处理程序使用 <strong>Server.GetLastError</strong> 来检索对未处理异常的引用，然后使用 <strong>System.Diagnostics.Trace</strong> 类的 <strong>TraceError</strong> 方法来记录错误消息。</p>
+
+<p>请注意，<strong>Trace</strong> 对象会将消息输出到 <strong>Listeners</strong> 集合中的每个侦听器，包括 <strong>TableStorageTraceListener</strong>，前提是已在配置设置中启用它。通常，该集合还包含 <strong>DefaultTraceListener</strong> 类的实例，并且在计算模拟器中执行解决方案时，还包含 <strong>DevelopmentFabricTraceListener</strong>。后者将输出写入可从计算模拟器用户界面查看的日志。</p>
+
+<p>若要写入 Windows Azure 诊断日志，还可以将 <strong>DiagnosticMonitorTraceListener</strong> 添加到角色的 <strong>Web.config</strong> 或 <strong>App.config</strong> 文件。在使用这个类型的跟踪侦听器时，将在本地收集每个角色的日志。若要检索日志，首先需要指示诊断监视器将信息复制到存储服务。Windows Azure Tools for Microsoft Visual Studio 附带的角色项目模板已包括了在生成的配置文件中使用 <strong>DiagnosticMonitorTraceListener</strong> 所需的设置。</p>
+</blockquote></li>
+<li><p>打开 <strong>FabrikamInsurance</strong> 项目的<strong>“控制器”</strong>文件夹中的 <strong>QuoteController.cs</strong> 文件，然后添加以下方法。</p>
+
+<p>（代码段 - WindowsAzureDebugging-Ex2-Controller OnException method-CS）</p>
+
+<!-- mark:6-9 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#">[HandleError]
+<span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> QuoteController : Controller { ...
+
+<strong class="markLine">  <span style="color:#0000FF">protected</span> <span style="color:#0000FF">override</span> <span style="color:#0000FF">void</span> OnException(ExceptionContext filterContext)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    System.Diagnostics.Trace.TraceError(filterContext.Exception.Message);</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>如果在控制器中处理某个操作期间发生未处理的异常，则会调用 <strong>OnException</strong> 方法。对于 MVC 应用程序，通常在控制器级别捕获未处理的错误，前提是这些错误发生在执行某个控制器操作期间，并且该操作（或控制器）是用 <strong>HandleErrorAttribute</strong> 修饰的。若要记录控制器操作中的异常，需要重写控制器的 <strong>OnException</strong> 方法，因为在错误处理筛选器捕获异常时，会绕过 <strong>Application_Error</strong>。</p>
+
+<p>默认情况下，在带有 <strong>HandleErrorAttribute</strong> 属性的操作方法引发异常时，MVC 会显示位于 <strong>~/Views/Shared</strong> 文件夹中的 <strong>Error</strong> 视图。</p>
+</blockquote></li>
+<li><p>除错误记录外，跟踪还可用于在执行应用程序期间记录其他重要事件。例如，每当调用给定控制器操作时进行注册。为了说明此功能，将以下（突出显示的）跟踪语句插入 <strong>Calculator</strong> 方法的开始处，以便每当调用此操作时都会记录一条消息。</p>
+
+<!-- mark:7 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> QuoteController : Controller { ...
+
+  <span style="color:#0000FF">public</span> ActionResult Calculator() {
+<strong class="markLine">    System.Diagnostics.Trace.TraceInformation(<span style="color:#8B0000">&quot;Calculator called...&quot;</span>);</strong>
+    QuoteViewModel model = <span style="color:#0000FF">new</span> QuoteViewModel();
+    <span style="color:#0000FF">this</span>.PopulateViewModel(model, <span style="color:#0000FF">null</span>);
+    <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.View(model); } ... }
+</code></pre></li>
+<li><p>同样，向 <strong>About</strong> 操作添加一个跟踪语句，如下所示（突出显示的内容）。</p>
+
+<!-- mark:7 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> QuoteController : Controller { ...
+
+  <span style="color:#0000FF">public</span> ActionResult About() {
+<strong class="markLine">    System.Diagnostics.Trace.TraceInformation(<span style="color:#8B0000">&quot;About called...&quot;</span>);</strong>
+    <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.View(); } ... }
+</code></pre></li>
+</ol>
+
+<p><a name="Ex2Task2"></a></p>
+
+<h4 id="Task_2_-_Creating_a_Log_Viewer_Tool">任务 2 - 创建日志查看器工具</h4>
+
+<p>此时，应用程序已做好跟踪准备，并且可以将其所有诊断输出发送到存储服务。若要查看跟踪日志，现在需要创建一个简单的日志查看器应用程序，该应用程序会定期查询该表并检索自上次查询以来添加的所有条目。</p>
+
+<ol>
+<li><p>将 LogViewer 控制台应用程序项目添加到解决方案。为此，在<strong>解决方案资源管理器</strong>中，右键单击 <strong>Begin</strong> 解决方案，指向<strong>“添加”</strong>，然后选择<strong>“现有项目”</strong>。在<strong>“添加现有项目”</strong>对话框中，浏览到实验的 <strong>Source</strong> 文件夹的 <strong>Assets</strong>，然后导航到此文件夹中的 <strong>LogViewer</strong>，选择 <strong>LogViewer</strong> 项目文件，然后单击<strong>“打开”</strong>。</p></li>
+<li><p>添加对此项目所需的程序集的引用。为此，在<strong>解决方案资源管理器</strong>中右键单击 <strong>LogViewer</strong> 项目，然后选择<strong>“添加引用”</strong>。在<strong>“添加引用”</strong>对话框中，切换到<strong>“程序集”</strong>面板下的<strong>“框架”</strong>选项卡并选择 <strong>System.Configuration</strong> 和 <strong>System.Data.Services.Client</strong>。接下来，切换到<strong>“扩展项”</strong>选项卡，然后选择 <strong>Microsoft.WindowsAzure.StorageClient</strong>。最后，单击<strong>“确定”</strong>。</p></li>
+<li><p>接下来，在解决方案中添加对诊断项目的引用。重复上一步骤打开<strong>“添加引用”</strong>对话框，只是这次应选择<strong>“解决方案”</strong>|<strong>“项目”</strong>选项卡，选择 <strong>AzureDiagnostics</strong> 项目，然后单击<strong>“确定”</strong>。</p></li>
+<li><p>将用于在控制台窗口中显示简单进度指示器的类添加到项目。为此，在<strong>解决方案资源管理器</strong>中右键单击 <strong>LogViewer</strong>，指向<strong>“添加”</strong>，然后选择<strong>“现有项”</strong>。在<strong>“添加现有项”</strong>对话框中，浏览到实验的 <strong>Source</strong> 文件夹中的 <strong>Assets</strong>，选择 <strong>ProgressIndicator.cs</strong> 文件，然后单击<strong>“添加”</strong>。</p></li>
+<li><p>在<strong>解决方案资源管理器</strong>中，双击 <strong>Program.cs</strong> 打开此文件，然后用下面各项替换其命名空间声明。</p>
+
+<p>（代码段 - WindowsAzureDebugging-Ex2-LogViewer namespaces-CS）</p>
+
+<!-- mark:1-8 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> System;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> System.Configuration;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> System.Data.Services.Client;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> System.Linq;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> System.Threading;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> AzureDiagnostics;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.StorageClient;</strong>
+</code></pre></li>
+<li><p>在 <strong>Program</strong> 类中定义以下（突出显示的）成员。</p>
+
+<p>（代码段 - <em>WindowsAzureDebugging-Ex2-LogViewer static members-CS</em>）</p>
+
+<!-- mark:3-4 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> Program {
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">static</span> <span style="color:#0000FF">string</span> lastPartitionKey = <span style="color:#0000FF">string</span>.Empty;</strong>
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">static</span> <span style="color:#0000FF">string</span> lastRowKey = <span style="color:#0000FF">string</span>.Empty;</strong>
+
+  <span style="color:#0000FF">static</span> <span style="color:#0000FF">void</span> Main(<span style="color:#0000FF">string</span>[] args) { } }
+</code></pre></li>
+<li><p>接下来，将 <strong>QueryLogTable</strong> 方法插入该类中。</p>
+
+<p>（代码段 - WindowsAzureDebugging-Ex2-QueryLogTable method-CS）</p>
+
+<!-- mark:4-19 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">class</span> Program { ...
+<strong class="markLine"></strong>
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">static</span> <span style="color:#0000FF">void</span> QueryLogTable(CloudTableClient tableStorage)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    TableServiceContext context = tableStorage.GetDataServiceContext();</strong>
+<strong class="markLine">    DataServiceQuery query = context.CreateQuery&lt;LogEntry&gt;(TableStorageTraceListener.DIAGNOSTICS_TABLE)</strong>
+<strong class="markLine">        .Where(entry =&gt; entry.PartitionKey.CompareTo(lastPartitionKey) &gt; 0</strong>
+<strong class="markLine">        || (entry.PartitionKey == lastPartitionKey &amp;&amp; entry.RowKey.CompareTo(lastRowKey) &gt; 0))</strong>
+<strong class="markLine">        <span style="color:#0000FF">as</span> DataServiceQuery;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">foreach</span> (AzureDiagnostics.LogEntry entry <span style="color:#0000FF">in</span> query.Execute())</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      Console.WriteLine(<span style="color:#8B0000">&quot;{0} - {1}&quot;</span>, entry.Timestamp, entry.Message);</strong>
+<strong class="markLine">      lastPartitionKey = entry.PartitionKey;</strong>
+<strong class="markLine">      lastRowKey = entry.RowKey;</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">  }</strong>
+
+  ... }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>诊断日志表中存储的行都带有一个由分区和行键属性组成的主键，其中，分区和行键属性都基于相应日志条目的事件时钟周期计数，因此按事件顺序排列。<strong>QueryLogTable</strong> 方法对该表进行查询，以检索主键值大于上一次调用此方法时获得的最后值的所有行。这会确保每次调用该方法时，该方法仅检索添加到日志中的新条目。</p>
+</blockquote></li>
+<li><p>最后，为了完成更改，将以下（突出显示的）代码插入 <strong>Main</strong> 方法的正文中。</p>
+
+<p>（代码段 - WindowsAzureDebugging-Ex2-LogViewer Main method-CS）</p>
+
+<!-- mark:7-25 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">class</span> Program { ...
+
+  <span style="color:#0000FF">static</span> <span style="color:#0000FF">void</span> Main(<span style="color:#0000FF">string</span>[] args) {
+<strong class="markLine">    <span style="color:#0000FF">string</span> connectionString = (args.Length == 0) ? <span style="color:#8B0000">&quot;Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString&quot;</span> : args[0];</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    CloudStorageAccount account = CloudStorageAccount.Parse(ConfigurationManager.AppSettings[connectionString]);</strong>
+<strong class="markLine">    CloudTableClient tableStorage = account.CreateCloudTableClient();</strong>
+<strong class="markLine">    tableStorage.CreateTableIfNotExist(TableStorageTraceListener.DIAGNOSTICS_TABLE);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    Utils.ProgressIndicator progress = <span style="color:#0000FF">new</span> Utils.ProgressIndicator();</strong>
+<strong class="markLine">    Timer timer = <span style="color:#0000FF">new</span> Timer(</strong>
+<strong class="markLine">      (state) =&gt;</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        progress.Disable();</strong>
+<strong class="markLine">        QueryLogTable(tableStorage);</strong>
+<strong class="markLine">        progress.Enable();</strong>
+<strong class="markLine">      },</strong>
+<strong class="markLine">      <span style="color:#0000FF">null</span>,</strong>
+<strong class="markLine">      0,</strong>
+<strong class="markLine">      10000);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    Console.ReadLine();</strong>
+  } ... }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>插入的代码对 Windows Azure 存储帐户信息进行初始化，必要时创建诊断表，然后启动一个计时器，该计时器定期调用在上一步中定义的 <strong>QueryLogMethod</strong>，以显示诊断日志中的新条目。</p>
+</blockquote></li>
+<li><p>为了完成查看器应用程序，请打开 <strong>LogViewer</strong> 项目中的 <strong>App.config</strong> 文件，然后插入以下（突出显示的）<strong>appSettings</strong> 节，以定义初始化存储帐户信息所需的 <em>DiagnosticsConnectionString</em> 设置。</p>
+
+<!-- mark:2-4 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+<strong class="markLine">  <span style="color:#0000FF">&lt;</span><span style="color:#800000">appSettings</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">key</span>=<span style="color:#0000FF">&quot;Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString&quot;</span> <span style="color:#FF0000">value</span>=<span style="color:#0000FF">&quot;UseDevelopmentStorage=true&quot;</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">appSettings</span><span style="color:#0000FF">&gt;</span></strong>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">startup</span><span style="color:#0000FF">&gt;</span>
+  ...
+</code></pre></li>
+</ol>
+
+<p><a name="Ex2Verification"></a></p>
+
+<h4 id="Verification">验证</h4>
+
+<p>您现在已做好在计算模拟器中执行解决方案的准备。为了动态启用表存储跟踪侦听器而不停止运行的服务，最初应在禁用 <em>EnableTraceStorageTraceListener</em> 设置的情况下部署该服务，然后在配置文件中更改该设置以启用侦听器，然后上载该侦听器以重新配置运行服务。应使用日志查看器应用程序来检查由该应用程序生成的跟踪消息。</p>
+
+<ol>
+<li><p>打开 <strong>FabrikamInsurance</strong> 项目的 <strong>Web.config</strong> 文件，然后插入以下（突出显示的）<strong>customErrors</strong> 节作为 <strong>system.web</strong> 元素的直接子项。</p>
+
+<!-- mark:5 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+  ...
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+    ...
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">customErrors</span> <span style="color:#FF0000">mode</span>=<span style="color:#0000FF">&quot;On&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+  ...
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>如果将 <strong>customErrors</strong> 模式设置为 <em>On</em>，ASP.NET 将为本地和远程客户端显示一般错误消息。如果 <strong>customErrors</strong> 设置为默认设置 <em>RemoteOnly</em>，应用程序部署到 Windows Azure 后，以远程方式访问该应用程序时，也将看到这些一般错误，因此，此步骤不是严格需要的。不过，您可通过此步骤在本地重现将应用程序部署到云后所观察到的这种行为。</p>
+</blockquote></li>
+<li><p>若要测试该解决方案，您需要配置 Windows Azure 项目和日志查看器应用程序，以便它们同时启动。若要定义启动项目，请右键单击<strong>解决方案资源管理器</strong>，然后选择<strong>“设置启动项目”</strong>。在<strong>“解决方案‘Begin’属性页”</strong>窗口中，确保已在<strong>“通用属性”</strong>下面选择<strong>“启动项目”</strong>，然后选择<strong>“多个启动项目”</strong>选项。接下来，将 <strong>LogViewer</strong> 和 <strong>FabrikamInsuranceService</strong> 项目的<strong>“操作”</strong>设置为<em>“启动”</em>，将其余项目保留为<em>“无”</em>。单击<strong>“确定”</strong>保存对启动配置的更改。</p>
+
+<p><img src="Images/configuring-the-start-up-projects-for-the-solution.png?raw=true" alt="为解决方案配置启动项目" title="为解决方案配置启动项目" />
+</p>
+
+<p><em>为解决方案配置启动项目</em></p></li>
+<li><p>按 <strong>Ctrl+F5</strong> 启动应用程序而不附加调试器。同样，这会重现在将应用程序部署到云后所遇到的情况。等待部署完成且浏览器打开并显示主页。</p></li>
+<li><p>在浏览器窗口中，完成该表单，确保针对车辆的 <strong>Make</strong>（制造商）选择 <em>PORSCHE</em>，针对 <strong>Model</strong>（车型）选择 <em>BOXSTER (BAD DATA)</em>。此时请注意，由于在 <strong>Web.config</strong> 文件中启用了 <strong>customErrors</strong> 设置，该应用程序将显示一般错误页而不是显示您之前看到的异常详细信息。假如将应用程序部署到 Windows Azure，也会看到这些内容。</p>
+
+<p><img src="Images/application-error-with-customerrors-enabled.png?raw=true" alt="启用了 customErrors 时的应用程序错误" title="启用了 customErrors 时的应用程序错误" />
+</p>
+
+<p><em>启用了 customErrors 时的应用程序错误</em></p></li>
+<li><p>从日志查看器应用程序检查输出。请注意，尽管存在错误，控制台窗口仍是空的，因为当前没有禁用表存储跟踪侦听器。</p></li>
+<li><p>切换回 Visual Studio，在<strong>解决方案资源管理器</strong>中，展开 <strong>FabrikamInsuranceService</strong> 项目的<strong>“角色”</strong>节点，然后双击 <strong>FabrikamInsurance</strong> 角色打开其属性窗口。选择<strong>“设置”</strong>页，然后将 <em>EnableTableStorageTraceListener</em> 设置的值更改为 <em>true</em>。</p></li>
+<li><p>按 <strong>Ctrl+S</strong> 保存对配置的更改。</p></li>
+<li><p>打开计算模拟器控制器，方法是右键单击系统托盘中计算模拟器的图标并选择<strong>“显示计算模拟器用户界面”</strong>。记录当前部署的 ID。这是显示在部署标签旁边的括号内的数值。</p>
+
+<p><img src="Images/compute-emulator-ui-showing-the-current-deployment-id.png?raw=true" alt="显示当前部署 ID 的计算模拟器用户界面" title="显示当前部署 ID 的计算模拟器用户界面" />
+</p>
+
+<p><em>显示当前部署 ID 的计算模拟器用户界面</em></p></li>
+<li><p>现在，以管理员身份打开 <strong>Windows Azure 命令提示符</strong>。若要以管理员身份启动命令提示符，请右键单击其快捷方式，然后选择<strong>“以管理员身份运行”</strong>。</p></li>
+<li><p>将当前目录更改为当前解决方案的文件夹内 <strong>FabrikamInsuranceService</strong> 云项目的位置。此文件夹包含服务配置文件。选择 ServiceConfiguration.Local.cscfg。</p></li>
+<li><p>在命令提示符下，执行以下命令更新运行部署的配置。将 [DEPLOYMENTID] 占位符替换为之前记录的值。</p>
+
+<span class="codelanguage">WindowsAzureCommandPrompt</span><pre><code class="WindowsAzureCommandPrompt">csrun /update:[DEPLOYMENTID];ServiceConfiguration.Local.cscfg
+</code></pre>
+
+<p><img src="Images/updating-the-configuration-of-the-running-service.png?raw=true" alt="更新运行服务的配置" title="更新运行服务的配置" />
+</p>
+
+<p><em>更新运行服务的配置</em></p>
+<blockquote>
+<p><strong>注意：</strong>对于部署到云的应用程序，通常通过 Windows Azure 开发人员门户更新正在运行的应用程序的配置，或使用 Windows Azure 管理 API 来上载新配置文件。</p>
+</blockquote></li>
+<li><p>在更新配置并启用跟踪侦听器后，返回到浏览器窗口，浏览到 <strong>Quotes</strong>（报价）页，重新输入此前引起错误的参数（制造商为 <em>PORSCHE</em>，车型为 <em>BOXSTER (BAD DATA)</em>）。然后，单击 <strong>Calculate</strong>（计算）再次提交表单。所得到的响应应该仍显示错误页。</p></li>
+<li><p>切换到日志查看器窗口，等待几秒钟让其刷新。请注意，控制台此时显示一个含有未处理异常的错误消息条目，这说明由正在运行的应用程序生成的跟踪输出已直接写入表存储。</p>
+
+<p><img src="Images/viewer-showing-the-error-logged-to-table-storage.png?raw=true" alt="显示已记录到表存储的错误的查看器" title="显示已记录到表存储的错误的查看器" />
+</p>
+
+<p><em>显示已记录到表存储的错误的查看器</em></p></li>
+<li><p>若要查看其他信息性跟踪消息的输出，请返回到浏览器窗口并单击 <strong>About</strong>（关于），然后单击 <strong>Quotes</strong>（报价单）以在控制器中执行这两个操作。请注意，您在每种方法的开始处都插入了跟踪消息。请注意，查看器控制台现在会为这些操作中的每个操作显示一条消息。</p>
+
+<p><img src="Images/viewer-showing-informational-trace-messages-for-the-controller-actions.png?raw=true" alt="显示控制器操作的信息跟踪消息的查看器" />
+</p>
+
+<p><em>显示控制器操作的信息跟踪消息的查看器</em></p></li>
+<li><p>在日志查看器窗口中，按 <strong>Enter</strong> 键两次以退出程序。</p></li>
+<li><p>最后，删除计算模拟器中正在运行的部署。为此，在<strong>“服务部署”</strong>树视图中右键单击该部署，然后选择<strong>“删除”</strong>。</p></li>
+</ol>
+
+<p><a name="Exercise3"></a></p>
+
+<h3 id="Exercise_3_Using_IntelliTrace_to_Diagnose_Role_Start-Up_Failures">练习 3：使用 IntelliTrace 诊断角色启动失败</h3>
+<blockquote>
+<p><strong>注意：</strong>本练习是可选的，因为 IntelliTrace 仅适用于 <strong>Visual Studio 2012 Ultimate Edition</strong>。有关特定 Visual Studio 2012 功能的详细信息，请在<a href="http://www.microsoft.com/visualstudio/eng/products/compare">此处</a>进行版本比较。</p>
+</blockquote>
+<p>IntelliTrace 能够在应用程序运行时收集其数据。启用 IntelliTrace 后，它会记录键代码执行和环境数据，因而您可以在 Visual Studio 中重播这些数据，单步执行在云中执行的相同代码。</p>
+
+<p>在从 Visual Studio 向 Windows Azure 部署服务时，可以启用 IntelliTrace 调试来打包必要的 IntelliTrace 文件以及一个代理，Visual Studio 与此代理通信以检索 IntelliTrace 数据。启用之后，IntelliTrace 在后台运行，收集有关正在运行的服务的信息。</p>
+
+<p>您可以自定义基本 IntelliTrace 配置、需要记录的事件、是否收集调用信息、要为哪些模块和进程收集日志以及用于分配记录的空间大小（默认大小为 250 MB）。</p>
+
+<p>所收集的信息会保存到一个 IntelliTrace 文件，您随后可打开该文件以解决问题。通过这种信息，您可以及时后退，以查看应用程序中发生的情况以及哪些事件导致了崩溃。</p>
+
+<p>在本练习中，将探索如何使用 IntelliTrace 来诊断将 Fabrikam Insurance 应用程序部署到 Windows Azure 时发生的角色启动失败。</p>
+<blockquote>
+<p><strong>重要事项：</strong>IntelliTrace 调试仅用于调试方案，不能用于生产部署。</p>
+</blockquote>
+<p><a name="Ex3Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_a_Storage_Account_and_a_Cloud_Service">任务 1 - 创建存储帐户和云服务</h4>
+
+<p>在本练习中部署的应用程序需要云服务和存储帐户。在本任务中，您将创建一个新存储帐户以允许应用程序保留其数据。另外，您还将定义一个云服务以承载 Web 应用程序。</p>
+
+<ol>
+<li><p>使用 Web 浏览器导航到 <a href="http://manage.windowsazure.com"><a href="http://manage.windowsazure.com">http://manage.windowsazure.com</a></a>，然后使用与您的 Windows Azure 帐户关联的 Microsoft 帐户登录。</p>
+
+<p><img src="Images/signing-in-to-the-windows-azure-platform-mana.png?raw=true" alt="登录 Windows Azure 管理门户" />
+</p>
+
+<p><em>登录 Windows Azure 管理门户</em></p></li>
+<li><p>创建应用程序用来存储数据的<strong>存储帐户</strong>。在 Windows Azure 管理门户中，单击<strong>“新建”</strong>|<strong>“数据服务”</strong>|<strong>“存储”</strong>|<strong>“快速创建”</strong>。</p></li>
+<li><p>设置唯一 <strong>URL</strong>（例如，<em>fabrikaminsurancestorage</em>），选择一个区域或地缘组，然后单击<strong>“创建存储帐户”</strong>继续。</p>
+
+<p><img src="Images/creating-a-new-storage-account.png?raw=true" alt="创建新存储帐户" />
+</p>
+
+<p><em>创建新存储帐户</em></p></li>
+<li><p>请等待存储帐户创建完成。单击您的存储帐户名称以转到<strong>“面板”</strong>。</p>
+
+<p><img src="Images/storage-accounts-page.png?raw=true" alt="存储帐户页" title="存储帐户页" />
+</p>
+
+<p><em>存储帐户页</em></p></li>
+<li><p>单击该页底部的<strong>“管理密钥”</strong>以显示该存储帐户的访问密钥。</p>
+
+<p><img src="Images/manage-storage-account-keys.png?raw=true" alt="管理存储帐户密钥" title="管理存储帐户密钥" />
+</p>
+
+<p><em>管理存储帐户密钥</em></p></li>
+<li><p>复制<strong>“存储帐户名称”</strong>和<strong>“主访问密钥”</strong>的值。您随后将使用这些值来配置应用程序。</p>
+
+<p><img src="Images/retrieving-the-storage-access-keys.png?raw=true" alt="检索存储访问密钥" />
+</p>
+
+<p><em>检索存储访问密钥</em></p></li>
+<li><p>接下来，创建用于执行应用程序代码的<strong>云服务</strong>。单击<strong>“新建”</strong>|<strong>“云服务”</strong>|<strong>“快速创建”</strong>。</p></li>
+<li><p>选择云服务的 <strong>URL</strong>（例如，<em>fabrikaminsuranceservice</em>）以及为存储选择的区域或地缘组，然后单击<strong>“创建云服务”</strong>继续。</p>
+
+<p><img src="Images/creating-a-new-cloud-service.png?raw=true" alt="创建新的云服务" title="创建新的云服务" />
+</p>
+
+<p><em>创建新的云服务</em></p></li>
+<li><p>请等到该云服务创建完毕后再继续。请不要关闭浏览器窗口，您需要在下一个任务中使用该门户。</p>
+
+<p><img src="Images/cloud-service-created.png?raw=true" alt="云服务已创建" title="云服务已创建" />
+</p>
+
+<p><em>云服务已创建</em></p></li>
+</ol>
+
+<p><a name="Ex3Task2"></a></p>
+
+<h4 id="Task_2_-_Preparing_the_Application_for_Deployment_to_the_Cloud">任务 2 - 准备要部署到云的应用程序</h4>
+
+<p>在使用 Visual Studio 发布服务时，Windows Azure Tools 会上载服务包，然后自动启动它。在服务启动之前，您无法更新配置设置。因此，必须在发布服务之前配置所有必要的设置。</p>
+
+<p>在本任务中，您将更新存储连接字符串以指向您的存储帐户。</p>
+
+<ol>
+<li><p>如果尚未打开，请以管理员身份启动 <strong>Microsoft Visual Studio Ultimate 2012</strong>。</p></li>
+<li><p>在<strong>“文件”</strong>菜单中，选择<strong>“打开项目”</strong>并浏览到实验的 <strong>Source</strong> 文件夹中的 <strong>Ex3-DebuggingWithIntelliTrace\Begin</strong>。选择 <strong>Begin.sln</strong>，然后单击“打开”。</p></li>
+<li><p>配置存储帐户连接字符串。为此，展开 <strong>FabrikamInsuranceService</strong> 云项目中的<strong>“角色”</strong>节点，双击 <strong>FabrikamInsurance</strong> Web 角色，然后切换到<strong>“设置”</strong>选项卡。</p></li>
+<li><p>现在，选择 <em>DataConnectionString</em> 设置，确保将<strong>“类型”</strong>设置为“连接字符串”，并将占位符替换为在本练习的任务 1 期间保存的存储<strong>“帐户名称”</strong>和<strong>“帐户密钥”</strong>值。</p>
+
+<p><img src="Images/defining-connection-settings.png?raw=true" alt="配置存储帐户名称和帐户密钥" title="配置存储帐户名称和帐户密钥" />
+</p>
+
+<p><em>配置存储帐户名称和帐户密钥</em></p></li>
+<li><p>重复上一个步骤，使用相同的帐户信息来配置 <em>Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString</em> 设置。</p></li>
+<li><p>按 <strong>Ctrl+S</strong> 保存更改。</p></li>
+</ol>
+
+<p><a name="Ex3Task3"></a></p>
+
+<h4 id="Task_3_-_Deploying_the_Application_with_IntelliTrace_Enabled">任务 3 - 在启用 IntelliTrace 的情况下部署应用程序</h4>
+
+<p>在本任务中，您将登录到 Windows Azure 门户并下载发布设置文件。此文件包含安全凭据以及有关在开发环境中使用的 Windows Azure 订阅的其他信息。</p>
+
+<p>然后，您将使用这些凭据在启用 IntelliTrace 功能的情况下直接从 Visual Studio 发布 FabrikamInsurance 应用程序。</p>
+
+<ol>
+<li><p>打开 Internet Explorer 浏览器，转到 <a href="https://windows.azure.com/download/publishprofile.aspx">https://windows.azure.com/download/publishprofile.aspx</a>。</p></li>
+<li><p>使用与您的 Windows Azure 帐户关联的 Microsoft 帐户登录。</p></li>
+<li><p>将发布设置文件<strong>保存</strong>到本地计算机。</p>
+
+<p><img src="Images/downloading-publish-settings-file.png?raw=true" alt="下载发布设置文件" title="下载发布设置文件" />
+</p>
+
+<p><em>下载发布设置文件</em></p></li>
+<li><p>切换到 Visual Studio，在<strong>解决方案资源管理器</strong>中，右键单击 <strong>FabrikamInsuranceService</strong> 云项目，然后选择<strong>“发布”</strong>。</p></li>
+<li><p>在<strong>“发布 Windows Azure 应用程序”</strong>对话框中，单击<strong>“导入”</strong>，浏览到已下载的 PublishSettings 文件，将其选中，然后单击<strong>“打开”</strong>。</p></li>
+<li><p>返回到<strong>“发布 Windows Azure 应用程序”</strong>对话框，选择从 <em>PublishSettings</em> 文件创建的订阅，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="Images/waz-sign-in.png?raw=true" alt="登录" title="登录" />
+</p>
+
+<p><em>登录</em></p></li>
+<li><p>请注意，在<strong>“通用设置”</strong>选项卡上，该对话框会使用在您的 Windows Azure 帐户中配置的所有服务的信息来填充<strong>“云服务”</strong>下拉列表。选择在本练习的任务 1 期间创建的云服务。</p>
+
+<p><img src="Images/deployment-common-settings.png?raw=true" alt="部署通用设置" title="部署通用设置" />
+</p>
+
+<p><em>部署通用设置</em></p></li>
+<li><p>单击<strong>“高级设置”</strong>选项卡。在<strong>“存储帐户”</strong>列表中，选择在本练习的任务 1 中创建的存储服务。选中<strong>“启用 IntelliTrace”</strong>复选框，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="Images/deployment-advanced-settings.png?raw=true" alt="部署高级设置" title="部署高级设置" />
+</p>
+
+<p><em>部署高级设置</em></p></li>
+<li><p>查看摘要信息。如果一切正常，单击<strong>“发布”</strong>以启动部署过程。</p>
+
+<p><img src="Images/start-deployment.png?raw=true" alt="启动部署" title="启动部署" />
+</p>
+
+<p><em>启动部署</em></p></li>
+<li><p>启动部署之后，可以检查 Windows Azure 活动日志窗口以确定操作状态。如果未显示此窗口，则在<strong>“视图”</strong>菜单中，指向<strong>“其他窗口”</strong>，然后选择<strong>“Windows Azure 活动日志”</strong>。</p>
+
+<p><img src="Images/azure-activity-log.png?raw=true" alt="Windows Azure 活动日志" title="Windows Azure 活动日志" />
+</p>
+
+<p><em>Windows Azure 活动日志</em></p></li>
+<li><p>您可以检查<strong>“Windows Azure 活动日志”</strong>窗口右侧的<strong>“历史记录”</strong>面板以确定部署状态。请注意，角色实例的状态显示为<strong>“已停止”</strong>。</p>
+
+<p><img src="Images/deployment-operation-details.png?raw=true" alt="部署操作详细信息" title="部署操作详细信息" />
+</p>
+
+<p><em>查看有关部署操作的详细信息</em></p></li>
+</ol>
+
+<p><a name="Ex3Task4"></a></p>
+
+<h4 id="Task_4_-_Examining_the_IntelliTrace_Logs_to_Determine_the_Cause_of_a_Failure">任务 4 - 检查 IntelliTrace 日志以确定失败原因</h4>
+
+<p>在上一个任务中，角色因未知原因无法启动。在本任务中，将使用 IntelliTrace 检查引起失败的原因。</p>
+
+<ol>
+<li><p>在<strong>“Windows Azure 活动日志”</strong>窗口中，单击<strong>“在服务器资源管理器中打开”</strong>。</p>
+
+<p><img src="Images/cloud-service-in-server-explorer.png?raw=true" alt="在服务器资源管理器中查看云服务" title="在服务器资源管理器中查看云服务" />
+</p>
+
+<p><em>在服务器资源管理器中查看云服务</em></p>
+<blockquote>
+<p><strong>注意：</strong>如果当前未显示该窗口，则在<strong>“视图”</strong>菜单中，指向<strong>“其他窗口”</strong>，然后选择<strong>“Windows Azure 活动日志”</strong>。</p>
+</blockquote></li>
+<li><p>在<strong>“Windows Azure 计算”</strong>节点中，检查部署了 <strong>FabrikamInsurance</strong> 应用程序的托管服务的角色实例状态。请注意，部署槽的标签指示已为此部署启用 IntelliTrace，并且状态在此处也显示为<strong>“忙”</strong>。</p>
+
+<p><img src="Images/service-instance-busy.png?raw=true" alt="Fabrikam Insurance 服务实例" title="Fabrikam Insurance 服务实例" />
+</p>
+
+<p><em>Fabrikam Insurance 服务实例</em></p></li>
+<li><p>现在，右键单击<strong>“服务器资源管理器”</strong>中标记为<strong>“实例 0 (忙)”</strong>的槽节点，然后选择<strong>“查看 IntelliTrace 日志”</strong>将信息下载至工作站。执行此操作后，请注意 Visual Studio 会在<strong>“Windows Azure 活动日志”</strong>中创建一个新的 IntelliTrace 条目以显示下载操作的进程。</p></li>
+<li><p>等待下载完成，这可能要用几分钟时间。下载过程中，您可以展开<strong>“Windows Azure 活动日志”</strong>窗口中的相应条目，检查右侧的<strong>“历史记录”</strong>面板以监视操作进度。</p>
+
+<p><img src="Images/intellitrace-operation-history-log.png?raw=true" alt="IntelliTrace 操作历史记录日志" title="IntelliTrace 操作历史记录日志" />
+</p>
+
+<p><em>IntelliTrace 操作历史记录日志</em></p>
+<blockquote>
+<p><strong>注意：</strong>在请求 IntelliTrace 日志时，将到目前为止从角色正在运行的虚拟机实例收集的信息的快照上载到您的存储帐户，然后下载到本地计算机上的一个磁盘文件。成功传输日志后，将从存储中删除该日志。</p>
+</blockquote></li>
+<li><p>下载完成后，Visual Studio 会自动打开 IntelliTrace 日志文件并在窗口中显示。<strong>“IntelliTrace 摘要”</strong>窗口划分为几个部分，其中包含为该部署收集的诊断信息。</p>
+
+<p><img src="Images/intellitrace-summary-window.png?raw=true" alt="“IntelliTrace 摘要”窗口" title="“IntelliTrace 摘要”窗口" />
+</p>
+
+<p><em>“IntelliTrace 摘要”窗口</em></p>
+
+<p>“IntelliTrace 摘要”窗口包含以下部分：</p>
+
+<p><strong>异常数据</strong> - 列出数据收集期间发生的未处理异常，包括有关异常类型、异常消息、引发异常的线程、HResult（如果适用）以及异常的时间。在列表中选择一个条目会显示该异常的相应调用堆栈。</p>
+
+<p>如果代码中发生异常，则可以在列表中选择该异常，然后单击<strong>“启动调试”</strong>以在 Visual Studio 中打开相应源文件，并且光标置于引发异常的代码行上。</p>
+
+<p><img src="Images/exception-data-section.png?raw=true" alt="异常数据部分" title="异常数据部分" />
+</p>
+
+<p><em>异常数据部分</em></p>
+
+<p><strong>线程列表</strong> - 显示诊断收集期间处于活动状态的每个线程，每个线程都显示其 ID、名称以及（如果有）该线程的开始和结束时间。</p>
+
+<p><img src="Images/threads-list-section.png?raw=true" alt="线程列表部分" title="线程列表部分" />
+</p>
+
+<p><em>线程列表部分</em></p>
+
+<p><strong>系统信息</strong> - 显示有关从中收集诊断数据的虚拟机环境的信息，包括计算机名称、操作系统和 CLR 版本、可用的物理内存和虚拟内存、处理器数目、时区以及其他详细信息。</p>
+
+<p><img src="Images/system-info-section.png?raw=true" alt="系统信息部分" title="系统信息部分" />
+</p>
+
+<p><em>系统信息部分</em></p>
+
+<p><strong>模块</strong> - 列出内存中加载的每个模块，包括模块名称以及加载该模块的路径。此信息对于调试程序集加载问题十分有用。</p>
+
+<p><img src="Images/modules-section.png?raw=true" alt="模块部分" title="模块部分" />
+</p>
+
+<p><em>模块部分</em></p>
+<blockquote>
+<p><strong>注意：</strong>对于当前部署，是使用默认设置来定义由 IntelliTrace 捕获的事件的。</p>
+
+<p>若要配置在发布操作期间应在 IntelliTrace 日志中包括的事件，请单击<strong>“Windows Azure 发布设置”</strong>|<strong>“高级设置”</strong>中的<strong>“设置”</strong>以打开<strong>“IntelliTrace 设置”</strong>窗口。</p>
+
+<p><img src="Images/configuring-intellitrace-settings.png?raw=true" alt="配置 IntelliTrace 设置" title="配置 IntelliTrace 设置" />
+</p>
+
+<p><em>发布服务包之前配置 IntelliTrace 设置</em></p>
+</blockquote></li>
+<li><p>若要确定上一个任务中角色启动失败的原因，请展开摘要页上的<strong>“异常</strong><strong>数据”</strong>部分，然后检查异常列表。</p>
+
+<p><img src="Images/viewing-exception-data.png?raw=true" alt="查看异常数据" title="查看异常数据" />
+</p>
+
+<p><em>在“IntelliTrace 摘要”窗口中查看异常数据</em></p>
+
+<p>通常，此列表包含多个异常，其中某些异常可以忽略，因为它们是由运行时环境处理的，不会引起角色崩溃。关于哪些异常是正常、可以忽略的异常，并没有精确的规则，因此通常要查看列表才能确定潜在严重异常。您会发现，通过检查 IntelliTrace 日志实现成功部署会提高您区分此列表中的重要条目的能力。</p>
+
+<p>请注意，该列表包含一个 <strong>System.TypeLoadException</strong>，消息为 <em>Unable to load the role entry point due to the following exceptions: -- System.IO.FileNotFoundException: Could not load file or assembly 'System.Web.Mvc, ...</em>（因以下异常无法加载角色入口点: -- System.IO.FileNotFoundException: 无法加载文件或程序集 System.Web.Mvc...）。此异常指示角色无法找到应用程序所需的 <strong>System.Web.Mvc</strong> 程序集，并且实际上是角色之前无法成功启动的原因。此类错误很常见，极难在云中诊断，如果无法在本地重现，尤其如此，这是因为部署环境中已存在全部所需的依赖项。</p>
+
+<p>在以下任务中，您将解决此问题并重新部署服务包。</p>
+<blockquote>
+<p><strong>注意：</strong>通常，对于默认情况下未在 Windows Azure 虚拟机上安装的所有程序集，请将<strong>“复制本地”</strong>设置为 <em>True</em>，以确保这些程序集能够随着您的应用程序一起部署。</p>
+</blockquote></li>
+<li><p>取消并删除向 Windows Azure 的失败部署。在 Windows Azure 活动日志窗口中，右键单击该部署，然后选择<strong>“取消并删除”</strong>。</p>
+
+<p><img src="Images/cancel-failing-deployment.png?raw=true" alt="取消失败的部署" title="取消失败的部署" />
+</p>
+
+<p><em>取消失败的部署</em></p></li>
+</ol>
+
+<p><a name="Ex3Task5"></a></p>
+
+<h4 id="Task_5_-_Fixing_the_Application_and_Re-Deploying_Optional">任务 5 - 修复应用程序并重新部署（可选）</h4>
+
+<p>在确定角色启动失败的原因是缺少某个程序集后，可更正此问题并重新部署应用程序。</p>
+
+<p>在本任务中，您要将缺少的程序集添加到服务包，并将其重新部署到 Windows Azure。</p>
+
+<ol>
+<li><p>确保 <strong>System.Web.Mvc</strong> 程序集已包括在您部署到 Windows Azure 的服务包中。为此，在<strong>解决方案资源管理器</strong>中展开 <strong>FabrikamInsurance</strong> 项目的<strong>“引用”</strong>节点，右键单击 <strong>System.Web.Mvc</strong> 程序集，然后选择<strong>“属性”</strong>。找到<strong>“复制本地”</strong>设置，将其值更改为 <em>True</em>。</p>
+
+<p><img src="Images/including-mvc-assembly.png?raw=true" alt="在部署到 Windows Azure 的服务包中包括程序集" title="在部署到 Windows Azure 的服务包中包括程序集" />
+</p>
+
+<p><em>在部署到 Windows Azure 的服务包中包括程序集</em></p></li>
+<li><p>在<strong>解决方案资源管理器</strong>中，右键单击 <strong>FabrikamInsuranceService</strong> 云项目，然后选择<strong>“发布”</strong>。在<strong>“发布 Windows Azure 应用程序”</strong>对话框中，将 IntelliTrace 选项保留为已启用，然后单击<strong>“发布”</strong>，再次启动部署过程。您可能需要更改<strong>“部署标签”</strong>，将部署标识为包含 Bug 修复的部署。</p>
+
+<p><img src="Images/deploying-updated-application.png?raw=true" alt="部署更新的应用程序" title="部署更新的应用程序" />
+</p>
+
+<p><em>部署更新的应用程序</em></p>
+<blockquote>
+<p><strong>注意：</strong>因为您选择的槽已由上一个部署占用，所以 Visual Studio 会发出警告，并在替换之前要求确认。单击<strong>“替换”</strong>覆盖当前部署。</p>
+</blockquote></li>
+<li><p>等待部署操作完成，这可能需要几分钟时间。</p>
+
+<p><img src="Images/deployment-operation-completed.png?raw=true" alt="部署操作已完成" title="部署操作已完成" />
+</p>
+
+<p><em>部署操作已完成</em></p></li>
+<li><p>部署就绪后，在<strong>“Windows Azure 活动日志”</strong>窗口中，单击<strong>“网站 URL”</strong>链接以便部署操作在浏览器中打开应用程序。测试该应用程序，并确保其运行正常。</p></li>
+<li><p>您可以为正在运行的应用程序下载 IntelliTrace 日志，并将其与之前该应用程序无法启动时获得的日志进行比较。这会提高您识别哪些异常是正常的异常的能力。</p></li>
+</ol>
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>通过完成本动手实验，您已了解如何使用简单调试方法对部署到云的 Windows Azure 应用程序进行故障排除。您已了解如何使用标准 .NET 诊断并通过自定义跟踪侦听器直接将诊断输出写入表存储。</p>
+
+<p>使用 IntelliTrace，您快速诊断了一个因缺少依赖项而无法启动的角色；这是一个用其他方法极难在云中诊断的错误。</p> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-DebuggingCloudServices-VS2012/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

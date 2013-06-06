@@ -1,0 +1,976 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - Service Bus 消息传递</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-ServiceBusMessaging-VS2012" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-ServiceBusMessaging-VS2012" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="HOLTop"></a></p>
+
+<h1 id="Service_Bus_Messaging">Service Bus 消息传递</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p><strong>Service Bus 消息传递</strong>包含一系列基于云、面向消息的全新中间件技术，其中包括功能全面的<strong>消息队列</strong>，支持任意内容类型、丰富的消息属性、关联、可靠的二进制传输和分组功能。另一个重要特性是 <strong>Service Bus 主题</strong>，它提供了一组发布和订阅功能，并基于与 <strong>Service Bus 队列</strong>相同的后端基础结构。<strong>主题</strong>由像<strong>队列</strong>这样的顺序消息存储区组成，但是它支持很多并发的持久性<strong>订阅</strong>（可向客户独立生成所发布消息的副本）。每个<strong>订阅</strong>都可定义一系列规则和简单的表达式，用以指定将已发布序列中的哪些消息选入订阅之中。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>创建队列。</li>
+<li>通过队列发送和接收消息。</li>
+<li>检查消息属性。</li>
+<li>创建主题和订阅。</li>
+<li>使用订阅筛选器表达式。</li>
+<li>使用订阅筛选器操作。</li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>若要完成此实验，必须具备以下项：</p>
+
+<ul>
+<li><a href="http://www.microsoft.com/windowsazure/sdk/">Windows Azure SDK for .NET</a></li>
+<li>Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>本实验设计为使用 Windows 8 操作系统。</p>
+</blockquote>
+<p><a name="Setup"></a></p>
+
+<h3 id="Setup">设置</h3>
+
+<p>为了执行此动手实验中的各项练习，需要对环境进行设置。</p>
+
+<ol>
+<li><p>打开 Windows 资源管理器窗口，浏览到此实验的 <strong>Source</strong> 文件夹。</p></li>
+<li><p>使用管理员权限执行 <strong>Setup.cmd</strong> 文件以启动设置过程，该过程将配置您的环境并安装此实验的 Visual Studio 代码段。</p></li>
+<li><p>如果显示“用户帐户控制”对话框，请确认操作以继续。</p></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>请务必在运行安装程序前检查此实验的所有依赖项。</p>
+</blockquote>
+<p><a name="UsingCodeSnippets"></a></p>
+
+<h3 id="Using_the_Code_Snippets">使用代码段</h3>
+
+<p>实验文档将指导您插入代码块。为方便起见，大部分代码是以 Visual Studio 代码段的形式提供的，您可以在 Visual Studio 2012 中使用而不必手动添加。</p>
+
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#Exercise1">使用队列</a></li>
+<li><a href="#Exercise2">使用主题和订阅</a></li>
+</ol>
+
+<p>完成此实验的估计时间：<strong>60 分钟</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>您首次启动 Visual Studio 时，必须选择一个预定义的设置集合。每个预定义的集合在设计上都对应于特定的开发风格，能够确定窗口布局、编辑器行为、IntelliSense 代码段和对话框选项。此实验中的过程介绍了在使用<strong>“常规开发设置”</strong>集合时，在 Visual Studio 中完成指定任务所需的操作。如果您为开发环境选择其他设置集合，需要考虑可能的过程差异。</p>
+</blockquote>
+<p><a name="GettingStarted"></a></p>
+
+<h3 id="Getting_Started_Creating_a_Service_Bus_Namespace">入门：创建 Service Bus 命名空间</h3>
+
+<p>要完成此实验以及所有练习，需要先创建一个 Windows Azure Service Bus 命名空间。命名空间创建后，可以在使用 Windows Azure Service Bus 的<strong>所有</strong>实验或者您自己的项目中使用此命名空间。</p>
+
+<p><a name="GettingStartedTask1"></a></p>
+
+<h4 id="Task_1_-_Creating_your_Service_Bus_Namespace">任务 1 - 创建 Service Bus 命名空间</h4>
+
+<p>在此任务中，您将创建一个新的 Windows Azure Service Bus 命名空间。</p>
+
+<ol>
+<li><p>导航到 <a href="http://manage.windowsazure.com"><a href="http://manage.windowsazure.com/">http://manage.windowsazure.com/</a></a>。如果您尚未登录，系统会提示您输入 <strong>Microsoft 帐户</strong>凭据。</p></li>
+<li><p>在左窗格中单击 <strong>Service Bus</strong>。</p>
+
+<p><img src="./Images/Configuring-Windows-Azure-Service-bus.png?raw=true" alt="配置 Windows Azure Service Bus" title="配置 Windows Azure Service Bus" />
+</p>
+
+<p><em>配置 Windows Azure Service Bus</em></p></li>
+<li><p>创建服务命名空间。服务命名空间为通过 Service Bus 公开的每个应用程序提供应用程序边界，并用于为应用程序构造 Service Bus 端点。要创建服务命名空间，请单击底部栏中的<strong>“创建”</strong>。</p>
+
+<p><img src="./Images/Creating-a-New-Namespace.png?raw=true" alt="创建新命名空间" title="创建新命名空间" />
+</p>
+
+<p><em>创建新命名空间</em></p></li>
+<li><p>在<strong>“创建命名空间”</strong>对话框中，为您的服务<strong>命名空间</strong>输入一个名称，然后选择要运行该服务的<strong>地区</strong>。服务名必须全局唯一，因为它们在云中承载，可由您确定授予其访问权限的任何人员访问。</p>
+
+<p><img src="./Images/Creating-a-new-Service-Namespace.png?raw=true" alt="创建新服务命名空间" title="创建新服务命名空间" />
+</p>
+
+<p><em>创建新服务命名空间</em></p>
+<blockquote>
+<p><strong>注意：</strong>服务的设置操作可能需要几分钟时间。</p>
+</blockquote></li>
+<li><p>在命名空间处于活动状态时，选择服务所在行，在底部菜单中单击<strong>“访问密钥”</strong>。</p>
+
+<p><img src="Images/view-access-key.png?raw=true" alt="查看访问密钥" title="查看访问密钥" />
+</p>
+
+<p><em>查看访问密钥</em></p></li>
+<li><p>在<strong>“访问密钥”</strong>对话框中，记下<strong>“默认颁发者”</strong>和<strong>“默认密钥”</strong>中显示的值，然后单击<strong>“确定”</strong>。稍后配置 Web 角色设置时，需要用到这些值。</p>
+
+<p><img src="./Images/Service-Bus-default-keys.png?raw=true" alt="Service Bus 默认密钥" title="Service Bus 默认密钥" />
+</p>
+
+<p><em>Service Bus 默认密钥</em></p></li>
+</ol>
+
+<p>现在，您已经为此动手实验创建了一个新的 Windows Azure 命名空间。您随时可以登录，只需导航至 Windows Azure 管理门户，单击<strong>“登录”</strong>并提供您的 <strong>Microsoft 帐户</strong>凭据即可。</p>
+<blockquote>
+<p><strong>注意：</strong>在此实验中，您将学习如何通过 ASP.NET MVC 应用程序创建和使用 Service Bus 队列和主题。您还可以通过 Windows Azure 管理门户创建队列和主题。有关详细信息，请参阅<a href="#appendixA">附录 A：使用 Windows Azure 管理门户创建队列和主题</a>。</p>
+</blockquote>
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Using_Queues">练习 1：使用队列</h3>
+
+<p>在此练习中，您将学习如何创建和使用 <strong>Service Bus 队列</strong>。您将设置一个 MVC 4 应用程序以与您的 Service Bus 命名空间通信，创建一个新队列，并学习如何通过该队列发送和接收消息。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_a_Queue">任务 1 - 创建队列</h4>
+
+<p>在此任务中，您将在您的 Service Bus 命名空间中创建一个新队列。</p>
+
+<ol>
+<li><p>以管理员身份打开 <strong>Visual Studio 2012 Express for Web 或更高版本</strong>。</p></li>
+<li><p>打开位于本实验 <strong>Source</strong> 文件夹下的 <strong>Source\Ex1-UsingQueues\Begin\Begin.sln</strong> 中的解决方案文件。</p></li>
+<li><p>生成该解决方案以下载和安装 NuGet 包依赖项。为此，请单击<strong>“生成”</strong>|<strong>“生成解决方案”</strong>，或按 <strong>Ctrl + Shift + B</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>NuGet 是一个 Visual Studio 扩展包，它简化了在使用 .NET Framework 的 Visual Studio 项目中添加、删除及更新库和工具的难度。</p>
+
+<p>安装此包时，NuGet 会将文件复制到您的解决方案，并根据需要自动进行必要的更改，例如添加引用和更改您的 app.config 或 web.config 文件。如果您决定删除该库，NuGet 会删除文件并恢复在项目中所做的更改，不会残留垃圾。</p>
+
+<p>有关 NuGet 的详细信息，请访问 <a href="http://nuget.org/"><a href="http://nuget.org/">http://nuget.org/</a></a>。</p>
+</blockquote></li>
+<li><p>更新服务定义，以定义访问 Service Bus 命名空间所需的配置设置。为此，请在<strong>解决方案资源管理器</strong>中展开 <strong>UsingQueues</strong> 项目的<strong>“角色”</strong>文件夹，右键单击 <strong>UsingQueues.Web</strong>，然后选择<strong>“属性”</strong>。</p>
+
+<p><img src="./Images/Launching-the-service-configuration-editor.png?raw=true" alt="启动服务配置编辑器" title="启动服务配置编辑器" />
+</p>
+
+<p><em>启动服务配置编辑器</em></p></li>
+<li><p>在<strong>“设置”</strong>选项卡中，将 <em>namespaceAddress</em> 的值设置为 Service Bus 命名空间的名称，将 <em>issuerName</em> 和 <em>issuerKey</em> 的值设置为之前从 <a href="http://go.microsoft.com/fwlink/?LinkID=129428">Windows Azure 管理门户</a>复制的值。</p>
+
+<p><img src="./Images/Updating-settings-to-the-UsingQueues.Web-Web-Role.png?raw=true" alt="更新 UsingQueues.Web Web 角色设置" title="更新 UsingQueues.Web Web 角色设置" />
+</p>
+
+<p><em>更新 <strong>UsingQueues.Web</strong> Web 角色设置</em></p></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存对 Web 角色配置的更改。</p></li>
+<li><p>接下来，您需要将所需的程序集添加至 <strong>ASP.NET MVC 4</strong> Web 项目中，以从您的应用程序连接至 <strong>Windows Azure Service Bus</strong>。在<strong>解决方案资源管理器</strong>中，右键单击 <strong>UsingQueues.Web</strong> 项目节点，然后选择<strong>“添加引用”</strong>。</p></li>
+<li><p>在<strong>“引用管理器”</strong>对话框中，选中 <strong>System.Runtime.Serialization</strong> 程序集。然后，从左窗格中选择 <strong>Extensions</strong> 程序集，选中 <strong>Microsoft.ServiceBus</strong> 并确保选中 <strong>Microsoft.WindowsAzure.ServiceRuntime</strong>。单击<strong>“确定”</strong>以添加引用。</p></li>
+<li><p>打开 <strong>UsingQueues.Web</strong> 项目中<strong>“控制器”</strong>文件夹下的 <strong>HomeController.cs</strong> 文件。</p></li>
+<li><p>添加以下命名空间指令以声明 Service Bus 和 Windows Azure 支持程序集，并添加对 Web 项目的 <strong>Models</strong> 命名空间的引用（您将在后面的任务中用到该命名空间）。</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex01 - Adding Namespace Directives</em> - CS）</p>
+
+<!-- mark:1-4 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.ServiceBus;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.ServiceBus.Messaging;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.ServiceRuntime;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> UsingQueues.Web.Models;</strong>
+</code></pre></li>
+<li><p>将两个属性添加至 <strong>HomeController</strong> 类，以支持与 Service Bus 队列的通信。</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex01 - Service Bus Properties</em> - CS）</p>
+
+<!-- mark:1-2 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">private</span> NamespaceManager namespaceManager;</strong>
+<strong class="markLine"><span style="color:#0000FF">private</span> MessagingFactory messagingFactory;</strong>
+</code></pre></li>
+<li><p>为创建队列，我们必须连接至 <strong>Service Bus 命名空间</strong>地址，并将该命名空间绑定至 <strong>MessagingFactory</strong>。该类负责创建用于通过队列发送和接收消息的实体。通过添加以下代码，为 <strong>HomeController</strong> 添加一个构造函数：</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex01 - HomeController Constructor</em> - CS）</p>
+
+<!-- mark:1-11 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">public</span> HomeController()</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> baseAddress = RoleEnvironment.GetConfigurationSettingValue(<span style="color:#8B0000">&quot;namespaceAddress&quot;</span>);</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> issuerName = RoleEnvironment.GetConfigurationSettingValue(<span style="color:#8B0000">&quot;issuerName&quot;</span>);</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> issuerKey = RoleEnvironment.GetConfigurationSettingValue(<span style="color:#8B0000">&quot;issuerKey&quot;</span>);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    Uri namespaceAddress = ServiceBusEnvironment.CreateServiceUri(<span style="color:#8B0000">&quot;sb&quot;</span>, baseAddress, <span style="color:#0000FF">string</span>.Empty);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.namespaceManager = <span style="color:#0000FF">new</span> NamespaceManager(namespaceAddress, TokenProvider.CreateSharedSecretTokenProvider(issuerName, issuerKey));</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.messagingFactory = MessagingFactory.Create(namespaceAddress, TokenProvider.CreateSharedSecretTokenProvider(issuerName, issuerKey));</strong>
+<strong class="markLine">}</strong>
+</code></pre></li>
+<li><p>将以下方法添加到 <strong>HomeController</strong> 类。此方法利用 <strong>namespaceClient</strong> 对象创建新队列。</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex01 - CreateQueue</em> - CS）</p>
+
+<!-- mark:1-13 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine">[HttpPost]</strong>
+<strong class="markLine"><span style="color:#0000FF">public</span> JsonResult CreateQueue(<span style="color:#0000FF">string</span> queueName)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    <span style="color:#0000FF">try</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> queueDescription = <span style="color:#0000FF">this</span>.namespaceManager.CreateQueue(queueName);</strong>
+<strong class="markLine">        <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(queueDescription, JsonRequestBehavior.AllowGet);</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">    <span style="color:#0000FF">catch</span> (Exception)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(<span style="color:#0000FF">false</span>, JsonRequestBehavior.AllowGet);</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">}</strong>
+</code></pre></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存对控制器的更改。</p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Sending_a_Message">任务 2 - 发送消息</h4>
+
+<p>在此任务中，您将学习如何通过队列发送消息。通过队列，您可以将任意可序列化对象作为<strong>消息</strong>发送。<strong></strong>您将发送一个 <strong>CustomMessage</strong> 对象，该对象具有自己的属性，而且 <strong>Service Bus 队列</strong>的工作方式以及与应用程序交互的方式对该对象是不透明的。</p>
+
+<ol>
+<li><p>在 <strong>UsingQueues.Web</strong> 项目的<strong>“模型”</strong>文件夹下创建一个新类。为此，请右键单击该文件夹，选择<strong>“添加”</strong>，然后选择<strong>“类”</strong>。在<strong>“添加新项”</strong>对话框中，将该类的名称设置为 <em>CustomMessage</em>。</p></li>
+<li><p>将该类的全部代码替换为以下内容：</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex01 - CustomMessage Class</em> - CS）</p>
+
+<!-- mark:1-23 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">namespace</span> UsingQueues.Web.Models</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    <span style="color:#0000FF">using</span> System;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    [Serializable]</strong>
+<strong class="markLine">    <span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> CustomMessage</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        <span style="color:#0000FF">private</span> DateTime date;</strong>
+<strong class="markLine">        <span style="color:#0000FF">private</span> <span style="color:#0000FF">string</span> body;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#0000FF">public</span> DateTime Date</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">            <span style="color:#0000FF">get</span> { <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.date; }</strong>
+<strong class="markLine">            <span style="color:#0000FF">set</span> { <span style="color:#0000FF">this</span>.date = <span style="color:#0000FF">value</span>; }</strong>
+<strong class="markLine">        }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#0000FF">public</span> <span style="color:#0000FF">string</span> Body</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">            <span style="color:#0000FF">get</span> { <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.body; }</strong>
+<strong class="markLine">            <span style="color:#0000FF">set</span> { <span style="color:#0000FF">this</span>.body = <span style="color:#0000FF">value</span>; }</strong>
+<strong class="markLine">        }</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">}</strong>
+</code></pre></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存更改。</p></li>
+<li><p>接着，您将在 <strong>HomeController</strong> 类中创建一个方法，用以将自定义对象发送至<strong>队列</strong>。打开 <strong>UsingQueues.Web</strong> 项目中<strong>“控制器”</strong>文件夹下的 <strong>HomeController.cs</strong> 文件。</p></li>
+<li><p>在该类中添加以下方法。</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex01 - NewCustomMessage</em> - CS）</p>
+
+<!-- mark:1-7 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine">[HttpPost]</strong>
+<strong class="markLine"><span style="color:#0000FF">public</span> JsonResult SendMessage(<span style="color:#0000FF">string</span> queueName, <span style="color:#0000FF">string</span> message)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    QueueClient queueClient = <span style="color:#0000FF">this</span>.messagingFactory.CreateQueueClient(queueName);</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> customMessage = <span style="color:#0000FF">new</span> CustomMessage() { Date = DateTime.Now, Body = message };</strong>
+<strong class="markLine">    <span style="color:#0000FF">long</span>? messagesInQueue = <span style="color:#0000FF">null</span>;</strong>
+<strong class="markLine">}</strong>
+</code></pre></li>
+<li><p>然后，您将实例化一个 <strong>CustomMessage</strong> 对象，并将该对象的 <strong>Date</strong> 属性设置为当前日期，将其 <strong>Body</strong> 属性设置为您从 UI 中接收的文本。这样，您将通过队列发送一条纯文本消息，以及用于处理接收自队列的消息所需的其他有用信息。为此，请将以下粗体代码添加至 <strong>SendMessage</strong> 方法中：</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex01 - Send BrokeredMessage</em> - CS）</p>
+
+<!-- mark:7-27 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#">[HttpPost]
+<span style="color:#0000FF">public</span> JsonResult SendMessage(<span style="color:#0000FF">string</span> queueName, <span style="color:#0000FF">string</span> message) { QueueClient queueClient = <span style="color:#0000FF">this</span>.messagingFactory.CreateQueueClient(queueName);
+    <span style="color:#0000FF">var</span> customMessage = <span style="color:#0000FF">new</span> CustomMessage() { Date = DateTime.Now, Body = message };
+    <span style="color:#0000FF">long</span>? messagesInQueue = <span style="color:#0000FF">null</span>;
+<strong class="markLine">    BrokeredMessage bm = <span style="color:#0000FF">null</span>;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">try</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      bm = <span style="color:#0000FF">new</span> BrokeredMessage(customMessage);</strong>
+<strong class="markLine">      queueClient.Send(bm);</strong>
+<strong class="markLine">      messagesInQueue = <span style="color:#0000FF">this</span>.GetMessageCount(queueName);</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">    <span style="color:#0000FF">catch</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#008000">// TODO: do something</span></strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">    <span style="color:#0000FF">finally</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">if</span> (bm != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        bm.Dispose();</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(messagesInQueue, JsonRequestBehavior.AllowGet);</strong>
+}
+</code></pre></li>
+<li><p><strong>BrokeredMessage</strong> 类有一个名为 <strong>Properties</strong> 的属性，该属性是一个<strong>字符串/对象</strong>键值对字典。您可以自己设置自定义键值对，并根据需要加以使用。这些属性与自定义对象无关，旨在用于消息逻辑中。您将添加两个预定义属性。在您从队列中检索消息时，将对这两个属性进行检查。将以下突出显示的代码添加至 <strong>SendMessage</strong> 方法中：</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex01 - Add Custom Properties</em> - CS）</p>
+
+<!-- mark:12-13 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#">[HttpPost]
+<span style="color:#0000FF">public</span> JsonResult SendMessage(<span style="color:#0000FF">string</span> queueName, <span style="color:#0000FF">string</span> message) { QueueClient queueClient = <span style="color:#0000FF">this</span>.messagingFactory.CreateQueueClient(queueName);
+    <span style="color:#0000FF">var</span> customMessage = <span style="color:#0000FF">new</span> CustomMessage() { Date = DateTime.Now, Body = message };
+    <span style="color:#0000FF">long</span>? messagesInQueue = <span style="color:#0000FF">null</span>; BrokeredMessage bm = <span style="color:#0000FF">null</span>;
+
+    <span style="color:#0000FF">try</span>
+    { bm = <span style="color:#0000FF">new</span> BrokeredMessage(customMessage);
+<strong class="markLine">      bm.Properties[<span style="color:#8B0000">&quot;Urgent&quot;</span>] = <span style="color:#8B0000">&quot;1&quot;</span>;</strong>
+<strong class="markLine">      bm.Properties[<span style="color:#8B0000">&quot;Priority&quot;</span>] = <span style="color:#8B0000">&quot;High&quot;</span>;</strong>
+      queueClient.Send(bm); messagesInQueue = <span style="color:#0000FF">this</span>.GetMessageCount(queueName); }
+    <span style="color:#0000FF">catch</span>
+    {
+      <span style="color:#008000">// TODO: do something</span>
+    }
+    <span style="color:#0000FF">finally</span>
+    {
+      <span style="color:#0000FF">if</span> (bm != <span style="color:#0000FF">null</span>) { bm.Dispose(); } }
+
+    <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(messagesInQueue, JsonRequestBehavior.AllowGet); }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>您将在本实验练习 2 的任务 3 和任务 4 中看到这些自定义属性的应用。</p>
+</blockquote></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存对控制器的更改。</p></li>
+</ol>
+
+<p><a name="Ex1Task3"></a></p>
+
+<h4 id="Task_3_-_Receiving_Messages">任务 3 - 接收消息</h4>
+
+<p>在上一任务中，为了向队列发送消息，我们实例化了 <strong>QueueClient</strong>。在此任务中，您将学习如何使用 <strong>QueueClient</strong> 从队列接收消息，并浏览收到的消息中包含的属性。</p>
+
+<ol>
+<li><p>打开 <strong>UsingQueues.Web</strong> 项目中<strong>“控制器”</strong>文件夹下的 <strong>HomeController.cs</strong> 文件（若尚未打开）。</p></li>
+<li><p>将以下方法添加至 <strong>HomeController</strong> 类中：</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex01 - RetrieveMessage from a Queue</em> - CS）</p>
+
+<!-- mark:1-32 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine">[HttpGet, OutputCache(NoStore = <span style="color:#0000FF">true</span>, Duration = 0, VaryByParam = <span style="color:#8B0000">&quot;*&quot;</span>)]</strong>
+<strong class="markLine"><span style="color:#0000FF">public</span> JsonResult RetrieveMessage(<span style="color:#0000FF">string</span> queueName)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    QueueClient queueClient = <span style="color:#0000FF">this</span>.messagingFactory.CreateQueueClient(queueName, ReceiveMode.PeekLock);</strong>
+<strong class="markLine">    BrokeredMessage receivedMessage = queueClient.Receive(<span style="color:#0000FF">new</span> TimeSpan(0,0,30));</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (receivedMessage == <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(<span style="color:#0000FF">null</span>, JsonRequestBehavior.AllowGet);</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> receivedCustomMessage = receivedMessage.GetBody&lt;CustomMessage&gt;();</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> brokeredMsgProperties = <span style="color:#0000FF">new</span> Dictionary&lt;<span style="color:#0000FF">string</span>, <span style="color:#0000FF">object</span>&gt;();</strong>
+<strong class="markLine">    brokeredMsgProperties.Add(<span style="color:#8B0000">&quot;Size&quot;</span>, receivedMessage.Size);</strong>
+<strong class="markLine">    brokeredMsgProperties.Add(<span style="color:#8B0000">&quot;MessageId&quot;</span>, receivedMessage.MessageId.Substring(0, 15) + <span style="color:#8B0000">&quot;...&quot;</span>);</strong>
+<strong class="markLine">    brokeredMsgProperties.Add(<span style="color:#8B0000">&quot;TimeToLive&quot;</span>, receivedMessage.TimeToLive.TotalSeconds);</strong>
+<strong class="markLine">    brokeredMsgProperties.Add(<span style="color:#8B0000">&quot;EnqueuedTimeUtc&quot;</span>, receivedMessage.EnqueuedTimeUtc.ToString(<span style="color:#8B0000">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>));</strong>
+<strong class="markLine">    brokeredMsgProperties.Add(<span style="color:#8B0000">&quot;ExpiresAtUtc&quot;</span>, receivedMessage.ExpiresAtUtc.ToString(<span style="color:#8B0000">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>));</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> messageInfo = <span style="color:#0000FF">new</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        Label = receivedMessage.Label,</strong>
+<strong class="markLine">        Date = receivedCustomMessage.Date,</strong>
+<strong class="markLine">        Message = receivedCustomMessage.Body,</strong>
+<strong class="markLine">        Properties = receivedMessage.Properties.ToArray(),</strong>
+<strong class="markLine">        BrokeredMsgProperties = brokeredMsgProperties.ToArray()</strong>
+<strong class="markLine">    };</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    receivedMessage.Complete();</strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(<span style="color:#0000FF">new</span> { MessageInfo = messageInfo, MessagesInQueue = <span style="color:#0000FF">this</span>.GetMessageCount(queueName) }, JsonRequestBehavior.AllowGet);</strong>
+<strong class="markLine">}</strong>
+</code></pre></li>
+<li><p>UI 中需要提供检索 Service Bus 中现有队列名称的机制，还需要一个方法来计算特定队列中的消息数目。为此，请将以下 ActionMethod 添加至 <strong>HomeController</strong> 类的末尾：</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex01 - GetQueues and Count</em> - CS）</p>
+
+<!-- mark:1-12 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine">[OutputCache(NoStore = <span style="color:#0000FF">true</span>, Duration = 0, VaryByParam = <span style="color:#8B0000">&quot;*&quot;</span>)]</strong>
+<strong class="markLine"><span style="color:#0000FF">public</span> JsonResult Queues()</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> queues = <span style="color:#0000FF">this</span>.namespaceManager.GetQueues().Select(c =&gt; <span style="color:#0000FF">new</span> { Name = c.Path, Messages = c.MessageCount }).ToArray();</strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(queues, JsonRequestBehavior.AllowGet);</strong>
+<strong class="markLine">}</strong>
+<strong class="markLine"></strong>
+<strong class="markLine"><span style="color:#0000FF">public</span> <span style="color:#0000FF">long</span> GetMessageCount(<span style="color:#0000FF">string</span> queueName)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> queueDescription = <span style="color:#0000FF">this</span>.namespaceManager.GetQueue(queueName);</strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> queueDescription.MessageCount;</strong>
+<strong class="markLine">}</strong>
+</code></pre></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存对控制器的更改。</p></li>
+</ol>
+
+<p><a name="Ex1Verification"></a></p>
+
+<h4 id="Verification">验证</h4>
+
+<p>现在，请在 Windows Azure 计算模拟器中启动经过更新的应用程序，以确认您能够创建队列、将消息发送至特定队列以及从队列中接收消息。</p>
+
+<ol>
+<li><p>在 <strong>Visual Studio</strong> 中，将云项目 <strong>UsingQueues</strong> 配置为启动项目。为此，请在<strong>解决方案资源管理器</strong>中，右键单击 <strong>UsingQueues</strong>，然后选择<strong>“设为启动项目”</strong>。</p>
+
+<p><img src="./Images/setting-startup-project.png?raw=true" alt="配置启动项目" title="配置启动项目" />
+</p>
+
+<p><em>配置启动项目</em></p></li>
+<li><p>按 <strong>F5</strong> 启动应用程序。浏览器将显示应用程序的默认页面。</p>
+
+<p><img src="./Images/UsingQueues-Application-Home-Page.png?raw=true" alt="UsingQueues 应用程序主页" title="UsingQueues 应用程序主页" />
+</p>
+
+<p><em>UsingQueues 应用程序主页</em></p></li>
+<li><p>在名为 <strong>Queues</strong>（队列）的面板中，在文本框中输入队列名称（如 <em>MyQueue</em>），然后单击 <strong>Create</strong>（创建）。</p>
+
+<p><img src="./Images/Creating-a-Queue.png?raw=true" alt="创建队列" title="创建队列" />
+</p>
+
+<p><em>创建队列</em></p>
+
+<p><img src="./Images/The-application-displays-a-message-when-a-Queue-was-successfully-created.png?raw=true" alt="成功创建队列后，应用程序会显示一条消息" title="成功创建队列后，应用程序会显示一条消息" />
+</p>
+
+<p><em>成功创建队列后，应用程序会显示一条消息</em></p></li>
+<li><p>在 <strong>Send Message</strong>（发送消息）面板中，从下拉列表中选择之前创建的队列，在文本框中输入一条消息，然后单击 <strong>Send</strong>（发送）。消息将发送至该队列。</p>
+
+<p><img src="./Images/Sending-a-Message-to-the-Queue.png?raw=true" alt="向队列发送消息" title="向队列发送消息" />
+</p>
+
+<p><em>向队列发送消息</em></p></li>
+<li><p>从 <strong>Receive Message</strong>（接收消息）面板的下拉列表中选择在上一步所用的队列（如尚未选择），然后单击 <strong>Retrieve First Message in Queue</strong>（检索队列中的第一条消息）按钮。该消息及其自定义属性将一起显示在该面板中。</p>
+
+<p><img src="./Images/Retrieving-the-First-Message-in-the-Queue.png?raw=true" alt="检索队列中的第一条消息" title="检索队列中的第一条消息" />
+</p>
+
+<p><em>检索队列中的第一条消息</em></p></li>
+<li><p>关闭 Internet Explorer。</p></li>
+</ol>
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Using_Topics_and_Subscriptions">练习 2：使用主题和订阅</h3>
+
+<p>在此练习中，您将学习如何创建主题并为主题添加订阅。订阅的工作原理与队列类似，但您可以对订阅应用筛选器，从而只检索与该订阅相关的消息。向主题发送消息时，所有订阅都会验证该消息是否与各自的订阅规则相符。如果相符，相应的订阅会包含该消息的一个虚拟副本。这有助于避免向不同订阅发送多条消息。向主题发送的单条消息将在不同的订阅间通过检查规则表达式逐一分发。此外，您将学习如何对订阅应用<strong>筛选器操作</strong>，以修改与自定义规则相符的消息的 <strong>BrokeredMessage</strong> 属性。</p>
+
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_a_Topic_and_Adding_Subscriptions">任务 1 - 创建主题并添加订阅</h4>
+
+<p>在此任务中，您将学习如何创建新主题并向该主题添加若干订阅。为此，您需要先添加必要的配置，以连接至您的 Service Bus 命名空间。</p>
+
+<ol>
+<li><p>以管理员身份打开 <strong>Visual Studio 2012</strong>。</p></li>
+<li><p>打开 <strong>Source\Ex2-UsingTopicsAndSubscriptions\Begin</strong> 中的 <strong>Begin.sln</strong> 解决方案文件。</p></li>
+<li><p>生成该解决方案以下载和安装 NuGet 包依赖项。为此，请单击<strong>“生成”</strong>|<strong>“生成解决方案”</strong>，或按 <strong>Ctrl + Shift + B</strong>。</p></li>
+<li><p>在<strong>服务配置</strong>文件中设置您自己的 Service Bus 命名空间。为此，请在<strong>解决方案资源管理器</strong>中展开位于 <strong>UsingTopics</strong> 项目中的<strong>“角色”</strong>文件夹，右键单击 <strong>UsingTopics.Web</strong>，然后选择<strong>“属性”</strong>。</p>
+
+<p><img src="./Images/Launching-the-topics-service-configuration-editor.png?raw=true" alt="启动服务配置编辑器" title="启动服务配置编辑器" />
+</p>
+
+<p><em>启动服务配置编辑器</em></p></li>
+<li><p>在<strong>“设置”</strong>选项卡中，将 <em>namespaceAddress</em> 的值设置为 Service Bus 命名空间的名称，将 <em>issuerName</em> 和 <em>issuerKey</em> 的值设置为之前从 <a href="http://go.microsoft.com/fwlink/?LinkID=129428">Windows Azure 管理门户</a>复制的值。</p>
+
+<p><img src="./Images/Updating-settings-to-the-UsingTopics.Web-Web-Role.png?raw=true" alt="更新 UsingTopics.Web Web 角色设置" title="更新 UsingTopics.Web Web 角色设置" />
+</p>
+
+<p><em>更新 <strong>UsingTopics.Web</strong> Web 角色设置</em></p></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存对 Web 角色配置的更改。</p></li>
+<li><p>打开 <strong>UsingTopics.Web</strong> 项目中<strong>“控制器”</strong>文件夹下的 <strong>HomeController.cs</strong> 文件。</p>
+<blockquote>
+<p><strong>注意：</strong>在上个练习中，您在 <strong>HomeController</strong> 类的构造函数方法中创建了一个指向 Service Bus 命名空间的连接。在当前练习中，已在解决方案中添加了该连接。有关详细信息，请参阅练习 1 中任务 1 的第 12 步。</p>
+</blockquote></li>
+<li><p>您将创建一个新<strong>主题</strong>和两个<strong>订阅</strong>，两个订阅的名称分别为 <em>AllMessages</em> 和 <em>UrgentMessages</em>。为此，请将以下方法添加至 <strong>HomeController</strong> 类的末尾。</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex02 - Create Topic and subscriptions</em> - CS）</p>
+
+<!-- mark:1-19 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine">[HttpPost]</strong>
+<strong class="markLine"><span style="color:#0000FF">public</span> JsonResult CreateTopic(<span style="color:#0000FF">string</span> topicName)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    <span style="color:#0000FF">bool</span> success;</strong>
+<strong class="markLine">    <span style="color:#0000FF">try</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> topic = <span style="color:#0000FF">this</span>.namespaceManager.CreateTopic(topicName);</strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> allMessagesSubscription = <span style="color:#0000FF">this</span>.namespaceManager.CreateSubscription(topic.Path, <span style="color:#8B0000">&quot;AllMessages&quot;</span>);</strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> urgentMessagesSubscription = <span style="color:#0000FF">this</span>.namespaceManager.CreateSubscription(topic.Path, <span style="color:#8B0000">&quot;UrgentMessages&quot;</span>);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        success = <span style="color:#0000FF">true</span>;</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">    <span style="color:#0000FF">catch</span> (Exception)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        success = <span style="color:#0000FF">false</span>;</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(success, JsonRequestBehavior.AllowGet);</strong>
+<strong class="markLine">}</strong>
+</code></pre></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存对控制器的更改。</p></li>
+</ol>
+
+<p><a name="Ex2Task2"></a></p>
+
+<h4 id="Task_2_-_Using_a_Subscription_Rule_Filter_Expression">任务 2 - 使用订阅规则筛选器表达式</h4>
+
+<p><strong>规则筛选器</strong>用于在订阅中检索与特定规则相符的消息。这样，您可以向主题发送一条消息，但该消息会在多个订阅中进行<em>虚拟</em> 复制。</p>
+
+<ol>
+<li><p>打开 <strong>UsingTopics.Web</strong> 项目中<strong>“控制器”</strong>文件夹下的 <strong>HomeController.cs</strong> 文件（若尚未打开）。</p></li>
+<li><p>在上一个任务中，您创建了一个主题和两个订阅。现在，您将替换其中一行代码，以在 <em>UrgentMessages</em> 订阅中包含一个 <strong>SqlFilter</strong>。借助该筛选器，<em>UrgentMessages</em> 订阅将仅获取与规则 <strong>Urgent = '1'</strong> 相符的消息。请用以下突出显示的代码替换在上一个任务中添加的代码。</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex02 - Create Topic and Subscriptions with Rule Filters</em> - CS）</p>
+
+<!-- mark:9 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#">[HttpPost]
+<span style="color:#0000FF">public</span> JsonResult CreateTopic(<span style="color:#0000FF">string</span> topicName) {
+    <span style="color:#0000FF">bool</span> success;
+    <span style="color:#0000FF">try</span>
+    {
+        <span style="color:#0000FF">var</span> topic = <span style="color:#0000FF">this</span>.namespaceManager.CreateTopic(topicName);
+        <span style="color:#0000FF">var</span> allMessagesSubscription = <span style="color:#0000FF">this</span>.namespaceManager.CreateSubscription(topic.Path, <span style="color:#8B0000">&quot;AllMessages&quot;</span>);
+<strong class="markLine">        <span style="color:#0000FF">var</span> urgentMessagesSubscription = <span style="color:#0000FF">this</span>.namespaceManager.CreateSubscription(topic.Path, <span style="color:#8B0000">&quot;UrgentMessages&quot;</span>, <span style="color:#0000FF">new</span> SqlFilter(<span style="color:#8B0000">&quot;Urgent = &#39;1&#39;&quot;</span>));</strong>
+   ... }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>您可以使用 SQL92 作为筛选器表达式。</p>
+</blockquote></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存对控制器的更改。</p></li>
+</ol>
+
+<p><a name="Ex2Task3"></a></p>
+
+<h4 id="Task_3_-_Using_a_Subscription_Rule_Filter_Action">任务 3 - 使用订阅规则筛选器操作</h4>
+
+<p>除了规则筛选器表达式外，还可以使用<strong>规则筛选器操作</strong>。通过规则筛选器操作，可以修改符合特定规则的 <strong>BrokeredMessage</strong> 的属性。您将创建一个名为 <em>HighPriorityMessages</em> 的新<strong>订阅</strong>，该订阅包含一个自定义<strong>规则筛选器操作</strong>。符合规则 <em>Urgent = '1'</em> 的所有消息都将发送至 <strong>Priority</strong> 设置为 <em>'High'</em> 的<strong>订阅</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>筛选器表达式和筛选器操作都使用名为 <strong>Properties</strong> 的 <strong>BrokeredMessage</strong> 字典中所声明的属性。这些规则不适用于 <strong>BrokeredMessage</strong> 主体中的自定义对象。</p>
+</blockquote>
+<ol>
+<li><p>打开 <strong>UsingTopics.Web</strong> 项目中<strong>“控制器”</strong>文件夹下的 <strong>HomeController.cs</strong> 文件（若尚未打开）。</p></li>
+<li><p>创建一个包含 <strong>RuleDescription</strong> 的新<strong>订阅</strong>对象。在此对象中，可以设置一个<strong>筛选器</strong>和一个<strong>操作</strong>。这样，如果<strong>筛选器</strong>匹配，则为 <strong>BrokeredMessage</strong> 应用特定的<strong>操作</strong>。在 <strong>CreateTopic</strong> 操作方法中，添加突出显示的代码。</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex02 - Create Subscription with Action Filter</em> - CS）</p>
+
+<!-- mark:11-16 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#">[HttpPost]
+<span style="color:#0000FF">public</span> JsonResult CreateTopic(<span style="color:#0000FF">string</span> topicName) {
+    <span style="color:#0000FF">bool</span> success;
+    <span style="color:#0000FF">try</span>
+    {
+        <span style="color:#0000FF">var</span> topic = <span style="color:#0000FF">this</span>.namespaceManager.CreateTopic(topicName);
+        <span style="color:#0000FF">var</span> allMessagesSubscription = <span style="color:#0000FF">this</span>.namespaceManager.CreateSubscription(topic.Path, <span style="color:#8B0000">&quot;AllMessages&quot;</span>);
+        <span style="color:#0000FF">var</span> urgentMessagesSubscription = <span style="color:#0000FF">this</span>.namespaceManager.CreateSubscription(topic.Path, <span style="color:#8B0000">&quot;UrgentMessages&quot;</span>, <span style="color:#0000FF">new</span> SqlFilter(<span style="color:#8B0000">&quot;Urgent = &#39;1&#39;&quot;</span>));
+
+<strong class="markLine">        <span style="color:#0000FF">var</span> ruleDescription = <span style="color:#0000FF">new</span> RuleDescription()</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">            Filter = <span style="color:#0000FF">new</span> SqlFilter(<span style="color:#8B0000">&quot;Important= &#39;1&#39; OR Priority = &#39;High&#39;&quot;</span>),</strong>
+<strong class="markLine">            Action = <span style="color:#0000FF">new</span> SqlRuleAction(<span style="color:#8B0000">&quot;set Priority= &#39;High&#39;&quot;</span>)</strong>
+<strong class="markLine">        };</strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> highPriorityMessagesSubscription = <span style="color:#0000FF">this</span>.namespaceManager.CreateSubscription(topic.Path, <span style="color:#8B0000">&quot;HighPriorityMessages&quot;</span>, ruleDescription);</strong>
+        success = <span style="color:#0000FF">true</span>; }
+    <span style="color:#0000FF">catch</span> (Exception) { success = <span style="color:#0000FF">false</span>; }
+
+    <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(success, JsonRequestBehavior.AllowGet); }
+</code></pre></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存对控制器的更改。</p></li>
+</ol>
+
+<p><a name="Ex2Task4"></a></p>
+
+<h4 id="Task_4_-_Sending_Messages">任务 4 - 发送消息</h4>
+
+<p>在此任务中，您将向主题发送消息，并验证每条消息是否都能送达正确的订阅。您将利用练习 1 中的相同方法，将一个可序列化对象连同其自定义属性作为<strong>消息</strong>发送。</p>
+
+<ol>
+<li><p>打开 <strong>UsingTopics.Web</strong> 项目中<strong>“控制器”</strong>文件夹下的 <strong>HomeController.cs</strong> 文件（若尚未打开）。</p></li>
+<li><p>为发送消息，您需要利用 <strong>MessagingFactory</strong> 创建一个 <strong>TopicClient</strong>。接着，您将创建一个 <strong>CustomMessage</strong> 并将其添加至 <strong>BrokeredMessage</strong>。然后，需要使用从 UI 收到的值设置 <em>Urgent</em>、<em>Important</em> 和 <em>Priority</em> 属性。最后，需要利用 <strong>TopicClient</strong> 将消息发送至<strong>主题</strong>。将以下方法添加至 <strong>HomeController</strong> 类的末尾。</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex02 - SendMessage</em> - CS）</p>
+
+<!-- mark:1-31 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine">[HttpPost]</strong>
+<strong class="markLine"><span style="color:#0000FF">public</span> JsonResult SendMessage(<span style="color:#0000FF">string</span> topicName, <span style="color:#0000FF">string</span> message, <span style="color:#0000FF">bool</span> messageIsUrgent, <span style="color:#0000FF">bool</span> messageIsImportant)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    TopicClient topicClient = <span style="color:#0000FF">this</span>.messagingFactory.CreateTopicClient(topicName);</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> customMessage = <span style="color:#0000FF">new</span> CustomMessage() { Body = message, Date = DateTime.Now };</strong>
+<strong class="markLine">    <span style="color:#0000FF">bool</span> success = <span style="color:#0000FF">false</span>;</strong>
+<strong class="markLine">    BrokeredMessage bm = <span style="color:#0000FF">null</span>;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">try</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        bm = <span style="color:#0000FF">new</span> BrokeredMessage(customMessage);</strong>
+<strong class="markLine">        bm.Properties[<span style="color:#8B0000">&quot;Urgent&quot;</span>] = messageIsUrgent ? <span style="color:#8B0000">&quot;1&quot;</span> : <span style="color:#8B0000">&quot;0&quot;</span>;</strong>
+<strong class="markLine">        bm.Properties[<span style="color:#8B0000">&quot;Important&quot;</span>] = messageIsImportant ? <span style="color:#8B0000">&quot;1&quot;</span> : <span style="color:#8B0000">&quot;0&quot;</span>;</strong>
+<strong class="markLine">        bm.Properties[<span style="color:#8B0000">&quot;Priority&quot;</span>] = <span style="color:#8B0000">&quot;Low&quot;</span>;</strong>
+<strong class="markLine">        topicClient.Send(bm);</strong>
+<strong class="markLine">        success = <span style="color:#0000FF">true</span>;</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">    <span style="color:#0000FF">catch</span> (Exception)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        <span style="color:#008000">// TODO: do something</span></strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">    <span style="color:#0000FF">finally</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        <span style="color:#0000FF">if</span> (bm != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">          bm.Dispose();</strong>
+<strong class="markLine">        }</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(success, JsonRequestBehavior.AllowGet);</strong>
+<strong class="markLine">}</strong>
+</code></pre></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存对控制器的更改。</p></li>
+</ol>
+
+<p><a name="Ex2Task5"></a></p>
+
+<h4 id="Task_5_-_Receiving_Messages">任务 5 - 接收消息</h4>
+
+<p>在此任务中，您将学习如何从订阅中接收消息。您将使用与练习 1 中所用逻辑非常相似的逻辑。但在本例中，您将从 <strong>SubscriptionClient</strong> 中实例化一个 <strong>MessageReceiver</strong> 对象。</p>
+
+<ol>
+<li><p>打开 <strong>UsingTopics.Web</strong> 项目中<strong>“控制器”</strong>文件夹下的 <strong>HomeController.cs</strong> 文件（若尚未打开）。</p></li>
+<li><p>将以下代码添加至 <strong>HomeController</strong> 类的末尾。</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex02 - RetrieveMessages</em> - CS）</p>
+
+<!-- mark:1-34 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine">[HttpGet, OutputCache(NoStore = <span style="color:#0000FF">true</span>, Duration = 0, VaryByParam = <span style="color:#8B0000">&quot;*&quot;</span>)]</strong>
+<strong class="markLine"><span style="color:#0000FF">public</span> JsonResult RetrieveMessage(<span style="color:#0000FF">string</span> topicName, <span style="color:#0000FF">string</span> subscriptionName)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    SubscriptionClient subscriptionClient = <span style="color:#0000FF">this</span>.messagingFactory.CreateSubscriptionClient(topicName, subscriptionName, ReceiveMode.PeekLock);</strong>
+<strong class="markLine">    BrokeredMessage receivedMessage = subscriptionClient.Receive(<span style="color:#0000FF">new</span> TimeSpan(0,0,30));</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (receivedMessage == <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(<span style="color:#0000FF">null</span>, JsonRequestBehavior.AllowGet);</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> receivedCustomMessage = receivedMessage.GetBody&lt;CustomMessage&gt;();</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    receivedMessage.Properties[<span style="color:#8B0000">&quot;Priority&quot;</span>] = receivedMessage.Properties[<span style="color:#8B0000">&quot;Important&quot;</span>].ToString() == <span style="color:#8B0000">&quot;1&quot;</span> ? <span style="color:#8B0000">&quot;High&quot;</span> : <span style="color:#8B0000">&quot;Low&quot;</span>;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> brokeredMsgProperties = <span style="color:#0000FF">new</span> Dictionary&lt;<span style="color:#0000FF">string</span>, <span style="color:#0000FF">object</span>&gt;();</strong>
+<strong class="markLine">    brokeredMsgProperties.Add(<span style="color:#8B0000">&quot;Size&quot;</span>, receivedMessage.Size);</strong>
+<strong class="markLine">    brokeredMsgProperties.Add(<span style="color:#8B0000">&quot;MessageId&quot;</span>, receivedMessage.MessageId.Substring(0, 15) + <span style="color:#8B0000">&quot;...&quot;</span>);</strong>
+<strong class="markLine">    brokeredMsgProperties.Add(<span style="color:#8B0000">&quot;TimeToLive&quot;</span>, receivedMessage.TimeToLive.TotalSeconds);</strong>
+<strong class="markLine">    brokeredMsgProperties.Add(<span style="color:#8B0000">&quot;EnqueuedTimeUtc&quot;</span>, receivedMessage.EnqueuedTimeUtc.ToString(<span style="color:#8B0000">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>));</strong>
+<strong class="markLine">    brokeredMsgProperties.Add(<span style="color:#8B0000">&quot;ExpiresAtUtc&quot;</span>, receivedMessage.ExpiresAtUtc.ToString(<span style="color:#8B0000">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>));</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> messageInfo = <span style="color:#0000FF">new</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        Label = receivedMessage.Label,</strong>
+<strong class="markLine">        Date = receivedCustomMessage.Date,</strong>
+<strong class="markLine">        Message = receivedCustomMessage.Body,</strong>
+<strong class="markLine">        Properties = receivedMessage.Properties.ToArray(),</strong>
+<strong class="markLine">        BrokeredMsgProperties = brokeredMsgProperties.ToArray()</strong>
+<strong class="markLine">    };</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    receivedMessage.Complete();</strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(messageInfo, JsonRequestBehavior.AllowGet);</strong>
+<strong class="markLine">}</strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>在此代码中，您还需要添加要在 UI 中显示的消息的其他信息。</p>
+</blockquote></li>
+<li><p>将以下代码添加至 <strong>HomeController</strong> 类的末尾，用以将主题和订阅数据检索到视图。</p>
+
+<p>（代码段 - <em>Service Bus Messaging - Ex02 - GetTopic and Subscriptions</em> - CS）</p>
+
+<!-- mark:1-49 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine">[OutputCache(NoStore = <span style="color:#0000FF">true</span>, Duration = 0, VaryByParam = <span style="color:#8B0000">&quot;*&quot;</span>)]</strong>
+<strong class="markLine"><span style="color:#0000FF">public</span> JsonResult Subscriptions(<span style="color:#0000FF">string</span> topicName)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> subscriptions = <span style="color:#0000FF">this</span>.namespaceManager.GetSubscriptions(topicName).Select(c =&gt; c.Name);</strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(subscriptions, JsonRequestBehavior.AllowGet);</strong>
+<strong class="markLine">}</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">[OutputCache(NoStore = <span style="color:#0000FF">true</span>, Duration = 0, VaryByParam = <span style="color:#8B0000">&quot;*&quot;</span>)]</strong>
+<strong class="markLine"><span style="color:#0000FF">public</span> JsonResult TopicsWithSubscriptions()</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> topics = <span style="color:#0000FF">this</span>.namespaceManager.GetTopics().Select(c =&gt; c.Path).ToList();</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> topicsToReturn = <span style="color:#0000FF">new</span> Dictionary&lt;<span style="color:#0000FF">string</span>, <span style="color:#0000FF">object</span>&gt;();</strong>
+<strong class="markLine">    topics.ForEach(c =&gt;</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> subscriptions = <span style="color:#0000FF">this</span>.namespaceManager.GetSubscriptions(c).Select(d =&gt; <span style="color:#0000FF">new</span> { Name = d.Name, MessageCount = d.MessageCount });</strong>
+<strong class="markLine">        topicsToReturn.Add(c, subscriptions);</strong>
+<strong class="markLine">    });</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(topicsToReturn.ToArray(), JsonRequestBehavior.AllowGet);</strong>
+<strong class="markLine">}</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">[OutputCache(NoStore = <span style="color:#0000FF">true</span>, Duration = 0, VaryByParam = <span style="color:#8B0000">&quot;*&quot;</span>)]</strong>
+<strong class="markLine"><span style="color:#0000FF">public</span> JsonResult Filters(<span style="color:#0000FF">string</span> topicName, <span style="color:#0000FF">string</span> subscriptionName)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> rules = <span style="color:#0000FF">this</span>.namespaceManager.GetRules(topicName, subscriptionName);</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> sqlFilters = <span style="color:#0000FF">new</span> List&lt;Tuple&lt;<span style="color:#0000FF">string</span>, <span style="color:#0000FF">string</span>&gt;&gt;();</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">foreach</span> (<span style="color:#0000FF">var</span> rule <span style="color:#0000FF">in</span> rules)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> expression = rule.Filter <span style="color:#0000FF">as</span> SqlFilter;</strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> action = rule. Action <span style="color:#0000FF">as</span> SqlRuleAction;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#0000FF">if</span> (expression != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">            sqlFilters.Add(</strong>
+<strong class="markLine">                <span style="color:#0000FF">new</span> Tuple&lt;<span style="color:#0000FF">string</span>, <span style="color:#0000FF">string</span>&gt;(</strong>
+<strong class="markLine">                    expression.SqlExpression,</strong>
+<strong class="markLine">                    action != <span style="color:#0000FF">null</span> ? action.SqlExpression : <span style="color:#0000FF">string</span>.Empty));</strong>
+<strong class="markLine">        }</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Json(sqlFilters.Select(t =&gt; <span style="color:#0000FF">new</span> { Filter = t.Item1, Action = t.Item2 }), JsonRequestBehavior.AllowGet);</strong>
+<strong class="markLine">}</strong>
+<strong class="markLine"></strong>
+<strong class="markLine"><span style="color:#0000FF">public</span> <span style="color:#0000FF">long</span> GetMessageCount(<span style="color:#0000FF">string</span> topicName, <span style="color:#0000FF">string</span> subscriptionName)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> subscriptionDescription = <span style="color:#0000FF">this</span>.namespaceManager.GetSubscription(topicName, subscriptionName);</strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> subscriptionDescription.MessageCount;</strong>
+<strong class="markLine">}</strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>视图利用这些方法通过 jQuery 和 AJAX 检索有关主题和订阅的信息。</p>
+</blockquote></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存对控制器的更改。</p></li>
+</ol>
+
+<p><a name="Ex2Verification"></a></p>
+
+<h4 id="Verification">验证</h4>
+
+<p>现在，您将在 Windows Azure 计算模拟器中启动经过更新的应用程序，以验证是否能够创建主题和订阅以及发送和接收消息。您将验证每条消息是否都能送到与相应筛选器相符的订阅。</p>
+
+<ol>
+<li><p>在 <strong>Visual Studio</strong> 中，将云项目 <strong>UsingTopics</strong> 配置为启动项目。为此，请在<strong>解决方案资源管理器</strong>中，右键单击 <strong>UsingTopics</strong>，然后选择<strong>“设为启动项目”</strong>。</p>
+
+<p><img src="./Images/setting-startup-project2.png?raw=true" alt="配置启动项目" title="配置启动项目" />
+</p>
+
+<p><em>配置启动项目</em></p></li>
+<li><p>按 <strong>F5</strong> 启动应用程序。浏览器将显示应用程序的默认页面。</p>
+
+<p><img src="./Images/UsingTopics-Application-Home-Page.png?raw=true" alt="UsingTopics 应用程序主页" title="UsingTopics 应用程序主页" />
+</p>
+
+<p><em>UsingTopics 应用程序主页</em></p></li>
+<li><p>在名为 <strong>Topics</strong>（主题）的面板中，输入主题的名称（如 <em>MyTopic</em>）并单击 <strong>Create</strong>（创建）。</p>
+
+<p><img src="./Images/Creating-a-Topic.png?raw=true" alt="创建主题" title="创建主题" />
+</p>
+
+<p><em>创建主题</em></p>
+
+<p><img src="./Images/The-application-displays-a-message-when-a-Topic-is-created.png?raw=true" alt="创建主题后，应用程序会显示一条消息" title="创建主题后，应用程序会显示一条消息" />
+</p>
+
+<p><em>创建主题后，应用程序会显示一条消息</em></p></li>
+<li><p>在 <strong>Send Message</strong>（发送消息）面板中，从下拉列表中选择之前创建的<strong>主题</strong>，在文本框中输入 &quot;This is an urgent message&quot;（这是一条紧急消息），勾选 <strong>Is Urgent</strong>（紧急）并单击 <strong>Send</strong>（发送）。</p>
+
+<p><img src="./Images/Sending-a-message-to-the-topic.png?raw=true" alt="向主题发送消息" title="向主题发送消息" />
+</p>
+
+<p><em>向主题发送消息</em></p></li>
+<li><p>检查是否只有 <strong>UrgentMessages</strong> 和 <strong>AllMessages</strong> 订阅收到该消息。为此，请选择位于 <strong>Receive Message</strong>（接收消息）面板中下拉列表中的每个订阅，并单击 <strong>Retrieve First message in Subscription</strong>（检索订阅中的第一条消息）。</p>
+
+<p><img src="./Images/Retrieving-a-message-to-the-AllMessages-subscription.png?raw=true" alt="检索发往 AllMessages 订阅的消息" title="检索发往 AllMessages 订阅的消息" />
+</p>
+
+<p><em>检索发往 AllMessages 订阅的消息</em></p>
+
+<p><img src="./Images/Retrieving-a-message-to-the-HighPriorityMessages-subscription.png?raw=true" alt="检索发往 HighPriorityMessages 订阅的消息" title="检索发往 HighPriorityMessages 订阅的消息" />
+</p>
+
+<p><em>检索发往 HighPriorityMessages 订阅的消息</em></p>
+
+<p><img src="./Images/Retrieving-a-message-to-the-UrgentMessages-subscription.png?raw=true" alt="检索发往 UrgentMessages 订阅的消息" title="检索发往 UrgentMessages 订阅的消息" />
+</p>
+
+<p><em>检索发往 UrgentMessages 订阅的消息</em></p></li>
+<li><p>再向主题发送一条消息，不过这次不再选中 <strong>Is Urgent</strong>（紧急）复选框，而是选中 <strong>Mark as important</strong>（标记为重要）。检索 <strong>HighPriorityMessages</strong> 订阅中的消息，并验证优先级现在是否设置为 <strong>High</strong>。</p>
+
+<p><img src="./Images/Sending-an-important-message-to-the-Topic.png?raw=true" alt="向主题发送一条重要消息" title="向主题发送一条重要消息" />
+</p>
+
+<p><em>向主题发送一条重要消息</em></p></li>
+</ol>
+
+<hr />
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>通过完成此动手实验，您了解了 Service Bus 队列、主题和订阅的基本元素。您还了解到如何通过队列发送和接收消息，以及如何为消息创建主题和订阅。最后，您学会了如何为订阅应用表达式筛选器和规则操作，以分发符合这些规则的消息。</p>
+
+<hr />
+
+<p><a name="appendixA"></a></p>
+
+<h2 id="Appendix_A_Creating_Queues_and_Topics_using_Windows_Azure_Management_Portal">附录 A：使用 Windows Azure 管理门户创建队列和主题</h2>
+
+<p>在此附录中，您将学习如何使用 Windows Azure 管理门户创建 Service Bus 队列和主题。</p>
+
+<p><a name="AppendixAQueues"></a></p>
+
+<h3 id="Creating_a_Queue_using_Windows_Azure_Management_Portal">使用 Windows Azure 管理门户创建队列</h3>
+
+<ol>
+<li><p>在继续操作之前，请确保已经创建服务命名空间。如果没有创建服务命名空间，请转至此实验的<a href="#GettingStarted">入门</a>部分。</p></li>
+<li><p>导航至 <a href="http://manage.windowsazure.com/"><a href="http://manage.windowsazure.com">http://manage.windowsazure.com</a></a>（若尚未打开）。如果您尚未登录，系统会提示您输入 <strong>Microsoft 帐户</strong>凭据。</p></li>
+<li><p>单击左窗格中的 <strong>Service Bus</strong>，再单击您的命名空间的名称以打开其面板。</p>
+
+<p><img src="Images/service-bus-namespace-dashboard.png?raw=true" alt="Service Bus 命名空间面板" title="Service Bus 命名空间面板" />
+</p>
+
+<p><em>Service Bus 命名空间面板</em></p></li>
+<li><p>单击底部菜单中的<strong>“新建”</strong>，然后选择<strong>“Service Bus 队列”</strong>|<strong>“自定义创建”</strong>。</p>
+
+<p><img src="Images/creating-a-new-queue.png?raw=true" alt="创建新队列" title="创建新队列" />
+</p>
+
+<p><em>创建新队列</em></p></li>
+<li><p>在<strong>“添加新队列”</strong>页面中，为您的队列选择<strong>“队列名称”</strong>和<strong>“区域”</strong>。确保所选的<strong>命名空间</strong>是您要创建队列的位置，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="Images/add-new-queue.png?raw=true" alt="添加新队列" title="添加新队列" />
+</p>
+
+<p><em>添加新队列</em></p></li>
+<li><p>在<strong>“配置队列”</strong>页面中，根据需要更新设置并单击<strong>“完成”</strong>。</p>
+
+<p><img src="Images/configure-queue.png?raw=true" alt="配置队列" title="配置队列" />
+</p>
+
+<p><em>配置队列</em></p></li>
+<li><p>等待<strong>队列</strong>创建完成。</p>
+
+<p><img src="Images/created-queue.png?raw=true" alt="已创建队列" title="已创建队列" />
+</p>
+
+<p><em>已创建队列</em></p></li>
+</ol>
+
+<p><a name="AppendixATopics"></a></p>
+
+<h3 id="Creating_a_Topic_using_Windows_Azure_Management_Portal">使用 Windows Azure 管理门户创建主题</h3>
+
+<ol>
+<li><p>导航至 <a href="http://manage.windowsazure.com/"><a href="http://manage.windowsazure.com">http://manage.windowsazure.com</a></a>（若尚未打开）。如果您尚未登录，系统会提示您输入 <strong>Microsoft 帐户</strong>凭据。</p></li>
+<li><p>单击左窗格中的 <strong>Service Bus</strong>，再单击您的命名空间的名称以打开其面板。</p>
+
+<p><img src="Images/service-bus-namespace-dashboard.png?raw=true" alt="Service Bus 命名空间面板" title="Service Bus 命名空间面板" />
+</p>
+
+<p><em>Service Bus 命名空间面板</em></p></li>
+<li><p>单击底部菜单中的<strong>“新建”</strong>，然后选择<strong>“Service Bus 主题”</strong>|<strong>“自定义创建”</strong>。</p>
+
+<p><img src="Images/creating-a-new-topic.png?raw=true" alt="创建新主题" title="创建新主题" />
+</p>
+
+<p><em>创建新主题</em></p></li>
+<li><p>在<strong>“添加新主题”</strong>页面中，为您的主题选择<strong>“主题名称”</strong>和<strong>“区域”</strong>。确保所选的<strong>命名空间</strong>是您要创建主题的位置，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="Images/add-new-topic.png?raw=true" alt="添加新主题" title="添加新主题" />
+</p>
+
+<p><em>添加新主题</em></p></li>
+<li><p>在<strong>“配置主题”</strong>页面中，根据需要更新设置并单击<strong>“完成”</strong>。</p>
+
+<p><img src="Images/configure-topic.png?raw=true" alt="配置主题" title="配置主题" />
+</p>
+
+<p><em>配置主题</em></p></li>
+<li><p>等待<strong>主题</strong>创建完成。</p>
+
+<p><img src="Images/created-topic.png?raw=true" alt="已创建主题" title="已创建主题" />
+</p>
+
+<p><em>已创建主题</em></p></li>
+</ol> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-ServiceBusMessaging-VS2012/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

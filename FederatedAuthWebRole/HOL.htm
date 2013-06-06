@@ -1,0 +1,834 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - Windows Azure 云服务中的联合身份验证</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /><span class="mainHomepageSubTitle"> 培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-FederatedAuthWebRole" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-FederatedAuthWebRole" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="HOLTitle"></a></p>
+
+<h1 id="Federated_Authentication_in_a_Windows_Azure_Cloud_Service">Windows Azure 云服务中的联合身份验证</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>此动手实验提供的分步指南介绍 Windows Azure 中的云服务如何接受来自外部标识提供者的标识：现在，通过外部标识提供者执行的身份验证功能，您可以专注于应用程序的业务功能，而不必关心底层细节。随着此实验的学习您将发现，通过利用 Windows Identity Foundation (WIF) 进行服务增强，很容易实现这一点。</p>
+
+<p>本文提供非常具体的指示，而且进行了优化，尽量减少步骤的数目，只保留必要的步骤以最小方案启动和运行。我们偶尔也会在文本中加入注意事项，说明选择理由，并向有兴趣了解解决方案工作原理或探索更高级方案的读者指出其他的替代方法。如果只对启动和运行基本方案感兴趣，在按实验说明操作时，大可放心地跳过这些注意事项。</p>
+
+<p><a name="essentialintro1"></a></p>
+
+<h3 id="Essential_Introduction_to_Windows_Identity_Foundation_for_Windows_Azure_developers">面向 Windows Azure 开发人员的 Windows Identity Foundation 基本介绍</h3>
+
+<p>Windows Identity Foundation (WIF) 是一个开发人员框架，它增强了 .NET Framework 的高级标识功能。根据“基于声明的访问”概念，WIF 提供了一系列与传统 .NET 标识对象模型无缝集成的类，让开发人员可以对身份验证、授权和身份驱动式应用程序行为的方方面面进行控制。WIF 的指向和单击工具及与 Visual Studio 的紧密集成，可以轻松实现将身份验证交由外部联合合作伙伴执行，因此开发人员可以将 ASP.NET 应用程序或 WCF 服务配置为依赖外部标识管理实体。WIF 将安全体系的复杂性隐藏在方便的编程模型之后，允许以开放协议和标准进行应用程序访问。WIF 适用于以 .NET Framework 3.5 SP2 或更高版本编写的应用程序。</p>
+
+<p>有关进一步的信息，请参阅 <a href="http://www.microsoft.com/wif">http://www.microsoft.com/wif</a>。</p>
+
+<p><a name="essentialintro2"></a></p>
+
+<h3 id="Essential_Introduction_to_Windows_Azure_for_Windows_Identity_Foundation_developers">面向 Windows Identity Foundation 开发人员的 Windows Azure 基本介绍</h3>
+
+<p>Windows Azure 是云服务操作系统，可用作目标 Web 或企业方案的开发、服务承载和服务管理环境。Windows Azure 通过 Microsoft 数据中心为开发人员提供按需计算和存储，以便在 Internet 上承载、扩展和管理 Web 应用程序。</p>
+
+<p>Windows Azure 提供一组 Visual Studio 模板，可用于开发拟部署在云中的 ASP.NET 应用程序或辅助服务。Windows Azure Tool for Visual Studio 包含 Windows Azure 计算模拟器，它是可在本地模拟 Windows Azure 结构中执行效果的承载环境。通过 Windows Azure 计算模拟器，无需联机即可体验多并发实例和其他云功能，同时仍然可以使用自己熟悉的调试和开发工具。</p>
+
+<p>Windows Azure 应用程序可以通过 Visual Studio 或命令行工具进行打包，然后通过 <a href="https://manage.windowsazure.com/">Windows Azure 管理门户</a>部署到云中。</p>
+
+<p>有关如何部署项目的进一步信息，请参阅 <a href="http://www.windowsazure.com">http://www.windowsazure.com</a>。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>在 Windows Azure Web 角色项目中创建一个简单的 ASP.NET 网站，并将其身份验证配置为依赖外部联合实体。联合合作伙伴将通过本地开发安全令牌服务 (STS) 进行模拟。</li>
+<li><p>在本地 Windows Azure 计算模拟器中测试 Windows Azure Web 角色项目。</p></li>
+<li><p>[可选] 在云中部署 Windows Azure 项目并用本地开发 STS 对其进行过渡环境和生产环境测试。</p></li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li>具备 IIS 元数据库和 IIS 6 配置兼容性的 Microsoft Internet Information Services (IIS) 7.0</li>
+<li><a href="http://go.microsoft.com/fwlink/?linkid=186916">Microsoft .NET Framework 4</a></li>
+<li><a href="http://www.microsoft.com/visualstudio/en-us/products/2010-editions/">Microsoft Visual Studio 2010</a></li>
+<li><a href="http://www.microsoft.com/downloads/en/details.aspx?FamilyID=eb9c345f-e830-40b8-a5fe-ae7a864c4d76">Microsoft Windows Identity Foundation Runtime</a></li>
+<li><a href="http://www.microsoft.com/downloads/en/details.aspx?FamilyID=c148b2df-c7af-46bb-9162-2c9422208504">Microsoft Windows Identity Foundation SDK 4.0</a></li>
+<li><a href="http://www.microsoft.com/windowsazure/sdk/">Windows Azure Tools for Microsoft Visual Studio 1.7</a></li>
+<li>启用了网站预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>此实验针对 Windows 7 操作系统而设计。</p>
+</blockquote>
+<p><a name="Setup"></a></p>
+
+<h3 id="Setup">设置</h3>
+
+<p>为了执行此动手实验中的各项练习，需要对环境进行设置。</p>
+
+<ol>
+<li><p>打开 Windows 资源管理器窗口，浏览到此实验的 <strong>Source</strong> 文件夹。</p></li>
+<li><p>以管理员权限运行该文件夹中 <strong>Setup.cmd</strong> 文件以启动安装流程，从而配置环境，并安装此实验的 Visual Studio 代码段。此步骤也将安装本地 STS 所用的本地主机证书。</p></li>
+<li><p>如果显示“用户帐户控制”对话框，请确认操作以继续。</p></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>请务必在运行安装程序前检查此实验的所有依赖项。</p>
+
+<p>此过程安装自签名证书以启用 SSL 绑定。如果已有使用者名称为 CN=localhost 的证书，则必须先备份证书，并在完成本指南的步骤之后还原证书。</p>
+</blockquote>
+<p><a name="CodeSnippets"></a></p>
+
+<h3 id="Using_the_Code_Snippets">使用代码段</h3>
+
+<p>实验文档将指导您插入代码块。为方便起见，大部分代码是以 Visual Studio 代码段的形式提供的，您可以在 Visual Studio 2010 中使用而不必手动添加。</p>
+
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#Exercise1">为 Windows Azure 中的 ASP.NET 应用程序启用联合身份验证</a></li>
+</ol>
+
+<p>完成此实验的估计时间：<strong>60 分钟</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>每个练习都附带一个起始解决方案，它位于练习的 Begin 文件夹中，允许您独立执行每个练习。请注意，在练习期间添加的代码段不包含在这些起始解决方案中，在您完成练习前，这些代码段不一定起作用。在练习的源代码内，您还会看到一个 End 文件夹，其中包含在完成相应练习中的步骤之后所生成的 Visual Studio 解决方案代码。如果在进行此动手实验时需要更多帮助，可以使用这些解决方案作为指南。</p>
+
+<p>您首次启动 Visual Studio 时，必须选择一个预定义的设置集合。每个预定义的集合在设计上都对应于特定的开发风格，能够确定窗口布局、编辑器行为、IntelliSense 代码段和对话框选项。此实验中的过程介绍了在使用<strong>“常规开发设置”</strong>集合时，在 Visual Studio 中完成指定任务所需的操作。如果您为开发环境选择其他设置集合，需要考虑可能的过程差异。</p>
+</blockquote>
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Enabling_Federated_Authentication_for_ASPNET_applications_in_Windows_Azure">练习 1：为 Windows Azure 中的 ASP.NET 应用程序启用联合身份验证</h3>
+
+<p>通过 WIF 实现 ASP.NET 网站安全非常简单。在 Visual Studio 中右键单击项目，运行一个简单的向导，在其中指定需要接受来自哪个联合合作伙伴的标识，即可完成配置。如果在开发期间没有联合合作伙伴可用，甚至可以选择动态生成本地开发 STS。</p>
+
+<p>即使目标是将 Windows Azure 作为应用程序的部署环境，这一简单步骤大部分仍保持不变：需要的少量调整主要与 Windows Azure 结构功能有关，例如 X509 证书的存储方式，或在不同环境（Windows Azure 计算模拟器、过渡环境、生产环境）下对应用程序 URI 的处理方式。</p>
+
+<p>在以下任务中，将展示如何创建 Windows Azure WebRole，如何将其配置为使用本地开发 STS，以及如何修改 Windows Azure 项目（通过继续引用本地开发 STS）使之能在 Windows Azure 计算模拟器中运行。最后，将项目发布到云中，观察应用程序在过渡环境和生产环境运行时，是如何继续使用本地开发 STS 的。</p>
+
+<p>此动手实验演示 WIF 和 Windows Azure 之间的最小集成方案。在此介绍的内容很容易扩展到更现实的方案，例如重用通过 AD FS 2.0（以前名为“Geneva”的服务器）公开的本地实体。您将会发现这个过程甚至更简单。</p>
+
+<p><img src="images/exercise-summary.png?raw=true" alt="练习小结" title="练习小结" />
+</p>
+
+<p><em>本练习的步骤小结</em></p>
+
+<p>首先以 Windows Azure Web 角色创建一个 ASP.NET 网站 (RP)，在同一个 Visual Studio 解决方案中为该网站创建 STS，在二者之间建立信任。成功测试后，在过渡环境中发布和测试该 Web 角色，最后在生产环境中发布和测试。各阶段使用的 STS 都由本地 IIS 承载，这是为了简化本指南在开发计算机上的部署，但如果有生成 STS 可用，当然可以用它来代替测试用 STS。</p>
+<blockquote>
+<p><strong>注意：</strong>要减少键入操作，可以右键单击要插入源代码的位置，依次选择“插入代码段”和“我的代码段”，然后选择与当前练习步骤对应的条目。</p>
+</blockquote>
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_a_Windows_Azure_Project_and_Preparing_it_for_Using_Windows_Identity_Foundation">任务 1 - 创建 Windows Azure 项目并将它准备好使用 Windows Identity Foundation</h4>
+
+<ol>
+<li>以管理员权限打开 Microsoft Visual Studio 2010。在<strong>“开始”|“所有程序”|“Microsoft Visual Studio 2010”</strong>菜单中，右键单击<strong>“Microsoft Visual Studio 2010”</strong>，选择<strong>“以管理员身份运行”</strong>。</li>
+<li>在<strong>“文件”</strong>菜单中选择<strong>“新建”</strong>，然后选择<strong>“项目”</strong>。</li>
+<li>在<strong>“新建项目”</strong>对话框中，在<strong>模板</strong>列表中的 <strong>Visual C#</strong> 节点下，选择<strong>“云”</strong>。</li>
+<li>选择<strong>“Windows Azure 项目”</strong>作为项目类型。</li>
+<li><p>为解决方案选择一个合适的名称。请注意，名称必须是唯一的，因为它在部署到 Windows Azure 后将公开可见。将解决方案名称设置为 <strong>Begin</strong>，将位置设置为 <strong>\Source\Ex1-AzureFederatedAuthentication</strong> 文件夹。请确保选中<strong>“创建解决方案目录”</strong>，并且框架是 <strong>.NET Framework 4</strong>。单击<strong>“确定”</strong>创建项目。</p>
+
+<p><img src="images/creating-a-new-windows-azure-project.png?raw=true" alt="创建新的 Windows Azure 项目" title="创建新的 Windows Azure 项目" />
+</p>
+
+<p><em>创建新的 Windows Azure 项目</em></p>
+<blockquote>
+<p><strong>注意：</strong><strong>我们为什么要求您选择自己的项目名，而不是提供一个示例解决方案？</strong></p>
+
+<p>每个 Windows Azure 服务都是在形式为 <strong>&lt;项目名称&gt;.cloudapp.net</strong> 的 URI 发布的。</p>
+
+<p>&lt;项目名称&gt; 字符串必须是唯一的，因为它在公共 Internet 上必须是可解析的。</p>
+
+<p>对于此动手实验的第一步，技术上来说可以选择任意项目名称，因为所有地址都是本地解析的。仅当将应用程序部署到生产环境时，才必须选择唯一的名称（并对配置作相应调整）。</p>
+
+<p>如果命名约定保持一致，本指南的步骤将更容易理解，因此我们建议您遵循命名约定，至少在第一次练习时遵循。如果需要将说明中的名称调整为您所选择的名称，只需在执行实验过程时将 <strong>fabrikamair</strong> 替换为您自己的项目名称。</p>
+</blockquote></li>
+<li><p>在<strong>“新建 Windows Azure 项目”</strong>对话框中，展开 Visual C# 角色面板，从可用角色列表中选择<strong>“ASP.NET Web 角色”</strong>并单击箭头 (<strong>&gt;</strong>) 向解决方案添加该角色的实例。在关闭对话框之前，选择右面板中的新角色，单击铅笔图标将角色重命名为 <strong>FederatedIdentity_WebRole</strong>。单击<strong>“确定”</strong>创建 Windows Azure 项目解决方案。</p>
+
+<p><img src="images/assigning-roles-to-the-windows-azure-project.png?raw=true" alt="将角色分配到 Windows Azure 项目" title="将角色分配到 Windows Azure 项目" />
+</p>
+
+<p><em>将角色分配到 Windows Azure 项目</em></p></li>
+<li><p>生成一个自签名的证书，以便应用程序使用 SSL。方便起见，实验材料包含一个执行必要操作的脚本。它根据指定的使用者创建证书，将证书安装到 <strong>LocalMachine/个人</strong>证书存储区，并将证书加入到 <strong>LocalMachine/受信任的根证书颁发机构</strong>存储区（以免在用 IE 浏览该网站时出现证书错误警告）。以管理员身份打开 Visual Studio 命令提示符。为此，打开<strong>“开始”|“所有程序”|“Microsoft Visual Studio 2010”|“Visual Studio Tools”</strong>菜单，右键单击<strong>“Visual Studio 命令提示符 (2010)”</strong>并选择<strong>“以管理员身份运行”</strong>。</p></li>
+<li><p>将当前目录更改为 <strong>\Source\Assets</strong> 文件夹，并以项目名称作为参数执行 <strong>CreateCert.cmd</strong> 脚本。</p>
+<blockquote>
+<p><strong>注意：</strong><strong>极其重要！</strong>证书名称务必使用<strong>小写</strong>。</p>
+</blockquote>
+<p>例如：</p>
+
+<!--mark: 1 -->
+
+<span class="codelanguage">Visual Studio 命令提示符</span><pre><code class="VisualStudioCommandPrompt"><strong class="markLine">CreateCert.cmd yourprojectname</strong>
+</code></pre>
+
+<p>当运行脚本时，会提示输入密码以保护私钥，请输入 <em>abc!123</em> 并按<strong>“确定”</strong>。</p>
+
+<p><img src="images/specifying-a-password-to-secure-your-private.png?raw=true" alt="指定密码以保护私钥" title="指定密码以保护私钥" />
+</p>
+
+<p><em>指定密码以保护私钥</em></p>
+
+<p><img src="images/specifying-a-password-to-secure-your-priva-2.png?raw=true" alt="指定密码以保护私钥" title="指定密码以保护私钥" />
+</p>
+
+<p><em>指定密码以保护私钥</em></p>
+
+<p>将证书添加到<strong>受信任的根证书颁发机构</strong>存储区时，会显示警告。单击<strong>“是”</strong>安装证书。</p>
+
+<p><img src="images/adding-a-certificate-as-a-trusted-root.png?raw=true" alt="将证书添加为受信任的根证书" title="将证书添加为受信任的根证书" />
+</p>
+
+<p><em>将证书添加为受信任的根证书</em></p></li>
+<li><p>转到解决方案资源管理器，导航到 <strong>&lt;您的项目名称&gt;/Roles/FederatedIdentity_WebRole</strong>。右键单击该项目并选择“属性”。</p>
+
+<p><img src="images/modifying-federatedidentitywebrole-properties.png?raw=true" alt="修改 FederatedIdentity_Webrole 属性" title="修改 FederatedIdentity_Webrole 属性" />
+</p>
+
+<p><em>修改 FederatedIdentity_Webrole 属性</em></p></li>
+<li><p>转到<strong>“配置”</strong>选项卡，确认设置了<strong>“完全信任”</strong>选项。</p>
+
+<p><img src="images/federatedidentitywebrole-is-set-to-full-trust.png?raw=true" alt="FederatedIdentity_WebRole 设置为完全信任，以便 WIF 正常工作" title="FederatedIdentity_WebRole 设置为完全信任，以便 WIF 正常工作" />
+</p>
+
+<p><em>FederatedIdentity_WebRole 设置为完全信任，以便 WIF 正常工作</em></p>
+<blockquote>
+<p><strong>注意：</strong><strong>我们为什么需要将 .NET 信任级别设置为“完全信任”？</strong></p>
+
+<p>Windows Identity Foundation 需要 Windows Communication Foundation (WCF) 处理各种加密和协议相关操作。现在，这些 WCF 部件需要完全信任才能正确执行，因此需要启用完全信任。</p>
+
+<p>而且，在 Windows Azure 项目可见的全局程序集缓存中（参阅下文）Windows Identity Foundation 不可用；因此在任何情况下都不可能部分信任执行。</p>
+</blockquote></li>
+<li><p>转到<strong>“证书”</strong>选项卡，单击<strong>“添加证书”</strong>。</p>
+
+<p><img src="images/selecting-add-certificate.png?raw=true" alt="选择添加证书" title="选择添加证书" />
+</p>
+
+<p><em>选择添加证书</em></p></li>
+<li><p>在“名称”字段中键入 &lt;<strong>项目名称</strong>&gt;，单击指纹列选择之前生成的证书。</p>
+
+<p><img src="images/selecting-the-certificate-previously-added.png?raw=true" alt="选择之前添加的证书" title="选择之前添加的证书" />
+</p>
+
+<p><em>选择之前添加的证书</em></p></li>
+<li><p>在“端点”选项卡中添加新的 Https 端点。单击<strong>“添加端点”</strong>，设置以下值：</p>
+
+<ul>
+<li><strong>名称</strong>：HttpsIn</li>
+<li><strong>类型</strong>：输入</li>
+<li><strong>协议</strong>：https</li>
+<li><strong>公用端口</strong>：8080</li>
+<li><strong>SSL 证书名称</strong>：&lt;您的项目名称&gt;</li>
+</ul>
+
+<p><img src="images/adding-a-https-endpoint.png?raw=true" alt="添加 Https 端点" title="添加 Https 端点" />
+</p>
+
+<p><em>添加 Https 端点</em></p></li>
+<li><p>删除 HTTP 端点。选择现有“Endpoint1”，并单击<strong>“删除端点”</strong>。</p>
+
+<p><img src="images/removing-the-http-endpoint.png?raw=true" alt="删除 Http 端点" title="删除 Http 端点" />
+</p>
+
+<p><em>删除 Http 端点</em></p></li>
+<li><p>按 <strong>Ctrl-S</strong> 保存属性。</p></li>
+<li><p>转到<strong>解决方案资源管理器</strong>，右键单击 <strong>FederatedIdentity_WebRole</strong> 项目，选择<strong>“添加引用”</strong>。在 <strong>.NET</strong> 选项卡中，选择 <strong>Microsoft.IdentityModel</strong> 并单击<strong>“确定”</strong>。</p></li>
+<li><p>转到 <strong>FederatedIdentity_WebRole</strong> 项目的<strong>“引用”</strong>文件夹，选择 <strong>Microsoft.IdentityModel</strong>。按 <strong>F4</strong> 打开<strong>“属性”</strong>窗口，将<strong>“复制本地”</strong>设置为 <strong>True</strong>，将<strong>“特定版本”</strong>设置为 <strong>False</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong><strong>我们为什么需要对 Microsoft.IdentityModel 的引用将“复制本地”设置为 True？</strong></p>
+
+<p>Microsoft.IdentityModel 是 Windows Identity Foundation 的主程序集。如上文所述，此程序集在 Windows Azure 应用程序可见的全局程序集缓存中不可用。通过将“复制本地”属性设为 True，可以确保程序集包含在项目包中。因此，部署到云后，可以确保 WIF 也部署到位并可用于您的应用程序。</p>
+</blockquote></li>
+<li><p>将 using 语句更新到 <strong>FederatedIdentity_WebRole</strong> 的 <strong>Default.aspx.cs</strong> 中。</p>
+
+<p>（代码段 - <em>Federated Authentication for WebRole Guide - RP Usings</em>）</p>
+
+<!--mark: 7-8 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">using</span> System;
+<span style="color:#0000FF">using</span> System.Collections.Generic;
+<span style="color:#0000FF">using</span> System.Linq;
+<span style="color:#0000FF">using</span> System.Web;
+<span style="color:#0000FF">using</span> System.Web.UI;
+<span style="color:#0000FF">using</span> System.Web.UI.WebControls;
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.IdentityModel.Claims;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> System.Threading;</strong>
+</code></pre></li>
+<li><p>将以下代码插入 <strong>FederatedIdentity_WebRole</strong> 中的 <strong>Page_Load</strong> 处理程序 <strong>Default.aspx.cs</strong> 正文中。</p>
+
+<p>（代码段 - <em>Federated Authentication for WebRole Guide - RP Page_Load Body</em>）</p>
+
+<!--mark: 7-11 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">namespace</span> FederatedIdentity_WebRole {
+    <span style="color:#0000FF">public</span> <span style="color:#0000FF">partial</span> <span style="color:#0000FF">class</span> _Default : System.Web.UI.Page {
+        <span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Page_Load(<span style="color:#0000FF">object</span> sender, EventArgs e) {
+<strong class="markLine">            IClaimsPrincipal icp = Thread.CurrentPrincipal <span style="color:#0000FF">as</span> IClaimsPrincipal;</strong>
+<strong class="markLine">            IClaimsIdentity ici = icp.Identity <span style="color:#0000FF">as</span> IClaimsIdentity;</strong>
+<strong class="markLine">            Response.Write(<span style="color:#8B0000">&quot;Welcome to Fabrikamair &lt;br/&gt;&lt;br/&gt;:Claims:&lt;br/&gt;&quot;</span>);</strong>
+<strong class="markLine">            <span style="color:#0000FF">foreach</span> (Claim c <span style="color:#0000FF">in</span> ici.Claims)</strong>
+<strong class="markLine">            Response.Write(c.ClaimType + <span style="color:#8B0000">&quot;-&quot;</span> + c.Value + <span style="color:#8B0000">&quot;&lt;br/&gt;&quot;</span>);</strong>
+        } } }
+</code></pre></li>
+<li><p>打开 Default.aspx 文件，用以下内容替换其内容。</p>
+
+<!--mark: 1 -->
+
+<span class="codelanguage">HTML</span><pre><code class="HTML"><strong class="markLine">    <span style="background-color:#FFFF00; color:Black">&lt;%</span>@ Page Title=&quot;Home Page&quot; Language=&quot;C#&quot; AutoEventWireup=&quot;true&quot; CodeBehind=&quot;Default.aspx.cs&quot; Inherits=&quot;FederatedIdentity_WebRole._Default&quot; <span style="background-color:#FFFF00; color:Black">%&gt;</span></strong>
+</code></pre></li>
+<li><p>在 <strong>FederetedIdentity_WebRole</strong> 项目中，双击 <strong>Global.asax</strong> 文件。用以下内容替换当前的 using 语句：</p>
+
+<p>（代码段 - <em>Federated Authentication for WebRole Guide - RP Global.asax Using</em>）</p>
+
+<!--mark: 1-7 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> System;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> System.Collections.Generic;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> System.Web;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> System.Text;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.IdentityModel.Tokens;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.IdentityModel.Web;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.IdentityModel.Web.Configuration;</strong>
+</code></pre></li>
+<li><p>添加 <strong>WSFederationAuthenticationModule_RedirectingToIdentityProvider</strong> 方法，如下所示：</p>
+
+<p>（代码段 - <em>Federated Authentication for WebRole Guide - RP Global.asax RedirectingToIdentityProvider</em>）</p>
+
+<!--mark: 4-27 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> Global : System.Web.HttpApplication { ...
+<strong class="markLine">  <span style="color:#808080">/// &lt;summary&gt;</span></strong>
+<strong class="markLine">  <span style="color:#808080">/// Retrieves the address that was used in the browser for accessing </span></strong>
+<strong class="markLine">  <span style="color:#808080">/// the web application, and injects it as WREPLY parameter in the</span></strong>
+<strong class="markLine">  <span style="color:#808080">/// request to the STS </span></strong>
+<strong class="markLine">  <span style="color:#808080">/// &lt;/summary&gt;</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">void</span> WSFederationAuthenticationModule_RedirectingToIdentityProvider(<span style="color:#0000FF">object</span> sender, RedirectingToIdentityProviderEventArgs e)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#008000">//</span></strong>
+<strong class="markLine">    <span style="color:#008000">// In the Windows Azure environment, build a wreply parameter for the SignIn request</span></strong>
+<strong class="markLine">    <span style="color:#008000">// that reflects the real address of the application.</span></strong>
+<strong class="markLine">    <span style="color:#008000">//</span></strong>
+<strong class="markLine">    HttpRequest request = HttpContext.Current.Request;</strong>
+<strong class="markLine">    Uri requestUrl = request.Url;</strong>
+<strong class="markLine">    StringBuilder wreply = <span style="color:#0000FF">new</span> StringBuilder();</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    wreply.Append(requestUrl.Scheme);     <span style="color:#008000">// e.g. &quot;http&quot; or &quot;https&quot;</span></strong>
+<strong class="markLine">    wreply.Append(<span style="color:#8B0000">&quot;://&quot;</span>);</strong>
+<strong class="markLine">    wreply.Append(request.Headers[<span style="color:#8B0000">&quot;Host&quot;</span>] ?? requestUrl.Authority);</strong>
+<strong class="markLine">    wreply.Append(request.ApplicationPath);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (!request.ApplicationPath.EndsWith(<span style="color:#8B0000">&quot;/&quot;</span>))</strong>
+<strong class="markLine">        wreply.Append(<span style="color:#8B0000">&quot;/&quot;</span>);</strong>
+<strong class="markLine">    e.SignInRequestMessage.Reply = wreply.ToString();</strong>
+<strong class="markLine">  }</strong>
+... }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>WSFederationAuthenticationModule_RedirectingToIdentityProvider 方法的作用是什么？</strong></p>
+
+<p>WIF 实现的联合登录过程，是基于 WS-Federation 协议的。访问网站的未经身份验证的用户将重定向到信任的 STS 进行身份验证和令牌颁发。用于重定向的 URI 包含很多参数，主要从网站的 Web.config 检索获得：在这些参数中，有个地址是 STS 用来在身份验证成功后将用户的浏览器重定向的地址。在默认情况下，WIF 从 Federation Utility 向导生成的配置设置中检索返回地址。</p>
+
+<p>在 Windows Azure 中，这种方法无法奏效，因为：承载在 Windows Azure 中的应用程序的 URI 取决于承载环境（Windows Azure 计算模拟器、过渡环境、生产环境），因此在部署之前，必须不断更改 Web.config 中的值。事实上，即使这种策略也无法在所有情况下奏效，因为在过渡环境中，仅当项目部署完成后才能知道分配给应用程序的 URI 是什么。</p>
+
+<p>目前对这个问题的解决方案是在运行时找到应用程序的地址，将其注入 STS 请求中，作为 wreply 参数。STS 接收 wreply 参数，将其值用作返回地址，从而解除了应用程序与其地址在部署时的耦合。</p>
+
+<p>当然，关于此解决方案还有许多安全方面的考虑。举例来说，该方案常常会导致 Internet Explorer 的地址栏变红，因为仅当项目部署在生产环境时，用来保证网站安全的证书使用者才匹配 URI。而且，这将为重定向攻击大开方便之门，这种攻击必须在 STS 端缓解。</p>
+
+<p><strong>为什么用主机头而不是直接从 HttpContext.Current.Request.Url 获得 Uri？</strong></p>
+
+<p>Windows Azure 在其基础结构中使用各种网络项目：因此，当前 http 请求中的 Url 属性包含端口，这些端口对于 Windows Azure 之外的应用程序并无意义，会引发一些问题，例如与会话 Cookie 相混淆。这里提供的代码确保将使用浏览器地址栏中的 URI。</p>
+</blockquote></li>
+<li><p>在 <strong>Global.asax.cs</strong> 文件中，添加 <strong>OnServiceConfigurationCreated</strong> 方法。</p>
+
+<p>（代码段 - <em>Federated Authentication for WebRole Guide - RP Global.asax ServiceConfiguration_Created</em>）</p>
+
+<!--mark: 4-17 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> Global : System.Web.HttpApplication { ...
+<strong class="markLine">  <span style="color:#0000FF">void</span> OnServiceConfigurationCreated(<span style="color:#0000FF">object</span> sender, ServiceConfigurationCreatedEventArgs e)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">      <span style="color:#008000">//</span></strong>
+<strong class="markLine">      <span style="color:#008000">// Use the &lt;serviceCertificate&gt; to protect the cookies that are</span></strong>
+<strong class="markLine">      <span style="color:#008000">// sent to the client.</span></strong>
+<strong class="markLine">      <span style="color:#008000">//</span></strong>
+<strong class="markLine">      List&lt;CookieTransform&gt; sessionTransforms =</strong>
+<strong class="markLine">        <span style="color:#0000FF">new</span> List&lt;CookieTransform&gt;(<span style="color:#0000FF">new</span> CookieTransform[] {</strong>
+<strong class="markLine">        <span style="color:#0000FF">new</span> DeflateCookieTransform(), </strong>
+<strong class="markLine">        <span style="color:#0000FF">new</span> RsaEncryptionCookieTransform(e.ServiceConfiguration.ServiceCertificate),</strong>
+<strong class="markLine">        <span style="color:#0000FF">new</span> RsaSignatureCookieTransform(e.ServiceConfiguration.ServiceCertificate) });</strong>
+<strong class="markLine">        SessionSecurityTokenHandler sessionHandler = <span style="color:#0000FF">new</span> SessionSecurityTokenHandler(sessionTransforms.AsReadOnly());</strong>
+<strong class="markLine">        e.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(sessionHandler);</strong>
+<strong class="markLine">  }</strong>
+    ... }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>ServiceConfigurationCreated</strong> 的作用是什么？</p>
+
+<p>默认情况下，WIF <strong>SessionTokens</strong> 使用 DPAPI 来保护发送给客户端的 Cookie 的内容，但是 Windows Azure 是负载均衡环境，需要确保每个实例都使用相同的密钥，而这不是默认行为。这种情况下，我们依赖 <strong>RsaEncryptionCookieTransform</strong> 来加密 Cookie，加密所用证书与网站 SSL 所用证书相同。</p>
+</blockquote></li>
+<li><p>在 <strong>Global.asax.cs</strong> 文件中，在 <strong>Application_Start</strong> 方法中注册 <strong>OnServiceConfigurationCreated</strong> 处理程序。</p>
+
+<p>（代码段 - <em>Federated Authentication for WebRole Guide - RP Global.asax Application_Start</em>）</p>
+
+<!--mark: 6 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#">...
+<span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> Global : System.Web.HttpApplication {
+    <span style="color:#0000FF">void</span> Application_Start(<span style="color:#0000FF">object</span> sender, EventArgs e) {
+<strong class="markLine">        FederatedAuthentication.ServiceConfigurationCreated += OnServiceConfigurationCreated;</strong>
+    } ... }
+</code></pre></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Creating_a_Local_Development_STS">任务 2 - 创建本地开发 STS</h4>
+
+<ol>
+<li><p>右键单击解决方案，选择<strong>“添加”|“新网站”</strong>。选择<strong>“ASP.NET 安全令牌服务网站”</strong>。选择位置 <strong>HTTP</strong>，指定 <strong>https://localhost/[您的项目名称]_sts</strong> 以在本地 IIS 中创建项目。确保框架是 <strong>.NET Framework 4</strong>，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="images/creating-your-local-sts-website.png?raw=true" alt="创建本地 STS 网站" title="创建本地 STS 网站" />
+</p>
+
+<p><em>创建本地 STS 网站</em></p></li>
+<li><p>在 <strong>https://localhost/[您的项目名称]_sts/App_Code</strong> 中打开 <strong>CustomSecurityTokenService.cs</strong>。在紧靠 <strong>GetScope</strong> 的上面位置，向 <strong>CustomSecurityTokenService</strong> 类添加以下方法。</p>
+
+<p>（代码段 - <em>Federated Authentication for WebRole Guide - STS ValidateReplyTo</em>）</p>
+
+<!--mark: 4-28 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> CustomSecurityTokenService : SecurityTokenService { ...
+<strong class="markLine">    <span style="color:#808080">/// &lt;summary&gt;</span></strong>
+<strong class="markLine">    <span style="color:#808080">/// Validates replyTo and throws an exception if the replyTo refers to a </span></strong>
+<strong class="markLine">    <span style="color:#808080">/// RP that is not on the local machine or is not hosted in Windows Azure</span></strong>
+<strong class="markLine">    <span style="color:#808080">/// &lt;/summary&gt;</span></strong>
+<strong class="markLine">    <span style="color:#808080">/// &lt;param name=&quot;replyTo&quot;&gt;</span></strong>
+<strong class="markLine">    <span style="color:#808080">/// The replyTo parameter in the request that came in (RST)</span></strong>
+<strong class="markLine">    <span style="color:#808080">/// &lt;/param&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">void</span> ValidateReplyTo(<span style="color:#0000FF">string</span> replyTo)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        <span style="color:#008000">// if ReplyTo is empty, we have nothing to validate. We will default </span></strong>
+<strong class="markLine">        <span style="color:#008000">// to AppliesTo, which is harder to compromise via redirect attack</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">if</span> (!String.IsNullOrEmpty(replyTo))</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">            <span style="color:#0000FF">string</span> host = (<span style="color:#0000FF">new</span> Uri(replyTo)).Host.ToLower();</strong>
+<strong class="markLine">            <span style="color:#0000FF">if</span> (!((host == <span style="color:#8B0000">&quot;127.0.0.1&quot;</span>)</strong>
+<strong class="markLine">                || (host == <span style="color:#8B0000">&quot;localhost&quot;</span>)</strong>
+<strong class="markLine">                || host.EndsWith(<span style="color:#8B0000">&quot;.cloudapp.net&quot;</span>)))</strong>
+<strong class="markLine">            {</strong>
+<strong class="markLine">                <span style="color:#0000FF">throw</span> <span style="color:#0000FF">new</span> InvalidRequestException(</strong>
+<strong class="markLine">                  String.Format(</strong>
+<strong class="markLine">                    <span style="color:#8B0000">&quot;The host in the ReplyTo address {0} is not valid.&quot;</span>,</strong>
+<strong class="markLine">                    host));</strong>
+<strong class="markLine">            }</strong>
+<strong class="markLine">        }</strong>
+<strong class="markLine">    }</strong>
+
+    <span style="color:#808080">/// &lt;summary&gt;</span>
+    <span style="color:#808080">/// This method returns the configuration for the token issuance request. The configuration</span>
+    <span style="color:#808080">/// is represented by the Scope class. In our case, we are only capable of issuing a token for a</span>
+    <span style="color:#808080">/// single RP identity represented by the EncryptingCertificateName.</span>
+    <span style="color:#808080">/// &lt;/summary&gt;</span>
+    <span style="color:#808080">/// &lt;param name=&quot;principal&quot;&gt;The caller&#39;s principal.&lt;/param&gt;</span>
+    <span style="color:#808080">/// &lt;param name=&quot;request&quot;&gt;The incoming RST.&lt;/param&gt;</span>
+    <span style="color:#808080">/// &lt;returns&gt;The scope information to be used for the token issuance.&lt;/returns&gt;</span>
+    <span style="color:#0000FF">protected</span> <span style="color:#0000FF">override</span> Scope GetScope( IClaimsPrincipal principal, RequestSecurityToken request ) { ValidateAppliesTo( request.AppliesTo ); ... }
+</code></pre></li>
+<li><p>在 <strong>GetScope</strong> 的开头，添加对上一步骤所添加的 <strong>ValidateReplyTo</strong> 的调用。</p>
+
+<p>（代码段 - <em>Federated Authentication for WebRole Guide - ValidateReplyTo Call</em>）</p>
+
+<!--mark: 5 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"> ...
+    <span style="color:#0000FF">protected</span> <span style="color:#0000FF">override</span> Scope GetScope( IClaimsPrincipal principal, RequestSecurityToken request ) { ValidateAppliesTo( request.AppliesTo );
+<strong class="markLine">        ValidateReplyTo(request.ReplyTo);</strong>
+
+        <span style="color:#008000">//</span>
+        <span style="color:#008000">// Note: The signing certificate used by default has a Distinguished name of &quot;CN=STSTestCert&quot;,</span>
+        <span style="color:#008000">// and is located in the Personal certificate store of the Local Computer. Before going into production,</span>
+        <span style="color:#008000">// ensure that you change this certificate to a valid CA-issued certificate as appropriate.</span>
+        <span style="color:#008000">//</span>
+        Scope scope = <span style="color:#0000FF">new</span> Scope( request.AppliesTo.Uri.OriginalString, SecurityTokenServiceConfiguration.SigningCredentials ); ...
+</code></pre></li>
+<li><p>在 <strong>GetScope</strong> 的末尾，将当前 <strong>scope.ReplyToAddress</strong> 赋值替换为以下突出显示的代码。</p>
+
+<p>（代码段 - <em>Federated Authentication for WebRole Guide - STS Redirect to ReplyTo</em>）</p>
+
+<!--mark: 7 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">override</span> Scope GetScope( IClaimsPrincipal principal, RequestSecurityToken request ) { ...
+  <span style="color:#008000">// Set the ReplyTo address for the WS-Federation passive protocol (wreply). This is the address to which responses will be directed. </span>
+  <span style="color:#008000">// In this template, we have chosen to set this to the AppliesToAddress.</span>
+
+<strong class="markLine">  scope.ReplyToAddress = String.IsNullOrEmpty(request.ReplyTo) ? scope.AppliesToAddress : request.ReplyTo;</strong>
+
+  <span style="color:#0000FF">return</span> scope; }
+</code></pre>
+<blockquote>
+<p><strong>注意</strong>：<strong>我们为什么对 Federation Utility 向导自动生成的默认本地 STS 进行这些更改？</strong></p>
+
+<p>在任务 1 中，修改了应用程序的 Global.asax，通过将 URI 存储在 wreply 参数中确保向 STS 发送其实际 URI。</p>
+
+<p>ValidateReplyTo 确保 wreply 中的地址指向本地计算机（如在 Windows Azure 计算模拟器中），或来自某个以“.cloudapp.net”结尾的主机（如在 Windows Azure 过渡环境或生产环境中）。这样可以缓解重定向攻击，因为它将接受的 ReplyTo 值限制为 Windows Azure 应用程序的地址。请注意，此检查将防止您使用不匹配 Windows Azure 架构的域名；因此，如果打算通过自定义域映射 Windows Azure 应用程序，需要对代码进行相应调整。</p>
+
+<p>对 scope.ReplyToAddress 的赋值修改为使用 wreply 的值（如果有）。如果请求中未提供 wreply 参数，则赋值将回归默认行为（使用 AppliesTo uri）。</p>
+</blockquote></li>
+</ol>
+
+<p><a name="Ex1Task3"></a></p>
+
+<h4 id="Task_3_-_Establishing_a_Trust_Relationship_between_the_Web_Role_and_the_Development_STS">任务 3 - 在 Web 角色和开发 STS 之间建立信任关系</h4>
+
+<ol>
+<li><p>转到<strong>解决方案资源管理器</strong>，右键单击 <strong>FederatedIdentity_WebRole</strong> 项目，选择<strong>“添加 STS 引用”</strong>。接受建议的应用程序配置文件位置，将<strong>“应用程序 URI”</strong>设置为 <strong>https://&lt;您的项目名称&gt;.cloudapp.net</strong>，这里的 <strong>&lt;您的项目名称&gt;</strong> 是为您的云项目选择的名称（例如 <a href="https://fabrikamair.cloudapp.net/">https://fabrikamair.cloudapp.net/</a>），然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/the-first-screen-of-the-federation-utility-wi.png?raw=true" alt="Federation Utility 向导的第一个屏幕" title="Federation Utility 向导的第一个屏幕" />
+</p>
+
+<p><em>Federation Utility 向导的第一个屏幕</em></p></li>
+<li><p>选择<strong>“使用现有 STS”</strong>选项，浏览到 <strong>inetpub</strong> 文件夹（一般位于 <strong>C:\inetpub</strong>）。选择 <strong>wwwroot\&lt;您的项目名称&gt;_sts\FederationMetadata\2007-06</strong> 中的 <strong>FederationMetadata.xml</strong>，单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/the-second-screen-of-the-federation-utility-w.png?raw=true" alt="Federation Utility 向导的第二个屏幕" title="Federation Utility 向导的第二个屏幕" />
+</p>
+
+<p><em>Federation Utility 向导的第二个屏幕</em></p></li>
+<li><p>选择<strong>“无加密”</strong>选项，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/federation-encryption-setup-screen.png?raw=true" alt="Federation 加密设置屏幕" title="Federation 加密设置屏幕" />
+</p>
+
+<p><em>Federation 加密设置屏幕</em></p></li>
+<li><p>单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/claim-offered-by-the-sts.png?raw=true" alt="STS 提供的声明。" title="STS 提供的声明。" />
+</p>
+
+<p><em>STS 提供的声明。</em></p></li>
+<li><p>在小结页检查要做的修改，然后单击<strong>“完成”</strong>。</p>
+
+<p><img src="images/summary.png?raw=true" alt="小结" title="小结" />
+</p>
+
+<p><em>小结</em></p></li>
+<li><p>在 <strong>microsoft.identityModel\service</strong> 下的 <strong>FederatedIdentity_WebRole</strong> 项目的 <strong>Web.config</strong> 中，添加 <strong>serviceCertificate</strong> 元素。将 <strong>findValue</strong> 特性中的占位符更新为 <strong>ServiceConfiguration.Cloud.cscfg</strong> 文件中的相应指纹。</p>
+
+<p>（代码段 - <em>Federated Authentication for WebRole Guide - ServiceCertificate</em>）</p>
+
+<!--mark: 4-6 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"> <span style="color:#0000FF">&lt;</span><span style="color:#800000">microsoft.identityModel</span><span style="color:#0000FF">&gt;</span>
+      <span style="color:#0000FF">&lt;</span><span style="color:#800000">service</span><span style="color:#0000FF">&gt;</span>
+        ...
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">serviceCertificate</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">          <span style="color:#0000FF">&lt;</span><span style="color:#800000">certificateReference</span> <span style="color:#FF0000">x509FindType</span>=<span style="color:#0000FF">&quot;FindByThumbprint&quot;</span> <span style="color:#FF0000">findValue</span>=<span style="color:#0000FF">&quot;[yourCorrespondingThumbprint]&quot;</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;/</span><span style="color:#800000">serviceCertificate</span><span style="color:#0000FF">&gt;</span></strong>
+      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">service</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">microsoft.identityModel</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>在 <strong>microsoft.identityModel\service</strong> 元素下添加 <strong>certificateValidation</strong> 元素，并将 <strong>certificateValidationMode</strong> 特性设置为 <strong>None</strong>。</p>
+
+<p>（代码段 - <em>Federated Authentication for WebRole Guide - CertificateValidation</em>）</p>
+
+<!--mark: 5 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">microsoft.identityModel</span><span style="color:#0000FF">&gt;</span>
+      <span style="color:#0000FF">&lt;</span><span style="color:#800000">service</span><span style="color:#0000FF">&gt;</span>
+        ...
+        <span style="color:#0000FF">&lt;/</span><span style="color:#800000">serviceCertificate</span><span style="color:#0000FF">&gt;</span>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">certificateValidation</span> <span style="color:#FF0000">certificateValidationMode</span>=<span style="color:#0000FF">&quot;None&quot;</span><span style="color:#0000FF">/&gt;</span></strong>
+      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">service</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">microsoft.identityModel</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>我们期望接收到的令牌是用我们信任的 STS 的私钥签名的。通过步骤 1 至 5 的<strong>添加 STS 引用</strong>向导，我们信任的 STS 的证书指纹保存到 web.config 的 <strong>issuerNameRegistry</strong> 元素中。我们接收到令牌后，WIF 使用这一信息用于：</p>
+
+<ul>
+<li>检索相应证书</li>
+<li>将证书用于检查令牌签名</li>
+<li>验证签名者确实列在 issuerNameRegistry 元素中，因而可以信任。为了执行这些操作，WIF 可以将指纹用于从证书存储区检索 STS 证书的数据。不过，在 Windows Azure 中处理证书需要额外操作，因此我们采用另一种方法。当请求包含令牌时，常常也会包含签名相应证书数据：这意味着应用程序可以用指纹从请求本身检索证书，而不依赖于相关数据在本地可用。将 <strong>certificateValidationMode</strong> 设置为 <strong>None</strong> 即可实现后一方案。</li>
+</ul>
+
+<p>请注意，请求不一定非得包含证书的信息，对某些平台来说这也不是默认行为：在这些情况下，需要将 STS 的公钥（即证书）也部署在 Windows Azure 中，如任务 5 的步骤 9 所示。</p>
+</blockquote>
+<p><a href="http://ASP.NET">ASP.NET</a> 默认对 Web 应用程序的所有 POST 请求都进行验证。验证是对输入内容进行检查，确保没有危险。例如，对 <a href="http://ASP.NET">ASP.NET</a> 来说，一段未编码 XML 是危险的。令牌即是一段未编码的 XML。为避免提交令牌时引发异常，需要增加一个类来检查输入是否为令牌。如果是令牌，则返回 true 并让请求得以继续处理。如果不是令牌，则引发常规“检测到<em>潜在危险</em> 的 Request.Form 值...”异常。</p></li>
+<li><p>将 Assets 文件夹的 <strong>SampleRequestValidator.cs</strong> 文件添加到 <strong>FederatedIdentity_WebRole</strong> 项目中。</p></li>
+<li><p>打开 <strong>FederatedIdentity_WebRole</strong> 项目的 <strong>Web.config</strong> 文件，在 <strong>configuration\system.web</strong> 元素中添加 <strong>httpRuntime</strong> 元素，并将 <strong>requestValidationType</strong> 特性设置为 <strong>SampleRequestValidator</strong>。</p>
+
+<!--mark: 2 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML">...
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">httpRuntime</span> <span style="color:#FF0000">requestValidationType</span>=<span style="color:#0000FF">&quot;SampleRequestValidator&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>请确保添加的是常规 <strong>system.web</strong> 元素中的 <strong>httpRuntime</strong> 元素，而非 <strong>&lt;location path =&quot;FederationMetadata&quot;&gt;</strong> 元素中的元素。</p>
+</blockquote></li>
+</ol>
+
+<p><a name="Ex1Task4"></a></p>
+
+<h4 id="Task_4_-_Testing_FabrikamAir_in_the_Windows_Azure_Compute_Emulator">任务 4 - 在 Windows Azure 计算模拟器中测试 FabrikamAir</h4>
+
+<p>在本任务中，您将在 Windows Azure 计算模拟器中运行 Web 应用程序，任务 2 中创建的开发 STS 将负责处理在本地 IIS 中运行时的用户身份验证。</p>
+
+<p><img src="images/local-deployment.png?raw=true" alt="本地部署" title="本地部署" />
+</p>
+
+<p><em>本地部署</em></p>
+
+<ol>
+<li><p>现在万事俱备，可以在 Windows Azure 计算模拟器中测试应用程序了。将云项目设置为启动项目。为此，请在<strong>解决方案资源管理器</strong>中，右键单击该 Windows Azure 项目并选择<strong>“设为启动项目”</strong>。</p></li>
+<li><p>按 <strong>F5</strong> 生成并运行应用程序。浏览器页打开，指向 <a href="https://127.0.0.1:8080">https://127.0.0.1:8080</a>。在第一个屏幕中，可以看到证书警告，因为 Windows Azure 计算模拟器使用 IP 地址导航到应用程序，而要使用的证书引用的是应用程序部署到云生产环境之后的地址。单击<strong>“继续浏览此网站”</strong>。</p>
+
+<p><img src="images/certificate-warning.png?raw=true" alt="证书警告" title="证书警告" />
+</p>
+
+<p><em>证书警告</em></p>
+<blockquote>
+<p><strong>注意：</strong>浏览器告诉我们页面地址和用于 SSL 绑定的证书使用者之间存在差异：根据 Windows Azure 计算模拟器处理地址的方式，该警告是可预期的。</p>
+</blockquote></li>
+<li><p>浏览器将重定向到本地 IIS 中承载的本地 STS 页面。单击<strong>“提交”</strong>。</p>
+
+<p><img src="images/authentication-page.png?raw=true" alt="身份验证页面" title="身份验证页面" />
+</p>
+
+<p><em>身份验证页面</em></p>
+<blockquote>
+<p><strong>注意：</strong>这是本地 STS 呈现的默认身份验证页面。请注意地址栏：STS 仍然在本地 IIS 中运行。</p>
+</blockquote></li>
+<li><p>STS 颁发令牌并重定向到 Windows Azure 计算模拟器中承载的 Web 角色应用程序；WIF 验证令牌并授予用户访问网站的权限。再次出现的红色地址栏指示正在使用的证书已经是在云中要使用的证书，因此使用者与浏览器中显示的 URL 不对应。关闭浏览器，返回 Visual Studio。</p>
+
+<p><img src="images/running-web-application.png?raw=true" alt="运行 Web 应用程序" title="运行 Web 应用程序" />
+</p>
+<blockquote>
+<p><strong>注意：</strong>Windows Azure 计算模拟器中承载的 Web 应用程序成功地对用户进行了身份验证，并且正确地处理了传入的令牌，如页面所示。地址栏显示为红色，符合 Windows Azure 计算模拟器中应用程序的预期表现。</p>
+</blockquote></li>
+</ol>
+
+<p><a name="Ex1Task5"></a></p>
+
+<h4 id="Task_5_-_Publishing_CloudFabrikamAir_in_the_Cloud_and_Testing_it_in_Staging_and_Production">任务 5 - 在云中发布 CloudFabrikamAir，并在过渡环境和生产环境进行测试</h4>
+
+<p>确认应用程序在 Windows Azure 计算模拟器中可以正常运行，就可以将它部署到云中进行测试了。</p>
+
+<p><img src="images/exercise-summary.png?raw=true" alt="云部署" title="云部署" />
+</p>
+
+<p><em>云部署</em></p>
+
+<p>在本任务中，会将项目发布到过渡环境，进行测试，最后迁移到生产环境</p>
+<blockquote>
+<p><strong>注意：</strong>请注意，您需要有管理门户的帐户，才能将应用程序部署到云。</p>
+
+<p>本任务的步骤假定以上要求都满足，即您已拥有订阅，但尚未为应用程序创建服务。</p>
+</blockquote>
+<ol>
+<li><p>使用 Web 浏览器导航到 <a href="https://manage.windowsazure.com/">https://manage.windowsazure.com/</a> 并用您的 Windows 帐户登录。</p>
+
+<p><img src="images/signing-in-to-the-management-portal.png?raw=true" alt="登录到管理门户" title="登录到管理门户" />
+</p>
+
+<p><em>登录到管理门户</em></p></li>
+<li><p>创建将承载应用程序的云服务。为此，请单击<strong>“创建”</strong>|<strong>“云服务”</strong>|<strong>“快速创建”</strong>。在标签为 <strong>URL</strong> 的文本框中输入服务 URL 前缀，此处使用的项目名称与任务 1 中生成证书所用项目名称相同。最后在<strong>“地区/地缘组”</strong>下拉列表中选择一个地区，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="images/creating-cloud-service.png?raw=true" alt="创建新的云服务" title="创建新的云服务" />
+</p>
+
+<p><em>创建新的云服务</em></p></li>
+<li><p>在项目包能够上载到云之前，需要确保目标环境有应用程序正常运行所需的所有证书。</p>
+<blockquote>
+<p><strong>注意：</strong>在任务 1 的步骤 11 中，我们从本地证书存储区选择了一个证书，用作应用程序的 SSL 证书。既然我们准备将应用程序部署到云，需要确保在目标部署环境中证书及其私钥是可用的。请注意，在此实验中，我们没有利用令牌加密：如果我们利用了，就得确定是要使用 SSL 所用的证书（这种情况下均已设置）来解密令牌，还是要使用其他证书。在后一种情况下，我们需要重复下面的步骤 10 至 13，以上载 pfx 加密证书及其私钥。</p>
+
+<p>通过 STS 证书的信任管理需要注意一些具体的事项：请参阅任务 3 步骤 7 的备注。</p>
+</blockquote></li>
+<li><p>若要管理 Azure 证书，需要访问上一管理门户版本。为此，请将鼠标悬停在主页标题中的<strong>“预览”</strong>上，并单击<strong>“转到以前的门户”</strong>。</p>
+
+<p><img src="images/switching-to-previous-portal.png?raw=true" alt="切换到以前的门户" title="切换到以前的门户" />
+</p>
+
+<p><em>切换到以前的门户</em></p></li>
+<li><p>进入生产门户后，单击<strong>“托管服务”</strong>并展开刚刚创建的项目，选择“证书”文件夹并单击<strong>“托管服务证书”</strong>功能区的<strong>“添加证书”</strong>。</p>
+
+<p><img src="images/adding-a-certificate.png?raw=true" alt="添加证书" title="添加证书" />
+</p>
+
+<p><em>添加证书</em></p></li>
+<li><p>单击<strong>“浏览”</strong>，选择任务 1 的步骤 7 和 8 创建的 SSL 证书。</p>
+
+<p><img src="images/select-the-ssl-certificate-to-upload.png?raw=true" alt="选择要上载的 SSL 证书" title="选择要上载的 SSL 证书" />
+</p>
+
+<p><em>选择要上载的 SSL 证书</em></p></li>
+<li><p>导航到创建证书所在文件夹 <strong>\Source\Assets\certs</strong>，选择名为 <strong>&lt;您的项目名称&gt;.cloudapp.net.pfx</strong> 的文件。</p>
+<blockquote>
+<p><strong>注意：</strong>请务必选择文件扩展名为 .pfx 的文件。</p>
+</blockquote></li>
+<li><p>键入证书私钥的密码，并单击<strong>“创建”</strong>。</p>
+
+<p><img src="images/private-key-password.png?raw=true" alt="私钥密码" title="私钥密码" />
+</p>
+
+<p><em>私钥密码</em></p>
+
+<p><img src="images/uploaded-certificate.png?raw=true" alt="上载的证书" title="上载的证书" />
+</p>
+
+<p><em>上载的证书</em></p></li>
+<li><p>证书上载后，就准备就绪，可将解决方案部署到 Windows Azure。在上载解决方案之前，必须成功部署证书，否则解决方案部署会失败。在<strong>解决方案资源管理器</strong>中，右键单击云项目 <strong>&lt;您的项目名称&gt;</strong>，选择<strong>“打包”</strong>。</p></li>
+<li><p>在“打包 Windows Azure 项目”对话框中，选择<strong>“云”</strong>作为<strong>“服务配置”</strong>，再单击<strong>“打包”</strong>。在此过程中，Visual Studio 将生成包，并打开含有包和配置文件的文件夹。稍后将使用这些文件。</p>
+
+<p><img src="images/publish-windows-azure-project-dialog-choosing.png?raw=true" alt="“发布 Windows Azure 项目”对话框，选择“仅创建服务包”选项" title="“发布 Windows Azure 项目”对话框，选择“仅创建服务包”选项" />
+</p>
+
+<p><em>“发布 Windows Azure 项目”对话框，选择“仅创建服务包”选项</em></p></li>
+<li><p>若要用新门户继续部署到 Azure，请单击页面底部的<strong>“转到新门户”</strong>。</p>
+
+<p><img src="images/go-to-the-new-azure-portal.png?raw=true" alt="转到新 Azure 门户" title="转到新 Azure 门户" />
+</p>
+
+<p><em>转到新 Azure 门户</em></p></li>
+<li><p>进入新门户后，可将项目上载并部署到过渡环境中。从<strong>“云服务”</strong>页面选择云服务，然后单击其<strong>“名称”</strong>字段。</p>
+
+<p><img src="images/select-your-cloud-service.png?raw=true" alt="选择云服务" title="选择云服务" />
+</p>
+
+<p><em>选择云服务</em></p></li>
+<li><p>在 fabrikam 云服务页面，选择<strong>“过渡”</strong>并单击<strong>“上载新过渡部署”</strong>。</p>
+
+<p><img src="images/publishing-to-staging.png?raw=true" alt="发布到过渡环境" title="发布到过渡环境" />
+</p>
+
+<p><em>发布到过渡环境</em></p></li>
+<li><p>在<strong>“上载包”</strong>对话框中，会提示选择本任务步骤 11 中由 Visual Studio 生成的<strong>“包”</strong>和<strong>“配置”</strong>文件：通过发布包时打开的 Windows 资源管理器窗口所示的文件系统位置可以找到这些文件。选择好两个文件路径之后，在“部署名称”字段中输入部署名称（例如当前日期），选择<strong>“即使一个或多个角色包含单个实例也进行部署”</strong>并单击<strong>“确定”</strong>。</p>
+
+<p><img src="images/package-upload-to-staging.png?raw=true" alt="将包上载到过渡环境" title="将包上载到过渡环境" />
+</p>
+
+<p><em>将包上载到过渡环境</em></p></li>
+<li><p>应用程序将花一些时间进行<strong>初始化</strong>（最多可能需要 10 分钟）。当应用程序在<strong>过渡</strong>环境<strong>运行</strong>时，页面将刷新。向下滚动并单击<strong>“网站 URL”</strong>链接。</p>
+
+<p><img src="images/uploading-application-package.png?raw=true" alt="上载应用程序包" title="上载应用程序包" />
+</p>
+
+<p><em>上载应用程序包</em></p>
+
+<p><img src="images/access-site-url.png?raw=true" alt="访问网站 URL" title="访问网站 URL" />
+</p>
+
+<p><em>访问网站 URL</em></p></li>
+<li><p>将打开新的浏览器并显示错误，因为该链接使用 http 协议，而应用程序只对 https 协议公开。向地址栏中的协议和端口号添加“s”（即 http<strong>s</strong>://16c6c035e158424aaa5322837f7291e7.cloudapp.net<strong>:8080</strong>），并按 <strong>Enter</strong>。此时将显示证书警告，因为过渡 URL 包含的 Guid 与证书 fabrikamair.cloudapp.net 并不对应；浏览器将重定向到本地开发 STS；最后，您将访问过渡环境的应用程序，成功进行身份验证。</p>
+
+<p><img src="images/the-web-application-running-in-staging-enviro.png?raw=true" alt="在过渡环境中运行的 Web 应用程序" title="在过渡环境中运行的 Web 应用程序" />
+</p>
+
+<p><em>在过渡环境中运行的 Web 应用程序</em></p></li>
+<li><p>现在，终于准备好可以将部署提升到<strong>生产环境</strong>了。请确保选择当前部署，单击底部窗格的<strong>“交换”</strong>按钮。在“VIP 交换”对话框上单击<strong>“是”</strong>。</p>
+
+<p><img src="images/swap-from-staging-to-production.png?raw=true" alt="从过渡环境交换到生产环境" title="从过渡环境交换到生产环境" />
+</p>
+
+<p><em>从过渡环境交换到生产环境</em></p>
+
+<p><img src="images/swap-vips-dialog.png?raw=true" alt="“交换 VIP”对话框" title="“交换 VIP”对话框" />
+</p>
+
+<p><em>“交换 VIP”对话框</em></p></li>
+<li><p>现在，项目已在生产环境中部署和运行。单击<strong>“DNS 名称”</strong>链接。您需要手动向地址栏中的协议和端口号添加“s”（即 http<strong>s</strong>://&lt;您的项目名称&gt;.cloudapp.net<strong>:8080</strong>），并按 <strong>Enter</strong>。这一次不会显示任何证书警告，因为 DNS 名称与上载的证书是匹配的。浏览器将重定向到本地 IIS 中运行的本地 STS。单击<strong>“提交”</strong>进行身份验证。网站的主页将显示 STS 发布的声明。</p>
+
+<p><img src="images/the-web-application-running.png?raw=true" alt="正在运行的 Web 应用程序" title="正在运行的 Web 应用程序" />
+</p>
+
+<p><em>使用 HTTPS 证书在生产环境中运行的 Web 应用程序</em></p></li>
+</ol>
+
+<hr />
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>在新应用程序中利用现有证书，是对当今分布式系统的基本要求之一，新兴的云服务也不例外。</p>
+
+<p>通过完成此动手实验，您已学习：</p>
+
+<ul>
+<li><p>如何通过利用 Windows Identity Foundation 与外部机构（此处以开发 STS 模拟）进行联合，实现将 Windows Azure Web 角色应用程序的身份验证交由外部进行。</p></li>
+<li><p>[可选] 如何将此类应用程序部署到 Windows Azure 中，并实现可以确保应用程序在联合和 SSO 方案中正常运行的操作（例如部署证书）。</p></li>
+</ul>
+
+<p>如您所见，在进行此实验时，由 Windows Identity Foundation 启用的基于声明的标识方法只需少量修改或不做修改，即可应用于本地或云服务应用程序。</p>
+
+<p>我们希望您在此实验和其他标识实验中学到的编程技能，有助于您充满自信地编写适用于各种部署环境的解决方案，并以一致和有效的方式进行标识管理。</p> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-FederatedAuthWebRole/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,504 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 使用 Windows Azure 网站和 WebMatrix 2 构建和发布 Web 应用程序</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-ASPNETAzureWebSitesWebMatrix" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-ASPNETAzureWebSitesWebMatrix" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="Title"></a></p>
+
+<h1 id="Building_and_Publishing_Web_Applications_with_Windows_Azure_Web_Sites_and_WebMatrix_2">使用 Windows Azure 网站和 WebMatrix 2 构建和发布 Web 应用程序</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>在此动手实验中，您将了解如何使用 Microsoft WebMatrix 2 在 Windows Azure 中构建和发布网站。</p>
+
+<p>Microsoft WebMatrix 是一个可用于创建、自定义和发布网站的免费工具。WebMatrix 提供一系列内置模板，可让您轻松便捷地展开网站编码工作，同时还提供内置的发布支持，帮助将网站轻松发布到 Windows Azure。</p>
+
+<p>在这些练习中，您将从 Windows Azure 管理门户创建一个新网站，并着手用 WebMatrix 在本地构建您的网站。利用 WebMatrix 中现成的模板，您将快速创建一个照片库应用程序，并对该应用程序进行自定义，添加一个 Facebook 的 Like 按钮。最后，您将使用 WebMatrix 内置的发布支持将完成的 Web 应用程序发布至 Windows Azure。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>从 Windows Azure 管理门户创建网站</li>
+<li>下载并安装 Microsoft WebMatrix</li>
+<li>使用 WebMatrix 照片库模板</li>
+<li>使用 WebMatrix 发布功能发布照片库应用程序</li>
+<li>用 NuGet 包自定义照片库应用程序</li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<ul>
+<li>启用了网站预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li> <a href="#Exercise1">创建一个 Windows Azure 网站并安装 WebMatrix 2</a></li>
+<li> <a href="#Exercise2">测试照片库应用程序</a></li>
+<li> <a href="#Exercise3">用 NuGet 包自定义照片库应用程序</a></li>
+</ol>
+
+<p>完成此实验的估计时间：<strong>45</strong> 分钟。</p>
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Creating_a_Windows_Azure_Web_Site_and_Installing_WebMatrix_2">练习 1：创建一个 Windows Azure 网站并安装 WebMatrix 2</h3>
+
+<p>在本练习中，您将使用 Windows Azure 管理门户创建一个新网站。随后，下载并安装 WebMatrix 以在网站中发布照片库模板。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_a_New_Windows_Azure_Web_Site">任务 1 - 新建 Windows Azure 网站</h4>
+
+<p>在此任务中，您将从 Windows Azure 管理门户创建一个新网站。</p>
+
+<ol>
+<li><p>打开 <a href="https://manage.windowsazure.com">Windows Azure 管理门户</a>并使用您的 Windows Azure 帐户凭据登录。</p></li>
+<li><p>依次单击<strong>“新建”</strong>|<strong>“网站”</strong>|<strong>“快速创建”</strong>。为网站选择一个唯一的 <strong>URL</strong>，例如 <em>WebMatrixWebSite</em>。</p>
+
+<p><img src="images/creating-a-new-web-site.png?raw=true" alt="创建新网站" title="创建新网站" />
+</p>
+
+<p><em>创建新网站</em></p>
+<blockquote>
+<p><strong>注意：</strong>Windows Azure 网站是一个宿主平台，您可以在该平台上控制和管理云中运行的 Web 应用程序。通过“快速创建”选项，可以从门户外将已完成的 Web 应用程序部署到 Windows Azure 网站。它不包含用于设置数据库的步骤。</p>
+</blockquote></li>
+<li><p>在继续执行下一个任务之前，等待网站进入<strong>正在运行</strong>状态。</p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Creating_a_Web_Site_using_WebMatrix_Templates">任务 2 - 使用 WebMatrix 模板创建网站</h4>
+
+<p>在此任务中，您将下载并安装 WebMatrix，然后使用照片库模板创建一个网站。</p>
+
+<ol>
+<li><p>在 <strong>Windows Azure 管理门户</strong>中，单击“网站”，然后单击刚刚在上个任务中创建的网站<strong>“名称”</strong>进入该网站的<strong>“面板”</strong>。</p>
+
+<p><img src="images/web-sites-page.png?raw=true" alt="网站页" title="网站页" />
+</p>
+
+<p><em>网站页</em></p></li>
+<li><p>在<strong>“面板”</strong>页中，从底部的菜单单击 <strong>WebMatrix</strong>。</p>
+
+<p><img src="images/accessing-webmatrix-from-the-portal.png?raw=true" alt="从门户打开 WebMatrix" title="从门户打开 WebMatrix" />
+</p>
+
+<p><em>从门户打开 WebMatrix</em></p></li>
+<li><p>如果显示<strong>“安全警告”</strong>对话框，请单击<strong>“运行”</strong>。</p>
+
+<p><img src="images/security-warning.png?raw=true" alt="安全警告" title="安全警告" />
+</p>
+
+<p><em>安全警告</em></p></li>
+<li><p>此操作将使用 <strong>Web 平台安装程序</strong>开始安装 <strong>Microsoft WebMatrix</strong>。</p>
+
+<p><img src="images/webmatrix-installation-using-wpi.png?raw=true" alt="使用 Web 平台安装程序安装 WebMatrix" title="使用 Web 平台安装程序安装 WebMatrix" />
+</p>
+
+<p><em>使用 Web 平台安装程序安装 WebMatrix</em></p>
+<blockquote>
+<p><strong>注意：</strong>Microsoft Web 平台安装程序是一个免费工具，可用于安装包括 WebMatrix 在内的各种 Microsoft 产品。</p>
+</blockquote></li>
+<li><p>等待安装完成。</p>
+
+<p><img src="images/webmatrix-installed.png?raw=true" alt="WebMatrix 安装完成" title="WebMatrix 安装完成" />
+</p>
+
+<p><em>WebMatrix 安装完成</em></p></li>
+<li><p>安装一旦完成，<strong>WebMatrix</strong> 即会自动启动并开始下载您的网站。随后，<strong>WebMatrix</strong> 将开始创建您的远程网站的本地副本。本例为空网站，因而此过程不需太多时间。</p>
+
+<p><img src="images/copying-files.png?raw=true" alt="复制文件" title="复制文件" />
+</p>
+
+<p><em>复制文件</em></p></li>
+<li><p><strong>WebMatrix</strong> 会检测出您的网站是空的，并显示<strong>“检测到空网站”</strong>消息。单击<strong>“是，从模板库安装”</strong>继续。</p>
+
+<p><img src="images/install-from-template-gallery.png?raw=true" alt="从模板库安装" title="从模板库安装" />
+</p>
+
+<p><em>从模板库安装</em></p></li>
+<li><p>在<strong>“从模板创建网站”</strong>页中，选择 <strong>ASP.NET</strong> 选项卡，然后选择<strong>“照片库”</strong>模板。最后，设置一个<strong>“网站名称”</strong>（例如 <em>AzurePhotoGallery</em>），再单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/photo-gallery-template.png?raw=true" alt="照片库模板" title="照片库模板" />
+</p>
+
+<p><em>照片库模板</em></p>
+<blockquote>
+<p><strong>注意：</strong>WebMatrix 网站模板包含用于通用类型网站的预生成页面和文件，您可以自定义这些页面和文件以创建自己的网站。有若干不同模板可供选择。</p>
+</blockquote></li>
+<li><p>等待网站安装完成。在此过程中，WebMatrix 将下载用于照片库模板的所有必需文件。</p>
+
+<p><img src="images/downloading-photo-gallery-template.png?raw=true" alt="下载照片库模板" title="下载照片库模板" />
+</p>
+
+<p><em>下载照片库模板</em></p></li>
+<li><p>安装完成后，可在 <strong>WebMatrix</strong> 中看到四个可用选项卡：<strong>“网站”</strong>、<strong>“文件”</strong>、<strong>“数据库”</strong>和<strong>“报表”</strong>。</p>
+
+<p><img src="images/exploring-web-site.png?raw=true" alt="浏览网站" title="浏览网站" />
+</p>
+
+<p><em>浏览网站</em></p>
+<blockquote>
+<p><strong>注意：</strong>WebMatrix 包含四个集成工作区，分别侧重处理网站的不同方面：</p>
+
+<ul>
+<li><strong>网站</strong>：监视实时 Web 请求，并配置用于网站工作区的网站服务器设置。</li>
+<li><strong>文件</strong>：管理文件并使用代码编辑器编辑代码，所用语法在文件工作区中突出显示。</li>
+<li><strong>数据库</strong>：使用数据库工作区添加和管理数据库。</li>
+<li><strong>报表</strong>：生成 SEO 报表，并使用工具优化网站以使其适用于搜索引擎。</li>
+</ul>
+</blockquote></li>
+</ol>
+
+<p><a name="Ex1Task3"></a></p>
+
+<h4 id="Task_3_-_Publishing_a_Web_Site_from_WebMatrix">任务 3 - 从 WebMatrix 发布网站</h4>
+
+<p>在此任务中，您将使用 WebMatrix 将在前一个任务中创建的照片库模板发布至 Windows Azure 网站。</p>
+
+<ol>
+<li><p>单击<strong>“发布”</strong>以开始将<strong>“照片库”</strong>发布至在之前的任务中创建的网站。</p>
+
+<p><img src="images/publish-web-site.png?raw=true" alt="发布网站" title="发布网站" />
+</p>
+
+<p><em>发布网站</em></p></li>
+<li><p>在<strong>“发布预览”</strong>页中，选择 <strong>PhotoGallery.sdf</strong> 以随网站部署数据库文件，然后单击<strong>“继续”</strong>。</p>
+
+<p><img src="images/web-site-publish-preview.png?raw=true" alt="网站发布预览" title="网站发布预览" />
+</p>
+
+<p><em>网站发布预览</em></p>
+<blockquote>
+<p><strong>注意：</strong>照片库模板使用 SQL Server Compact 4.0 数据库存储照片数据。SQL Server Compact 提供一个免费的嵌入式数据库引擎，该引擎简化了单个文件内的数据存储。有了它，您就不需要在本地开发环境中安装完整的数据库。若要了解有关 SQL Server Compact 的详细信息，请下载<a href="http://www.microsoft.com/zh-CN/download/details.aspx?id=21880">联机丛书</a>。</p>
+</blockquote></li>
+<li><p>等待网站发布至 Windows Azure。发布完成后，单击底部所示通知中的链接以在浏览器中打开网站。</p>
+
+<p> <img src="images/publishing-complete.png?raw=true" alt="发布完成" title="发布完成" />
+</p>
+
+<p><em>发布完成</em></p></li>
+<li><p>验证是否已成功发布<strong>照片库</strong>应用程序。不要关闭浏览器。</p>
+
+<p><img src="images/azure-photo-gallery-running.png?raw=true" alt="运行中的 Azure 照片库" title="运行中的 Azure 照片库" />
+</p></li>
+<li><p>返回至 <strong>Windows Azure 管理门户</strong>，进入网站的<strong>“面板”</strong>，查看最近的操作在指标图中的反映。</p>
+
+<p><img src="images/metrics-chart.png?raw=true" alt="指标图" title="指标图" />
+</p>
+
+<p><em>指标图</em></p></li>
+</ol>
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Trying_out_the_Photo_Gallery_Application">练习 2：测试照片库应用程序</h3>
+
+<p>在此任务中，您将详细了解在<a href="#Exercise1">练习 1</a> 中发布的照片库应用程序。您将以照片库用户的身份注册，然后查看该应用程序的工作情况。您将上传几张图像，为这些图片添加评论，然后观察缩略图在上传图片之后的变化情况。</p>
+<blockquote>
+<p><strong>注意：</strong>此练习要求您已如练习 1 所述在 Windows Azure 网站中发布了照片库应用程序。</p>
+</blockquote>
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_-_Uploading_Images_and_Adding_Comments">任务 1 - 上载图像并添加评论</h4>
+
+<ol>
+<li><p>打开在上一练习中发布的照片库网站。</p>
+
+<p><img src="images/opening-the-web-site.png?raw=true" alt="打开网站" title="打开网站" />
+</p>
+
+<p><em>打开照片库网站</em></p>
+<blockquote>
+<p><strong>注意：</strong>也可以在 Windows Azure 门户中，从该网站的“面板”中获取已发布网站的 URL。</p>
+</blockquote></li>
+<li><p>单击 <strong>Login</strong>（登录）链接，然后单击 <strong>Register</strong>（注册）以注册一个新用户。</p>
+
+<p><img src="images/click-register.png?raw=true" alt="单击“Register”" title="单击“Register”" />
+</p>
+
+<p><em>注册新帐户</em></p></li>
+<li><p>进入 <strong>Account Creation</strong>（帐户创建）页之后，为新帐户输入<strong>电子邮件</strong>、<strong>密码</strong>和<strong>密码确认</strong>。然后单击 <strong>Register</strong>（注册）。</p>
+
+<p><img src="images/creating-a-new-account.png?raw=true" alt="创建新帐户" title="创建新帐户" />
+</p>
+
+<p><em>创建新帐户</em></p></li>
+<li><p>注册之后，单击 <strong>Create a New Gallery</strong>（创建新库）。</p>
+
+<p><img src="images/creating-a-new-gallery.png?raw=true" alt="创建新库" title="创建新库" />
+</p>
+
+<p><em>创建新库</em></p></li>
+<li><p>在 <strong>New Gallery</strong>（新建库）对话框中，将库的 <strong>Name</strong>（名称）设置为 <em>Photos</em>，然后单击 <strong>Create</strong>（创建）。</p>
+
+<p><img src="images/creating-photos-gallery.png?raw=true" alt="创建新照片" title="创建新照片" />
+</p>
+
+<p><em>创建新照片</em></p></li>
+<li><p>创建新库之后，单击 <strong>Upload a Photo</strong>（上载照片）链接在库中添加一张新照片。</p>
+
+<p><img src="images/click-upload-a-photo.png?raw=true" alt="单击“Upload a Photo”" title="单击“Upload a Photo”" />
+</p>
+
+<p><em>上载新照片</em></p></li>
+<li><p>在 <strong>Upload Photo</strong>（上载照片）对话框中，单击 <strong>Browse</strong>（浏览）并选择一个图像文件。</p>
+
+<p><img src="images/click-browse.png?raw=true" alt="单击“Browse”" title="单击“Browse”" />
+</p>
+
+<p><em>选择图像</em></p></li>
+<li><p>单击 <strong>Upload</strong>（上载）将所选图像添加到库中。请注意，也可以一次添加多张图像，以简化上载过程。</p>
+
+<p><img src="images/select-and-upload-a-photo.png?raw=true" alt="选择并上载照片" title="选择并上载照片" />
+</p>
+
+<p><em>上载新照片</em></p></li>
+<li><p>上载图像之后，网站中即会显示新照片及其属性，您就可以对其发表新评论。在 <strong>Comment</strong>（评论）框中键入一条评论，然后单击 <strong>Add Comment</strong>（添加评论）。</p>
+
+<p><img src="images/adding-a-comment.png?raw=true" alt="添加评论" title="添加评论" />
+</p>
+
+<p><em>添加评论</em></p></li>
+<li><p>从导航栏单击 <strong>Galleries</strong>（库）链接。将显示一个包含可用库的列表，可以在 <strong>Photos</strong> 库中看到刚刚上载的图片。</p>
+
+<p><img src="images/click-galleries.png?raw=true" alt="单击“Galleries”" title="单击“Galleries”" />
+</p>
+
+<p><em>可用照片库</em></p>
+
+<p><img src="images/the-new-photo-gallery.png?raw=true" alt="新照片库" title="新照片库" />
+</p>
+
+<p><em>显示新图片的照片库</em></p></li>
+<li><p>单击库图像返回至 <strong>Photos</strong> 库。重复上述步骤再上载一张照片并对其添加评论。</p></li>
+<li><p>单击 <strong>Galleries</strong>（库）链接以显示可用的库。请注意，<strong>Photos</strong> 库的缩略图发生了变化，表明上载了多张照片。</p>
+
+<p><img src="images/showing-multiple-images.png?raw=true" alt="显示多张图像" title="显示多张图像" />
+</p>
+
+<p><em>显示有多张图像的缩略图</em></p></li>
+</ol>
+
+<p><a name="Exercise3"></a> </p>
+
+<h3 id="Exercise_3_Using_NuGet_Packages_to_Customize_the_Photo_Gallery_Application">练习 3：用 NuGet 包自定义照片库应用程序</h3>
+
+<p>在此练习中，您将使用 <strong>NuGet 包</strong>自定义在前一练习中创建的照片库应用程序。</p>
+<blockquote>
+<p><strong>注意：</strong>此练习要求您已如练习 1 所述在 Windows Azure 网站中发布了照片库应用程序。</p>
+</blockquote>
+<p><a name="Ex3Task1"></a></p>
+
+<h4 id="Task_1_-_Installing_the_Facebook_Helper_NuGet_Package">任务 1 - 安装 Facebook Helper NuGet 包</h4>
+
+<p>在此任务中，您将使用 <strong>NuGet 包</strong>安装 <strong>Facebook Helper</strong> 程序包。</p>
+
+<ol>
+<li><p>从 <strong>Windows Azure 管理门户</strong>，使用网站<strong>“面板”</strong>中的 <strong>WebMatrix</strong> 图标在 <strong>WebMatrix</strong> 中打开 <strong>AzurePhotoGallery</strong> 项目（如果尚未打开）。</p>
+
+<p><img src="images/accessing-webmatrix-from-the-portal.png?raw=true" alt="从门户访问 WebMatrix " title="从门户访问 WebMatrix " />
+</p>
+
+<p><em>从门户访问 WebMatrix</em></p></li>
+<li><p>在 <strong>WebMatrix</strong> 中，单击<strong>“文件”</strong>选项卡。</p>
+
+<p><img src="images/switching-to-the-files-tab.png?raw=true" alt="切换到“文件”选项卡" title="切换到“文件”选项卡" />
+</p>
+
+<p><em>切换到“文件”选项卡</em></p></li>
+<li><p>单击功能区栏中的 <strong>NuGet</strong> 以打开 <strong>NuGet 包库</strong>。</p>
+
+<p>NuGet 是一个程序包管理工具，可用于下载和安装由社区提供的有用代码，帮助执行如社交网络集成和移动支持等任务。</p>
+
+<p><img src="images/gallery-icon.png?raw=true" alt="库图标" title="库图标" />
+</p>
+
+<p><em>打开 NuGet 库</em></p></li>
+<li><p>在<strong>“NuGet 库”</strong>对话框中，从左上角的下拉菜单中选择<strong>“NuGet 官方程序包来源”</strong>。</p>
+
+<p><img src="images/selecting-the-official-package-source.png?raw=true" alt="选择官方程序包来源" title="选择官方程序包来源" />
+</p>
+
+<p><em>选择官方程序包来源</em></p></li>
+<li><p>在搜索框中键入 <em>Facebook.Helper</em>。选择库项 <strong>Facebook.Helper</strong>，然后单击<strong>“安装”</strong>。</p>
+
+<p><img src="images/facebook-helper-item.png?raw=true" alt="Facebook Helper 项" title="Facebook Helper 项" />
+</p>
+
+<p><em>选择 Facebook.Helper 项</em></p></li>
+<li><p>将显示一个对话框，其中包含有关 <strong>Facebook.Helper</strong> 程序包的附加信息。单击<strong>“安装”</strong>下载并安装该程序包。</p>
+
+<p><img src="images/installing-facebookhelper.png?raw=true" alt="安装 Facebook.Helper" title="安装 Facebook.Helper" />
+</p>
+
+<p><em>安装 Facebook.Helper</em></p></li>
+<li><p>在<strong>“许可协议”</strong>对话框中，单击<strong>“我接受”</strong>以完成程序包的安装。</p>
+
+<p><img src="images/accept-eula.png?raw=true" alt="接受 EULA" title="接受 EULA" />
+</p>
+
+<p><em>接受 EULA</em></p>
+
+<p>窗口底部将显示该程序包的安装状态。</p>
+
+<p><img src="images/facebook-helper-package-status.png?raw=true" alt="Facebook Helper 程序包状态" title="Facebook Helper 程序包状态" />
+</p>
+
+<p><em>Facebook Helper 程序包状态</em></p></li>
+<li><p>在<strong>“文件”</strong>工作区，展开您的项目并定位至新的 <strong>Facebook</strong> 文件夹。展开 <strong>Facebook</strong> 文件夹，可以看到刚刚安装的 NuGet 包所添加的文件。</p>
+
+<p><img src="images/facebook-folder.png?raw=true" alt="Facebook 文件夹" title="Facebook 文件夹" />
+</p>
+
+<p><em>Facebook 文件夹</em></p>
+<blockquote>
+<p><strong>注意：</strong>Facebook Helper 中提供了介绍其所有功能使用方法的说明文档。右键单击 Facebook\Docs 文件夹下的 startHere.htm 文件，然后选择“在浏览器中启动”，可以查看该文档。从该帮助程序的 <a href="http://facebookhelper.codeplex.com">CodePlex 网站</a>上可以下载一个示例 WebMatrix 网站，从中可以了解该帮助程序的运行情况。该示例还向您展示了如何使用该帮助程序在您的网站中集成 Facebook 登录机制。</p>
+</blockquote></li>
+</ol>
+
+<p><a name="Ex3Task2"></a></p>
+
+<h4 id="Task_2_-_Adding_a_Facebook_Like_Button">任务 2 - 添加 Facebook Like 按钮</h4>
+
+<p>在此任务中，您将使用 <strong>Facebook Helper</strong> 在照片视图中插入一个 Like 按钮。</p>
+
+<ol>
+<li><p>在<strong>“网站”</strong>工作区中，展开 <strong>Photo</strong> 文件夹并双击 <strong>View.cshtml</strong> 以在编辑器中打开该文件。</p>
+
+<p><img src="images/opening-viewcshtml-file.png?raw=true" alt="打开 View.cshtml 文件" title="打开 View.cshtml 文件" />
+</p>
+
+<p><em>打开 View.cshtml 文件</em></p></li>
+<li><p>在 HTML 编辑器中定位至以下代码行。</p>
+
+<span class="codelanguage">HTML</span><pre><code class="HTML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span>@photo.FileTitle<span style="color:#0000FF">&lt;/</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>在 HTML 编辑器中，在该代码行下面新添加一个空行，并键入 <strong><code>@Facebook</code></strong>。可以看到，将显示 IntelliSense 下拉列表帮助您编写代码。</p>
+
+<p><img src="images/intellisense-for-facebook-helper.png?raw=true" alt="用于 Facebook Helper 的 Intellisense" title="用于 Facebook Helper 的 Intellisense" />
+</p>
+
+<p><em>用于 Facebook Helper 的 Intellisense</em></p>
+<blockquote>
+<p><strong>注意：</strong>IntelliSense 提供了一组功能，这些功能可方便进行语言参考（例如列表成员、参数信息、完成词语等等）。新版 WebMatrix 在各种语言中都支持 IntelliSense：HTML（包括 HTML5）、CSS（包括 CSS3）、JavaScript、C#、Visual Basic 和 PHP。</p>
+</blockquote></li>
+<li><p>从列表中选择 <strong>LikeButton</strong>。请确保添加到 HTML 文档的代码类似如下所示。</p>
+
+<span class="codelanguage">ASP.NET</span><pre><code class="ASP.NET">@Facebook.LikeButton()
+</code></pre>
+
+<p><img src="images/inserting-a-facebook-like-button.png?raw=true" alt="插入 Facebook Like 按钮" title="插入 Facebook Like 按钮" />
+</p>
+
+<p><em>插入 Facebook Like 按钮</em></p></li>
+<li><p>保存文件并单击<strong>“发布”</strong>。</p></li>
+<li><p><strong>取消选中</strong> <strong>PhotoGallery.sdf</strong> 文件旁边的复选框，以避免重新发布数据库，保留数据而不将其传送到发布的网站。</p>
+
+<p><img src="images/uncheck-the-photogallery-database.png?raw=true" alt="取消选中 PhotoGallery 数据库" title="取消选中 PhotoGallery 数据库" />
+</p>
+
+<p><em>取消选中 PhotoGallery 数据库选项</em></p></li>
+<li><p>单击<strong>“继续”</strong>。底部条上会显示发布状态。</p>
+
+<p><img src="images/publishing-status.png?raw=true" alt="发布状态" title="发布状态" />
+</p>
+
+<p><em>发布状态</em></p></li>
+<li><p>发布完成后，返回至 <strong>AzurePhotoGallery</strong> 网站，或单击底部的链接以在 Web 浏览器中将其打开。</p>
+
+<p><img src="images/publishing-complete.png?raw=true" alt="发布完成" title="发布完成" />
+</p>
+
+<p><em>发布完成</em></p></li>
+<li><p>单击 <strong>Photos</strong> 库以查看库中的图像。</p></li>
+<li><p>单击库中的一张图像以将其打开，请注意 <strong>Facebook Like</strong> 按钮现在显示在页面上。</p>
+
+<p><img src="images/facebook-like-button-in-place.png?raw=true" alt="Facebook Like 按钮出现" title="Facebook Like 按钮出现" />
+</p>
+
+<p><em>Facebook Like 按钮出现</em></p></li>
+<li><p>单击 <strong>Like</strong>，可以看到弹出 Facebook 登录窗口，允许用户表示“赞”或发表评论。</p>
+
+<p><img src="images/facebook-authentication.png?raw=true" alt="登录 Facebook" title="登录 Facebook" />
+</p>
+
+<p><em>登录 Facebook</em></p></li>
+</ol> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-ASPNETAzureWebSitesWebMatrix/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,556 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 使用虚拟网络将 PaaS 应用程序连接到 IaaS 应用程序 - 适用于 Visual Studio 2012</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-WindowsAzureVMandWebRoleVNet-VS2012" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-WindowsAzureVMandWebRoleVNet-VS2012" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="handsonlab"></a></p>
+
+<h1 id="Connecting_a_PaaS_application_to_an_IaaS_Application_with_a_Virtual_Network_-_for_Visual_Studio_2012">使用虚拟网络将 PaaS 应用程序连接到 IaaS 应用程序 - 适用于 Visual Studio 2012</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>在此实验中，您将使用 Windows Azure 管理门户创建一个安装了 SQL Server 的虚拟机。然后您将修改一个示例 Web 应用程序并将其部署到新的云服务。最后，您将通过虚拟网络与云服务和 SQL Server 虚拟机通信。</p>
+<blockquote>
+<p><strong>注意：</strong>在最新版本的 <a href="http://bit.ly/WindowsAzureTK">Windows Azure 培训包</a>或 <a href="https://github.com/WindowsAzure-TrainingKit/HOL-WindowsAzureVMandWebRoleVNet-VS2012">GitHub</a> 中可以找到此动手实验的 Visual Studio 2012 版本。</p>
+</blockquote>
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>通过简单的虚拟网络将 Web 角色直接连接到虚拟机上运行的 SQL Server</li>
+<li>配置 SQL Server 虚拟机 </li>
+<li>更新示例 Web 应用程序并将其部署到 Windows Azure 中的云应用</li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li><a href="http://www.microsoft.com/visualstudio/">Visual Studio Express 2012 for Web</a> 或更高版本</li>
+<li><a href="http://www.microsoft.com/windowsazure/sdk/">Windows Azure Tools for Microsoft Visual Studio 1.8</a></li>
+<li>启用了虚拟机预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>此动手实验针对 Windows 8 而设计。</p>
+</blockquote>
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ul>
+<li><p><a href="#Exercise1">创建 SQL Server 虚拟机</a></p></li>
+<li><p><a href="#Exercise2">部署简单的 MVC4 应用程序</a></p></li>
+</ul>
+
+<p>完成此实验的估计时间：<strong>45 分钟</strong>。</p>
+
+<p><a name="GettingStarted"></a></p>
+
+<h3 id="Getting_Started_-_Configuring_Virtual_Networking">入门 - 配置虚拟网络</h3>
+
+<p>对于此实验，您将定义一个虚拟网络，在这里，您可以将虚拟机分配给特定子网。</p>
+
+<p><a name="GettingStartedTask1"></a></p>
+
+<h4 id="Task_1_-_Creating_an_Affinity_Group">任务 1 - 创建地缘组</h4>
+
+<p>第一个任务是为虚拟网络创建一个地缘组。</p>
+
+<ol>
+<li><p>打开浏览器并转到 <a href="https://manage.windowsazure.com">https://manage.windowsazure.com</a>。提示时，使用您的 <strong>Windows Azure</strong> 凭据登录。在 Windows Azure 门户中，单击<strong>“网络”</strong>、<strong>“地缘组”</strong>，然后在底部单击<strong>“创建”</strong>。</p></li>
+<li><p>将该地缘组命名为<em>“myag”</em>并选择一个<strong>区域</strong>。单击按钮创建该地缘组。</p>
+
+<p><img src="Images/creating-an-affinity-group.png?raw=true" alt="创建地缘组" />
+</p>
+
+<p><em>创建地缘组</em></p></li>
+</ol>
+
+<p><a name="GettingStartedTask2"></a></p>
+
+<h4 id="Task_2_-_Creating_a_new_Virtual_Network">任务 2 - 新建虚拟网络</h4>
+
+<p>下一步是在您的订阅中新建一个虚拟网络。</p>
+
+<ol>
+<li><p>在 Windows Azure 门户中，单击<strong>“新建”</strong>，选择<strong>“网络”</strong>|<strong>“虚拟网络”</strong>，然后单击<strong>“自定义创建”</strong>。</p>
+
+<p><img src="Images/virtual-network-custom-create.png?raw=true" alt="自定义创建虚拟网络" />
+</p>
+
+<p><em>自定义创建虚拟网络</em></p></li>
+<li><p>设置虚拟网络名称（例如 <em>MyVNET</em>）和描述，然后单击箭头按钮继续。</p>
+
+<p><img src="Images/creating-a-new-virtual-network.png?raw=true" alt="新建虚拟网络" />
+</p>
+
+<p><em>新建虚拟网络</em></p></li>
+<li><p>将<strong>“地址空间”</strong>值设置为 <em>192.168.0.0/16</em>，并添加一个带 <em>192.168.1.0/24</em> 前缀的子网 <em>AppSubnet</em>。</p>
+
+<p><img src="Images/adding-an-address-space-and-subnets.png?raw=true" alt="添加地址空间和子网" />
+</p>
+
+<p><em>添加地址空间和子网</em></p></li>
+<li><p>保留 DNS 的默认设置并单击完成按钮。</p>
+
+<p><img src="Images/creating-the-virtual-network.png?raw=true" alt="创建虚拟网络" title="创建虚拟网络" />
+</p>
+
+<p><em>创建虚拟网络</em></p></li>
+</ol>
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Creating_a_SQL_Server_VM">练习 1：创建 SQL Server 虚拟机</h3>
+
+<p>在此练习中，您将新建一个包含 SQL Server 的虚拟机，并配置一个公用端点以便对它进行远程访问。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_a_VM_Using_Windows_Azure_Portal">任务 1 - 使用 Windows Azure 门户创建虚拟机</h4>
+
+<p>在此任务中，您将使用 Windows Azure 门户创建一个新的虚拟机。</p>
+
+<ol>
+<li><p>使用 Web 浏览器导航到 <strong>Windows Azure 门户</strong>，然后使用与您的 Windows Azure 帐户关联的 <strong>Microsoft 帐户</strong>登录。</p></li>
+<li><p>单击<strong>“新建”</strong>，选择<strong>“虚拟机”</strong>选项，然后选择<strong>“从库中”</strong>。</p>
+
+<p><img src="Images/creating-a-new-vm.png?raw=true" alt="新建虚拟机" title="新建虚拟机" />
+</p>
+
+<p><em>新建虚拟机</em></p></li>
+<li><p>在<strong>“选择虚拟机操作系统”</strong>页中，单击左侧菜单中的<strong>“平台映像”</strong>，然后从列表中选择 <strong>SQL Server 2012</strong> 操作系统映像。单击箭头继续。</p></li>
+<li><p>在<strong>“虚拟机配置”</strong>页中，输入一个虚拟机<strong>名称</strong>，用虚拟机管理员的密码填写<strong>“管理员密码”</strong>和<strong>“确认”</strong>字段，并将虚拟机<strong>大小</strong>设置为<em>“小”</em>。单击<strong>“下一步”</strong>继续。</p>
+<blockquote>
+<p><strong>注意：</strong>后面的步骤中将使用这些凭据通过远程桌面连接虚拟机。</p>
+</blockquote>
+<p><img src="Images/vm-configuration.png?raw=true" alt="虚拟机配置" title="虚拟机配置" />
+</p>
+
+<p><em>虚拟机配置</em></p></li>
+<li><p>在<strong>“虚拟机模式”</strong>页中，选择<strong>“独立虚拟机”</strong>选项并提供一个唯一名称作为<strong>“DNS 名称”</strong>。最后，选择一个<strong>存储帐户</strong>或保留默认值<em>“使用自动生成的存储帐户”</em>，然后从<strong>“区域/地缘组/虚拟网络”</strong>列表中选择之前创建的虚拟网络，单击<strong>“下一步”</strong>继续。</p>
+
+<p><img src="Images/selecting-vm-mode.png?raw=true" alt="选择虚拟机模式" title="选择虚拟机模式" />
+</p>
+
+<p><em>设置虚拟机模式</em></p></li>
+<li><p>在<strong>“虚拟机选项”</strong>页中，选择 <strong>APPSUBNET</strong> 虚拟网络子网，然后单击完成按钮创建新的虚拟机。</p>
+
+<p><img src="Images/vm-options.png?raw=true" alt="虚拟机选项" title="虚拟机选项" />
+</p>
+
+<p><em>设置虚拟机选项</em></p></li>
+<li><p>在<strong>“虚拟机”</strong>部分，您将看到所创建的虚拟机显示<em>“正在配置”</em>状态。等待状态变为<em>“正在运行”</em>再继续后面的步骤。</p>
+<blockquote>
+<p><strong>注意：</strong>虚拟机完成设置过程需要 8 到 10 分钟。</p>
+</blockquote></li>
+<li><p>现在，您将创建并附加空数据磁盘来存储 SQL Server 日志和数据文件，还要添加一个端点。为此，请在<strong>“虚拟机”</strong>部分，选择在此任务中所创建的 SQL Server 虚拟机。</p></li>
+<li><p>在虚拟机的<strong>“面板”</strong>中，单击页面底部菜单中的<strong>“附加”</strong>并选择<strong>“附加空磁盘”</strong>。</p>
+
+<p><img src="Images/attach-empty-disk.png?raw=true" alt="附加空磁盘" title="附加空磁盘" />
+</p>
+
+<p><em>附加空磁盘</em></p></li>
+<li><p>在<strong>“附加空磁盘”</strong>页中，将<strong>“大小”</strong>设置为 <em>50</em> GB，然后创建磁盘。</p></li>
+<li><p>等待附加磁盘过程完成。重复步骤 8 至 10 创建第二个磁盘。</p></li>
+<li><p>您将看到三个虚拟机磁盘：<strong>操作系统</strong>磁盘和用于<strong>数据</strong>和<strong>日志</strong>的另外两个磁盘。</p>
+<blockquote>
+<p><strong>注意：</strong>数据磁盘可能需要几分钟才能在 Azure 门户内的虚拟机面板中出现。</p>
+</blockquote></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Configuring_SQL_Server_2012_Instance">任务 2 - 配置 SQL Server 2012 实例</h4>
+
+<p>在此任务中，您将设置 SQL Server 并将其配置为启用远程访问。</p>
+
+<ol>
+<li><p>在 Windows Azure 管理门户中，单击左侧菜单上的<strong>“虚拟机”</strong>。</p>
+
+<p><img src="./Images/Windows-Azure-Portal.png?raw=true" alt="Windows Azure 门户" title="Windows Azure 门户" />
+</p>
+
+<p><em>Windows Azure 门户</em></p></li>
+<li><p>从“虚拟机”列表中选择您的虚拟机，然后单击<strong>“连接”</strong>以使用<strong>远程桌面连接</strong>进行连接。</p></li>
+<li><p>在虚拟机中，从<strong>“开始”|“所有程序”|“管理工具”</strong>中打开<strong>“服务器管理器”</strong>。</p></li>
+<li><p>展开<strong>“存储”</strong>节点，然后选择<strong>“磁盘管理”</strong>选项。</p>
+
+<p><img src="Images/disk-management2.png?raw=true" alt="磁盘管理 (2)" />
+</p>
+
+<p><em>磁盘管理</em></p></li>
+<li><p>选择“磁盘管理”后，会显示一个<strong>“初始化磁盘”</strong>对话框。保留默认值，然后单击<strong>“确定”</strong>。</p>
+<blockquote>
+<p><strong>注意</strong>：如果选择“磁盘管理”后未显示“初始化磁盘”对话框，请从 Windows Azure 管理门户找到您使用<strong>“附加空磁盘”</strong>功能创建的磁盘，右键单击第一个磁盘并选择<strong>“初始化磁盘”</strong>。保留默认值，然后单击<strong>“确定”</strong>。</p>
+</blockquote></li>
+<li><p>右键单击第一个磁盘的未分配空间并选择<strong>“新建简单卷”</strong>。</p>
+
+<p><img src="Images/disk-management.png?raw=true" alt="磁盘管理" />
+</p>
+
+<p><em>磁盘管理</em></p></li>
+<li><p>根据<strong>“新建简单卷向导”</strong>执行操作。系统要求输入<strong>卷标</strong>时，使用 <em>SQLData</em> 作为卷标。</p></li>
+<li><p>等待第一个磁盘创建完成。重复步骤 5 至 8，但这次使用第二个磁盘。将<strong>“卷标”</strong>设置为 <em>SQLLogs</em>。</p></li>
+<li><p>现在可用磁盘的<strong>“磁盘管理”</strong>列表应显示 <strong>SQLData</strong> 和 <strong>SQLLogs</strong> 磁盘，如下图所示：</p>
+
+<p><img src="./Images/Disks-Management.png?raw=true" alt="磁盘管理" title="磁盘管理" />
+</p>
+
+<p><em>磁盘管理</em></p></li>
+<li><p>从<strong>“开始”|“所有程序”|“Microsoft SQL Server 2012”|“配置工具”</strong>中打开<strong>“SQL Server 配置管理器”</strong>。</p></li>
+<li><p>展开<strong>“SQL Server 网络配置”</strong>节点并选择<strong>“MSSQLServer 的协议”</strong>（如果在安装 SQL Server 时使用了不同的实例名称，此选项可能有所不同）。确保启用了 <strong>Shared Memory</strong>、<strong>Named Pipes</strong> 和 <strong>TCP/IP</strong> 协议。要启用某一协议，请右键单击协议名称并选择<strong>“启用”</strong>。</p>
+
+<p><img src="./Images/Enabling-SQL-Server-Protocols.png?raw=true" alt="启用 SQL Server 协议" title="启用 SQL Server 协议" />
+</p>
+
+<p><em>启用 SQL Server 协议</em></p></li>
+<li><p>转到<strong>“SQL Server 服务”</strong>节点，右键单击 <strong>SQL Server (MSSQLSERVER)</strong> 项并选择<strong>“重新启动”</strong>。</p></li>
+</ol>
+
+<p><a name="Ex1Task3"></a></p>
+
+<h4 id="Task_3_-_Installing_the_AdventureWorks_Database">任务 3 - 安装 AdventureWorks 数据库</h4>
+
+<p>在此任务中，您将添加 <strong>AdventureWorks</strong> 数据库，后面练习中的示例应用程序将用到这个数据库。</p>
+
+<ol>
+<li><p>为启用从 IE 下载，需要更新<strong>“Internet Explorer 增强的安全配置”</strong>。在 Azure 虚拟机中，从<strong>“开始”|“所有程序”|“管理工具”</strong>中打开<strong>“服务器管理器”</strong>。</p></li>
+<li><p>在<strong>“服务器管理器”</strong>窗口中，单击<strong>“安全信息”</strong>部分的<strong>“配置 IE ESC”</strong>。</p>
+
+<p><img src="Images/configure-internet-explorer-enhanced-security.png?raw=true" alt="设置 Internet Explorer 增强的安全配置" title="设置 Internet Explorer 增强的安全配置" />
+</p>
+
+<p><em>设置 Internet Explorer 增强的安全配置</em></p></li>
+<li><p>在<strong>“Internet Explorer 增强的安全配置”</strong>对话框中，<strong>关闭</strong><strong>管理员</strong>的增强安全配置，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="./Images/Internet-Explorer-Enhanced-Security.png?raw=true" alt="Internet Explorer 增强的安全配置" title="Internet Explorer 增强的安全配置" />
+</p>
+
+<p><em>Internet Explorer 增强的安全配置</em></p>
+<blockquote>
+<p><strong>注意：</strong>修改“Internet Explorer 增强的安全配置”不宜作为常规做法，在此仅为本次特定实验临时使用。正确的做法应是从本地下载文件，然后将文件复制到共享文件夹或直接复制到虚拟机。</p>
+</blockquote></li>
+<li><p>从<strong>“开始”|“所有程序”|“Microsoft SQL Server 2012”|“SQL Server Management Studio”</strong>打开 SQL Server Management Studio。</p></li>
+<li><p>使用您的 Windows 帐户连接到 SQL Server 2012 默认实例。</p></li>
+<li><p>现在，您将更新数据库的默认位置以便拆分“日志”和“数据”。为此，请右键单击您的 SQL Server 实例，再选择<strong>“属性”</strong>。</p></li>
+<li><p>从左侧窗格中选择<strong>“数据库设置”</strong>。</p></li>
+<li><p>找到<strong>“数据库默认位置”</strong>部分，更新默认值使之指向在前面的任务中附加的磁盘。</p>
+
+<p><img src="./Images/Setting-Database-Default-Locations.png?raw=true" alt="设置数据库默认位置" title="设置数据库默认位置" />
+</p>
+
+<p><em>设置数据库默认位置</em></p></li>
+<li><p>使用 Windows 资源管理器创建以下文件夹：<strong>F:\Data、G:\Logs</strong> 和 <strong>G:\Backups</strong>。</p></li>
+<li><p>重新启动 SQL Server。在<strong>对象资源管理器</strong>中，右键单击服务器节点，然后选择<strong>“重新启动”</strong>。</p></li>
+<li><p>此实验使用 <strong>AdventureWorks2012</strong> 数据库。打开 <strong>Internet Explorer</strong> 浏览器，然后转到 <a href="http://msftdbprodsamples.codeplex.com/">http://msftdbprodsamples.codeplex.com/</a> 下载 <strong>SQL Server 2012</strong> 示例数据库。进入页面后，单击 SQL Server 2012 DW，然后下载 Adventure Works 2012 数据文件。将文件下载到 F:\Data。</p></li>
+<li><p>右键单击数据库文件打开其属性。单击<strong>“取消锁定”</strong>。</p></li>
+<li><p>将 <strong>AdventureWorks2012</strong> 示例数据库添加到您的 SQL Server 中。为此，请打开 <strong>SQL Server Management Studio</strong>，并使用您的 Windows 帐户连接到 <strong>(local)</strong>。找到您的 SQL Server 实例节点并将其展开。</p></li>
+<li><p>右键单击<strong>“数据库”</strong>文件夹并选择<strong>“附加”</strong>。</p>
+
+<p><img src="Images/attaching-adventureworks-database-menu.png?raw=true" alt="对象资源管理器 - 附加 AdventureWorks2012 数据库" />
+</p>
+
+<p><em>对象资源管理器 - 附加 Adventureworks2012 数据库</em></p></li>
+<li><p>在<strong>“附加数据库”</strong>对话框中，按<strong>“添加”</strong>。浏览到数据磁盘并选择 Adventure Works 2012 数据文件。</p></li>
+<li><p>现在，在<strong>“数据库详细信息”</strong>中选择 AdventureWorks2012 日志行，然后单击<strong>“删除”</strong>。</p>
+
+<p><img src="./Images/attaching-adventureworks-database.png?raw=true" alt="附加 AdventureWorks 数据库" title="附加 AdventureWorks 数据库" />
+</p>
+
+<p><em>附加 AdventureWorks2012 数据库</em></p></li>
+<li><p>单击<strong>“确定”</strong>附加数据库。</p></li>
+<li><p>为数据库创建全文目录。您将在下一练习中部署的 MVC 应用程序中使用此功能。为此，请展开 <strong>AdventureWorks2012</strong> 数据库中的<strong>“存储”</strong>节点。</p></li>
+<li><p>右键单击<strong>“全文目录”</strong>文件夹，选择<strong>“新建全文目录”</strong>。</p>
+
+<p><img src="Images/new-full-text-catalog.png?raw=true" alt="新建全文目录" title="新建全文目录" />
+</p>
+
+<p><em>新建全文目录</em></p></li>
+<li><p>在<strong>“新建全文目录”</strong>对话框中，将<strong>“名称”</strong>值设置为 <em>AdventureWorksCatalog</em>，然后按<strong>“确定”</strong>。</p>
+
+<p><img src="Images/new-full-text-catalog-name.png?raw=true" alt="新全文目录名称" title="新全文目录名称" />
+</p>
+
+<p><em>全文目录名称</em></p></li>
+<li><p>右键单击 <strong>AdventureWorksCatalog</strong>，然后选择<strong>“属性”</strong>。选择<strong>“表/视图”</strong>菜单项。将 <strong>Production.Product</strong> 表添加到<strong>“分配给该目录的表/视图对象”</strong>列表中。从<strong>“合格列”</strong>中选中 <em>Name</em>，在<em>“断字符语言”</em>中选择<strong>“英语”</strong>，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="Images/full-text-catalog-properties.png?raw=true" alt="全文目录属性" title="全文目录属性" />
+</p>
+
+<p><em>全文目录属性</em></p></li>
+<li><p>对 SQL Server 实例启用<strong>混合模式身份验证</strong>。为此，请在 <strong>SQL Server Management Studio</strong> 中右键单击服务器实例，然后单击<strong>“属性”</strong>。</p></li>
+<li><p>在右侧窗格中选择<strong>“安全性”</strong>页面，然后在<strong>“服务器身份验证”</strong>部分下选择<strong>“SQL Server 和 Windows 身份验证模式”</strong>。单击<strong>“确定”</strong>保存更改。</p>
+
+<p><img src="Images/mixed-authentication-mode.png?raw=true" alt="混合身份验证模式" title="混合身份验证模式" />
+</p>
+
+<p><em>混合身份验证模式</em></p></li>
+<li><p>重新启动 SQL Server 实例。为此，请右键单击 SQL Server 实例，然后单击<strong>“重新启动”</strong>。</p></li>
+<li><p>添加一个新用户，该用户将用于下面练习中部署的 MVC4 应用程序。为此，请展开 SQL Server 实例中的<strong>“安全性”</strong>文件夹。右键单击<strong>“登录”</strong>文件夹，然后选择<strong>“新建登录名”</strong>。</p>
+
+<p><img src="./Images/create-new-login.png?raw=true" alt="创建新登录名" title="创建新登录名" />
+</p>
+
+<p><em>创建新登录名</em></p></li>
+<li><p>在<strong>“常规”</strong>部分，将<strong>“登录名”</strong>设置为 <em>CloudShop</em>。选择<strong>“SQL Server 身份验证”</strong>选项并将<strong>“密码”</strong>设置为 <em>Azure$123</em>。</p>
+<blockquote>
+<p><strong>注意：</strong>如果您输入的用户名或密码与本步中的建议不同，则需要更新下一练习中将使用的 MVC 4 应用程序的 web.config 文件，以使值匹配。</p>
+</blockquote></li>
+<li><p>取消选中<strong>“强制实施密码策略”</strong>选项以避免首次登录时必须更改用户密码，并将<strong>“默认数据库”</strong>设置为 <em>AdventureWorks2012</em>。</p>
+
+<p><img src="Images/new-logins-general-settings.png?raw=true" alt="新登录名的常规设置" title="新登录名的常规设置" />
+</p>
+
+<p><em>创建新登录名</em></p></li>
+<li><p>转到<strong>“用户映射”</strong>部分。将用户映射到 <em>AdventureWorks2012</em> 数据库，并单击<strong>“确定”</strong>。</p>
+
+<p><img src="./Images/Mapping-the-new-User.png?raw=true" alt="将新用户映射到 AdventureWorks2012 数据库" title="将新用户映射到 AdventureWorks 数据库" />
+</p>
+
+<p><em>将新用户映射到 AdventureWorks2012 数据库</em></p></li>
+<li><p>展开<strong>“数据库”</strong>文件夹中的 <strong>AdventureWorks2012</strong> 数据库。在<strong>“安全性”</strong>文件夹中，展开<strong>“用户”</strong>并双击 <strong>CloudShop</strong> 用户。</p></li>
+<li><p>选择<strong>“成员身份”</strong>页，再选择 <strong>CloudShop</strong> 用户的 <em>db_owner</em> 角色复选框，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="./Images/Adding-Database-role-membership-to-CloudShop-user.png?raw=true" alt="向 CloudShop 用户添加数据库角色成员身份" title="向 CloudShop 用户添加数据库角色成员身份" />
+</p>
+
+<p><em>向 CloudShop 用户添加数据库角色成员身份</em></p>
+<blockquote>
+<p><strong>注意：</strong>在下一练习中部署的应用程序将使用“通用提供程序”管理会话。应用程序首次运行时，提供程序将在 AdventureWorks 数据库中创建一个 Sessions 表。因此，您需要将 db_owner 角色分配给 CloudShop 用户。首次运行该应用程序后，就可以移除该用户的此角色，因为该用户不再需要这些权限。</p>
+</blockquote></li>
+<li><p>关闭 <strong>SQL Server Management Studio</strong>。</p></li>
+<li><p>为允许 MVC4 应用程序访问 SQL Server 数据库，您需要在<strong>“Windows 防火墙”</strong>中为 SQL Server 请求添加一条<strong>“入站规则”</strong>。为此，请从<strong>“开始”|“所有程序”|“管理工具”</strong>中打开<strong>“高级安全 Windows 防火墙”</strong>。</p></li>
+<li><p>选择<strong>“入站规则”</strong>节点，右键单击它并选择<strong>“新建规则”</strong>。</p>
+
+<p><img src="./Images/Creating-an-Inbound-Rule.png?raw=true" alt="创建入站规则" title="创建入站规则" />
+</p>
+
+<p><em>创建入站规则</em></p></li>
+<li><p>在<strong>“新建入站规则向导”</strong>中选择<em>“端口”</em>作为<strong>“规则类型”</strong>，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="Images/new-inbound-rule-type.png?raw=true" alt="新入站规则类型" title="入站规则类型" />
+</p>
+
+<p><em>入站规则的类型</em></p></li>
+<li><p>在<strong>“协议和端口”</strong>步骤中，选择<strong>“特定本地端口”</strong>并将其值设置为 <em>1433</em>。单击<strong>“下一步”</strong>继续。</p>
+
+<p><img src="Images/inbound-rules-local-port.png?raw=true" alt="入站规则的本地端口" title="入站规则的本地端口" />
+</p>
+
+<p><em>入站规则的本地端口</em></p></li>
+<li><p>在<strong>“操作”</strong>步骤中，确保选中<strong>“允许连接”</strong>选项并单击<strong>“下一步”</strong>。</p>
+
+<p><img src="Images/inbound-rules-action.png?raw=true" alt="入站规则的操作" title="入站规则的操作" />
+</p>
+
+<p><em>入站规则的操作</em></p></li>
+<li><p>在<strong>“配置文件”</strong>步骤中，保留默认值，然后单击<strong>“下一步”</strong>。</p></li>
+<li><p>最后，将入站规则的<strong>名称</strong>设置为 <em>SQLServerRule</em> 并单击<strong>“完成”</strong>。</p>
+
+<p><img src="Images/new-inbound-rule.png?raw=true" alt="新入站规则" title="新入站规则" />
+</p>
+
+<p><em>新入站规则</em></p></li>
+<li><p>关闭<strong>“高级安全 Windows 防火墙”</strong>窗口，然后关闭<strong>远程桌面连接</strong>。</p></li>
+</ol>
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Deploying_a_Simple_MVC4_Application">练习 2：部署简单的 MVC4 应用程序</h3>
+
+<p>在此练习中，您将配置一个简单的 Web 应用程序，将它连接到在上一练习中创建的 SQL Server 实例，然后将该应用程序发布到 <strong>Windows Azure</strong> 并在云中运行。</p>
+
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_-_Configuring_the_MVC4_Application_to_Connect_to_an_SQL_Server_Instance">任务 1 - 配置 MVC4 应用程序以连接到 SQL Server 实例</h4>
+
+<p>在此任务中，您将更改连接字符串，使其指向在上一练习中创建的 SQL Server 实例，更新配置设置以启用 Web 角色和 SQL Server 实例之间的网络通信。</p>
+
+<ol>
+<li><p>使用 Web 浏览器导航到 <strong>Windows Azure 门户</strong>，然后使用与您的 Windows Azure 帐户关联的 <strong>Microsoft 帐户</strong>登录。</p></li>
+<li><p>在左侧窗格中，单击<strong>“虚拟机”</strong>，找到在上一练习中创建的 SQL Server 虚拟机。选择该虚拟机，然后单击<strong>“连接”</strong>。</p></li>
+<li><p>提示您保存或打开 .rdp 文件时，单击<strong>“打开”</strong>并使用您在创建虚拟机时定义的管理员凭据登录。</p></li>
+<li><p>登录后，打开一个<strong>“命令提示符”</strong>窗口并键入 <strong>ipconfig</strong> 以显示虚拟机的 IP 配置。</p></li>
+<li><p>记下虚拟机的 IP 地址，稍后将用到它。</p>
+
+<p><img src="Images/getting-the-ip-address.png?raw=true" alt="获取 IP 地址" title="获取 IP 地址" />
+</p>
+
+<p><em>获取 IP 地址</em></p></li>
+<li><p>以管理员身份打开 Visual Studio Express 2012 for Web。</p></li>
+<li><p>打开位于本实验 <strong>Source</strong> 文件夹下的 <strong>Ex02-DeploySampleApp</strong> 文件夹中的 <strong>IaaSDeploySimpleApp.sln</strong> 解决方案。</p></li>
+<li><p>编译该解决方案以下载所需的包。</p></li>
+<li><p>打开 <strong>Web.config</strong> 文件并找到 <strong>connectionStrings</strong> 节点。将 <strong>Data Source</strong> 属性值替换为在第 5 步中复制的 SQL Server 虚拟机 IP 地址。</p>
+
+<!--mark: 1-5 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><strong class="markLine"><span style="color:#0000FF">&lt;</span><span style="color:#800000">connectionStrings</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;DefaultConnection&quot;</span> <span style="color:#FF0000">connectionString</span>=<span style="color:#0000FF">&quot;Data Source=[ENTER-IP-ADDRESS];initial catalog=AdventureWorks2012;Uid=CloudShop;Password=Azure$123;MultipleActiveResultSets=True&quot;</span> <span style="color:#FF0000">providerName</span>=<span style="color:#0000FF">&quot;System.Data.SqlClient&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;AdventureWorksEntities&quot;</span> <span style="color:#FF0000">connectionString</span>=<span style="color:#0000FF">&quot;metadata=res://*/Models.AdventureWorks.csdl|res://*/Models.AdventureWorks.ssdl|res://*/Models.AdventureWorks.msl;provider=System.Data.SqlClient;provider connection string=&amp;quot;data source=[ENTER-IP-ADDRESS];initial catalog=AdventureWorks2012;Uid=CloudShop;Password=Azure$123;multipleactiveresultsets=True;App=EntityFramework&amp;quot;&quot;</span> <span style="color:#FF0000">providerName</span>=<span style="color:#0000FF">&quot;System.Data.EntityClient&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine"><span style="color:#0000FF">&lt;/</span><span style="color:#800000">connectionStrings</span><span style="color:#0000FF">&gt;</span></strong>
+</code></pre></li>
+<li><p>为启用 Web 角色和 SQL Server 虚拟机之间的通信，您需要配置 Web 角色以连接到 SQL Server 虚拟机所在的同一个<strong>虚拟网络</strong>。为此，请打开 <strong>CloudShop.Azure</strong> 项目下的 <strong>ServiceConfiguration.Cloud.cscfg</strong>，添加突出显示的配置：</p>
+
+<!--mark: 9-18 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;?</span>xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;<span style="color:#0000FF">?&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">ServiceConfiguration</span> <span style="color:#FF0000">serviceName</span>=<span style="color:#0000FF">&quot;CloudShop.Azure&quot;</span> <span style="color:#FF0000">xmlns</span>=<span style="color:#0000FF">&quot;http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration&quot;</span> <span style="color:#FF0000">osFamily</span>=<span style="color:#0000FF">&quot;3&quot;</span> <span style="color:#FF0000">osVersion</span>=<span style="color:#0000FF">&quot;*&quot;</span> <span style="color:#FF0000">schemaVersion</span>=<span style="color:#0000FF">&quot;2012-10.1.8&quot;</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">Role</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;CloudShop&quot;</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">Instances</span> <span style="color:#FF0000">count</span>=<span style="color:#0000FF">&quot;1&quot;</span> <span style="color:#0000FF">/&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">ConfigurationSettings</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">Setting</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString&quot;</span> <span style="color:#FF0000">value</span>=<span style="color:#0000FF">&quot;UseDevelopmentStorage=true&quot;</span> <span style="color:#0000FF">/&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">ConfigurationSettings</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">Role</span><span style="color:#0000FF">&gt;</span>
+<strong class="markLine"><span style="color:#0000FF">&lt;</span><span style="color:#800000">NetworkConfiguration</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine"><span style="color:#0000FF">&lt;</span><span style="color:#800000">VirtualNetworkSite</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;MyVNET&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine"><span style="color:#0000FF">&lt;</span><span style="color:#800000">AddressAssignments</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">&lt;</span><span style="color:#800000">InstanceAddress</span> <span style="color:#FF0000">roleName</span>=<span style="color:#0000FF">&quot;CloudShop&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">Subnets</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">Subnet</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;AppSubnet&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">Subnets</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">InstanceAddress</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine"><span style="color:#0000FF">&lt;/</span><span style="color:#800000">AddressAssignments</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine"><span style="color:#0000FF">&lt;/</span><span style="color:#800000">NetworkConfiguration</span><span style="color:#0000FF">&gt;</span></strong>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">ServiceConfiguration</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+</ol>
+
+<p><a name="Ex2Task2"></a></p>
+
+<h4 id="Task_2_-_Publishing_the_MVC4_Application_to_Windows_Azure">任务 2 - 将 MVC4 应用程序发布到 Windows Azure</h4>
+
+<p>在此任务中，您将使用 Visual Studio 将 Web 应用程序发布到 Windows Azure。</p>
+
+<ol>
+<li><p>在 Visual Studio 中，右键单击 <strong>CloudShop.Azure</strong> 项目并选择<strong>“打包”</strong>。</p>
+
+<p><img src="Images/packaging-the-cloud-application.png?raw=true" alt="打包云应用程序" title="打包云应用程序" />
+</p>
+
+<p><em>打包云应用程序</em></p></li>
+<li><p>在<strong>“打包 Windows Azure 应用程序”</strong>对话框中，确保将<em>“服务配置”</em>设置为<strong>“云”</strong>，<em>“生成配置”</em>设置为<strong>“发布”</strong>。然后单击<strong>“打包”</strong>按钮。</p>
+
+<p><img src="Images/package-windows-azure-application-dialog.png?raw=true" alt="“打包 Windows Azure 应用程序”对话框" title="“打包 Windows Azure 应用程序”对话框" />
+</p>
+
+<p><em>“打包 Windows Azure 应用程序”对话框</em></p></li>
+<li><p>等待打包过程结束以继续下一步骤。</p></li>
+<li><p>使用 Web 浏览器导航到 <strong>Windows Azure 门户</strong>，然后使用与您的 Windows Azure 帐户关联的 <strong>Microsoft 帐户</strong>登录。</p></li>
+<li><p>单击位于页面底部的<strong>“新建”</strong>链接，选择<strong>“计算”</strong>|<strong>“云服务”</strong>，然后选择<strong>“自定义创建”</strong>。</p></li>
+<li><p>在<strong>“创建云服务”</strong>窗口中，在 <strong>URL</strong> 字段中输入 <strong>CloudShop</strong>，从<strong>“地区/地缘组”</strong>选择列表中选择 <strong>myag</strong>，选中<strong>“立即部署云服务包”</strong>选项。</p>
+
+<p><img src="Images/new-cloud-service5.png?raw=true" alt="新建云服务" title="新建云服务" />
+</p>
+
+<p><em>新建云服务</em></p></li>
+<li><p>在<strong>“发布云服务”</strong>窗口中，为新部署输入一个名称（例如 <strong>CloudShop</strong>）。输入您的包和配置文件的位置（通常位于云项目的 bin\Release\app.publish 文件夹下），并选中<strong>“即使一个或多个角色包含单个实例也进行部署”</strong>选项。然后单击<strong>“完成”</strong>按钮。</p>
+
+<p><img src="Images/new-cloud-service4.png?raw=true" alt="发布云服务" title="发布云服务" />
+</p>
+
+<p><em>发布云服务</em></p></li>
+<li><p>等待新的<em>“云服务”</em>完成部署和设置。</p></li>
+<li><p>当<em>“云服务”</em>状态变为<strong>“已创建”</strong>时，单击该服务的名称转到<strong>“面板”</strong>页。在该页中单击<strong>“速览”</strong>窗格中的<strong>“网站 URL”</strong>链接。</p>
+
+<p><img src="Images/cloud-service-dashboard.png?raw=true" alt="云服务面板" title="云服务面板" />
+</p>
+
+<p><em>云服务面板</em></p></li>
+<li><p>浏览器将显示 <strong>CloudShop</strong> 示例应用程序的主页。在<strong>搜索</strong>框中，输入 <em>Classic</em>，然后单击 <strong>Search</strong>（搜索）。页面会显示与搜索条件相符的所有产品。云应用正在使用公用端点访问 SQL Server 以检索产品列表。</p>
+
+<p><img src="./Images/Searching-Products.png?raw=true" alt="搜索产品" title="搜索产品" />
+</p>
+
+<p><em>搜索产品</em></p></li>
+</ol>
+
+<hr />
+
+<p><a name="Summary"></a></p>
+
+<h3 id="Summary">小结</h3>
+
+<p>通过完成此动手实验，您学习了如何：</p>
+
+<ul>
+<li>通过简单的虚拟网络将 Web 角色直接连接到虚拟机上运行的 SQL Server</li>
+<li>配置 SQL Server 虚拟机</li>
+<li>更新示例 Web 应用程序并将其部署到 Windows Azure 中的云应用</li>
+</ul> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-WindowsAzureVMandWebRoleVNet-VS2012/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+
