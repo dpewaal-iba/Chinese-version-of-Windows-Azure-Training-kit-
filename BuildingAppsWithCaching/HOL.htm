@@ -1,0 +1,1052 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 使用缓存服务构建 Windows Azure 云服务</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2013 年 4 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-BuildingAppsWithCaching" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-BuildingAppsWithCaching" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="HOLTop"></a></p>
+
+<h1 id="Building_Windows_Azure_Cloud_Services_with_Cache_Service">使用缓存服务构建 Windows Azure 云服务</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>Windows Azure 缓存服务为您的云服务提供经济高效的内存中分布式缓存。借助于在您的云服务角色上启用的缓存服务，您可以将服务主机上的空闲内存作为高性能缓存加以利用，以便改进响应时间和系统吞吐量。并且，因为缓存主机与您的云服务角色并置，所以，您可以通过避免外部服务调用，获得最佳访问时间。在此实验中，您将学习在您的云服务角色上实现缓存服务是多么容易，以及如何使用缓存服务向您的云服务提供高性能的内存中缓存。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>轻松快捷地启用缓存服务。</li>
+<li>将缓存服务用于您的 Asp.Net 会话状态。</li>
+<li>在缓存服务中缓存来自 Windows Azure SQL Database 的引用数据。</li>
+<li>为您的云服务创建可重复使用和可扩展的缓存层。</li>
+</ul>
+
+<p>在此实验过程中，您将了解如何在一个简单的 Asp.Net MVC4 应用程序中使用这些功能。</p>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li><a href="http://www.microsoft.com/visualstudio/">Microsoft Visual Studio 2012 Express for Web</a> 或更高版本</li>
+<li><a href="http://www.windowsazure.com/en-us/develop/downloads/">Windows Azure Tools for Microsoft Visual Studio 1.8</a></li>
+<li>Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>此动手实验针对 Windows 8 而设计。</p>
+</blockquote>
+<p><a name="Setup"></a></p>
+
+<h3 id="Setup">设置</h3>
+
+<p>为了执行此动手实验中的各项练习，首先需要对环境进行设置。</p>
+
+<ol>
+<li>打开 Windows 资源管理器窗口，浏览到此实验的 <strong>Source</strong> 文件夹。</li>
+<li>右键单击 <strong>Setup.cmd</strong> 并选择“以管理员身份运行”，以便启动设置过程，该过程将配置您的环境并安装此实验的 Visual Studio 代码段。</li>
+<li>如果显示“用户帐户控制”对话框，请确认操作以继续。</li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>请务必在运行安装程序前检查此实验的所有依赖项。</p>
+
+<p>此实验需要使用 Windows Azure SQL Database。为了自动生成 Northwind2 数据库，<strong>Setup.cmd</strong> 文件将提示您提供 Windows Azure SQL Database 帐户信息。请记住，在每个解决方案中，都需要将应用程序配置文件中的 NorthwingEntities 连接字符串更新为指向您的数据库。</p>
+
+<p>另外，还需要针对 Windows Azure SQL Database 帐户配置防火墙设置，以便允许您指定可访问 Windows Azure SQL Database 服务器的 IP 地址的列表。默认情况下，防火墙将拒绝所有连接，因此<strong>请务必配置允许列表</strong>以便您可以连接到该数据库。对防火墙设置的更改可能需要一段时间才能生效。有关如何准备您的 Windows Azure SQL Database 帐户的其他信息，请参考本培训包中的“Windows Azure SQL Database 简介”实验的练习 1。</p>
+
+<p><img src="Images/sql-database-setup.png?raw=true" alt="SQL Database 安装" title="Windows Azure SQL Database 安装" />
+</p>
+
+<p><em>Windows Azure SQL Database 安装</em></p>
+</blockquote>
+<p><a name="CodeSnippets"></a></p>
+
+<h3 id="Using_the_Code_Snippets">使用代码段</h3>
+
+<p>实验文档将指导您插入代码块。为方便起见，大部分代码是以 Visual Studio 代码段的形式提供的，您可以在 Visual Studio 2012 中使用而不必手动添加。</p>
+<blockquote>
+<p><strong>注意</strong>：每个练习都附带一个起始解决方案，它位于练习的 Begin 文件夹中，允许您独立执行每个练习。请注意，在练习期间添加的代码段不包含在这些起始解决方案中，在您完成练习前，这些代码段不一定起作用。在练习的源代码内，您还会看到一个 End 文件夹，其中包含在完成相应练习中的步骤之后所生成的 Visual Studio 解决方案代码。如果在进行此动手实验时需要更多帮助，可以使用这些解决方案作为指南。</p>
+</blockquote>
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#Exercise1">为会话状态启用缓存服务</a></li>
+<li><a href="#Exercise2">使用缓存服务缓存数据</a></li>
+<li><a href="#Exercise3">创建可重复使用和可扩展的缓存层</a></li>
+</ol>
+
+<p>完成此实验的估计时间：<strong>60 分钟</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>您首次启动 Visual Studio 时，必须选择一个预定义的设置集合。每个预定义的集合在设计上都对应于特定的开发风格，能够确定窗口布局、编辑器行为、IntelliSense 代码段和对话框选项。此实验中的过程介绍了在使用<strong>“常规开发设置”</strong>集合时，在 Visual Studio 中完成指定任务所需的操作。如果您为开发环境选择其他设置集合，需要考虑可能的过程差异。</p>
+</blockquote>
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Enable_Cache_service_for_Session_State">练习 1：为会话状态启用缓存服务</h3>
+
+<p>在此练习中，您将了解如何使用缓存服务的会话状态提供程序来作为会话状态数据的进程外存储机制。出于此目的，您将使用一个通过 Asp.Net MVC4 实现的示例购物车应用程序 —— Azure Store。您将在计算模拟器中运行此应用程序，然后对该应用程序进行修改以便利用 Windows Azure 缓存服务作为 Asp.Net 会话状态的后端存储。您将从一个起始解决方案开始，并且使用默认的 Asp.Net 进程中会话状态提供程序浏览该示例。接下来，您将添加对缓存程序集的引用，并且对会话状态提供程序进行配置以便在缓存服务提供的分布式缓存群集中存储购物车的内容。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Running_the_Azure_Store_Sample_Site_in_the_Compute_Emulator">任务 1 - 在计算模拟器中运行 Azure Store 示例网站</h4>
+
+<p>在此任务中，您将使用默认的会话状态提供程序在计算模拟器中运行该 Azure Store 应用程序；然后，您将更改该提供程序以便使用 Windows Azure 缓存服务。</p>
+
+<ol>
+<li>以管理员身份启动 <strong>Microsoft Visual Studio 2012 Express for Web</strong>。</li>
+<li><p>打开位于 <strong>Source\Ex1-CacheSessionState\Begin</strong> 的 <strong>Begin</strong> 解决方案。</p>
+<blockquote>
+<p><strong>重要提示：</strong>在执行该解决方案前，请确保设置了启动项目。对于 MVC 项目，起始页必须保留为空白。</p>
+
+<p>要设置启动项目，请在<strong>解决方案资源管理器</strong>中，右键单击 <strong>CloudShop.Azure</strong> 项目，然后选择<strong>“设为启动项目”</strong>。</p>
+
+<p>要设置起始页，请在<strong>解决方案资源管理器</strong>中，右键单击 <strong>CloudShop</strong> 项目，然后选择<strong>“属性”</strong>。在<strong>“属性”</strong>窗口中，选择 <strong>Web</strong> 选项卡，然后在<strong>“启动操作”</strong>中选择<strong>“特定页”</strong>。将此字段的值保留为空白。</p>
+</blockquote></li>
+<li><p>在 <strong>Web.config</strong> 文件中，更新 <em>NorthwindEntities</em> 连接字符串以便指向您的数据库。使用您在门户中注册并在安装过程中用于创建数据库的 Windows Azure SQL Database 服务器名称、管理员用户名和管理员密码替换 connectionStrings 部分中的 <strong>[YOUR-SQL-DATABASE-SERVER-ADDRESS]</strong>、<strong>[SQL-DATABASE-USERNAME]</strong> 和 <strong>[SQL-DATABASE-PASSWORD]</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>请确保遵守安装部分的说明，以便用您自己的 Windows Azure SQL Database 帐户创建 Northwind2 数据库的副本并且配置您的 Windows Azure SQL Database 防火墙设置。</p>
+</blockquote></li>
+<li><p>按 <strong>CTRL</strong> + <strong>F5</strong> 可生成并运行该应用程序，而不会在计算模拟器中进行调试。</p>
+<blockquote>
+<p><strong>注意：</strong>请确保在不进行调试的情况下运行该应用程序。在调试模式下，您将不能回收该 Web 角色</p>
+</blockquote></li>
+<li><p>浏览该应用程序的主页，即 <strong>Products</strong>（产品）页，该页将显示从 Windows Azure SQL Database 获取的产品的列表。</p>
+
+<p><img src="Images/azure-store-products-page.png?raw=true" alt="Azure Store 的产品页" title="Azure Store 的产品页" />
+</p>
+
+<p><em>Azure Store 的产品页</em></p></li>
+<li><p>从列表中选择一个产品，然后单击 <strong>Add item to cart</strong>（将商品添加到购物车）。您可以重复该过程以在购物车中存储其他商品。</p></li>
+<li><p>单击 <strong>Checkout</strong>（结账）链接以查看购物车的内容。验证您选择的商品显示在列表中。这些商品存储在当前会话中。</p>
+
+<p><img src="Images/checkout-page-showing-the-contents-of-the-sho.png?raw=true" alt="显示购物车内容的结账页" title="显示购物车内容的结账页" />
+</p>
+
+<p><em>显示购物车内容的结账页</em></p></li>
+<li><p>导航回 <strong>Products</strong>（产品）页。</p></li>
+<li><p>单击 <strong>Recycle</strong>（回收）链接。该链接将强制回收 Web 角色。一旦您单击该链接，“Products”（产品）页将变为空。</p></li>
+<li><p>在<strong>计算模拟器</strong>中，观察该模拟器是如何回收该 Web 角色的：</p>
+
+<p><img src="Images/suspending-the-service-role-instance.png?raw=true" alt="挂起服务角色实例" title="挂起服务角色实例" />
+</p>
+
+<p><em>回收 Web 角色</em></p></li>
+<li><p>返回浏览器，从地址栏中删除 <em>/Home/Recylce</em>，然后按 Enter 重新加载该网站。<strong>Products</strong>（产品）页应该在短暂延迟后恢复正常。</p></li>
+<li><p>导航到 <strong>Checkout</strong>（结账）页。请注意，订单现在显示为空。</p>
+<blockquote>
+<p><strong>注意：</strong>应用程序当前正在使用进程内会话状态，该状态在内存中维护会话状态。服务实例在停止时会丢弃所有会话状态，包括购物车的内容。在以下任务中，您将对应用程序进行配置，以便使用 Windows Azure Caching 作为存储机制来存储会话状态，这允许应用程序在重新启动时和应用程序承载在多个角色实例时维护会话状态。</p>
+</blockquote></li>
+<li><p>关闭浏览器窗口以停止应用程序。</p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Adding_a_dedicated_caching_role">任务 2 - 添加专用的缓存角色</h4>
+
+<p>在此任务中，您将添加一个充当专用缓存主机的新的辅助角色。云服务中的所有其他 Web 角色和辅助角色都将能够访问此角色承载的缓存服务。您可以在云服务内设置多个此类专用辅助角色。此外，您还可以在任何现有角色上启用缓存服务并且分配一定百分比的虚拟机内存用作缓存。</p>
+
+<ol>
+<li>在解决方案资源管理器中，展开 <strong>CloudShop.Azure</strong> 节点，然后右键单击<strong>“角色”</strong>。然后，选择<strong>“添加”</strong>-&gt;<strong>“新建辅助角色项目...”</strong>*。</li>
+<li>在<strong>“添加新角色项目”</strong>对话框中，选择<strong>“缓存辅助角色”</strong>模板。将该角色命名为 <strong>CacheWorkerRole</strong>，然后单击<strong>“添加”</strong>。</li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>您的云服务中的所有缓存主机都通过 Windows Azure Blog 存储共享其运行时状态。默认情况下，缓存辅助角色配置为使用开发存储。您可以在角色属性页上的<strong>“缓存”</strong>选项卡中更改此设置。</p>
+</blockquote>
+<p><a name="Ex1Task3"></a></p>
+
+<h4 id="Task_3_-_Configuring_Session_State_Using_Windows_Azure_Cache_service">任务 3 - 使用 Windows Azure 缓存服务配置会话状态</h4>
+
+<p>在此任务中，您将更改会话状态提供程序以便将 Windows Azure 缓存用作存储机制。这要求将相应程序集添加到 <strong>CloudShop</strong> 项目中，然后在 <strong>Web.config</strong> 文件中更新相应配置。</p>
+
+<ol>
+<li><p>在 Visual Studio 2012 Express for Web 中，从<strong>“工具”</strong>-&gt;<strong>“库包管理器”</strong>-&gt;<strong>“包管理器控制台”</strong>菜单中打开<strong>“包管理器控制台”</strong>。</p></li>
+<li><p>请确保在<strong>“默认项目”</strong>下拉列表中选择了 <strong>CloudShop</strong>。发出以下命令以便为缓存服务安装 Nuget 包：</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Install-package Microsoft.WindowsAzure.Caching 
+</code></pre></li>
+<li><p>打开位于 <strong>CloudShop</strong> 项目根文件夹中的 <strong>Web.config</strong> 文件。</p></li>
+<li><p>将 <strong>[cache cluster role name]</strong> 更改为 <strong>CacheWorkerRole</strong>。</p>
+
+<!--mark: 4 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">dataCacheClients</span><span style="color:#0000FF">&gt;</span>
+ <span style="color:#0000FF">&lt;</span><span style="color:#800000">tracing</span> <span style="color:#FF0000">sinkType</span>=<span style="color:#0000FF">&quot;DiagnosticSink&quot;</span> <span style="color:#FF0000">traceLevel</span>=<span style="color:#0000FF">&quot;Error&quot;</span> <span style="color:#0000FF">/&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">dataCacheClient</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;default&quot;</span><span style="color:#0000FF">&gt;</span>
+<strong class="markLine">   <span style="color:#0000FF">&lt;</span><span style="color:#800000">autoDiscover</span> <span style="color:#FF0000">isEnabled</span>=<span style="color:#0000FF">&quot;true&quot;</span> <span style="color:#FF0000">identifier</span>=<span style="color:#0000FF">&quot;CacheWorkerRole&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+  <span style="color:#008000">&lt;!--&lt;localCache isEnabled=&quot;true&quot; sync=&quot;TimeoutBased&quot; objectCount=&quot;100000&quot; ttlValue=&quot;300&quot; /&gt;--&gt;</span>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">dataCacheClient</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">dataCacheClients</span><span style="color:#0000FF">&gt;</span>
+  ...
+</code></pre></li>
+<li><p>在 System.Web 标记下添加一个新的会话状态提供程序配置：</p>
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">system.Web</span><span style="color:#0000FF">&gt;</span>
+...
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">sessionState</span> <span style="color:#FF0000">mode</span>=<span style="color:#0000FF">&quot;Custom&quot;</span> <span style="color:#FF0000">customProvider</span>=<span style="color:#0000FF">&quot;NamedCacheBProvider&quot;</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">cacheName</span>=<span style="color:#0000FF">&quot;default&quot;</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;NamedCacheBProvider&quot;</span> 
+         <span style="color:#FF0000">dataCacheClientName</span>=<span style="color:#0000FF">&quot;default&quot;</span> <span style="color:#FF0000">applicationName</span>=<span style="color:#0000FF">&quot;MyApp&quot;</span> 
+         <span style="color:#FF0000">type</span>=<span style="color:#0000FF">&quot;Microsoft.Web.DistributedCache.DistributedCacheSessionStateStoreProvider, Microsoft.Web.DistributedCache&quot;</span> <span style="color:#0000FF">/&gt;</span>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">sessionState</span><span style="color:#0000FF">&gt;</span>
+...
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存对 <strong>Web.config</strong> 文件的更改。</p></li>
+</ol>
+
+<p><a name="Ex1Task4"></a></p>
+
+<h4 id="Task_4_-_Verification">任务 4 - 验证</h4>
+
+<ol>
+<li>按 <strong>Ctrl + F5</strong> 生成并运行该应用程序。等待浏览器启动并显示 <strong>Products</strong>（产品）页。</li>
+<li>从列表中选择一个产品，然后单击“Add item to cart”（将商品添加到购物车）。重复该过程以在购物车中存储其他商品。</li>
+<li>单击 <strong>Checkout</strong>（结账）链接以查看购物车的内容。验证您选择的商品显示在列表中。</li>
+<li>导航回 <strong>Products</strong>（产品）页并单击“Recycle”（回收）链接。</li>
+<li>观察在 <strong>显示计算模拟器 UI</strong> 中回收的 Web 角色。</li>
+<li>返回浏览器，从地址栏中删除 <em>/Home/Recycle</em>，然后按 Enter 重新加载该网站。</li>
+<li><p><strong>Products</strong>（产品）页应正确加载。导航到 <strong>Checkout</strong>（结账）页。请注意，订单保持不变。这证实了对于 Windows Azure Caching 提供程序，会话状态存储于角色实例之外，并且在应用程序重新启动时仍保留会话状态。</p>
+<blockquote>
+<p><strong>注意：</strong>从验证结果应该可以推断出，对于承载于多个服务器或多个 Windows Azure 角色实例并且利用负载平衡器来分发请求的应用程序，客户端将继续有权访问其会话数据，而与哪个实例将响应请求无关。</p>
+</blockquote></li>
+<li><p>关闭浏览器窗口以停止应用程序。</p></li>
+</ol>
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Caching_Data_with_Windows_Azure_Caching">练习 2：使用 Windows Azure Caching 缓存数据</h3>
+
+<p>此练习将演示如何使用 Windows Azure Caching 来缓存针对 Windows Azure SQL Database 的查询结果。您所使用的解决方案与前一个练习中所使用的解决方案稍有不同，唯一的区别在于主页，更新的主页显示了检索目录中产品列表所用的时间，并且现在具有一个链接，可启用或禁用缓存。在练习过程中，您将通过一个小小的缓存实现来更新数据访问代码。它使用规范模式，其中，代码首先检查缓存以便检索查询的结果，并且如果没有可用数据，则对数据库执行查询以便缓存结果。</p>
+
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_-_Caching_Data_Retrieved_from_the_SQL_Reporting">任务 1 - 缓存从 SQL Reporting 检索的数据</h4>
+
+<p>若要使用 Windows Azure Caching，您首先需要创建一个 <strong>DataCacheFactory</strong> 对象。该对象确定缓存群集连接信息，该信息是以编程方式设置的，或者是通过从配置文件读取设置来获得的。通常，您创建工厂类的一个实例并且将该实例用于应用程序的生存期。若要在缓存中存储数据，您从 <strong>DataCacheFactory</strong> 请求一个 <strong>DataCache</strong> 实例，然后使用该实例从缓存中添加或检索项。在此任务中，您将更新数据访问代码以便使用 Windows Azure Caching 来缓存对 Windows Azure SQL Database 的查询结果。</p>
+
+<ol>
+<li>以管理员身份启动 <strong>Microsoft Visual Studio 2012 Express for Web</strong>。</li>
+<li><p>打开位于 <strong>Source\Ex2-CachingData\Begin</strong> 的 <strong>Begin</strong> 解决方案。</p>
+<blockquote>
+<p><strong>重要提示：</strong>在执行该解决方案前，请确保设置了启动项目。对于 MVC 项目，起始页必须保留为空白。要设置启动项目，请在<strong>解决方案资源管理器</strong>中，右键单击 <strong>CloudShop.Azure</strong> 项目，然后选择<strong>“设为启动项目”</strong>。要设置起始页，请在<strong>解决方案资源管理器</strong>中，右键单击 <strong>CloudShop</strong> 项目，然后选择<strong>“属性”</strong>。在<strong>“属性”</strong>窗口中，选择 <strong>Web</strong> 选项卡，然后在<strong>“启动操作”</strong>中选择<strong>“特定页”</strong>。将此字段的值保留为空白。</p>
+</blockquote></li>
+<li><p>在 <strong>Web.config</strong> 文件中，更新 <em>NorthwindEntities</em> 连接字符串以便指向您的数据库。使用您在门户中注册并用于在安装过程中创建数据库的 Windows Azure SQL Database 服务器名称、管理员用户名和管理员密码替换 <strong>[YOUR-SQL-DATABASE-SERVER-ADDRESS]</strong>、<strong>[SQL-DATABASE-USERNAME]</strong> 和 <strong>[SQL-DATABASE-PASSWORD]</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>请确保遵守安装部分的说明，以便用您自己的 Windows Azure SQL Database 帐户创建 Northwind2 数据库的副本并且配置您的 Windows Azure SQL Database 防火墙设置。</p>
+</blockquote></li>
+<li><p>打开 <strong>CloudShop</strong> 项目的 <strong>Services</strong> 文件夹中的 <strong>ProductsRepository.cs</strong> 文件。</p></li>
+<li><p>为 <strong>Microsoft.ApplicationServer.Caching</strong> 添加一个命名空间指令。</p>
+
+<!--mark: 5 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">using</span> System;
+<span style="color:#0000FF">using</span> System.Collections.Generic;
+<span style="color:#0000FF">using</span> System.Linq;
+<span style="color:#0000FF">using</span> CloudShop.Models;
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.ApplicationServer.Caching;</strong>
+...
+</code></pre></li>
+<li><p>在 <strong>ProductsRepository</strong> 类中，添加以下突出显示的代码以便定义构造函数，并且为 <strong>DataCacheFactory</strong> 对象实例声明一个静态成员变量，以及声明一个布尔实例变量以控制对缓存的使用。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex2-ProductsRepository constructor-CS</em>）</p>
+
+<!--mark: 3-9 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> ProductsRepository : IProductRepository {
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">static</span> DataCacheFactory cacheFactory = <span style="color:#0000FF">new</span> DataCacheFactory();</strong>
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">bool</span> enableCache = <span style="color:#0000FF">false</span>;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">  <span style="color:#0000FF">public</span> ProductsRepository(<span style="color:#0000FF">bool</span> enableCache)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.enableCache = enableCache;</strong>
+<strong class="markLine">  }</strong>
+
+  <span style="color:#0000FF">public</span> List&lt;<span style="color:#0000FF">string</span>&gt; GetProducts() { ... } }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>DataCacheFactory</strong> 成员声明为静态的，并且在应用程序的整个生存期中使用。</p>
+</blockquote></li>
+<li><p>找到 <strong>GetProducts</strong> 方法并将以下（突出显示的）代码插入声明 <strong>products</strong> 局部变量的行的紧后面。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex2-GetProducts read cache-CS</em>）</p>
+
+<!--mark: 8-30 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> ProductsRepository : IProductRepository { ...
+  <span style="color:#0000FF">public</span> List&lt;<span style="color:#0000FF">string</span>&gt; GetProducts() { List&lt;<span style="color:#0000FF">string</span>&gt; products = <span style="color:#0000FF">null</span>;
+
+<strong class="markLine">    DataCache dataCache = <span style="color:#0000FF">null</span>;</strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (<span style="color:#0000FF">this</span>.enableCache)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">try</span></strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        dataCache = cacheFactory.GetDefaultCache();</strong>
+<strong class="markLine">        products = dataCache.Get(<span style="color:#8B0000">&quot;products&quot;</span>) <span style="color:#0000FF">as</span> List&lt;<span style="color:#0000FF">string</span>&gt;;</strong>
+<strong class="markLine">        <span style="color:#0000FF">if</span> (products != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">          products[0] = <span style="color:#8B0000">&quot;(from cache)&quot;</span>;</strong>
+<strong class="markLine">          <span style="color:#0000FF">return</span> products;</strong>
+<strong class="markLine">        }</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine">      <span style="color:#0000FF">catch</span> (DataCacheException ex)</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        <span style="color:#0000FF">if</span> (ex.ErrorCode != DataCacheErrorCode.RetryLater)</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">          <span style="color:#0000FF">throw</span>;</strong>
+<strong class="markLine">        }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#008000">// ignore temporary failures</span></strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine">    }</strong>
+
+    NorthwindEntities context = <span style="color:#0000FF">new</span> NorthwindEntities();
+
+    <span style="color:#0000FF">try</span>
+    {
+      <span style="color:#0000FF">var</span> query = from product <span style="color:#0000FF">in</span> context.Products select product.ProductName; products = query.ToList(); }
+    <span style="color:#0000FF">finally</span>
+    {
+      <span style="color:#0000FF">if</span> (context != <span style="color:#0000FF">null</span>) { context.Dispose(); } }
+
+    <span style="color:#0000FF">return</span> products; } }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>插入的代码使用 <strong>DataCacheFactory</strong> 对象返回默认缓存对象的实例，然后尝试通过将某一键用于值 &quot;<em>products</em>&quot; 从该缓存中检索某一项。如果缓存包含具有请求的键的对象，则它会设置第一个条目的文本以便指示列表已从缓存检索，然后返回该列表。该代码会将来自 Windows Azure Caching 服务的暂时性故障作为缓存未命中处理，这样，它就可以改为从其数据源检索项。</p>
+</blockquote></li>
+<li><p>接下来，将以下（突出显示的）代码块添加到 <strong>GetProducts</strong> 方法，放置在该方法末尾的返回 <strong>products</strong> 列表的行之前。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex2-GetProducts write cache-CS</em>）</p>
+
+<!--mark: 30-35 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> ProductsRepository : IProductRepository { ...
+    <span style="color:#0000FF">public</span> List&lt;<span style="color:#0000FF">string</span>&gt; GetProducts() { List&lt;<span style="color:#0000FF">string</span>&gt; products = <span style="color:#0000FF">null</span>; DataCache dataCache = <span style="color:#0000FF">null</span>;
+        <span style="color:#0000FF">if</span> (<span style="color:#0000FF">this</span>.enableCache) { ... } NorthwindEntities context = <span style="color:#0000FF">new</span> NorthwindEntities();
+
+        <span style="color:#0000FF">try</span>
+        {
+          <span style="color:#0000FF">var</span> query = from product <span style="color:#0000FF">in</span> context.Products select product.ProductName; products = query.ToList(); }
+        <span style="color:#0000FF">finally</span>
+        {
+          <span style="color:#0000FF">if</span> (context != <span style="color:#0000FF">null</span>) { context.Dispose(); } }
+
+<strong class="markLine">        products.Insert(0, <span style="color:#8B0000">&quot;(from data source)&quot;</span>);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#0000FF">if</span> (<span style="color:#0000FF">this</span>.enableCache &amp;&amp; dataCache != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">          dataCache.Add(<span style="color:#8B0000">&quot;products&quot;</span>, products, TimeSpan.FromSeconds(30));</strong>
+<strong class="markLine">        }</strong>
+
+        <span style="color:#0000FF">return</span> products; } }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>插入的代码将针对数据源的查询结果存储于缓存中，并且设置其到期策略以便在 30 秒后从缓存中清除该项。</p>
+</blockquote></li>
+</ol>
+
+<p><a name="Ex2Task2"></a></p>
+
+<h4 id="Task_2_-_Measuring_the_Data_Access_Latency">任务 2 - 测量数据访问延迟</h4>
+
+<p>在此任务中，您将更新应用程序以便允许从 UI 控制对缓存的使用以及显示检索目录数据所需的时间，并且允许您将从缓存检索数据的延迟时间与访问数据源所需的时间进行比较。</p>
+
+<ol>
+<li><p>打开 <strong>Controllers</strong> 文件夹中的 <strong>HomeController.cs</strong> 文件，然后使用文件顶部的指令添加 <strong>System.Diagnostics</strong>。</p>
+
+<!-- mark:1 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> System.Diagnostics;</strong>
+</code></pre></li>
+<li><p>查找 <strong>Index</strong> 操作，找到实例化一个新的 <strong>ProductsRepository</strong> 并调用其 <strong>GetProducts</strong> 方法的行，并且使用突出显示的代码替换这些行，如下所示。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex2-GetProducts latency-CS</em>）</p>
+
+<!--mark: 9-17; strike:6-8 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> HomeController : Controller { ...                       
+  <span style="color:#0000FF">public</span> ActionResult Index() {
+<span class="strikeLine" style="text-decoration:line-through;">    Services.IProductRepository productRepository =</span>
+<span class="strikeLine" style="text-decoration:line-through;">        <span style="color:#0000FF">new</span> Services.ProductsRepository();</span>
+<span class="strikeLine" style="text-decoration:line-through;">    <span style="color:#0000FF">var</span> products = productRepository.GetProducts();</span>
+<strong class="markLine">    <span style="color:#0000FF">bool</span> enableCache = (<span style="color:#0000FF">bool</span>)<span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;EnableCache&quot;</span>];</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#008000">// retrieve product catalog from repository and measure the elapsed time</span></strong>
+<strong class="markLine">    Services.IProductRepository productRepository =</strong>
+<strong class="markLine">        <span style="color:#0000FF">new</span> Services.ProductsRepository(enableCache);</strong>
+<strong class="markLine">    Stopwatch stopWatch = <span style="color:#0000FF">new</span> Stopwatch();</strong>
+<strong class="markLine">    stopWatch.Start();</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> products = productRepository.GetProducts();</strong>
+<strong class="markLine">    stopWatch.Stop();</strong>
+
+    <span style="color:#008000">// add all products currently not in session</span>
+    <span style="color:#0000FF">var</span> itemsInSession = <span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;Cart&quot;</span>] <span style="color:#0000FF">as</span> List&lt;<span style="color:#0000FF">string</span>&gt; ?? <span style="color:#0000FF">new</span> List&lt;<span style="color:#0000FF">string</span>&gt;();
+    <span style="color:#0000FF">var</span> filteredProducts = products.Where(item =&gt; !itemsInSession.Contains(item)); IndexViewModel model = <span style="color:#0000FF">new</span> IndexViewModel() { Products = filteredProducts };
+
+    <span style="color:#0000FF">return</span> View(model); } ... }
+</code></pre></li>
+<li><p>在同一个方法中，找到创建一个新的 <strong>IndexViewModel</strong> 实例的代码，并且使用以下（突出显示的）代码块替换其初始化。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex2-IndexViewModel initialization-CS</em>）</p>
+
+<!--mark: 22-25 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> HomeController : Controller { ...                       
+  <span style="color:#0000FF">public</span> ActionResult Index() {
+    <span style="color:#0000FF">bool</span> enableCache = (<span style="color:#0000FF">bool</span>)<span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;EnableCache&quot;</span>];
+
+    <span style="color:#008000">// retrieve product catalog from repository and measure the elapsed time</span>
+    Services.IProductRepository productRepository =
+        <span style="color:#0000FF">new</span> Services.ProductsRepository(enableCache); Stopwatch stopWatch = <span style="color:#0000FF">new</span> Stopwatch(); stopWatch.Start();
+    <span style="color:#0000FF">var</span> products = productRepository.GetProducts(); stopWatch.Stop();
+
+    <span style="color:#008000">// add all products currently not in session</span>
+    <span style="color:#0000FF">var</span> itemsInSession = <span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;Cart&quot;</span>] <span style="color:#0000FF">as</span> List&lt;<span style="color:#0000FF">string</span>&gt; ?? <span style="color:#0000FF">new</span> List&lt;<span style="color:#0000FF">string</span>&gt;();
+    <span style="color:#0000FF">var</span> filteredProducts = products.Where(item =&gt; !itemsInSession.Contains(item)); IndexViewModel model = <span style="color:#0000FF">new</span> IndexViewModel() {
+<strong class="markLine">      Products = filteredProducts,</strong>
+<strong class="markLine">      ElapsedTime = stopWatch.ElapsedMilliseconds,</strong>
+<strong class="markLine">      IsCacheEnabled = enableCache,</strong>
+<strong class="markLine">      ObjectId = products.GetHashCode().ToString()</strong>
+    };
+
+    <span style="color:#0000FF">return</span> View(model); } ... }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>添加到查看模型的元素提供从存储库加载产品目录所用的时间、指示是否启用缓存的标志以及由对 <strong>GetProducts</strong> 的调用返回的目录对象的标识符。该视图显示对象 ID，以便允许您确定是否更改对存储库的调用返回的实例。在本练习的后面在您启用本地缓存时将使用此功能。</p>
+</blockquote></li>
+<li><p>将一个新的操作方法添加到 <strong>HomeController</strong>，以便从应用程序的 UI 启用或禁用缓存。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex2-EnableCache method-CS</em>）</p>
+
+<!--mark: 4-8 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> HomeController : Controller { ...
+<strong class="markLine">  <span style="color:#0000FF">public</span> ActionResult EnableCache(<span style="color:#0000FF">bool</span> enabled)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;EnableCache&quot;</span>] = enabled;</strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> RedirectToAction(<span style="color:#8B0000">&quot;Index&quot;</span>);</strong>
+<strong class="markLine">  }</strong>
+ }
+</code></pre></li>
+<li><p>按 <strong>F5</strong> 在计算模拟器中生成并启动应用程序。</p>
+<blockquote>
+<p><strong>注意：</strong>理想状态下，您应该在 Windows Azure 中测试代码。当您在计算模拟器中执行应用程序时，考虑访问 Windows Azure SQL Database 数据源和 Windows Azure Caching 要求执行对位于您自己网络边界外的资源的请求。根据您所在的地理位置，两个请求都可能会表现出相对较高的延迟，这可能会掩盖缓存和未缓存这两种情况之间的差异。在您将应用程序部署到 Windows Azure 后，它将与 Windows Azure SQL Database 中的 Windows Azure Caching 服务共置于同一个数据中心中。因为延迟会短得多，所以结果应该会更有意义。</p>
+</blockquote></li>
+<li><p>当您启动应用程序时，最初将禁用缓存。刷新该页并且注意在该页底部显示的所用时间，该时间指示检索产品目录所需的时间。请注意，该列表中的第一项指示应用程序从数据源检索了产品目录。</p>
+<blockquote>
+<p><strong>注意：</strong>您可能需要几次刷新该页，以便获取稳定的读取内容。为第一个请求显示的值可能较大，因为 ASP.NET 需要对该页进行编译。</p>
+</blockquote>
+<p><img src="Images/running-the-application-without-the-cache.png?raw=true" alt="在没有缓存的情况下运行应用程序" title="在没有缓存的情况下运行应用程序" />
+</p>
+
+<p><em>在没有缓存的情况下运行应用程序</em></p></li>
+<li><p>观察在产品目录的上方显示的 <strong>Object ID</strong>（对象 ID）指示器，并且注意每次您刷新该页时该指示器是如何更改的，表明存储库为每个调用返回不同对象。</p></li>
+<li><p>现在，在 <strong>Enable Cache</strong>（启用缓存）中单击 <strong>Yes</strong>（是）并且等待该页刷新。请注意，列表中的第一项指示应用程序仍需要从数据源检索产品目录，因为这些信息尚未被缓存。</p></li>
+<li><p>单击 <strong>Products</strong>（产品）或者在浏览器中刷新该页。这一次，应用程序将从 Windows Azure Caching 中检索产品数据，并且所用时间应较低。确认该列表中的第一项指示信息的源是缓存。</p>
+
+<p><img src="Images/running-the-application-with-the-cache-enable.png?raw=true" alt="在启用了缓存的情况下运行应用程序" title="在启用了缓存的情况下运行应用程序" />
+</p>
+
+<p><em>在启用了缓存的情况下运行应用程序</em></p></li>
+<li><p>关闭浏览器。</p></li>
+</ol>
+
+<p><a name="Ex2Task3"></a></p>
+
+<h4 id="Task_3_-_Enabling_the_Local_Cache">任务 3 - 启用本地缓存</h4>
+
+<p>在使用 Windows Azure Caching 时，您具有使用本地缓存的选项，允许在客户端的内存中缓存对象，以及存储于缓存群集中。在此任务中，您将启用本地缓存，然后将访问时间与远程情况下的访问时间进行比较。</p>
+
+<ol>
+<li><p>打开 <strong>CloudShop</strong> 项目的 <strong>Services</strong> 文件夹中的 <strong>ProductsRepository.cs</strong> 文件。</p>
+<blockquote>
+<p><strong>注意：</strong>在编辑文件前请确保您的解决方案未在运行。</p>
+</blockquote></li>
+<li><p>在 <strong>ProductsRepository</strong> 类中，使用以下代码替换当前成员字段和构造函数，以便添加用于管理 localCache 配置的逻辑。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex2-ProductsRepository with local cache-CS</em>）</p>
+
+<!--mark: 2-34 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#">... 
+<strong class="markLine"><span style="color:#0000FF">private</span> <span style="color:#0000FF">static</span> DataCacheFactory cacheFactory;</strong>
+<strong class="markLine"><span style="color:#0000FF">private</span> <span style="color:#0000FF">static</span> DataCacheFactoryConfiguration factoryConfig;</strong>
+<strong class="markLine"><span style="color:#0000FF">private</span> <span style="color:#0000FF">bool</span> enableCache = <span style="color:#0000FF">false</span>;</strong>
+<strong class="markLine"><span style="color:#0000FF">private</span> <span style="color:#0000FF">bool</span> enableLocalCache = <span style="color:#0000FF">false</span>;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine"><span style="color:#0000FF">public</span> ProductsRepository(<span style="color:#0000FF">bool</span> enableCache, <span style="color:#0000FF">bool</span> enableLocalCache)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.enableCache = enableCache;</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.enableLocalCache = enableLocalCache;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (enableCache)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        <span style="color:#0000FF">if</span> (enableLocalCache &amp;&amp; (factoryConfig == <span style="color:#0000FF">null</span> || !factoryConfig.LocalCacheProperties.IsEnabled))</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">            TimeSpan localTimeout = <span style="color:#0000FF">new</span> TimeSpan(0, 0, 30);</strong>
+<strong class="markLine">            DataCacheLocalCacheProperties localCacheConfig = <span style="color:#0000FF">new</span> DataCacheLocalCacheProperties(10000, localTimeout, DataCacheLocalCacheInvalidationPolicy.TimeoutBased);</strong>
+<strong class="markLine">            factoryConfig = <span style="color:#0000FF">new</span> DataCacheFactoryConfiguration();</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">            factoryConfig.LocalCacheProperties = localCacheConfig;</strong>
+<strong class="markLine">            cacheFactory = <span style="color:#0000FF">new</span> DataCacheFactory(factoryConfig);</strong>
+<strong class="markLine">        }</strong>
+<strong class="markLine">        <span style="color:#0000FF">else</span> <span style="color:#0000FF">if</span> (!enableLocalCache &amp;&amp; (factoryConfig == <span style="color:#0000FF">null</span> || factoryConfig.LocalCacheProperties.IsEnabled))</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">            cacheFactory = <span style="color:#0000FF">null</span>;</strong>
+<strong class="markLine">        }</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (cacheFactory == <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        factoryConfig = <span style="color:#0000FF">new</span> DataCacheFactoryConfiguration();</strong>
+<strong class="markLine">        cacheFactory = <span style="color:#0000FF">new</span> DataCacheFactory(factoryConfig);</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">} </strong>
+...
+</code></pre></li>
+<li><p>打开 <strong>Controllers</strong> 文件夹中的 <strong>HomeController.cs</strong> 文件，并且找到 <strong>Index</strong> 操作。找到实例化新的 <strong>ProductsRepository</strong> 的行，然后使用以下突出显示的代码替换这些行：</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex2-GetProducts LocalCache-CS</em>）</p>
+
+<!--mark: 7-10; strike: 11-13 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> HomeController : Controller { ...                       
+  <span style="color:#0000FF">public</span> ActionResult Index() {
+    <span style="color:#0000FF">bool</span> enableCache = (<span style="color:#0000FF">bool</span>)<span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;EnableCache&quot;</span>];
+<strong class="markLine">    <span style="color:#0000FF">bool</span> enableLocalCache = (<span style="color:#0000FF">bool</span>)<span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;EnableLocalCache&quot;</span>];</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#008000">// retrieve product catalog from repository and measure the elapsed time</span></strong>
+<strong class="markLine">    Services.IProductRepository productRepository = <span style="color:#0000FF">new</span> Services.ProductsRepository(enableCache, enableLocalCache);</strong>
+<span class="strikeLine" style="text-decoration:line-through;">    <span style="color:#008000">// retrieve product catalog from repository and measure the elapsed time</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">    Services.IProductRepository productRepository =</span>
+<span class="strikeLine" style="text-decoration:line-through;">    <span style="color:#0000FF">new</span> Services.ProductsRepository(enableCache);</span>
+    Stopwatch stopwatch = <span style="color:#0000FF">new</span> Stopwatch(); stopWatch.Start();
+    <span style="color:#0000FF">var</span> products = productRepository.GetProducts(); ... }
+</code></pre></li>
+<li><p>在同一个方法中，找到创建新的 <strong>IndexViewModel</strong> 的代码，然后添加以下突出显示的属性。</p>
+
+<!--mark: 25 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> HomeController : Controller { ...                       
+  <span style="color:#0000FF">public</span> ActionResult Index() {
+      <span style="color:#0000FF">bool</span> enableCache = (<span style="color:#0000FF">bool</span>)<span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;EnableCache&quot;</span>];
+      <span style="color:#0000FF">bool</span> enableLocalCache = (<span style="color:#0000FF">bool</span>)<span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;EnableLocalCache&quot;</span>];
+      <span style="color:#008000">// retrieve product catalog from repository and measure the elapsed time</span>
+      Services.IProductRepository productRepository =
+      <span style="color:#0000FF">new</span> Services.ProductsRepository(enableCache, enableLocalCache); Stopwatch stopwatch = <span style="color:#0000FF">new</span> Stopwatch(); stopWatch.Start();
+      <span style="color:#0000FF">var</span> products = productRepository.GetProducts(); stopWatch.Stop();
+
+      <span style="color:#008000">// add all products currently not in session</span>
+      <span style="color:#0000FF">var</span> itemsInSession = <span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;Cart&quot;</span>] <span style="color:#0000FF">as</span> List&lt;<span style="color:#0000FF">string</span>&gt; ?? <span style="color:#0000FF">new</span> List&lt;<span style="color:#0000FF">string</span>&gt;();
+      <span style="color:#0000FF">var</span> filteredProducts = products.Where(item =&gt; !itemsInSession.Contains(item)); IndexViewModel model = <span style="color:#0000FF">new</span> IndexViewModel() { Products = filteredProducts, ElapsedTime = stopWatch.ElapsedMilliseconds, IsCacheEnabled = enableCache,
+<strong class="markLine">          IsLocalCacheEnabled = enableLocalCache,</strong>
+          ObjectId = products.GetHashCode().ToString() };
+      <span style="color:#0000FF">return</span> View(model); } }
+</code></pre></li>
+<li><p>将一个新的操作方法添加到 <strong>HomeController</strong>，以便从应用程序的 UI 启用或禁用本地缓存。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex2-EnableLocalCache method-CS</em>）</p>
+
+<!--mark: 4-8 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> HomeController : Controller { ...
+<strong class="markLine">  <span style="color:#0000FF">public</span> ActionResult EnableLocalCache(<span style="color:#0000FF">bool</span> enabled)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;EnableLocalCache&quot;</span>] = enabled;</strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> RedirectToAction(<span style="color:#8B0000">&quot;Index&quot;</span>);</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>打开 <strong>Views\Home</strong> 文件夹中的 <strong>Index.cshtml</strong> 文件，然后在 <strong>elapsedTime</strong> div 的上方添加以下突出显示的代码。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex2-EnableLocalCache Option-HTML</em>）</p>
+
+<!--mark: 12-23 -->
+
+<span class="codelanguage">HTML</span><pre><code class="HTML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">fieldset</span><span style="color:#0000FF">&gt;</span>
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">legend</span><span style="color:#0000FF">&gt;</span>Cache settings for product data<span style="color:#0000FF">&lt;/</span><span style="color:#800000">legend</span><span style="color:#0000FF">&gt;</span>Enable Cache: @if (Model.IsCacheEnabled) {
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span>Yes |<span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span>@Html.ActionLink(&quot;No&quot;, &quot;EnableCache&quot;, new { enabled = false })<span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span>
+     } else {
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span>@Html.ActionLink(&quot;Yes&quot;, &quot;EnableCache&quot;, new { enabled = true })<span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span> | No<span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span>
+     }
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">br</span> <span style="color:#0000FF">/&gt;</span>
+<strong class="markLine">     @if(Model.IsCacheEnabled)</strong>
+<strong class="markLine">     {</strong>
+<strong class="markLine">          <span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span>Use Local Cache:<span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">          if (Model.IsLocalCacheEnabled)</strong>
+<strong class="markLine">          {</strong>
+<strong class="markLine">                <span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span>Yes |<span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span>@Html.ActionLink(&quot;No&quot;, &quot;EnableLocalCache&quot;, new { enabled = false })<span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">          }</strong>
+<strong class="markLine">          else</strong>
+<strong class="markLine">          {</strong>
+<strong class="markLine">                <span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span>@Html.ActionLink(&quot;Yes&quot;, &quot;EnableLocalCache&quot;, new { enabled = true })<span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span> | No<span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">          }</strong>
+<strong class="markLine">     }</strong>
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">id</span>=<span style="color:#0000FF">&quot;elapsedTime&quot;</span><span style="color:#0000FF">&gt;</span>Elapsed time: @Model.ElapsedTime.ToString() milliseconds.<span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">fieldset</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>按 <strong>F5</strong> 在计算模拟器中生成并启动应用程序。</p></li>
+<li><p>在您启动该应用程序时，缓存选项最初将被禁用，并且隐藏本地缓存选项（在您启用缓存后该选项将显示）。启用缓存，然后启用本地缓存。</p></li>
+<li><p>刷新该页几次，直到所用时间稳定。请注意，读取速度现在将显著降低，可能低于 1 毫秒，这表明应用程序现在从本地内存中缓存检索数据。</p>
+
+<p><img src="Images/using-the-local-cache.png?raw=true" alt="使用本地缓存" title="使用本地缓存" />
+</p>
+
+<p><em>使用本地缓存</em></p></li>
+<li><p>观察可发现，每次刷新页面时，在产品目录上方显示的 <strong>Object ID</strong>（对象 ID）都保持不变，这表明存储库现在每次都返回相同的对象。</p>
+<blockquote>
+<p><strong>注意：</strong>这是要考虑的重要方面。在前面禁用了本地缓存的情况中，更改从缓存检索的对象对缓存的数据没有影响，并且后续提取始终返回新副本。一旦您启用本地缓存后，它将存储对内存中对象的引用，并且对该对象的任何更改都将直接影响缓存的数据。在您自己的应用程序中使用缓存时您应该知道这个情况，并且要考虑下面这个因素：在更改某一缓存的对象并且以后从缓存中检索相同对象后，根据更改是从本地缓存还是远程缓存返回的，该对象不一定包括这些更改。</p>
+</blockquote></li>
+<li><p>等待至少 30 秒，然后再次刷新该页。请注意，所用时间将恢复到其原始值，并且对象 ID 已更改，表明缓存的项已到期，并且由于在存储时对该对象设置的到期策略，缓存的项已从缓存中清除。</p></li>
+</ol>
+
+<p><a name="Exercise3"></a></p>
+
+<h3 id="Exercise_3_Creating_a_Reusable_and_Extensible_Caching_Layer">练习 3：创建可重复使用和可扩展的缓存层</h3>
+
+<p>在前面的练习中，您通过直接更新数据访问类中的方法以便缓存从存储库中检索的数据，了解了使用 Windows Azure Caching 的基本方面。尽管此方法可能会带来很大的利益，但它要求更改您的每个数据访问方法以便启用缓存。不要求更改您的现有数据访问类的替代方法将会非常有用。</p>
+
+<p>在此练习中，您将了解如何在您的现有数据访问类的基础上构建一个缓存层，从而允许您插入不同的缓存提供程序，甚至通过简单的配置更改一起删除它们。</p>
+
+<p>为构建此层，您将实现一个名为 <strong>CachedDataSource</strong> 的抽象缓存类，它将为在缓存中存储数据和删除数据提供支持。然后，您将从该类中派生，以便为您的应用程序中的任何数据源创建等效的缓存。唯一要求是，您的数据源实现一个约定以便定义其数据访问操作。缓存类将封装您需要在其构造函数中提供的缓存提供程序，并且提供方法以便从缓存中检索数据和删除数据。</p>
+
+<p>缓存类中的数据检索方法接收唯一标识某一缓存项的缓存键、从数据源中检索数据的委托以及确定何时从缓存中清除项的缓存到期策略。该方法将实现典型的缓存模式，在该模式中，将首先尝试从缓存中检索项，并且如果未找到某一副本，则使用提供的委托从源中检索数据，然后将数据存储于缓存中。</p>
+
+<p><strong>CachedDataSource</strong> 类的实现完全可重复使用，这允许您使用满足要求的任何缓存提供程序。为了指定某一缓存提供程序，您将向其构造函数提供一个 <a href="http://msdn.microsoft.com/en-us/library/system.runtime.caching.objectcache.aspx">ObjectCache</a> 实例。<strong>ObjectCache</strong> 类（作为 <strong>System.Runtime.Caching</strong> 命名空间的一部分）是在 .NET Framework 4 中引入的，使缓存可用于所有应用程序。此抽象类表示一个对象缓存，并且为访问基础缓存提供程序提供基础方法和属性。.NET Framework 已提供对提供内存中缓存的此类的具体实现，即 <a href="http://msdn.microsoft.com/en-us/library/system.runtime.caching.memorycache.aspx">MemoryCache</a>。</p>
+
+<p>若要将某一给定的缓存服务与 <strong>CachedDataSource</strong> 派生类一起使用，您需要提供特定于缓存提供程序的 <strong>ObjectCache</strong> 实现。创建数据源工厂是一个不错的方法，因为它允许您基于需要选择适当的缓存实现。替换缓存提供程序只不过是在配置文件中更改设置。</p>
+
+<p>目前，Windows Azure Caching 未提供它自己的 <strong>ObjectCache</strong> 实现。尽管如此，您仍可以创建一个提供对其服务的包装的实现。您将在 <strong>BuildingAppsWithCacheService\Source\Assets</strong> 文件夹中找到此类实现的一个示例： <strong>AzureCacheProvider</strong>。此类是从 <strong>ObjectCache</strong> 派生的，用来公开 Windows Azure Caching 中的服务。</p>
+
+<p>若要在 Azure 应用商店应用程序中利用此缓存实现，您将创建 <strong>ProductsRepository</strong> 类的缓存对等类。该应用程序使用此类（该类使用单个 <strong>GetProducts</strong> 操作实现 <strong>IProductsRepository</strong> 约定）从 Windows Azure SQL Database 检索目录信息。若要创建缓存产品目录源，您需要执行以下步骤：</p>
+
+<ul>
+<li><p>创建从 <strong>CachedDataSource</strong> 继承的一个新的 <strong>CachingProductsReposity</strong> 类。</p></li>
+<li><p>将一个构造函数添加到这个新类，它接收具有非缓存数据源类的实例的 <strong>IProductRepository</strong> 参数以及具有要使用的缓存提供程序的实例的 <strong>ObjectCache</strong> 参数。</p></li>
+<li><p>通过在基类中调用 <strong>RetrievedCachedData</strong> 方法并且提供调用原始数据源类的委托，在 <strong>IProductRepository</strong> 接口中实现各方法。</p></li>
+</ul>
+
+<p><a name="Ex3Task1"></a></p>
+
+<h4 id="Task_1_-_Implementing_a_Caching_Data_Source_Base_Class">任务 1 - 实现缓存数据源基类</h4>
+
+<p>在此任务中，您将创建一个抽象类，该抽象类将用作您的缓存数据源类的基类。您可以在要求缓存层的任何项目中利用此常用类。</p>
+
+<ol>
+<li><p>以管理员身份启动 <strong>Microsoft Visual Studio 2012 Express for Web</strong>。</p></li>
+<li><p>打开位于 <strong>Source\Ex3-ReusableCachingImplementation</strong> 的 <strong>Begin</strong> 解决方案。</p>
+<blockquote>
+<p><strong>重要提示：</strong>在执行该解决方案前，请确保设置了启动项目。对于 MVC 项目，起始页必须保留为空白。</p>
+
+<p>要设置启动项目，请在<strong>解决方案资源管理器</strong>中，右键单击 <strong>CloudShop.Azure</strong> 项目，然后选择<strong>“设为启动项目”</strong>。</p>
+
+<p>要设置起始页，请在<strong>解决方案资源管理器</strong>中，右键单击 <strong>CloudShop</strong> 项目，然后选择<strong>“属性”</strong>。在<strong>“属性”</strong>窗口中，选择 <strong>Web</strong> 选项卡，然后在<strong>“启动操作”</strong>中选择<strong>“特定页”</strong>。将此字段的值保留为空白。</p>
+</blockquote></li>
+<li><p>在 <strong>Web.config</strong> 文件中，更新 <em>NorthwindEntities</em> 连接字符串以便指向您的数据库。使用您在门户中注册并用于在安装过程中创建数据库的 Windows Azure SQL Database 服务器名称、管理员用户名和管理员密码替换 <strong>[YOUR-SQL-DATABASE-SERVER-ADDRESS]</strong>、<strong>[SQL-DATABASE-USERNAME]</strong> 和 <strong>[SQL-DATABASE-PASSWORD]</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>请确保遵守安装部分的说明，以便用您自己的 Windows Azure SQL Database 帐户创建 Northwind2 数据库的副本并且配置您的 Windows Azure SQL Database 防火墙设置。</p>
+</blockquote></li>
+<li><p>在 <strong>CloudShop</strong> 项目中添加对 <strong>System.Runtime.Caching</strong> 程序集的引用。</p></li>
+<li><p>在 <strong>CloudShop</strong> 项目的 <strong>Services</strong> 文件夹中，添加名为 <strong>Caching</strong> 的新文件夹。</p></li>
+<li><p>在之前步骤中创建的 <strong>Caching</strong> 文件夹内，添加名为 <strong>CachedDataSource.cs</strong> 的一个新的类文件。</p></li>
+<li><p>在这个新的类文件中，为 <strong>System.Runtime.Caching</strong> 添加命名空间指令。</p>
+
+<!--mark: 5 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">using</span> System;
+<span style="color:#0000FF">using</span> System.Collections.Generic;
+<span style="color:#0000FF">using</span> System.Linq;
+<span style="color:#0000FF">using</span> System.Web;
+<strong class="markLine"><span style="color:#0000FF">using</span> System.Runtime.Caching;</strong>
+...
+</code></pre></li>
+<li><p>为 <strong>CachedDataSource</strong> 类指定 <strong>abstract</strong> 修饰符。</p>
+
+<!--mark: 1-3 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">public</span> <span style="color:#0000FF">abstract</span> <span style="color:#0000FF">class</span> CachedDataSource</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">}</strong>
+</code></pre></li>
+<li><p>向该类添加以下（突出显示的）成员字段。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex3-CachedDataSource member fields-CS</em>）</p>
+
+<!--mark: 3,4 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">abstract</span> <span style="color:#0000FF">class</span> CachedDataSource {
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">readonly</span> ObjectCache cacheProvider;</strong>
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">readonly</span> <span style="color:#0000FF">string</span> regionName;</strong>
+}
+</code></pre></li>
+<li><p>现在，定义一个构造函数，该构造函数将对象缓存和区域名称作为参数接收，如下面（突出显示的）代码所示。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex3-CachedDataSource constructor-CS</em>）</p>
+
+<!--mark: 4-18 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">abstract</span> <span style="color:#0000FF">class</span> CachedDataSource { ...
+<strong class="markLine">  <span style="color:#0000FF">public</span> CachedDataSource(ObjectCache cacheProvider, <span style="color:#0000FF">string</span> regionName)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (cacheProvider == <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">throw</span> <span style="color:#0000FF">new</span> ArgumentNullException(<span style="color:#8B0000">&quot;cacheProvider&quot;</span>);</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (cacheProvider <span style="color:#0000FF">is</span> MemoryCache)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      regionName = <span style="color:#0000FF">null</span>;</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.cacheProvider = cacheProvider;</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.regionName = regionName;</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>CachedDataSource</strong> 构造函数将 ObjectCache (<a href="http://msdn.microsoft.com/en-us/library/system.runtime.caching.objectcache.aspx"><a href="http://msdn.microsoft.com/en-us/library/system.runtime.caching.objectcache.aspx">http://msdn.microsoft.com/en-us/library/system.runtime.caching.objectcache.aspx</a></a>) 实例作为参数接收，它为访问对象缓存提供方法和属性以及区域名称。缓存区域是缓存中用于对缓存对象进行组织的分区。</p>
+</blockquote></li>
+<li><p>接下来，添加以下（突出显示的）方法以便从缓存检索数据。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex3-RetrieveCachedData method-CS</em>）</p>
+
+<!--mark: 4-19 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">abstract</span> <span style="color:#0000FF">class</span> CachedDataSource { ...
+<strong class="markLine">  <span style="color:#0000FF">protected</span> T RetrieveCachedData&lt;T&gt;(<span style="color:#0000FF">string</span> cacheKey, Func&lt;T&gt; fallbackFunction, CacheItemPolicy cachePolicy) where T : <span style="color:#0000FF">class</span></strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> data = <span style="color:#0000FF">this</span>.cacheProvider.Get(cacheKey, <span style="color:#0000FF">this</span>.regionName) <span style="color:#0000FF">as</span> T;</strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (data != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">return</span> data;</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    data = fallbackFunction();</strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (data != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.cacheProvider.Add(<span style="color:#0000FF">new</span> CacheItem(cacheKey, data, <span style="color:#0000FF">this</span>.regionName), cachePolicy);</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> data;</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>RetrieveCachedData</strong> 方法使用提供的键从缓存中检索请求的项的副本。如果数据可用，则返回数据；否则，它将使用提供的回退委托从数据源获取信息，然后使用提供的缓存到期策略缓存结果。</p>
+</blockquote></li>
+<li><p>最后，添加一个方法以便从缓存中删除项。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex3-RemoveCachedData method-CS</em>）</p>
+
+<!--mark: 4-7 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">abstract</span> <span style="color:#0000FF">class</span> CachedDataSource { ...
+<strong class="markLine">  <span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> RemoveCachedData(<span style="color:#0000FF">string</span> cacheKey)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.cacheProvider.Remove(cacheKey, <span style="color:#0000FF">this</span>.regionName);</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>保存 <strong>CachedDataSource.cs</strong> 文件。</p></li>
+</ol>
+
+<p><a name="Ex3Task2"></a></p>
+
+<h4 id="Task_2_-_Building_a_Caching_Product_Catalog_Repository">任务 2 - 构建缓存产品目录存储库</h4>
+
+<p>在您为缓存数据源创建了一个抽象基类后，现在将创建一个具体的实现，该实现将为 <strong>ProductsRepository</strong> 类提供替代的缓存。此任务代表了在您使用 <strong>CachedDataSource</strong> 类为数据访问代码创建缓存层时通常应遵循的步骤。</p>
+
+<ol>
+<li><p>在 <strong>CloudShop</strong> 项目的 <strong>Services\Caching</strong> 文件夹内，添加名为 <strong>CachedProductsRepository.cs</strong> 的一个新的类文件。</p></li>
+<li><p>在这个新的类文件中，为 <strong>System.Runtime.Caching</strong> 和 <strong>CloudShop.Services</strong> 追加命名空间指令。</p>
+
+<!-- mark:5-6 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">using</span> System;
+<span style="color:#0000FF">using</span> System.Collections.Generic;
+<span style="color:#0000FF">using</span> System.Linq;
+<span style="color:#0000FF">using</span> System.Web;
+<strong class="markLine"><span style="color:#0000FF">using</span> CloudShop.Services;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> System.Runtime.Caching;</strong>
+...
+</code></pre></li>
+<li><p>更改要从 <strong>CachedDataSource</strong> 和 <strong>IProductRepository</strong> 派生的 <strong>CachedProductsRepository</strong> 类的声明，如下面突出显示的代码所示。</p>
+
+<!--mark: 2 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> CachedProductsRepository 
+<strong class="markLine">  : CachedDataSource, IProductRepository</strong>
+{ }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>缓存数据源类从 <strong>CachedDataSource</strong> 派生，以便提供必需的缓存行为，以及实现原始数据源类使用的相同约定。</p>
+</blockquote></li>
+<li><p>添加以下代码以便定义一个构造函数，并且声明一个成员字段，该字段持有对基础数据源的引用，如下面突出显示的代码所示。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex3-CachedProductsRepository constructor-CS</em>）</p>
+
+<!--mark: 3-9 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> CachedProductsRepository : CachedDataSource, IProductRepository {
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">readonly</span> IProductRepository repository;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">  <span style="color:#0000FF">public</span> CachedProductsRepository(IProductRepository repository, ObjectCache cacheProvider) :</strong>
+<strong class="markLine">    <span style="color:#0000FF">base</span>(cacheProvider, <span style="color:#8B0000">&quot;Products&quot;</span>)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.repository = repository;</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>CachedProductsRepository</strong> 构造函数使用提供的缓存提供程序初始化其基类，并且在成员字段中保存对基础数据源的引用。该类定义一个 &quot;<em>Products</em>&quot; 缓存区域。</p>
+</blockquote></li>
+<li><p>最后，通过实现 <strong>GetProducts</strong> 方法满足 <strong>IProductRepository</strong> 约定，如下面突出显示的代码所示。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex3-GetProducts method -CS</em>）</p>
+
+<!--mark: 4-10 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> CachedProductsRepository : CachedDataSource, IProductRepository { ...
+<strong class="markLine">  <span style="color:#0000FF">public</span> List&lt;<span style="color:#0000FF">string</span>&gt; GetProducts()</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> RetrieveCachedData(</strong>
+<strong class="markLine">    <span style="color:#8B0000">&quot;allproducts&quot;</span>,</strong>
+<strong class="markLine">    () =&gt; <span style="color:#0000FF">this</span>.repository.GetProducts(),</strong>
+<strong class="markLine">    <span style="color:#0000FF">new</span> CacheItemPolicy { AbsoluteExpiration = DateTime.UtcNow.AddMinutes(1) });</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>GetProducts</strong> 方法调用基类中的 <strong>RetrieveCachedData</strong>，并且传入标识缓存项的键、&quot;<em>allproducts</em>&quot; 的情况下的 lambda 表达式形式的回退委托（只调用原始数据源中的 <strong>GetProducts</strong> 方法）以及 <a href="http://msdn.microsoft.com/en-us/library/system.runtime.caching.cacheitempolicy.aspx">CacheItemPolicy</a>（用于将该项的到期时间设置为 1 分钟）。</p>
+</blockquote>
+<p>因为 <strong>IProductRepository</strong> 约定十分简单，所以，这就是提供缓存实现所需的全部操作。通常，您的数据源将具有多个方法，但基本方法应不变，这允许您通过复制此相同模式实现每个方法。</p></li>
+</ol>
+
+<p><a name="Ex3Task3"></a></p>
+
+<h4 id="Task_3_-_Creating_a_Data_Source_Factory_Class">任务 3 - 创建数据源工厂类</h4>
+
+<p>在此任务中，您将创建一个可返回数据源实例的工厂类。该工厂类确定要从应用程序配置设置使用的缓存提供程序，并且返回适当配置为使用所选缓存提供程序的数据源。</p>
+
+<ol>
+<li><p>将位于 <strong>\Source\Assets</strong> 文件夹的 <strong>AzureCacheProvider.cs</strong> 文件的副本添加到 <strong>CloudShop</strong> 项目，并且将其放置于 <strong>Services\Caching</strong> 文件夹中。</p>
+<blockquote>
+<p><strong>注意：</strong><strong>AzureCacheProvider</strong> 类实现一个 <strong>ObjectCache</strong>，它包装 Windows Azure 缓存服务提供的服务。</p>
+</blockquote></li>
+<li><p>在 <strong>CloudShop</strong> 项目的 <strong>Services</strong> 文件夹内，添加名为 <strong>DataSourceFactory.cs</strong> 的一个新的类文件。</p></li>
+<li><p>在这个新的类文件中，插入针对 <strong>System.Configuration</strong>、<strong>System.Runtime.Caching</strong>、<strong>CloudShop.Services</strong> 和 <strong>CloudShop.Services.Caching</strong> 的命名空间指令。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex3-DataSourceFactory namespaces-CS</em>）</p>
+
+<!--mark: 5-8 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">using</span> System;
+<span style="color:#0000FF">using</span> System.Collections.Generic;
+<span style="color:#0000FF">using</span> System.Linq;
+<span style="color:#0000FF">using</span> System.Web;
+<strong class="markLine"><span style="color:#0000FF">using</span> System.Configuration;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> System.Runtime.Caching;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> CloudShop.Services;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> CloudShop.Services.Caching;</strong>
+</code></pre></li>
+<li><p>现在，添加以下代码以便为 <strong>DataSourceFactory</strong> 类定义类型构造函数，并且声明一个静态字段，该字段承载对已配置缓存服务提供程序的引用，如下面突出显示的代码所示。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex3-DataSourceFactory class constructor-CS</em>）</p>
+
+<!--mark: 3-20 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> DataSourceFactory {
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">static</span> <span style="color:#0000FF">readonly</span> ObjectCache cacheProvider;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">  <span style="color:#0000FF">static</span> DataSourceFactory()</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">string</span> provider = ConfigurationManager.AppSettings[<span style="color:#8B0000">&quot;CacheService.Provider&quot;</span>];</strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (provider != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">switch</span> (ConfigurationManager.AppSettings[<span style="color:#8B0000">&quot;CacheService.Provider&quot;</span>].ToUpperInvariant())</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        <span style="color:#0000FF">case</span> <span style="color:#8B0000">&quot;AZURE&quot;</span>:</strong>
+<strong class="markLine">          cacheProvider = <span style="color:#0000FF">new</span> AzureCacheProvider();</strong>
+<strong class="markLine">          <span style="color:#0000FF">break</span>;</strong>
+<strong class="markLine">        <span style="color:#0000FF">case</span> <span style="color:#8B0000">&quot;INMEMORY&quot;</span>:</strong>
+<strong class="markLine">          cacheProvider = MemoryCache.Default;</strong>
+<strong class="markLine">          <span style="color:#0000FF">break</span>;</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>该类构造函数从配置读取 <em>CacheService.Provider</em> 设置，并且基于其值初始化应用程序的缓存提供程序。在这个示例中，将认识针对该设置的两个不同值，一个值用于 Windows Azure Caching，另一个值用于 .NET Framework 4 提供的默认内存中缓存提供程序。</p>
+</blockquote></li>
+<li><p>接下来，添加下面的属性以便返回配置的缓存服务提供程序。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex3-CacheProvider property-CS</em>）</p>
+
+<!--mark: 4-7 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> DataSourceFactory { ...
+<strong class="markLine">  <span style="color:#0000FF">public</span> <span style="color:#0000FF">static</span> ObjectCache CacheProvider</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">get</span> { <span style="color:#0000FF">return</span> cacheProvider; }</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>最后，添加一个方法，以便返回使用已配置的缓存服务提供程序初始化的 <strong>IProductRepository</strong> 数据源的实例。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex3-GetProductsRepository method-CS</em>）</p>
+
+<!--mark: 4-13 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> DataSourceFactory { ...
+<strong class="markLine">  <span style="color:#0000FF">public</span> <span style="color:#0000FF">static</span> IProductRepository GetProductsRepository(<span style="color:#0000FF">bool</span> enableCache)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> dataSource = <span style="color:#0000FF">new</span> ProductsRepository();</strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (enableCache &amp;&amp; CacheProvider != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">return</span> <span style="color:#0000FF">new</span> CachedProductsRepository(dataSource, cacheProvider);</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> dataSource;</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+</ol>
+
+<p><a name="Ex3Task4"></a></p>
+
+<h4 id="Task_4_-_Configuring_the_Application_for_Caching">任务 4 - 为缓存配置应用程序</h4>
+
+<p>在此任务中，您将更新应用程序以便利用数据源工厂来实例化产品目录数据源。若要完成缓存层的设置，您将定义必需的配置设置以便选择缓存提供程序。</p>
+
+<ol>
+<li><p>打开 <strong>Controllers</strong> 文件夹中的 <strong>HomeController.cs</strong> 文件，并且找到 <strong>Index</strong> 方法。在此方法内，使用下面所示的突出显示的代码（该代码使用 <strong>DataSourceFactory</strong> 检索一个 <strong>IProductRepository</strong> 实例）替换初始化 <strong>productRepository</strong> 局部变量的行。</p>
+
+<!--mark: 10 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> HomeController : Controller { ...
+  <span style="color:#0000FF">public</span> ActionResult Index() {
+    <span style="color:#0000FF">bool</span> enableCache = (<span style="color:#0000FF">bool</span>)<span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;EnableCache&quot;</span>];
+
+    <span style="color:#008000">// retrieve product catalog from repository and measure the elapsed time</span>
+    Services.IProductRepository productRepository =
+<strong class="markLine">    CloudShop.Services.DataSourceFactory.GetProductsRepository(enableCache);</strong>
+    Stopwatch stopWatch = <span style="color:#0000FF">new</span> Stopwatch(); stopWatch.Start(); ... } ... }
+</code></pre></li>
+<li><p>若要配置 <strong>DataSourceFactory</strong>，请打开 <strong>Web.config</strong> 文件并且将以下突出显示的设置添加到 <strong>appSettings</strong> 部分。</p>
+
+<p>（代码段 - <em>BuildingAppsWithCachingService-Ex3-Web.config appSettings section-CS</em>）</p>
+
+<!--mark: 3 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML">  <span style="color:#0000FF">&lt;</span><span style="color:#800000">appSettings</span><span style="color:#0000FF">&gt;</span>
+     ...
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">key</span>=<span style="color:#0000FF">&quot;CacheService.Provider&quot;</span> <span style="color:#FF0000">value</span>=<span style="color:#0000FF">&quot;InMemory&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">appSettings</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>如果您在单个节点中承载该应用程序，则内存中缓存提供程序会是一个不错的选择。</p>
+</blockquote></li>
+<li><p>按 <strong>CTRL+F5</strong> 生成和测试在计算模拟器中增强的缓存实现。</p></li>
+<li><p>当您启动应用程序时，最初将禁用缓存。在 <strong>Enable Cache</strong>（启用缓存）中单击 <strong>Yes</strong>（是）并且等待该页刷新。请记住，您启用缓存后的初始请求包括检索数据并将数据插入缓存中所需的开销。</p></li>
+<li><p>单击 <strong>Products</strong>（产品）或者在浏览器中再次刷新该页。此时，应用程序将从缓存中检索产品数据，并且所用时间应降低，在您当前将其配置为使用 .NET Framework 提供的内存中缓存的情况下，很可能低于 1 毫秒。</p></li>
+<li><p>现在，在 <strong>Web.config</strong> 文件中，找到 <strong>appSettings</strong> 部分并且将 <strong>CacheService.Provider</strong> 设置的值设为 <em>Azure</em>。</p>
+
+<!--mark: 3 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML">  <span style="color:#0000FF">&lt;</span><span style="color:#800000">appSettings</span><span style="color:#0000FF">&gt;</span>
+          ...
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">key</span>=<span style="color:#0000FF">&quot;CacheService.Provider&quot;</span> <span style="color:#FF0000">value</span>=<span style="color:#0000FF">&quot;Azure&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">appSettings</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>如果您在多个节点中承载该应用程序，则内存中缓存提供程序将不再是一个好的选择。您而是可以利用 Windows Azure Caching 所提供的分布式缓存。</p>
+</blockquote></li>
+<li><p>保存 <strong>Web.config</strong> 文件。</p></li>
+<li><p>单击 <strong>Recycle</strong>（回收）链接以便回收角色并且重新加载配置。一旦您单击该链接，“Products”（产品）页将变为空。</p></li>
+<li><p>返回浏览器，从地址栏中删除 <em>/Home/Recylce</em>，然后按 Enter 重新加载该网站。<strong>Products</strong>（产品）页应该在短暂延迟后恢复正常。</p></li>
+<li><p>请确保缓存仍启用，然后在浏览器中刷新该页<strong>两次</strong>以便向缓存提供数据。请注意，针对缓存方案的所用时间已增加，表明该应用程序现在使用 Windows Azure Caching 提供程序，而不是内存中提供程序。</p></li>
+</ol>
+
+<hr />
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>在此动手实验中，您了解了如何使用 Windows Azure Caching。您看到了如何将会话状态配置为跨缓存群集进行缓存，这允许在重新启动时和跨承载应用程序的多个角色实例保留会话。此外，您学习了使用 Windows Azure 执行数据缓存的基础知识，特别是学习了如何将查询结果缓存到 Windows Azure SQL Database。最后，您看到了一个可重复使用的缓存层实现，通过该缓存层实现，您能够以非常简单的方式将缓存层添加到应用程序中。</p> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-BuildingAppsWithCaching/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+
