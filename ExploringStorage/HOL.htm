@@ -1,0 +1,1922 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 了解 Windows Azure 存储</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-ExploringStorage" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-ExploringStorage" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="handsonlab"></a></p>
+
+<h1 id="Exploring_Windows_Azure_Storage">了解 Windows Azure 存储</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>存储服务在 Windows Azure 计算模拟器中提供永久性存储，并且包含 blob 和表服务，以及队列服务。此外，通过使用 Windows Azure 驱动器，运行于云中的 Windows Azure 应用程序能够使用现有 NTFS API 访问由 blob 存储支持的持久驱动器。在本实验中，您将了解到在本地计算模拟器上使用 Windows Azure 存储的基本过程，并探究可供开发人员使用的一些功能。</p>
+<blockquote>
+<p><strong>注意：</strong>在最新版本的 <a href="http://bit.ly/WindowsAzureTK">Windows Azure 培训包</a>或 <a href="https://github.com/WindowsAzure-TrainingKit/HOL-ExploringStorage-VS2012">GitHub</a> 中可以找到此动手实验的 Visual Studio 2012 版本。</p>
+</blockquote>
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>  使用表服务</li>
+<li>  使用 Blob 服务</li>
+<li>  使用队列服务</li>
+<li>  创建和读取元数据</li>
+<li>  使用 Windows Azure 驱动器</li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<ul>
+<li>IIS 7（带有 ASP.NET、WCF HTTP 激活、跟踪）</li>
+<li><a href="http://go.microsoft.com/fwlink/?linkid=186916">Microsoft .NET Framework 4.0</a></li>
+<li><a href="http://msdn.microsoft.com/vstudio/products/">Microsoft Visual Studio 2010</a></li>
+<li><a href="http://www.microsoft.com/sqlserver">Microsoft SQL Express LocalDB</a></li>
+<li><a href="http://www.microsoft.com/windowsazure/sdk/">Windows Azure Tools for Microsoft Visual Studio 1.8</a></li>
+<li>Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>此动手实验针对 Windows 7 而设计。</p>
+</blockquote>
+<p><a name="Setup"></a></p>
+
+<h3 id="Setup">设置</h3>
+
+<p>为了执行此动手实验中的各项练习，需要对环境进行设置。</p>
+
+<ol>
+<li><p>打开 Windows 资源管理器窗口，浏览到此实验的 <strong>Source</strong> 文件夹。</p></li>
+<li><p>以管理员权限执行 <strong>Setup.cmd</strong> 文件，启动设置过程。此过程将配置环境并安装用于此实验的 Visual Studio 代码段。</p></li>
+<li><p>如果显示“用户帐户控制”对话框，请确认操作以继续。</p></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>请务必在运行安装程序前检查此实验的所有依赖项。</p>
+</blockquote>
+<p><a name="CodeSnippets"></a></p>
+
+<h3 id="Using_the_Code_Snippets">使用代码段</h3>
+
+<p>实验文档将指导您插入代码块。为方便起见，大部分代码是以 Visual Studio 代码段的形式提供的，您可以在 Visual Studio 2010 中使用而不必手动添加。</p>
+
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#Exercise1">使用表</a></li>
+<li><a href="#Exercise2">使用 Blob</a></li>
+<li><a href="#Exercise3">使用队列</a></li>
+<li><a href="#Exercise4">使用驱动器</a></li>
+</ol>
+
+<p>完成此实验的估计时间：<strong>90 分钟</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>每个练习都附带一个起始解决方案，它位于练习的 Begin 文件夹中，允许您独立执行每个练习。请注意，在练习期间添加的代码段不包含在这些起始解决方案中，在您完成练习前，这些代码段不一定起作用。在练习的源代码内，您还会看到一个 End 文件夹，其中包含在完成相应练习中的步骤之后所生成的 Visual Studio 解决方案代码。如果在进行此动手实验时需要更多帮助，可以使用这些解决方案作为指南。</p>
+
+<p>您首次启动 Visual Studio 时，必须选择一个预定义的设置集合。每个预定义的集合在设计上都对应于特定的开发风格，能够确定窗口布局、编辑器行为、IntelliSense 代码段和对话框选项。此实验中的过程介绍了在使用<strong>“常规开发设置”</strong>集合时，在 Visual Studio 中完成指定任务所需的操作。如果您为开发环境选择其他设置集合，需要考虑可能的过程差异。</p>
+</blockquote>
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Working_with_Tables">练习 1：使用表</h3>
+
+<p>在此练习中，您将使用 Windows Azure 表服务 API 创建一个在结构化存储中保存和检索数据的简单应用程序。这是一个简单的聊天 Web 应用程序，可以将消息保存在 Windows Azure 表中，并进行检索和显示。</p>
+
+<p>Windows Azure 表以实体集合的形式存储数据。实体类似于行。实体具有主键和一组属性。属性为名称/值对，与列类似。</p>
+
+<p>为访问 Windows Azure 表服务，您将使用与 <a href="http://msdn.microsoft.com/zh-CN/library/cc668792.aspx">WCF Data Services</a>（以前为 ADO.NET Data Services Framework）兼容的 REST API。此练习使用 <a href="http://msdn.microsoft.com/zh-CN/library/cc668772.aspx">WCF Data Services 客户端库</a>（以前为 .NET 客户端库）读取数据并写入表服务。</p>
+<blockquote>
+<p><strong>注意：</strong>要减少键入操作，可以右键单击要插入源代码的位置，依次选择“插入代码段”和“我的代码段”，然后选择与当前练习步骤对应的条目。</p>
+</blockquote>
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Configuring_Storage_Account_Settings">任务 1 - 配置存储帐户设置</h4>
+
+<p>在此任务中，您将配置连接表服务所需的设置。</p>
+
+<ol>
+<li><p>通过从<strong>“开始”|“所有程序”|“Microsoft Visual Studio 2010”</strong>中右键单击 <strong>Microsoft Visual Studio 2010</strong>，然后选择<strong>“以管理员身份运行”</strong>，以提升的<strong>管理员</strong>身份打开 Microsoft Visual Studio 2010。</p></li>
+<li><p>在<strong>“文件”</strong>菜单中，选择<strong>“打开”</strong>，然后选择<strong>“项目/解决方案”</strong>。在<strong>“打开项目”</strong>对话框中，浏览到 <strong>\Source\Ex1-WorkingWithTables\Begin</strong>，选择针对您的首选语言的文件夹，然后打开 <strong>Begin.sln</strong> 文件。</p>
+
+<p><img src="./Images/solutionexplorer.png?raw=true" alt="显示了 Windows Azure 聊天应用程序的解决方案资源管理器" />
+</p>
+
+<p><em>显示了 Windows Azure 聊天应用程序的解决方案资源管理器</em></p>
+<blockquote>
+<p><strong>注意：</strong>该解决方案包含一个 Windows Azure WebRole 项目。</p>
+</blockquote></li>
+<li><p>通过以下方式确保 <strong>RdChat</strong> 设置为启动项目：在<strong>解决方案资源管理器</strong>中右键单击该项目，然后选择<strong>“设为启动项目”</strong>。</p>
+
+<p><img src="./Images/startupproject.png?raw=true" alt="设置启动项目" />
+</p>
+
+<p><em>设置启动项目</em></p></li>
+<li><p>更新服务定义，以定义访问 Windows Azure 表服务所需的配置设置。为此，请在<strong>解决方案资源管理器</strong>中展开 <strong>RdChat</strong> 项目的<strong>“角色”</strong>文件夹，右键单击 <strong>RdChat_WebRole</strong>，然后选择<strong>“属性”</strong>。</p>
+
+<p><img src="./Images/configurationeditor.png?raw=true" alt="启动服务配置编辑器" />
+</p>
+
+<p><em>启动服务配置编辑器</em></p></li>
+<li><p>选择<strong>“设置”</strong>选项卡，单击<strong>“添加设置”</strong>，然后创建名为 <em>DataConnectionString</em> 的新配置设置。将该设置的类型设为<strong>“连接字符串”</strong>，然后单击省略号标签按钮，将存储连接字符串配置为<em>“Windows Azure 存储模拟器”</em>。</p>
+
+<p><img src="./Images/webroleconfiguration.png?raw=true" alt="创建存储连接字符串" />
+</p>
+
+<p><em>创建存储连接字符串</em></p>
+
+<p><img src="./Images/storageaccountconnectionstring.png?raw=true" alt="将连接字符串配置为使用存储模拟器" />
+</p>
+
+<p><em>将连接字符串配置为使用存储模拟器</em></p></li>
+<li><p>按 <strong>Ctrl+S</strong> 保存配置更改。</p></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>StorageClient 库使用这些设置访问 Windows Azure 存储。<strong>DataConnectionString</strong>：这是指向 Window Azure 帐户的连接字符串，通过它能够以编程方式访问数据存储以及 Windows Azure 中的其他功能。此连接字符串可以指向云中的 Windows Azure 帐户以及本地计算模拟器。<strong>Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString</strong>：这是指向 Windows Azure 服务器的连接字符串，与 <em>DataConnectionString</em> 相同，但此字符串专用于记录诊断信息。</p>
+</blockquote>
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Creating_Classes_to_Model_the_Table_Schema">任务 2 - 创建用于表架构建模的类</h4>
+
+<p>当针对表服务的存储模拟器服务在本地工作时，要使用 WCF Data Services 客户端库。</p>
+
+<p>要在 .NET 中使用 Windows Azure 表服务，需要构造一个类以构建所需架构模型。除模型所需的属性外，该类还必须包括 <strong>Timestamp</strong>、<strong>PartitionKey</strong> 和 <strong>RowKey</strong> 属性，并且必须使用 <strong>DataServiceKey</strong> <em>(&quot;PartitionKey&quot;, &quot;RowKey&quot;)</em> 自定义特性对其进行修饰。为简化这方面工作，<strong>Microsoft.WindowsAzure.StorageClient</strong> 命名空间提供一个 <strong>TableServiceEntity</strong> 类，该类已定义必需的属性和特性并可在您类中轻松进行派生。</p>
+
+<p>在此任务中，您将创建为聊天应用程序存储数据的模型。</p>
+
+<ol>
+<li><p>将对 WCF 数据服务客户端库的引用添加到 Web 角色项目。在<strong>“解决方案资源管理器”</strong>中，右键单击 <strong>RdChat_WebRole</strong> 项目节点，然后选择<strong>“添加引用”</strong>。在 <strong>.NET</strong> 选项卡中，选择 <strong>System.Data.Services.Client</strong> 程序集，然后单击<strong>“确定”</strong>。</p></li>
+<li><p>在 Web 角色项目中添加一个类以对消息表进行建模。为此，请在<strong>解决方案资源管理器</strong>中，右键单击 <strong>RdChat_WebRole</strong> 项目节点，指向<strong>“添加”</strong>，然后选择<strong>“类”</strong>。在<strong>“添加新项”</strong>对话框中，将<strong>“名称”</strong>设置为 <strong>Message.cs</strong>，然后单击<strong>“添加”</strong>。</p></li>
+<li><p>更新 Message 类的声明，使其从 <strong>Microsoft.WindowsAzure.StorageClient.TableServiceEntity</strong> 类派生。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex1-01-MessageClass-CS</em>）</p>
+
+<!--mark: 2 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> Message 
+<strong class="markLine">    : Microsoft.WindowsAzure.StorageClient.TableServiceEntity</strong>
+{ }   
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>TableServiceEntity</strong> 类在 <strong>Microsoft.WindowsAzure.StorageClient</strong> 库中提供。该类定义了 Windows Azure 表中存储的每个实体所需要的 <strong>PartititionKey、RowKey</strong> 和 <strong>TimeStamp</strong> 系统属性。<strong>PartitionKey</strong> 和 <strong>RowKey</strong> 共同定义唯一标识表中每个实体的 <strong>DataServiceKey</strong>。</p>
+</blockquote></li>
+<li><p>将默认构造函数添加到初始化 <strong>PartitionKey</strong> 和 <strong>RowKey</strong> 属性的 <strong>Message</strong> 类。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex1-02-MessageConstructor-CS</em>）</p>
+
+<!--mark: 1-5 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">public</span> Message()</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">  PartitionKey = <span style="color:#8B0000">&quot;a&quot;</span>;</strong>
+<strong class="markLine">  RowKey = <span style="color:#0000FF">string</span>.Format(<span style="color:#8B0000">&quot;{0:10}_{1}&quot;</span>, DateTime.MaxValue.Ticks - DateTime.Now.Ticks, Guid.NewGuid());</strong>
+<strong class="markLine">}</strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>出于练习的目的，您为 <strong>PartitionKey</strong> 属性指定了一个固定值。在实际应用中，应选择一个可确保在存储节点间实现负载平衡的值。</p>
+</blockquote></li>
+<li><p>在 <strong>Message</strong> 类中添加两个字符串属性 <strong>Name</strong> 和 <strong>Body</strong>，用于存放有关聊天消息的信息。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex1-03-TableSchemaProperties-CS</em>）</p>
+
+<!--mark: 1,3 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">public</span> <span style="color:#0000FF">string</span> Name { <span style="color:#0000FF">get</span>; <span style="color:#0000FF">set</span>; }</strong>
+
+<strong class="markLine"><span style="color:#0000FF">public</span> <span style="color:#0000FF">string</span> Body { <span style="color:#0000FF">get</span>; <span style="color:#0000FF">set</span>; }</strong>
+</code></pre></li>
+<li><p>保存 <strong>Message.cs</strong> 文件。</p></li>
+<li><p>下一步，在 Web 角色项目中添加一个类，以定义访问 Messages 表所需的 WCF Data Services <strong>DataServiceContext</strong>。为此，请在<strong>解决方案资源管理器</strong>中，右键单击 <strong>RdChat_WebRole</strong> 项目节点，指向<strong>“添加”</strong>，然后选择<strong>“类”</strong>。在<strong>“添加新项”</strong>对话框中，将<strong>“名称”</strong>设置为 <strong>MessageDataServiceContext.cs</strong>，然后单击<strong>“添加”</strong>。</p></li>
+<li><p>在新的类文件中，使用命名空间指令添加以下内容。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex1-04-Namespace-CS</em>）</p>
+
+<!--mark: 1,2 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.StorageClient;</strong>
+</code></pre></li>
+<li><p>替换新类的声明，使其从 <strong>TableServiceContext</strong> 类派生，并包含一个默认构造函数以使用存储帐户信息初始化基类。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex1-05-MessageDataServiceContextClass-CS</em>）</p>
+
+<!--mark: 3-10 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">namespace</span> RdChat_WebRole {
+<strong class="markLine">  <span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> MessageDataServiceContext</strong>
+<strong class="markLine">      : TableServiceContext</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">public</span> MessageDataServiceContext(<span style="color:#0000FF">string</span> baseAddress, StorageCredentials credentials)</strong>
+<strong class="markLine">        : <span style="color:#0000FF">base</span>(baseAddress, credentials)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>现在，向 <strong>MessageDataServiceContext</strong> 类添加一个属性，以返回 Messages 表的数据服务查询。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex1-06-MessagesProperty-CS</em>）</p>
+
+<!--mark: 5-11 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> MessageDataServiceContext : TableServiceContext { ...
+<strong class="markLine">  <span style="color:#0000FF">public</span> IQueryable&lt;Message&gt; Messages</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">get</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.CreateQuery&lt;Message&gt;(<span style="color:#8B0000">&quot;Messages&quot;</span>);</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>最后，向 <strong>MessageDataServiceContext</strong> 类添加一个方法以在表中插入新消息。稍后在实现聊天功能时将使用此方法。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex1-07-AddMessageMethod-CS</em>）</p>
+
+<!--mark: 5-9 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> MessageDataServiceContext : TableServiceContext { ...
+<strong class="markLine">  <span style="color:#0000FF">public</span> <span style="color:#0000FF">void</span> AddMessage(<span style="color:#0000FF">string</span> name, <span style="color:#0000FF">string</span> body)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.AddObject(<span style="color:#8B0000">&quot;Messages&quot;</span>, <span style="color:#0000FF">new</span> Message { Name = name, Body = body });</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.SaveChanges();</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>在“生成”菜单中，选择“生成解决方案”。</p></li>
+</ol>
+
+<p><a name="Ex1Task3"></a></p>
+
+<h4 id="Task_3_-_Creating_the_Chat_User_Interface">任务 3 - 创建聊天用户界面</h4>
+
+<p>在此任务中，您将添加将消息存储在 Windows Azure 表中并在网页上显示消息所需的代码。</p>
+
+<ol>
+<li><p>在 <strong>Global.asax.cs</strong> 文件中找到 <strong>Application_Start</strong> 方法，然后在其中插入以下代码（<strong>粗体</strong>显示的代码）。此代码将从先前创建的 <strong>MessageDataServiceContext</strong> 创建存储表。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex1-08-ApplicationStartMethod-CS</em>）</p>
+
+<!--mark: 4-13 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Application_Start() { ...
+<strong class="markLine">  <span style="color:#808080">/// Create data table from MessageDataServiceContext</span></strong>
+<strong class="markLine">  <span style="color:#808080">/// It is recommended the data tables should be only created once. It is typically done as a </span></strong>
+<strong class="markLine">  <span style="color:#808080">/// provisioning step and rarely in application code.</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">var</span> account = CloudStorageAccount.FromConfigurationSetting(<span style="color:#8B0000">&quot;DataConnectionString&quot;</span>);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">  <span style="color:#008000">// dynamically create the tables</span></strong>
+<strong class="markLine">  CloudTableClient.CreateTablesFromModel(</strong>
+<strong class="markLine">      <span style="color:#0000FF">typeof</span>(MessageDataServiceContext),</strong>
+<strong class="markLine">      account.TableEndpoint.AbsoluteUri,</strong>
+<strong class="markLine">      account.Credentials);</strong>
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>上示代码从先前创建的 <strong>MessageDataServiceContext</strong> 类所定义的模型创建所需的表。注意，建议仅创建一次数据表。一般会在配置步骤中执行此操作，很少在应用程序代码中这样做。建议在 <strong>Global</strong> 类中的 <strong>Application_Start</strong> 方法中实现初始化逻辑。为检索和显示消息，该方法创建 <strong>MessageDataServiceContext</strong> 类的实例，并从服务配置文件 <strong>(ServiceConfiguration.cscfg)</strong> 中获得的帐户信息对其进行初始化。该类将 <strong>Messages</strong> 属性（该属性返回 <em>Messages</em> 表的数据服务查询）绑定到页面上的 <strong>ListView</strong> 控件以进行显示。<strong>CloudStorageAccount</strong> 类型的对象表示存储帐户，其包含连接存储服务所需的设置。与存储帐户相关联的为帐户名称、帐户的 URI 以及共享密钥，<strong>CloudTableClient</strong> 帮助程序类使用它们进行初始化。这些设置是从 <strong>ServiceConfiguration.cscfg</strong> 获取的。</p>
+</blockquote></li>
+<li><p>确保 <strong>Global.asax.cs</strong> 代码文件的开头包含以下命名空间指令。这些指令用于实用工具存储类和 <strong>ServiceRuntime</strong> 类。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex1-09-GlobalNamespace-CS</em>）</p>
+
+<!--mark: 1-3 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.ServiceRuntime;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.StorageClient;</strong>
+</code></pre></li>
+<li><p>展开<strong>解决方案资源管理器</strong>中的 <strong>RDChat_WebRole</strong> 节点，右键单击 <strong>Default.aspx</strong>，然后选择<strong>“查看代码”</strong>，以打开包含聊天应用程序 UI 的网页的代码隐藏文件。</p>
+
+<p>确保 <strong>Default.aspx.cs</strong> 代码隐藏文件中包含以下命名空间指令。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex1-10-Namespace-CS</em>）</p>
+
+<!--mark: 1,2 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> System.Data.Services.Client;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure;</strong>
+</code></pre></li>
+<li><p>在 <strong>Default.aspx.cs</strong> 中找到 <strong>SubmitButton_Click</strong> 事件处理程序，将以下代码（<strong>粗体</strong>显示的代码）插入方法主体中，以将用户输入的消息保存到表服务，并将来自表服务的数据绑定消息保存到页面。该方法使用先前在实验中创建的 <strong>AddMessage</strong> 方法将新 <strong>Message</strong> 实体插入表中。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex1-11-SubmitButtonClick-CS</em>）</p>
+
+<!--mark: 3-21 -->   
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> SubmitButton_Click(<span style="color:#0000FF">object</span> sender, EventArgs e) {
+<strong class="markLine">      <span style="color:#0000FF">var</span> statusMessage = <span style="color:#0000FF">string</span>.Empty;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#0000FF">try</span></strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> account = CloudStorageAccount.FromConfigurationSetting(<span style="color:#8B0000">&quot;DataConnectionString&quot;</span>);</strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> context = <span style="color:#0000FF">new</span> MessageDataServiceContext(account.TableEndpoint.ToString(), account.Credentials);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        context.AddMessage(HttpUtility.HtmlEncode(<span style="color:#0000FF">this</span>.nameBox.Text), HttpUtility.HtmlEncode(<span style="color:#0000FF">this</span>.messageBox.Text));</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#0000FF">this</span>.messageList.DataSource = context.Messages;</strong>
+<strong class="markLine">        <span style="color:#0000FF">this</span>.messageList.DataBind();</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine">      <span style="color:#0000FF">catch</span> (DataServiceRequestException ex)</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">       statusMessage = <span style="color:#8B0000">&quot;Unable to connect to the table storage server. Please check that the service is running.&lt;br&gt;&quot;</span></strong>
+<strong class="markLine">                        + ex.Message;</strong>
+<strong class="markLine">       }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">       <span style="color:#0000FF">this</span>.status.Text = statusMessage;</strong>
+    }
+</code></pre></li>
+<li><p>保存所有文件，然后从<strong>“生成”</strong>菜单中选择<strong>“生成解决方案”</strong>。</p></li>
+</ol>
+
+<p><a name="Ex1Verification"></a></p>
+
+<h4 id="Verification">验证</h4>
+
+<p>测试在计算模拟器中运行的服务：</p>
+
+<ol>
+<li><p>在 Visual Studio 中，按 <strong>F5</strong> 生成并运行该应用程序。计算模拟器将启动，包含 <strong>RdChat</strong> Web 角色的新部署进行初始化。此时将打开一个浏览器窗口以显示 Windows Azure Chat 聊天应用程序的网页。</p>
+
+<p><img src="Images/application-after-connecting-successfully.png?raw=true" alt="成功连接到存储模拟器表服务器后的应用程序" />
+</p>
+
+<p><em>成功连接到存储模拟器表服务器后的应用程序</em></p>
+
+<p>在调试器中启动该程序时，Visual Studio 会自动启动存储模拟器。如果聊天应用程序无法访问表服务服务器，页面上将显示错误消息。要检查该服务的状态，请右键单击系统托盘中的图标（服务器形图标），然后选择<strong>“显示存储模拟器用户界面”</strong>。</p>
+
+<p><img src="Images/viewing-the-status-of-storage-emulator.png?raw=true" alt="查看存储模拟器的状态" />
+</p>
+
+<p><em>查看存储模拟器的状态</em></p></li>
+<li><p>现在，通过输入几条消息测试聊天应用程序。键入您的姓名及消息文本，然后单击 <strong>Submit</strong>（提交）。</p></li>
+<li><p>在 Internet Explorer 中，按 <strong>Ctrl + N</strong> 另外打开一个浏览器窗口。输入不同的姓名，并再键入几条消息。注意观察发送新消息后聊天框如何更新对话。</p>
+
+<p><img src="Images/using-the-windows-azure-chat-application.png?raw=true" alt="使用 Windows Azure 聊天应用程序" />
+</p>
+
+<p><em>使用 Windows Azure 聊天应用程序</em></p></li>
+</ol>
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Working_with_Blobs">练习 2：使用 Blob</h3>
+
+<p>在此练习中，您将使用 Windows Azure Blob 服务 API 创建一个应用程序，该程序在 Windows Azure 存储中以 BLOB 形式保存图像数据并进行检索。该应用程序包含一个简单的图像库网站，可显示、上载和删除 Windows Azure 存储中的图像，并且允许输入和显示相关元数据。该应用程序使用单个容器将其图像内容存储为 blob。</p>
+
+<p>在 Windows Azure 中创建 blob 时，将设置一个内容类型关联，该内容类型指定 API 返回该内容所采用的格式，并允许从相应 blob 的 URL 中直接检索图像。</p>
+
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_-_Retrieving_Blob_Data_from_Storage">任务 1 - 从存储中检索 Blob 数据</h4>
+
+<p>在此任务中，您将创建一个图像库网页用以显示从 Windows Azure 存储中检索到的图像。提供的解决方案包含一个网站项目，该项目有一个网页，其中包含显示图像和输入元数据所需的元素。通过编辑代码隐藏文件添加必要的功能。</p>
+
+<ol>
+<li><p>通过从<strong>“开始”|“所有程序”|“Microsoft Visual Studio 2010”</strong>中右键单击 <strong>Microsoft Visual Studio 2010</strong>，然后选择<strong>“以管理员身份运行”</strong>，以提升的<strong>管理员</strong>身份打开 Microsoft Visual Studio 2010。</p></li>
+<li><p>在<strong>“文件”</strong>菜单中，选择<strong>“打开”</strong>，然后选择<strong>“项目/解决方案”</strong>。在<strong>“打开项目”</strong>对话框中，浏览到 <strong>\Source\Ex2-WorkingWithBlobs\Begin</strong>，然后打开 <strong>Begin.sln</strong> 文件。</p></li>
+<li><p>更新服务定义，以定义访问 Windows Azure 表服务所需的配置设置。为此，请在<strong>解决方案资源管理器</strong>中展开 <strong>RDImageGallery</strong> 项目的 Roles 文件夹，右键单击 <strong>RDImageGallery_WebRole</strong>，然后选择<strong>“属性”</strong>。</p>
+
+<p><img src="Images/setting-role-configuration-settings.png?raw=true" alt="设置角色配置设置" />
+</p>
+
+<p><em>设置角色配置设置</em></p></li>
+<li><p>在<strong>“设置”</strong>选项卡中，单击<strong>“添加设置”</strong>，然后创建名为 <em>DataConnectionString</em> 的 <strong>ConnectionString</strong> 类型。单击省略号标签按钮，然后将连接字符串设为<strong>“Windows Azure 存储模拟器”</strong>。</p>
+
+<p><img src="Images/configuring-a-storage-connection-string.png?raw=true" alt="配置存储连接字符串" />
+</p>
+
+<p><em>配置存储连接字符串</em></p>
+
+<p><img src="Images/storage-connection-string-dialog.png?raw=true" alt="存储连接字符串对话框" />
+</p>
+
+<p><em>存储连接字符串对话框</em></p></li>
+<li><p>另添加一个名为 <em>ContainerName</em> 的设置，将其值设为 <em>gallery</em>。</p>
+
+<p><img src="Images/creating-a-setting-for-the-container-name.png?raw=true" alt="创建容器名称设置" />
+</p>
+
+<p><em>创建容器名称设置</em></p>
+<blockquote>
+<p><strong>注意：</strong>容器名称必须是符合以下命名规则的有效域名系统 (DNS) 名称：</p>
+
+<ul>
+<li>必须以字母或数字开头，并且只能包含字母、数字和短划线 (-) 字符。</li>
+<li>所有字母必须为小写。</li>
+<li>长度必须为 3 至 63 个字符。</li>
+<li>名称中句点与短划线不可相连。</li>
+</ul>
+</blockquote></li>
+<li><p>展开<strong>解决方案资源管理器</strong>中的 <strong>RDImageGallery_WebRole</strong> 节点，右键单击 <strong>Default.aspx</strong>，然后选择<strong>“查看代码”</strong>，以打开图像库用户界面的代码隐藏文件。在以下步骤中将修改此文件，以添加一些必要功能。</p></li>
+<li><p>确保代码文件的开头包含以下命名空间指令。这些指令用于实用工具存储类和 <strong>ServiceRuntime</strong> 类。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex2-01-Namespace-CS</em>）</p>
+
+<!--mark: 1-4 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.ServiceRuntime;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.StorageClient;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.StorageClient.Protocol;</strong>
+</code></pre></li>
+<li><p>对于此实验，需要将 blob 存储在公用容器中，使之对普通匿名用户在 Web 上可见。在此步骤中，须确保在 <strong>ServiceConfiguration.cscfg</strong> 中指定的容器存在。为此，请在 <strong>_Default</strong> 类末尾添加以下方法。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex2-02-EnsureContainerExistsMethod-CS</em>）</p>
+
+<!--mark: 4-12 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">partial</span> <span style="color:#0000FF">class</span> _Default : System.Web.UI.Page { ...
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">void</span> EnsureContainerExists()</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> container = <span style="color:#0000FF">this</span>.GetContainer();</strong>
+<strong class="markLine">    container.CreateIfNotExist();</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> permissions = container.GetPermissions();</strong>
+<strong class="markLine">    permissions.PublicAccess = BlobContainerPublicAccessType.Container;</strong>
+<strong class="markLine">    container.SetPermissions(permissions);</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>下一步是创建一个实用工具方法，用以检索对上一步代码所建容器的引用。由于所有 blob 操作都涉及到该容器，因此几乎在所有操作中都会调用此方法。在 <strong>_Default</strong> 类末尾添加一个方法以创建该容器。此方法使用在先前步骤中输入的配置设置。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex2-03-GetContainerMethod-CS</em>）</p>
+
+<!--mark: 4-11 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">partial</span> <span style="color:#0000FF">class</span> _Default : System.Web.UI.Page { ...
+<strong class="markLine">  <span style="color:#0000FF">private</span> CloudBlobContainer GetContainer()</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#008000">// Get a handle on account, create a blob service client and get container proxy</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> account = CloudStorageAccount.FromConfigurationSetting(<span style="color:#8B0000">&quot;DataConnectionString&quot;</span>);</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> client = account.CreateCloudBlobClient();</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">return</span> client.GetContainerReference(RoleEnvironment.GetConfigurationSettingValue(<span style="color:#8B0000">&quot;ContainerName&quot;</span>));</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>将以下代码（<strong>粗体</strong>显示的代码）插入 <strong>Page_Load</strong> 方法中以初始化该容器，然后刷新页面上用于显示从存储中检索的图像的 <strong>asp:ListView</strong> 控件。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex2-04-PageLoadMethod-CS</em>）</p>
+
+<!--mark: 6-27 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">partial</span> <span style="color:#0000FF">class</span> _Default : System.Web.UI.Page { ...
+  <span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Page_Load(<span style="color:#0000FF">object</span> sender, EventArgs e) {
+<strong class="markLine">    <span style="color:#0000FF">try</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">if</span> (!IsPostBack)</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        <span style="color:#0000FF">this</span>.EnsureContainerExists();</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.RefreshGallery();</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">    <span style="color:#0000FF">catch</span> (System.Net.WebException we)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.status.Text = <span style="color:#8B0000">&quot;Network error: &quot;</span> + we.Message;</strong>
+<strong class="markLine">      <span style="color:#0000FF">if</span> (we.Status == System.Net.WebExceptionStatus.ConnectFailure)</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        <span style="color:#0000FF">this</span>.status.Text += <span style="color:#8B0000">&quot;&lt;br /&gt;Please check if the blob service is running at &quot;</span> +</strong>
+<strong class="markLine">        ConfigurationManager.AppSettings[<span style="color:#8B0000">&quot;storageEndpoint&quot;</span>];</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">    <span style="color:#0000FF">catch</span> (StorageException se)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      Console.WriteLine(<span style="color:#8B0000">&quot;Storage service error: &quot;</span> + se.Message);</strong>
+<strong class="markLine">    }</strong>
+  } ... }
+</code></pre></li>
+<li><p>在 <strong>_Default</strong> 类底部添加以下方法，将图像控件绑定到图像库容器中的 blob 列表。这段代码使用 <strong>CloudBlobContainer</strong> 对象中的 <strong>ListBlobs</strong> 方法检索包含每个 blob 相关信息的 <strong>IListBlobItem</strong> 对象集合。页面中的图像 <strong>asp:ListView</strong> 控件绑定到这些对象以显示对象值。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex2-05-RefreshGalleryMethod-CS</em>）</p>
+
+<!--mark: 4-13 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">partial</span> <span style="color:#0000FF">class</span> _Default : System.Web.UI.Page { ...
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">void</span> RefreshGallery()</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.images.DataSource =</strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.GetContainer().ListBlobs(<span style="color:#0000FF">new</span> BlobRequestOptions()</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        UseFlatBlobListing = <span style="color:#0000FF">true</span>,</strong>
+<strong class="markLine">        BlobListingDetails = BlobListingDetails.All</strong>
+<strong class="markLine">      });</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.images.DataBind();</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>按 <strong>F5</strong> 生成并运行应用程序。此时将启动一个显示图像库内容的浏览器窗口。注意，此时容器为空，并且列表视图显示“无可用数据”消息。下一个任务将实现在 Windows Azure 存储中以 blob 形式存储图像所需的功能。</p>
+<blockquote>
+<p><strong>注意：</strong>请确保通过以下方式将云项目设为启动项目：在<strong>解决方案资源管理器</strong>中右键单击该项目，然后选择<strong>“设为启动项目”</strong>。</p>
+</blockquote>
+<p><img src="Images/the-image-gallery-application.png?raw=true" alt="显示空容器的图像库应用程序" />
+</p>
+
+<p><em>显示空容器的图像库应用程序</em></p>
+<blockquote>
+<p><strong>注意：</strong>如果存储设置配置有误，或者存储服务未运行，将显示类似如下所示的错误。</p>
+</blockquote>
+<p><img src="Images/error--invalid-azure-storage.png?raw=true" alt="无效 Windows Azure 存储配置或服务问题导致出现错误" />
+</p>
+
+<p><em>无效 Windows Azure 存储配置或服务问题导致出现错误</em></p></li>
+<li><p>在 Visual Studio 中，按 <strong>Shift+F5</strong> 停止调试并从计算模拟器中删除部署。</p></li>
+</ol>
+
+<p><a name="Ex2Task2"></a></p>
+
+<h4 id="Task_2_-_Uploading_Blob_Data_to_Storage">任务 2 - 将 Blob 数据上载到存储</h4>
+
+<p>在此任务中，您将向图像库网页中添加功能，用以输入元数据并将图像文件上载到 Windows Azure 存储。该页面包含可用于为所选图像输入描述性元数据的文本控件。页面上的 <strong>asp:FileUpload</strong> 控件从磁盘检索图像并将图像发布到该页面，在该页面中这些图像存储于 blob 存储之中。</p>
+
+<ol>
+<li><p>在 Visual Studio 文本编辑器中打开 <strong>Default.aspx.cs</strong> 文件。为此，在解决方案资源管理器中右键单击 <strong>Default.aspx</strong> 文件，然后选择<strong>“查看代码”</strong>。</p></li>
+<li><p>在页面末尾添加一个方法，用以将图像及其元数据以 blob 形式存储在 Windows Azure 存储中。该方法使用 <strong>CloudBlobContainer</strong> 对象中的 <strong>GetBlobReference</strong> 方法，从图像数据数组和元数据属性创建 blob。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex2-06-SaveImageMethod-CS</em>）</p>
+
+<!--mark: 4-22 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">partial</span> <span style="color:#0000FF">class</span> _Default : System.Web.UI.Page { ...
+<strong class="markLine">  <span style="color:#0000FF">private</span> <span style="color:#0000FF">void</span> SaveImage(<span style="color:#0000FF">string</span> id, <span style="color:#0000FF">string</span> name, <span style="color:#0000FF">string</span> description, <span style="color:#0000FF">string</span> tags, <span style="color:#0000FF">string</span> fileName, <span style="color:#0000FF">string</span> contentType, <span style="color:#0000FF">byte</span>[] data)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#008000">// Create a blob in container and upload image bytes to it</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> blob = <span style="color:#0000FF">this</span>.GetContainer().GetBlobReference(name);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    blob.Properties.ContentType = contentType;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#008000">// Create some metadata for this image</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> metadata = <span style="color:#0000FF">new</span> NameValueCollection();</strong>
+<strong class="markLine">    metadata[<span style="color:#8B0000">&quot;Id&quot;</span>] = id;</strong>
+<strong class="markLine">    metadata[<span style="color:#8B0000">&quot;Filename&quot;</span>] = fileName;</strong>
+<strong class="markLine">    metadata[<span style="color:#8B0000">&quot;ImageName&quot;</span>] = <span style="color:#0000FF">string</span>.IsNullOrEmpty(name) ? <span style="color:#8B0000">&quot;unknown&quot;</span> : name;</strong>
+<strong class="markLine">    metadata[<span style="color:#8B0000">&quot;Description&quot;</span>] = <span style="color:#0000FF">string</span>.IsNullOrEmpty(description) ? <span style="color:#8B0000">&quot;unknown&quot;</span> : description;</strong>
+<strong class="markLine">    metadata[<span style="color:#8B0000">&quot;Tags&quot;</span>] = <span style="color:#0000FF">string</span>.IsNullOrEmpty(tags) ? <span style="color:#8B0000">&quot;unknown&quot;</span> : tags;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#008000">// Add and commit metadata to blob</span></strong>
+<strong class="markLine">    blob.Metadata.Add(metadata);</strong>
+<strong class="markLine">    blob.UploadByteArray(data);            </strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>通过将下面的代码（以<strong>粗体</strong>显示的代码）插入 <strong>upload_Click</strong> 方法中，完成 <strong>Upload Image</strong>（上载图像）按钮的事件处理程序中的代码。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex2-07-UploadClickMethod-CS</em>）</p>
+
+<!--mark: 6-24 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">partial</span> <span style="color:#0000FF">class</span> _Default : System.Web.UI.Page { ...
+  <span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> upload_Click(<span style="color:#0000FF">object</span> sender, EventArgs e) {
+<strong class="markLine">    <span style="color:#0000FF">if</span> (<span style="color:#0000FF">this</span>.imageFile.HasFile)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.status.Text = <span style="color:#8B0000">&quot;Inserted [&quot;</span> + <span style="color:#0000FF">this</span>.imageFile.FileName + <span style="color:#8B0000">&quot;] - Content Type [&quot;</span> + <span style="color:#0000FF">this</span>.imageFile.PostedFile.ContentType + <span style="color:#8B0000">&quot;] - Length [&quot;</span> + <span style="color:#0000FF">this</span>.imageFile.PostedFile.ContentLength + <span style="color:#8B0000">&quot;]&quot;</span>;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.SaveImage(</strong>
+<strong class="markLine">        Guid.NewGuid().ToString(),</strong>
+<strong class="markLine">        <span style="color:#0000FF">this</span>.imageName.Text,</strong>
+<strong class="markLine">        <span style="color:#0000FF">this</span>.imageDescription.Text,</strong>
+<strong class="markLine">        <span style="color:#0000FF">this</span>.imageTags.Text,</strong>
+<strong class="markLine">        <span style="color:#0000FF">this</span>.imageFile.FileName,</strong>
+<strong class="markLine">        <span style="color:#0000FF">this</span>.imageFile.PostedFile.ContentType,</strong>
+<strong class="markLine">        <span style="color:#0000FF">this</span>.imageFile.FileBytes);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.RefreshGallery();</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">    <span style="color:#0000FF">else</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.status.Text = <span style="color:#8B0000">&quot;No image file&quot;</span>;</strong>
+<strong class="markLine">    }</strong>
+  } ... }
+</code></pre>
+
+<p>此代码从文件控件以及页面上 <strong>asp:FileUpload</strong> 控件中的属性检索元数据，包括已发布文件的内容类型、文件名，以及包含图像数据的字节数组。然后此代码调用 <strong>SaveImage</strong> 方法将图像及其元数据存储到 Windows Azure 存储。</p></li>
+<li><p>按 <strong>F5</strong> 生成并运行该应用程序，并在浏览器窗口中打开图像库页面。</p></li>
+<li><p>在 <strong>Name</strong>、<strong>Description</strong> 和 <strong>Tags</strong> 文本框中输入元数据。要选择图像文件，请单击<strong>“浏览”</strong>，导航到 <strong>\Source\Assets\Images</strong>，然后选择一个可用图像。</p>
+
+<p><img src="Images/entering-metadata-to-store.png?raw=true" alt="输入在 blob 存储中与图像一同存储的元数据" />
+</p>
+
+<p><em>输入在 blob 存储中与图像一同存储的元数据</em></p></li>
+<li><p>单击 <strong>Upload Image</strong>（上载图像），将图像发布到 Web 应用程序。此时将刷新页面，并在列表视图中显示新添加的图像。状态消息显示文件名、内容类型，以及所上载文件的大小。注意，此时不显示图像的元数据。下一个任务将实现检索和显示 Windows Azure 中所存储的 blob 元数据所需的功能。</p>
+
+<p><img src="Images/the-image-gallery-showing-the-uploaded-image.png?raw=true" alt="显示已上载图像的图像库" />
+</p>
+
+<p><em>显示已上载图像的图像库</em></p></li>
+<li><p>在 Visual Studio 中，按 <strong>Shift+F5</strong> 停止调试并从计算模拟器中删除部署。</p></li>
+</ol>
+
+<p><a name="Ex2Task3"></a></p>
+
+<h4 id="Task_3_-_Retrieving_Metadata_for_Blobs_in_Storage">任务 3 - 在存储中检索 Blob 元数据</h4>
+
+<p>Blob 上可以附加元数据。在请求创建新容器或 blob 资源时，或者请求在现有资源上显式创建属性时，可以在请求中设置元数据头。在此任务中，您将向图像库页面中添加功能，用以检索和显示与 Windows Azure 容器中所存储的图像相关联的元数据。</p>
+
+<ol>
+<li><p>添加一个事件处理程序，用以检索显示图像的列表视图控件中所显示的每个 blob 的元数据。为此，转到 <strong>Default.aspx</strong>，右键单击它，然后选择<strong>“视图设计器”</strong>。然后，选择 <strong>images ListView</strong> 控件，在<strong>“属性”</strong>窗口（可能需要通过右键单击此控件并选择“属性”来显示该窗口）中，单击<strong>“事件”</strong>按钮。在“数据”类别中找到 <strong>ItemDataBound</strong> 事件，键入 <strong>OnBlobDataBound</strong>，然后按 <strong>Enter</strong>。或者，也可直接编辑 ASP.NET 标记，插入所需的事件处理程序。</p>
+
+<p><img src="Images/configuring-the-event-handler-to-display-meta.png?raw=true" alt="配置事件处理程序以显示元数据" />
+</p>
+
+<p><em>配置事件处理程序以显示元数据</em></p></li>
+<li><p>在代码隐藏文件中，找到 <strong>OnBlobDataBound</strong> 方法，然后插入以下代码（<strong>粗体</strong>显示的代码），此代码检索绑定到列表视图的每个 blob 的属性，并且创建一个集合，其中包含所找到的每个元数据项的名称/值对。然后，该集合被用作为每个图像显示元数据的 <strong>asp:Repeater</strong> 控件的数据源。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex2-08-OnBlobDataBoundMethod-CS</em>）</p>
+
+<!--mark: 3-41 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> OnBlobDataBound(<span style="color:#0000FF">object</span> sender, ListViewItemEventArgs e) {
+<strong class="markLine">  <span style="color:#0000FF">if</span> (e.Item.ItemType == ListViewItemType.DataItem)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> metadataRepeater = e.Item.FindControl(<span style="color:#8B0000">&quot;blobMetadata&quot;</span>) <span style="color:#0000FF">as</span> Repeater;</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> blob = ((ListViewDataItem)e.Item).DataItem <span style="color:#0000FF">as</span> CloudBlob;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#008000">// If this blob is a snapshot, rename button to &quot;Delete Snapshot&quot;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (blob != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">if</span> (blob.SnapshotTime.HasValue)</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> delBtn = e.Item.FindControl(<span style="color:#8B0000">&quot;deleteBlob&quot;</span>) <span style="color:#0000FF">as</span> LinkButton;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#0000FF">if</span> (delBtn != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">          delBtn.Text = <span style="color:#8B0000">&quot;Delete Snapshot&quot;</span>;</strong>
+<strong class="markLine">          <span style="color:#0000FF">var</span> snapshotRequest = BlobRequest.Get(<span style="color:#0000FF">new</span> Uri(delBtn.CommandArgument), 0, blob.SnapshotTime.Value, <span style="color:#0000FF">null</span>);</strong>
+<strong class="markLine">          delBtn.CommandArgument = snapshotRequest.RequestUri.AbsoluteUri;</strong>
+<strong class="markLine">        }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> snapshotBtn = e.Item.FindControl(<span style="color:#8B0000">&quot;SnapshotBlob&quot;</span>) <span style="color:#0000FF">as</span> LinkButton;</strong>
+<strong class="markLine">        <span style="color:#0000FF">if</span> (snapshotBtn != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">          snapshotBtn.Visible = <span style="color:#0000FF">false</span>;</strong>
+<strong class="markLine">        }</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#0000FF">if</span> (metadataRepeater != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        <span style="color:#008000">// bind to metadata</span></strong>
+<strong class="markLine">        metadataRepeater.DataSource = from key <span style="color:#0000FF">in</span> blob.Metadata.AllKeys</strong>
+<strong class="markLine">                                      select <span style="color:#0000FF">new</span></strong>
+<strong class="markLine">                                      {</strong>
+<strong class="markLine">                                        Name = key,</strong>
+<strong class="markLine">                                        Value = blob.Metadata[key]</strong>
+<strong class="markLine">                                      };</strong>
+<strong class="markLine">        metadataRepeater.DataBind();</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>按 <strong>F5</strong> 生成并运行应用程序。注意，列表视图现在显示了在上一个练习中上载的图像的元数据。</p>
+
+<p><img src="Images/the-image-gallery-showing-metadata-retrieved.png?raw=true" alt="显示从 blob 存储中检索的元数据的图像库" />
+</p>
+
+<p><em>显示从 blob 存储中检索的元数据的图像库</em></p></li>
+<li><p>按 <strong>Shift+F5</strong> 停止调试并从计算模拟器中删除部署。</p></li>
+</ol>
+
+<p><a name="Ex2Task4"></a></p>
+
+<h4 id="Task_4_-_Deleting_Blobs_from_Storage">任务 4 - 存储中删除 Blob</h4>
+
+<p>在此任务中，您将向图像库网页中添加功能，用以从 Windows Azure 存储中删除包含图像数据的 blob。</p>
+
+<ol>
+<li><p>更新图像列表视图，以添加用于从库容器中删除图像的 <strong>asp:LinkButton</strong> 控件。为此，请右键单击 <strong>Default.aspx</strong>，选择<strong>“查看标记”</strong>，然后查找用于图像 <strong>asp:ListView</strong> 控件的 <strong>ItemTemplate</strong>。取消注释紧随 <strong>blobMetadata</strong> repeater 控件之后的 ASP.NET 标记（以下以<strong>粗体</strong>显示的代码）。</p>
+
+<!--mark: 10-14 -->
+
+<span class="codelanguage">HTML</span><pre><code class="HTML">...
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;item&quot;</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">ul</span> <span style="color:#FF0000">style</span>=<span style="color:#0000FF">&quot;width:40em;float:left;clear:left&quot;</span> <span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Repeater</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;blobMetadata&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span><span style="color:#0000FF">&gt;</span>
+      <span style="color:#0000FF">&lt;</span><span style="color:#800000">ItemTemplate</span><span style="color:#0000FF">&gt;</span>
+        <span style="color:#0000FF">&lt;</span><span style="color:#800000">li</span><span style="color:#0000FF">&gt;</span><span style="background-color:#FFFF00; color:Black">&lt;%</span># Eval(&quot;Name&quot;) <span style="background-color:#FFFF00; color:Black">%&gt;</span><span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span><span style="background-color:#FFFF00; color:Black">&lt;%</span># Eval(&quot;Value&quot;) <span style="background-color:#FFFF00; color:Black">%&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">li</span><span style="color:#0000FF">&gt;</span>
+      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">ItemTemplate</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;/</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Repeater</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">li</span><span style="color:#0000FF">&gt;</span>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LinkButton</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;deleteBlob&quot;</span> </strong>
+<strong class="markLine">                      <span style="color:#FF0000">OnClientClick</span>=<span style="color:#0000FF">&quot;return confirm(&#39;Delete image?&#39;);&quot;</span></strong>
+<strong class="markLine">                      <span style="color:#FF0000">CommandName</span>=<span style="color:#0000FF">&quot;Delete&quot;</span> </strong>
+<strong class="markLine">                      <span style="color:#FF0000">CommandArgument</span>=<span style="color:#0000FF">&#39;&lt;%# Eval(&quot;Uri&quot;)%&gt;&#39;</span></strong>
+<strong class="markLine">                      <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">Text</span>=<span style="color:#0000FF">&quot;Delete&quot;</span> <span style="color:#FF0000">oncommand</span>=<span style="color:#0000FF">&quot;OnDeleteImage&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+      ...
+    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">li</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">ul</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">img</span> <span style="color:#FF0000">src</span>=<span style="color:#0000FF">&quot;&lt;%# Eval(&quot;</span><span style="color:#FF0000">Uri</span>&quot;) %&gt;&quot; <span style="color:#FF0000">alt</span>=<span style="color:#0000FF">&quot;&lt;%# Eval(&quot;</span><span style="color:#FF0000">Uri</span>&quot;) %&gt;&quot; <span style="color:#FF0000">style</span>=<span style="color:#0000FF">&quot;float:left&quot;</span><span style="color:#0000FF">/&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span>
+...
+</code></pre></li>
+<li><p>在 <strong>Default.aspx.cs</strong> 中添加代码（<strong>粗体</strong>显示的代码），以执行 <em>deleteBlob</em> <strong>asp:LinkButton</strong> 控件的命令处理程序。这段代码验证某 blob 是否在存储中，若有则将其删除。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex2-09-OnDeleteImageMethod-CS</em>）</p>
+
+<!--mark: 6-23 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">partial</span> <span style="color:#0000FF">class</span> _Default : System.Web.UI.Page { ...
+  <span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> OnDeleteImage(<span style="color:#0000FF">object</span> sender, CommandEventArgs e) {
+<strong class="markLine">    <span style="color:#0000FF">try</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">if</span> (e.CommandName == <span style="color:#8B0000">&quot;Delete&quot;</span>)</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> blobUri = (<span style="color:#0000FF">string</span>)e.CommandArgument;</strong>
+<strong class="markLine">        <span style="color:#0000FF">var</span> blob = <span style="color:#0000FF">this</span>.GetContainer().GetBlobReference(blobUri);</strong>
+<strong class="markLine">        blob.DeleteIfExists();</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">    <span style="color:#0000FF">catch</span> (StorageClientException se)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.status.Text = <span style="color:#8B0000">&quot;Storage client error: &quot;</span> + se.Message;</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">    <span style="color:#0000FF">catch</span> (Exception)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.RefreshGallery();</strong>
+  } ... }
+</code></pre></li>
+<li><p>按 <strong>F5</strong> 生成并运行应用程序。</p></li>
+<li><p>从实验 <strong>Source</strong> 文件夹的 <strong>Assets\Images</strong> 中再上载几张图像，然后在显示的任何图像上单击 <strong>Delete</strong>（删除），将相应的 blob 从存储中删除。</p>
+
+<p><img src="Images/adding-and-deleting-image.png?raw=true" alt="在存储中添加和删除图像 blob" />
+</p>
+
+<p><em>在存储中添加和删除图像 blob</em></p></li>
+<li><p>按 <strong>Shift+F5</strong> 停止调试并从计算模拟器中删除部署。</p></li>
+</ol>
+
+<p><a name="Ex2Task5"></a></p>
+
+<h4 id="Task_5_-_Copying_Blobs">任务 5 - 复制 Blob</h4>
+
+<p>Windows Azure Blob 服务支持对 blob 进行复制。在此任务中，您将向图像库网页中添加功能，用以从 Windows Azure 存储中复制包含之前添加的图像数据的 blob。</p>
+
+<ol>
+<li><p>更新图像列表视图，以添加用于从库容器复制图像的 <strong>asp:LinkButton</strong> 控件。在源模式下打开 <strong>Default.aspx</strong> 页，找到用于图像 <strong>asp:ListView</strong> 控件的 <strong>ItemTemplate</strong>。取消注释紧随 delete blob 链接按钮控件之后的 ASP.NET 标记（以下以<strong>粗体</strong>文本显示的代码）。</p>
+
+<!--mark: 16-20 -->
+
+<span class="codelanguage">HTML</span><pre><code class="HTML">...
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;item&quot;</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">ul</span> <span style="color:#FF0000">style</span>=<span style="color:#0000FF">&quot;width:40em;float:left;clear:left&quot;</span> <span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Repeater</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;blobMetadata&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span><span style="color:#0000FF">&gt;</span>
+      <span style="color:#0000FF">&lt;</span><span style="color:#800000">ItemTemplate</span><span style="color:#0000FF">&gt;</span>
+        <span style="color:#0000FF">&lt;</span><span style="color:#800000">li</span><span style="color:#0000FF">&gt;</span><span style="background-color:#FFFF00; color:Black">&lt;%</span># Eval(&quot;Name&quot;) <span style="background-color:#FFFF00; color:Black">%&gt;</span><span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span><span style="background-color:#FFFF00; color:Black">&lt;%</span># Eval(&quot;Value&quot;) <span style="background-color:#FFFF00; color:Black">%&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">li</span><span style="color:#0000FF">&gt;</span>
+      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">ItemTemplate</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;/</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Repeater</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">li</span><span style="color:#0000FF">&gt;</span>
+      <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LinkButton</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;deleteBlob&quot;</span> 
+                      <span style="color:#FF0000">OnClientClick</span>=<span style="color:#0000FF">&quot;return confirm(&#39;Delete image?&#39;);&quot;</span>
+                      <span style="color:#FF0000">CommandName</span>=<span style="color:#0000FF">&quot;Delete&quot;</span> 
+                      <span style="color:#FF0000">CommandArgument</span>=<span style="color:#0000FF">&#39;&lt;%# Eval(&quot;Uri&quot;)%&gt;&#39;</span>
+                      <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">Text</span>=<span style="color:#0000FF">&quot;Delete&quot;</span> <span style="color:#FF0000">oncommand</span>=<span style="color:#0000FF">&quot;OnDeleteImage&quot;</span> <span style="color:#0000FF">/&gt;</span>
+
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LinkButton</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;CopyBlob&quot;</span> </strong>
+<strong class="markLine">                      <span style="color:#FF0000">OnClientClick</span>=<span style="color:#0000FF">&quot;return confirm(&#39;Copy image?&#39;);&quot;</span></strong>
+<strong class="markLine">                      <span style="color:#FF0000">CommandName</span>=<span style="color:#0000FF">&quot;Copy&quot;</span> </strong>
+<strong class="markLine">                      <span style="color:#FF0000">CommandArgument</span>=<span style="color:#0000FF">&#39;&lt;%# Eval(&quot;Uri&quot;)%&gt;&#39;</span></strong>
+<strong class="markLine">                      <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">Text</span>=<span style="color:#0000FF">&quot;Copy&quot;</span> <span style="color:#FF0000">oncommand</span>=<span style="color:#0000FF">&quot;OnCopyImage&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+      ...
+    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">li</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">ul</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">img</span> <span style="color:#FF0000">src</span>=<span style="color:#0000FF">&quot;&lt;%# Eval(&quot;</span><span style="color:#FF0000">Uri</span>&quot;) %&gt;&quot; <span style="color:#FF0000">alt</span>=<span style="color:#0000FF">&quot;&lt;%# Eval(&quot;</span><span style="color:#FF0000">Uri</span>&quot;) %&gt;&quot; <span style="color:#FF0000">style</span>=<span style="color:#0000FF">&quot;float:left&quot;</span><span style="color:#0000FF">/&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span>
+...
+</code></pre></li>
+<li><p>在 <strong>Default.aspx.cs</strong> 中添加代码（<strong>粗体</strong>显示的代码），以执行 <em>copyBlob</em> <strong>asp:LinkButton</strong> 控件的命令处理程序。此代码创建基于现有 blob 的 blob 副本。它还更新其元数据中的 <em>&quot;ImageName&quot;</em> 属性，以反映这是一个副本。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex2-10-OnCopyImageMethod-CS</em>）</p>
+
+<!--mark: 6-31 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">partial</span> <span style="color:#0000FF">class</span> _Default : System.Web.UI.Page { ...
+  <span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> OnCopyImage(<span style="color:#0000FF">object</span> sender, CommandEventArgs e) {
+<strong class="markLine">    <span style="color:#0000FF">if</span> (e.CommandName == <span style="color:#8B0000">&quot;Copy&quot;</span>)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#008000">// Prepare an Id for the copied blob</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">var</span> newId = Guid.NewGuid();</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#008000">// Get source blob</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">var</span> blobUri = (<span style="color:#0000FF">string</span>)e.CommandArgument;</strong>
+<strong class="markLine">      <span style="color:#0000FF">var</span> srcBlob = <span style="color:#0000FF">this</span>.GetContainer().GetBlobReference(blobUri);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#008000">// Create new blob</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">var</span> newBlob = <span style="color:#0000FF">this</span>.GetContainer().GetBlobReference(newId.ToString());</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#008000">// Copy content from source blob</span></strong>
+<strong class="markLine">      newBlob.CopyFromBlob(srcBlob);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#008000">// Explicitly get metadata for new blob</span></strong>
+<strong class="markLine">      newBlob.FetchAttributes(<span style="color:#0000FF">new</span> BlobRequestOptions { BlobListingDetails = BlobListingDetails.Metadata });</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#008000">// Change metadata on the new blob to reflect this is a copy via UI</span></strong>
+<strong class="markLine">      newBlob.Metadata[<span style="color:#8B0000">&quot;ImageName&quot;</span>] = <span style="color:#8B0000">&quot;Copy of \&quot;&quot;</span> + newBlob.Metadata[<span style="color:#8B0000">&quot;ImageName&quot;</span>] + <span style="color:#8B0000">&quot;\&quot;&quot;</span>;</strong>
+<strong class="markLine">      newBlob.Metadata[<span style="color:#8B0000">&quot;Id&quot;</span>] = newId.ToString();</strong>
+<strong class="markLine">      newBlob.SetMetadata();</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#008000">// Render all blobs</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.RefreshGallery();</strong>
+<strong class="markLine">    }</strong>
+  } ... }
+</code></pre></li>
+<li><p>按 <strong>F5</strong> 生成并运行应用程序。</p>
+
+<p><img src="Images/copying-image-blobs-from-storage.png?raw=true" alt="从存储复制图像 blob" />
+</p>
+
+<p><em>从存储复制图像 blob</em></p></li>
+<li><p>从 <strong>Source\Assets\Images</strong> 中再上载几张图像，然后在显示的任何图像上单击 <strong>Copy</strong>（复制），创建存储中相应 blob 的副本。</p></li>
+<li><p>单击 <strong>OK</strong>（确定）确认复制操作。应看到已经创建了该图像的副本，并且 <strong>ImageName</strong> 元数据表明这是一个副本。</p>
+
+<p><img src="Images/verification.png?raw=true" alt="验证" />
+</p>
+
+<p><em>验证</em></p></li>
+<li><p>按 <strong>Shift+F5</strong> 停止调试并从计算模拟器中删除部署。</p></li>
+</ol>
+
+<p><a name="Ex2Task6"></a></p>
+
+<h4 id="Task_6_-_Taking_Blob_Snapshots">任务 6 - 拍摄 Blob 快照</h4>
+
+<p>Windows Azure Blob 服务支持获取 blob 快照。快照与副本的区别为快照是只读的，并且原始 blob 与它的快照保持着关系；而 blob 副本是可编辑的。获取 blob 快照以后，源 blob 不可再删除。要删除源 blob，须先删除它的所有快照。</p>
+
+<p>在此任务中，您将添加功能以获取包含 Windows Azure 存储中的图像数据的 blob 的快照。</p>
+
+<ol>
+<li><p>更新图像列表视图，以添加用于为库容器中的图像获取快照的 <strong>asp:LinkButton</strong> 控件。在源模式下打开 <strong>Default.aspx</strong> 页，找到用于图像 <strong>asp:ListView</strong> 控件的 <strong>ItemTemplate</strong>。取消注释紧随 copy blob 链接按钮控件之后的 ASP.NET 标记（以下以<strong>粗体</strong>文本显示的代码）。</p>
+
+<!--mark: 21-25 -->
+
+<span class="codelanguage">HTML</span><pre><code class="HTML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;item&quot;</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">ul</span> <span style="color:#FF0000">style</span>=<span style="color:#0000FF">&quot;width:40em;float:left;clear:left&quot;</span> <span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Repeater</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;blobMetadata&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span><span style="color:#0000FF">&gt;</span>
+      <span style="color:#0000FF">&lt;</span><span style="color:#800000">ItemTemplate</span><span style="color:#0000FF">&gt;</span>
+        <span style="color:#0000FF">&lt;</span><span style="color:#800000">li</span><span style="color:#0000FF">&gt;</span><span style="background-color:#FFFF00; color:Black">&lt;%</span># Eval(&quot;Name&quot;) <span style="background-color:#FFFF00; color:Black">%&gt;</span><span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span><span style="background-color:#FFFF00; color:Black">&lt;%</span># Eval(&quot;Value&quot;) <span style="background-color:#FFFF00; color:Black">%&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">li</span><span style="color:#0000FF">&gt;</span>
+      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">ItemTemplate</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;/</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Repeater</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">li</span><span style="color:#0000FF">&gt;</span>
+      <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LinkButton</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;deleteBlob&quot;</span> 
+                      <span style="color:#FF0000">OnClientClick</span>=<span style="color:#0000FF">&quot;return confirm(&#39;Delete image?&#39;);&quot;</span>
+                      <span style="color:#FF0000">CommandName</span>=<span style="color:#0000FF">&quot;Delete&quot;</span> 
+                      <span style="color:#FF0000">CommandArgument</span>=<span style="color:#0000FF">&#39;&lt;%# Eval(&quot;Uri&quot;)%&gt;&#39;</span>
+                      <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">Text</span>=<span style="color:#0000FF">&quot;Delete&quot;</span> <span style="color:#FF0000">oncommand</span>=<span style="color:#0000FF">&quot;OnDeleteImage&quot;</span> <span style="color:#0000FF">/&gt;</span>
+
+      <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LinkButton</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;CopyBlob&quot;</span> 
+                      <span style="color:#FF0000">OnClientClick</span>=<span style="color:#0000FF">&quot;return confirm(&#39;Copy image?&#39;);&quot;</span>
+                      <span style="color:#FF0000">CommandName</span>=<span style="color:#0000FF">&quot;Copy&quot;</span> 
+                      <span style="color:#FF0000">CommandArgument</span>=<span style="color:#0000FF">&#39;&lt;%# Eval(&quot;Uri&quot;)%&gt;&#39;</span>
+                      <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">Text</span>=<span style="color:#0000FF">&quot;Copy&quot;</span> <span style="color:#FF0000">oncommand</span>=<span style="color:#0000FF">&quot;OnCopyImage&quot;</span> <span style="color:#0000FF">/&gt;</span>
+
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LinkButton</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;SnapshotBlob&quot;</span> </strong>
+<strong class="markLine">                      <span style="color:#FF0000">OnClientClick</span>=<span style="color:#0000FF">&quot;return confirm(&#39;Snapshot image?&#39;);&quot;</span></strong>
+<strong class="markLine">                      <span style="color:#FF0000">CommandName</span>=<span style="color:#0000FF">&quot;Snapshot&quot;</span> </strong>
+<strong class="markLine">                      <span style="color:#FF0000">CommandArgument</span>=<span style="color:#0000FF">&#39;&lt;%# Eval(&quot;Uri&quot;)%&gt;&#39;</span></strong>
+<strong class="markLine">                      <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">Text</span>=<span style="color:#0000FF">&quot;Snapshot&quot;</span> <span style="color:#FF0000">oncommand</span>=<span style="color:#0000FF">&quot;OnSnapshotImage&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">li</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">ul</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">img</span> <span style="color:#FF0000">src</span>=<span style="color:#0000FF">&quot;&lt;%# Eval(&quot;</span><span style="color:#FF0000">Uri</span>&quot;) %&gt;&quot; <span style="color:#FF0000">alt</span>=<span style="color:#0000FF">&quot;&lt;%# Eval(&quot;</span><span style="color:#FF0000">Uri</span>&quot;) %&gt;&quot; <span style="color:#FF0000">style</span>=<span style="color:#0000FF">&quot;float:left&quot;</span><span style="color:#0000FF">/&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>在 <strong>Default.aspx.cs</strong> 中添加代码（<strong>粗体</strong>显示的代码），以执行 <em>snapshotBlob</em> <strong>asp:LinkButton</strong> 控件的命令处理程序。此代码会获取源 blob 并制作其快照。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex2-11-OnSnapshotImageMethod-CS</em>）</p>
+
+<!--mark: 6-18 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">partial</span> <span style="color:#0000FF">class</span> _Default : System.Web.UI.Page { ...
+  <span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> OnSnapshotImage(<span style="color:#0000FF">object</span> sender, CommandEventArgs e) {
+<strong class="markLine">    <span style="color:#0000FF">if</span> (e.CommandName == <span style="color:#8B0000">&quot;Snapshot&quot;</span>)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#008000">// Get source blob</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">var</span> blobUri = (<span style="color:#0000FF">string</span>)e.CommandArgument;</strong>
+<strong class="markLine">      <span style="color:#0000FF">var</span> srcBlob = <span style="color:#0000FF">this</span>.GetContainer().GetBlobReference(blobUri);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#008000">// Create a snapshot</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">var</span> snapshot = srcBlob.CreateSnapshot();</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.status.Text = <span style="color:#8B0000">&quot;A snapshot has been taken for image blob:&quot;</span> + srcBlob.Uri + <span style="color:#8B0000">&quot; at &quot;</span> + snapshot.SnapshotTime;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.RefreshGallery();</strong>
+<strong class="markLine">    }</strong>
+  } ... }
+</code></pre></li>
+<li><p>按 <strong>F5</strong> 生成并运行应用程序。</p></li>
+<li><p>在显示的任何图像上单击 <strong>Snapshot</strong>（快照），获取存储中相应 blob 的快照。</p>
+
+<p><img src="Images/taking-a-snapshot-of-image-blobs-from-storage.png?raw=true" alt="获取存储中图像 blob 的快照" />
+</p>
+
+<p><em>获取存储中图像 blob 的快照</em></p></li>
+<li><p>单击 <strong>OK</strong>（确定）确认获取快照的操作。此时将显示确认已获取快照的状态更新。</p></li>
+<li><p>尝试删除已获取了快照的<strong>原始</strong> blob。</p>
+
+<p><img src="Images/cannot-delete-snapshot-error.png?raw=true" alt="无法删除快照错误" />
+</p>
+
+<p><em>无法删除快照错误</em></p></li>
+<li><p>此时将显示确认无法删除该 blob 的状态更新。</p>
+
+<p><img src="Images/cannot-delete-snapshot-error2.png?raw=true" alt="无法删除快照错误" />
+</p>
+
+<p><em>无法删除快照错误</em></p>
+<blockquote>
+<p><strong>注意：</strong>要删除包含快照的 blob，须先删除其所有快照（此解决方案中不提供该功能）。</p>
+</blockquote></li>
+</ol>
+
+<p><a name="Exercise3"></a></p>
+
+<h3 id="Exercise_3_Working_with_Queues">练习 3：使用队列</h3>
+
+<p>在此练习中，您将创建一个简单的 Web 应用程序，用以将消息发送到 Windows Azure 队列。该解决方案中的一个辅助角色将检索消息，并将其写入计算模拟器日志。</p>
+
+<p>队列服务是在前端角色与辅助角色之间发送消息的一种很好的方式。队列可包含不限数目的消息，每条消息的大小最高为 64 KB。消息从队列末尾推入，从队列前端弹出。</p>
+
+<p><a name="Ex3Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_the_Initial_Solution">任务 1 - 创建初始解决方案</h4>
+
+<p>在此任务中，您将创建并配置在 Windows Azure 中使用队列的初始解决方案。</p>
+
+<ol>
+<li><p>通过从<strong>“开始”|“所有程序”|“Microsoft Visual Studio 2010”</strong>中右键单击 <strong>Microsoft Visual Studio 2010</strong>，然后选择<strong>“以管理员身份运行”</strong>，以提升的<strong>管理员</strong>身份打开 Microsoft Visual Studio 2010。</p></li>
+<li><p>从<strong>“文件”</strong>菜单中，选择<strong>“新建项目”</strong>。</p></li>
+<li><p>在<strong>“新建项目”</strong>对话框中，展开“已安装的模板”列表中的 <strong>Visual C#</strong> 语言，然后选择<strong>“云”</strong>。选择<strong>“Windows Azure 项目”</strong>模板，将项目的<strong>名称</strong>设置为 <strong>RdStorage</strong>，将位置设置为实验 <strong>Source</strong> 文件夹中的 <strong>Ex3-WorkingWithQueues\Begin</strong>，将解决方案名称更改为 <strong>Begin</strong>，然后确保选中<strong>“创建解决方案的目录”</strong>。单击<strong>“确定”</strong>创建项目。</p>
+
+<p><img src="Images/creating-a-windowsazure-project.png?raw=true" alt="创建 WindowsAzure 项目" />
+</p>
+
+<p><em>创建 WindowsAzure 项目</em></p></li>
+<li><p>在<strong>“新建 Windows Azure 项目”</strong>对话框中，从可用角色列表中选择<strong>“ASP.NET Web 角色”</strong>，然后单击箭头 <strong>(&gt;)</strong> 向解决方案添加该角色的实例。将角色名称更改为 <strong>RdStorage_WebRole</strong>。为此，请在右侧面板中选择角色，单击铅笔图标，然后输入新名称。不要关闭该对话框。下一步将再添加一个角色。</p>
+
+<p><img src="Images/adding-a-web-role-to-the-windows-azure-projec.png?raw=true" alt="在 Windows Azure 项目中添加 Web 角色" />
+</p>
+
+<p><em>在 Windows Azure 项目中添加 Web 角色</em></p></li>
+<li><p>下一步将在该解决方案中再添加一个角色。选择一个<strong>辅助角色</strong>，将其名称更改为 <strong>RdStorage_WorkerRole</strong>。</p>
+
+<p><img src="Images/adding-a-new-worker-role-to-the-cloud-service.png?raw=true" alt="在云服务项目中添加新的辅助角色" />
+</p>
+
+<p><em>在云服务项目中添加新的辅助角色</em></p></li>
+<li><p>单击<strong>“确定”</strong>，关闭<strong>“新建 Windows Azure 项目”</strong>对话框并创建解决方案。</p></li>
+<li><p>从 <strong>RdStorage</strong> 云项目中，右键单击<strong>“角色”</strong>文件夹下的每个角色。选择<strong>“属性”</strong>。</p></li>
+<li><p>在<strong>“设置”</strong>选项卡中，单击<strong>“添加设置”</strong>，然后创建名为 <em>DataConnectionString</em> 的 <strong>ConnectionString</strong> 类型。单击省略号标签按钮，然后将连接字符串设为<strong>“Windows Azure 存储模拟器”</strong>。对项目中的每个角色均重复此操作。</p>
+
+<p><img src="Images/creating-a-storage-connection-string.png?raw=true" alt="创建存储连接字符串" />
+</p>
+
+<p><em>创建存储连接字符串</em></p>
+
+<p><img src="Images/configuring-a-connection-string-to-use-comput.png?raw=true" alt="配置连接字符串以使用计算模拟器" />
+</p>
+
+<p><em>配置连接字符串以使用计算模拟器</em></p></li>
+</ol>
+
+<p><a name="Ex3Task2"></a></p>
+
+<h4 id="Task_2_-_Sending_Messages_to_the_Queue">任务 2 - 将消息发送到队列</h4>
+
+<p>在此任务中，您将实现 <strong>RdStorage_WebRole</strong> Web 应用程序以将消息发送到队列。</p>
+
+<ol>
+<li><p>打开 <strong>RdStorage_WebRole</strong> 网站的 <strong>Default.aspx</strong> 页面。删除 <em>BodyContent</em> <strong>Content</strong> 控件中的现有内容。</p></li>
+<li><p>在该页面中添加一个 <strong>asp:TextBox</strong> 控件。将 <strong>TextBox</strong> 的 <strong>ID</strong> 更改为 <strong>txtMessage</strong>。您可能希望为美观起见设置该页面的格式，但不要求这样做。另外，紧随先前插入的 <strong>TextBox</strong> 添加一个 <strong>asp:Button</strong> 控件。将该按钮的 <strong>ID</strong> 更改为 <strong>btnSend</strong>，并将 <strong>Text</strong> 设置为 <strong>Send message</strong>（发送消息）。此代码应类似如下：</p>
+
+<!--mark: 8,9 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#">&lt;%@ Page Title=<span style="color:#8B0000">&quot;Home Page&quot;</span> Language=<span style="color:#8B0000">&quot;C#&quot;</span> MasterPageFile=<span style="color:#8B0000">&quot;~/Site.master&quot;</span> AutoEventWireup=<span style="color:#8B0000">&quot;true&quot;</span>
+    CodeBehind=<span style="color:#8B0000">&quot;Default.aspx.cs&quot;</span> Inherits=<span style="color:#8B0000">&quot;RdStorage_WebRole._Default&quot;</span> %&gt; &lt;asp:Content ID=<span style="color:#8B0000">&quot;HeaderContent&quot;</span> runat=<span style="color:#8B0000">&quot;server&quot;</span> ContentPlaceHolderID=<span style="color:#8B0000">&quot;HeadContent&quot;</span>&gt; &lt;/asp:Content&gt; &lt;asp:Content ID=<span style="color:#8B0000">&quot;BodyContent&quot;</span> runat=<span style="color:#8B0000">&quot;server&quot;</span> ContentPlaceHolderID=<span style="color:#8B0000">&quot;MainContent&quot;</span>&gt;
+
+<strong class="markLine">  &lt;asp:TextBox ID=<span style="color:#8B0000">&quot;txtMessage&quot;</span> runat=<span style="color:#8B0000">&quot;server&quot;</span>&gt;&lt;/asp:TextBox&gt;</strong>
+<strong class="markLine">  &lt;asp:Button ID=<span style="color:#8B0000">&quot;btnSend&quot;</span> runat=<span style="color:#8B0000">&quot;server&quot;</span> Text=<span style="color:#8B0000">&quot;Send message&quot;</span> /&gt;</strong>
+
+&lt;/asp:Content&gt;
+</code></pre></li>
+<li><p>打开 <strong>Default.aspx</strong> 页面的代码隐藏文件。为此，请右键单击 <strong>Default.aspx</strong>，然后选择<strong>“查看代码”</strong>。</p></li>
+<li><p>在该文件的开头添加以下命名空间指令。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex3-01-Namespace-CS</em>）</p>
+
+<!--mark: 1-3 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.StorageClient;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.ServiceRuntime;</strong>
+</code></pre></li>
+<li><p>右键单击 <strong>Default.aspx</strong>，选择<strong>“视图设计器”</strong>，然后双击 <strong>Send message</strong>（发送消息）按钮。或者，也可直接编辑 ASP.NET 标记，插入所需的事件处理程序。将以下代码（<strong>粗体</strong>显示的代码）添加到 btnSend_Click 事件中以初始化帐户信息：</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex3-02-WebRoleCreateAccount-CS</em>）</p>
+
+<!--mark: 6,7 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">partial</span> <span style="color:#0000FF">class</span> _Default : System.Web.UI.Page { ...
+  <span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> btnSend_Click(<span style="color:#0000FF">object</span> sender, EventArgs e) {
+<strong class="markLine">    <span style="color:#008000">// initialize the account information</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> storageAccount = CloudStorageAccount.FromConfigurationSetting(<span style="color:#8B0000">&quot;DataConnectionString&quot;</span>);</strong>
+  } }
+</code></pre></li>
+<li><p>接着，紧随上一步插入的代码之后添加以下代码（<strong>粗体</strong>显示的代码），以获取 <strong>QueueStorage</strong> 帮助程序对象的实例，并创建消息队列（如果还没有消息队列）。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex3-03-WebRoleCreateQueue-CS</em>）</p>
+
+<!--mark: 5-8 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> btnSend_Click(<span style="color:#0000FF">object</span> sender, EventArgs e) { ...
+
+<strong class="markLine">  <span style="color:#008000">// retrieve a reference to the messages queue</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">var</span> queueClient = storageAccount.CreateCloudQueueClient();</strong>
+<strong class="markLine">  <span style="color:#0000FF">var</span> queue = queueClient.GetQueueReference(<span style="color:#8B0000">&quot;messagequeue&quot;</span>);</strong>
+<strong class="markLine">  queue.CreateIfNotExist();</strong>
+}
+</code></pre></li>
+<li><p>紧随上一步插入的代码之后添加以下代码（<strong>粗体</strong>显示的代码），以将用户输入的消息放入队列中。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex3-04-WebRoleAddMessage-CS</em>）</p>
+
+<!--mark: 5-8 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> btnSend_Click(<span style="color:#0000FF">object</span> sender, EventArgs e) { ...
+
+<strong class="markLine">  <span style="color:#008000">// add the message to the queue</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">var</span> msg = <span style="color:#0000FF">new</span> CloudQueueMessage(<span style="color:#0000FF">this</span>.txtMessage.Text);</strong>
+<strong class="markLine">  queue.AddMessage(msg);</strong>
+<strong class="markLine">  <span style="color:#0000FF">this</span>.txtMessage.Text = <span style="color:#0000FF">string</span>.Empty;</strong>
+}
+</code></pre></li>
+<li><p>从 <strong>RDStorage_WebRole</strong> 项目中打开 <strong>WebRole.cs</strong> 文件。</p></li>
+<li><p>在该代码文件的开头将以下命名空间添加到现有指令中。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex3-05-Namespace-CS</em>）</p>
+
+<!--mark: 1 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.StorageClient;</strong>
+</code></pre></li>
+</ol>
+
+<p><a name="Ex3Task3"></a></p>
+
+<h4 id="Task_3_-_Retrieving_Messages_from_the_Queue">任务 3 - 从队列中检索消息</h4>
+
+<p>在此任务中，您将更新辅助角色，以从队列中检索消息并在计算模拟器日志中显示这些消息。</p>
+
+<ol>
+<li><p>从 <strong>RdStorage_WebRole</strong> 项目中打开 <strong>Global.asax.cs</strong> 文件。</p></li>
+<li><p>将以下代码（<strong>粗体</strong>显示的代码）添加到 <strong>Application_Start</strong> 方法中以初始化帐户信息。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex3-06-InitializeAccount-CS</em>）</p>
+
+<!--mark: 3-6 -->    
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">void</span> Application_Start(<span style="color:#0000FF">object</span> sender, EventArgs e) {
+<strong class="markLine">  CloudStorageAccount.SetConfigurationSettingPublisher((configName, configSetter) =&gt;</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    configSetter(RoleEnvironment.GetConfigurationSettingValue(configName));</strong>
+<strong class="markLine">  });</strong>
+}
+</code></pre></li>
+<li><p>确保代码文件的开头包含以下命名空间指令。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex3-07-Namespace-CS</em>）</p>
+
+<!--mark: 1,2 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.ServiceRuntime;</strong>
+</code></pre></li>
+<li><p>从 <strong>RdStorage_WorkerRole</strong> 项目中打开 <strong>WorkerRole.cs</strong> 文件。</p></li>
+<li><p>将以下突出显示的代码添加到 WorkerRole.cs 中的 <strong>OnStart</strong> 中，放在 <strong>return base.OnStart()</strong> 之前，用于初始化帐户信息。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex3-08-InitializeAccount-CS</em>）</p>
+
+<!--mark: 9-12 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">override</span> <span style="color:#0000FF">bool</span> OnStart() {
+  <span style="color:#008000">// Set the maximum number of concurrent connections </span>
+  ServicePointManager.DefaultConnectionLimit = 12;
+
+  <span style="color:#008000">// For information on handling configuration changes</span>
+  <span style="color:#008000">// see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.</span>
+
+<strong class="markLine">  CloudStorageAccount.SetConfigurationSettingPublisher((configName, configSetter) =&gt;</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    configSetter(RoleEnvironment.GetConfigurationSettingValue(configName));</strong>
+<strong class="markLine">  });</strong>
+
+  <span style="color:#0000FF">return</span> <span style="color:#0000FF">base</span>.OnStart(); }
+</code></pre></li>
+<li><p>确保代码文件的开头包含以下命名空间指令。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex3-09-Namespace-CS</em>）</p>
+
+<!--mark: 1-6 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> System.Diagnostics;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> System.Threading;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.Diagnostics;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.ServiceRuntime;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.StorageClient;</strong>
+</code></pre></li>
+<li><p>在 <strong>Run</strong> 方法中，获得 <strong>QueueStorage</strong> 帮助程序对象的实例，并检索对<em>消息</em> 队列的引用。为此，请添加以下代码（<strong>粗体</strong>显示的代码），并删除模拟辅助角色延迟的以下代码行（以<del>删除线</del>显示）。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex3-10-WorkerGetQueue-CS</em>）</p>
+
+<!--mark: 12-17; strike: 6-10 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">override</span> <span style="color:#0000FF">void</span> Run() {
+  <span style="color:#008000">// This is a sample worker implementation. Replace with your logic.</span>
+  Trace.WriteLine(<span style="color:#8B0000">&quot;RdStorage_WorkerRole entry point called&quot;</span>, <span style="color:#8B0000">&quot;Information&quot;</span>);
+
+<span class="strikeLine" style="text-decoration:line-through;">  <span style="color:#0000FF">while</span> (<span style="color:#0000FF">true</span>)</span>
+<span class="strikeLine" style="text-decoration:line-through;">  {</span>
+<span class="strikeLine" style="text-decoration:line-through;">    Thread.Sleep(10000);</span>
+<span class="strikeLine" style="text-decoration:line-through;">    Trace.WriteLine(<span style="color:#8B0000">&quot;Working&quot;</span>, <span style="color:#8B0000">&quot;Information&quot;</span>);</span>
+<span class="strikeLine" style="text-decoration:line-through;">  }</span>
+
+<strong class="markLine">  <span style="color:#008000">// initialize the account information</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">var</span> storageAccount = CloudStorageAccount.FromConfigurationSetting(<span style="color:#8B0000">&quot;DataConnectionString&quot;</span>);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">  <span style="color:#008000">// retrieve a reference to the messages queue</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">var</span> queueClient = storageAccount.CreateCloudQueueClient();</strong>
+<strong class="markLine">  <span style="color:#0000FF">var</span> queue = queueClient.GetQueueReference(<span style="color:#8B0000">&quot;messagequeue&quot;</span>);</strong>
+}
+</code></pre></li>
+<li><p>下一步，添加突出显示的以下代码，以检索消息并将它们写入到计算模拟器日志中。然后将该消息从队列中删除。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex3-11-WorkerGetMessages-CS</em>）</p>
+
+<!--mark: 5-20 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">override</span> <span style="color:#0000FF">void</span> Run() { ...
+
+<strong class="markLine">  <span style="color:#008000">// retrieve messages and write them to the compute emulator log</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">while</span> (<span style="color:#0000FF">true</span>)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    Thread.Sleep(10000);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (queue.Exists())</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">var</span> msg = queue.GetMessage();</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#0000FF">if</span> (msg != <span style="color:#0000FF">null</span>)</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        Trace.TraceInformation(<span style="color:#0000FF">string</span>.Format(<span style="color:#8B0000">&quot;Message &#39;{0}&#39; processed.&quot;</span>, msg.AsString));</strong>
+<strong class="markLine">        queue.DeleteMessage(msg);</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>该工作进程将尝试使用 GetMessage 方法每隔 10 秒从队列中获取一条消息。如果队列中有消息，则进程将在计算模拟器日志中显示它们。</p>
+</blockquote>
+<p><a name="Ex3Verification"></a></p>
+
+<h4 id="Verification">验证</h4>
+
+<p>测试在计算模拟器中运行的服务：</p>
+
+<ol>
+<li><p>在 Visual Studio 中，按 <strong>F5</strong> 生成并运行该应用程序。</p>
+<blockquote>
+<p><strong>注意：</strong>请确保通过以下方式将云项目设为启动项目：在<strong>解决方案资源管理器</strong>中右键单击该项目，然后选择<strong>“设为启动项目”</strong>。</p>
+</blockquote></li>
+<li><p>打开计算模拟器用户界面。为此，请右键单击系统托盘中的相应图标，然后选择<strong>“显示计算模拟器用户界面”</strong>。（该图标形如蔚蓝色窗口。）</p>
+
+<p><img src="Images/showing-the-compute-emulator-ui.png?raw=true" alt="显示计算模拟器用户界面" />
+</p>
+
+<p><em>显示计算模拟器用户界面</em></p></li>
+<li><p>展开树结构，以显示<strong>辅助角色</strong>实例日志。</p></li>
+<li><p>切换回 Windows Internet Explorer。确保显示默认页面，输入消息，然后单击 <strong>Send message</strong>（发送消息）。</p>
+
+<p><img src="Images/default-web-page.png?raw=true" alt="默认网页" />
+</p>
+
+<p><em>默认网页</em></p></li>
+<li><p>切换回计算模拟器用户界面。此时应看到该消息记录在辅助角色日志中。</p>
+
+<p><img src="Images/worker-log-showing-the-message.png?raw=true" alt="显示消息的辅助角色日志" />
+</p>
+
+<p><em>显示消息的辅助角色日志</em></p>
+<blockquote>
+<p><strong>注意：</strong>由于辅助角色睡眠时间的缘故，可能需要几秒钟才能显示该消息。</p>
+</blockquote></li>
+</ol>
+
+<p><a name="Exercise4"></a></p>
+
+<h3 id="Exercise_4_Working_with_Drives">练习 4：使用驱动器</h3>
+
+<p>Windows Azure 驱动器是一种存储在页 blob 中的 NTFS 格式的虚拟硬盘 (VHD) 文件。可将该虚拟硬盘装载到 Windows Azure 计算实例中，以便提供通过 Windows 文件系统向应用程序公开的永久性存储。Azure 驱动器的内容将持续存在，即使装载了它的计算角色已回收也是如此。</p>
+
+<p>在此练习中，您将取用一个利用常规 Windows 文件系统 API 访问本地磁盘存储中的信息的现有应用程序，并将该应用程序作为 Windows Azure 服务运行。您将看到，通过使用 Windows Azure 驱动器，无需更改代码便可在 Azure 云中运行相同的应用程序，并使其访问保存在 Azure 存储中的信息。</p>
+
+<p>在此练习的第一部分，您在 ASP.NET 开发服务器中执行原始应用程序，以熟悉该应用程序的操作。下一步是创建云服务项目，将该应用程序作为 Web 角色进行关联，然后使用模拟的 Azure 驱动器在计算模拟器中运行该应用程序。最后，在本地计算机上创建虚拟硬盘，将其上载到 blob 存储中，将应用程序部署到 Windows Azure，并将该驱动器装载到 Windows Azure 实例中。</p>
+
+<p><a name="Ex4Task1"></a></p>
+
+<h4 id="Task_1_-_Exploring_the_PhotoAlbum_Application">任务 1 - 探索 PhotoAlbum 应用程序</h4>
+
+<p>PhotoAlbum 是一个示例应用程序，它使用标准文件系统 API 获取其图像存储内容的目录列表。在此任务中，请您简单检查该应用程序，然后将图像存储位置配置为计算机中的某个文件夹，以便在本地运行该应用程序。</p>
+
+<ol>
+<li><p>在提升的管理员模式下打开 Microsoft Visual Studio 2010。为此，请在<strong>“开始”</strong>|<strong>“所有程序”</strong>|<strong>“Microsoft Visual Studio 2010”</strong>中，右键单击 <strong>Microsoft Visual Studio 2010</strong> 快捷方式，然后选择<strong>“以管理员身份运行”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>使用 ASP.NET Web 开发服务器时，无需使用提升的管理员模式运行该应用程序。但稍后在计算模拟器中启动该应用程序时，需要使用提升的管理员模式。</p>
+</blockquote></li>
+<li><p>如果显示<strong>“用户帐户控制”</strong>对话框，请单击<strong>“继续”</strong>。</p></li>
+<li><p>打开为此练习提供的起始解决方案。在<strong>“文件”</strong>菜单中，选择<strong>“打开项目”</strong>。然后，在<strong>“打开项目”</strong>对话框中，导航到 <strong>\Source\Ex4-WorkingWithDrives\begin</strong>，然后打开 <strong>PhotoAlbum.sln</strong> 解决方案。</p></li>
+<li><p>简单浏览该应用程序中的文件。首先在<strong>解决方案资源管理器</strong>中，双击 <strong>Default.aspx</strong> 打开该文件。注意，该页面使用 <strong>GridView</strong> 控件显示图像存储的目录列表，其数据源为绑定到 <strong>PhotoAlbumDataSource</strong> 上下文对象的 <strong>LinqDataSource</strong> 控件。</p></li>
+<li><p>下一步，打开 <strong>PhotoAlbumDataSource.cs</strong> 文件，检查 <strong>LinqDataSource</strong> 所用的上下文对象类。注意，数据源控件使用 <strong>Files</strong> 属性返回 <a href="http://msdn.microsoft.com/zh-CN/library/system.io.fileinfo.aspx">FileInfo</a> 对象的集合，并且它使用标准文件系统 API 枚举图像存储目录中的 PNG 和 JPEG 文件。</p></li>
+<li><p>现在，打开 <strong>Global.asax</strong> 文件，可以看到该文件有一个返回图像存储文件夹位置的 <strong>ImageStorePath</strong> 属性，并且 <strong>Application_Start</strong> 事件处理程序利用它从应用程序设置中检索的路径对该属性进行初始化。</p></li>
+<li><p>运行该应用程序前，需要配置图像存储的位置。在<strong>解决方案资源管理器</strong>中，双击 <strong>Web.config</strong>，在文本编辑器中打开该文件。在 <strong>appSettings</strong> 部分找到 <em>ImageStorePath</em> 设置，将该设置的值更新为计算机中 <strong>Sample Pictures</strong> 文件夹的路径。</p>
+
+<p><img src="Images/configuring-the-location-of-the-image-store.png?raw=true" alt="配置图像存储的位置" />
+</p>
+
+<p><em>配置图像存储的位置</em></p>
+<blockquote>
+<p><strong>注意：</strong>大多数 Windows 安装一般都提供示例图片库，该图片库位于 <em>&quot;%PUBLIC%\Pictures\Sample Pictures&quot;</em>。图片库中包含一个小的图像文件集。如果您的环境中没有该文件夹，可将其替换为包含适用 JPEG 或 PNG 图像文件集合的任何文件夹，例如，位于此实验 <em>Source</em> 文件夹中 <em>Assets\Images</em> 之下的图像文件。</p>
+
+<p>注意，<em>%PUBLIC%</em> 是一个环境变量，指向用户配置文件的文件夹中 <em>Public</em> 的位置。配置 <em>ImageStorePath</em> 设置时，必须将该变量扩展到正确的值（例如 <em>C:\Users\Public\Pictures\Sample Pictures</em>）。</p>
+</blockquote></li>
+<li><p>按 <strong>F5</strong> 生成并运行 PhotoAlbum 应用程序。注意，默认页面显示图像存储中所含文件的列表。另请注意，图像存储的路径是您在应用程序配置文件中设置的计算机上的文件夹。</p>
+<blockquote>
+<p><strong>注意：</strong>请确保通过以下方式将云项目设为启动项目：在<strong>解决方案资源管理器</strong>中右键单击该项目，然后选择<strong>“设为启动项目”</strong>。</p>
+</blockquote>
+<p><img src="Images/running-the-photoalbum-application-locally.png?raw=true" alt="本地运行 PhotoAlbum 应用程序" />
+</p>
+
+<p><em>本地运行 PhotoAlbum 应用程序</em></p></li>
+<li><p>关闭浏览器窗口。现在您已经看到，该应用程序使用标准文件系统 API 访问其存储中的文件。在下一个任务中，您将更新该应用程序以将其作为云服务运行。</p></li>
+</ol>
+
+<p><a name="Ex4Task2"></a></p>
+
+<h4 id="Task_2_-_Using_a_Windows_Azure_Drive_to_Move_the_Application_to_the_Cloud">任务 2 - 使用 Windows Azure 驱动器将应用程序迁移到云</h4>
+
+<p>将该应用程序迁移到 Windows Azure 时，一个很自然的选择是将图像存储重新定位到 blob 存储。不管怎样，该应用程序都期望其图像存储在文件系统中。您总是可以更新访问存储中的图像的代码，将其更改为使用 Blob 服务 API。这对于简单的应用程序（如本例）难度不大，而对于更加复杂的应用程序则会构成障碍。通过使用 Windows Azure 驱动器，无需更改任何代码便可将该应用程序迁移到云，需要做的只是将驱动器装载到页 blob 上。</p>
+
+<p>在此任务中，您将更新该应用程序，以使其作为 Windows Azure 云服务运行，并使用 Windows Azure 驱动器作为其图像存储。</p>
+
+<ol>
+<li><p>在解决方案中添加云服务项目。在<strong>解决方案资源管理器</strong>中，右键单击根解决方案节点，指向<strong>“添加”</strong>，然后选择<strong>“新建项目”</strong>。</p></li>
+<li><p>在<strong>“添加</strong><strong>新项目”</strong>对话框中，展开<strong>“已安装的模板”</strong>列表中的 <strong>Visual C#</strong>，然后选择<strong>“云”</strong>。选择<strong>“Windows Azure 项目”</strong>模板，将项目的<strong>名称</strong>设置为 <strong>PhotoAlbumService</strong>，保留建议的位置不变，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="Images/creating-a-windows-azure-project.png?raw=true" alt="创建 Windows Azure 项目" />
+</p>
+
+<p><em>创建 Windows Azure 项目</em></p></li>
+<li><p>在<strong>“新建 Windows Azure 项目”</strong>对话框中，单击<strong>“确定”</strong>，而不添加任何新角色。您将使用现有应用程序作为 Web 角色。</p></li>
+<li><p>添加对 Windows Azure 支持程序集的引用。在<strong>解决方案资源管理器</strong>中，右键单击 <strong>PhotoAlbum</strong> 项目，然后选择<strong>“添加引用”</strong>。在<strong>“添加引用”</strong>对话框中，切换到 <strong>.NET</strong> 选项卡，选择 <strong>Microsoft.WindowsAzure.CloudDrive</strong>、<strong>Microsoft.WindowsAzure.Diagnostics</strong>、<strong>Microsoft.WindowsAzure.ServiceRuntime</strong> 和 <strong>Microsoft.WindowsAzure.StorageClient</strong> 程序集，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="Images/adding-a-reference-to-the-windows-azure-suppo.png?raw=true" alt="添加对 Windows Azure 支持程序集的引用" />
+</p>
+
+<p><em>添加对 Windows Azure 支持程序集的引用</em></p></li>
+<li><p>现在，在<strong>解决方案资源管理器</strong>中，右键单击 <strong>PhotoAlbumService</strong> 项目中的<strong>“角色”</strong>节点，指向<strong>“添加”</strong>，然后选择<strong>“解决方案中的 Web 角色项目”</strong>。</p></li>
+<li><p>在<strong>“与角色项目关联”</strong>对话框中，选择 <strong>PhotoAlbum</strong> 项目，然后单击<strong>“确定”</strong>。</p></li>
+<li><p>现在将配置 Web 角色。为此，请双击 <strong>PhotoAlbumService</strong> 项目中<strong>“角色”</strong>节点下的 <strong>PhotoAlbum</strong> 角色。</p></li>
+<li><p>在<strong>“PhotoAlbum [角色]”</strong>属性窗口中，切换到<strong>“设置”</strong>选项卡，然后单击<strong>“添加设置”</strong>。将新设置的<strong>“名称”</strong>设为 <em>DataConnectionString</em>，将<strong>“类型”</strong>设为<em>“连接字符串”</em>，然后单击<strong>“值”</strong>列右侧的省略号标记按钮。在<strong>“存储连接字符串”</strong>对话框中，选择<strong>“使用存储模拟器”</strong>选项，然后单击<strong>“确定”</strong>。</p></li>
+<li><p>添加另一个设置，配置 blob 存储中云驱动器的 URL。对于该设置，将<strong>“名称”</strong>设为 <em>ImageStoreBlobUri</em>，将<strong>“类型”</strong>设为<em>“字符串”</em>，将<strong>“值”</strong>设为 <em>mydrives/SamplePictures.vhd</em>。</p>
+<blockquote>
+<p><strong>注意：</strong><em>ImageStoreBlobUri</em> 设置标识 Blob 服务 URI，并且区分大小写。请确保输入与所示相同的值。</p>
+</blockquote>
+<p><img src="Images/configuring-the-web-role-settings.png?raw=true" alt="配置 Web 角色设置" />
+</p>
+
+<p><em>配置 Web 角色设置</em></p></li>
+<li><p>切换到<strong>“本地存储”</strong>选项卡，然后单击<strong>“添加本地存储”</strong>。将新存储设置的<strong>“名称”</strong>设置为 <em>LocalDriveCache</em>，将<strong>“大小”</strong>设为 <em>120</em>，不选择<strong>“清理角色回收”</strong>。</p>
+
+<p><img src="Images/configuring-local-storage-for-the-web-role-to.png?raw=true" alt="将 Web 角色的本地存储配置为缓存 Azure 驱动器内容" />
+</p>
+
+<p><em>将 Web 角色的本地存储配置为缓存 Azure 驱动器内容</em></p>
+<blockquote>
+<p><strong>注意：</strong>当禁用<strong>“清理角色回收”</strong>时，即使角色实例已回收，缓存的内容也将持续存在。</p>
+
+<p>由于系统分配本地存储资源的方式，部分已请求的空间不可供缓存使用。从 Windows Azure Guest OS 1.8 开始，整个 Windows Azure 驱动器缓存已预先分配，如果本地资源中没有足够的空间用于缓存，则对 Mount 的调用将失败。为避免在配置专用于驱动器缓存的本地资源大小时遇到该问题，请在所需大小的基础上另外指定 20MB 空间。例如，要使用 1000MB 缓存大小，则将本地资源的大小设为 1020MB。</p>
+</blockquote></li>
+<li><p>按 <strong>Ctrl+S</strong> 保存对角色配置的更改。</p></li>
+<li><p>配置跟踪侦听器以将诊断信息输出至 Windows Azure 日志。为此，请双击<strong>“解决方案资源管理器”</strong>中的 <strong>Web.config</strong> 打开该文件，在配置中插入以下 <strong>system.diagnostics</strong> 部分，如下所示。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex4-01-DiagnosticMonitorTraceListener</em>）</p>
+
+<!--mark: 3-12 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;?</span>xml version=&quot;1.0&quot;<span style="color:#0000FF">?&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.diagnostics</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">trace</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">            <span style="color:#0000FF">&lt;</span><span style="color:#800000">listeners</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">                <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">type</span>=<span style="color:#0000FF">&quot;Microsoft.WindowsAzure.Diagnostics.DiagnosticMonitorTraceListener, Microsoft.WindowsAzure.Diagnostics, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35&quot;</span></strong>
+<strong class="markLine">  <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;AzureDiagnostics&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">                    <span style="color:#0000FF">&lt;</span><span style="color:#800000">filter</span> <span style="color:#FF0000">type</span>=<span style="color:#0000FF">&quot;&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">                <span style="color:#0000FF">&lt;/</span><span style="color:#800000">add</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">            <span style="color:#0000FF">&lt;/</span><span style="color:#800000">listeners</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;/</span><span style="color:#800000">trace</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.diagnostics</span><span style="color:#0000FF">&gt;</span></strong>
+   ...
+    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>在 Web 角色项目中添加一个类以管理其初始化和关闭。在<strong>解决方案资源管理器</strong>中，右键单击 <strong>PhotoAlbum</strong> 项目，指向<strong>“添加”</strong>，然后选择<strong>“现有项”</strong>。在<strong>“添加现有项”</strong>对话框中，浏览到 <strong>Ex4-WorkingWithDrives\Assets</strong>，选择 <strong>WebRole.cs</strong>，然后单击<strong>“添加”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong><strong>WebRole.cs</strong> 文件包含一个标准 <strong>RoleEntryPoint</strong> 派生类，其类似于在 Visual Studio 中选择新 Windows Azure Web 角色项目模板时生成的类。</p>
+</blockquote></li>
+<li><p>在 <strong>Global.asax.cs</strong> 文件中找到 <strong>Application_Start</strong> 方法，然后将以下代码（<strong>粗体</strong>显示的代码）插入该方法中。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex4-02-ApplicationStartMethod-CS</em>）</p>
+
+<!--mark: 8-55 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Application_Start(<span style="color:#0000FF">object</span> sender, EventArgs e) {
+      <span style="color:#0000FF">if</span> (imageStorePath == <span style="color:#0000FF">null</span>) { ImageStorePath = WebConfigurationManager.AppSettings[<span style="color:#8B0000">&quot;ImageStorePath&quot;</span>]; }
+
+<strong class="markLine">      <span style="color:#008000">// initialize storage account configuration setting publisher</span></strong>
+<strong class="markLine">      CloudStorageAccount.SetConfigurationSettingPublisher((configName, configSetter) =&gt;</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        <span style="color:#0000FF">string</span> connectionString = RoleEnvironment.GetConfigurationSettingValue(configName);</strong>
+<strong class="markLine">        configSetter(connectionString);</strong>
+<strong class="markLine">      });</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#0000FF">try</span></strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        <span style="color:#008000">// initialize the local cache for the Azure drive</span></strong>
+<strong class="markLine">        LocalResource cache = RoleEnvironment.GetLocalResource(<span style="color:#8B0000">&quot;LocalDriveCache&quot;</span>);</strong>
+<strong class="markLine">        CloudDrive.InitializeCache(cache.RootPath + <span style="color:#8B0000">&quot;cache&quot;</span>, cache.MaximumSizeInMegabytes);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#008000">// retrieve storage account </span></strong>
+<strong class="markLine">        CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting(<span style="color:#8B0000">&quot;DataConnectionString&quot;</span>);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#008000">// retrieve URI for the page blob that contains the cloud drive from configuration settings </span></strong>
+<strong class="markLine">        <span style="color:#0000FF">string</span> imageStoreBlobUri = RoleEnvironment.GetConfigurationSettingValue(<span style="color:#8B0000">&quot;ImageStoreBlobUri&quot;</span>);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#008000">// unmount any previously mounted drive.</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">foreach</span> (<span style="color:#0000FF">var</span> drive <span style="color:#0000FF">in</span> CloudDrive.GetMountedDrives())</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">            <span style="color:#0000FF">var</span> mountedDrive = <span style="color:#0000FF">new</span> CloudDrive(drive.Value, account.Credentials);</strong>
+<strong class="markLine">            mountedDrive.Unmount();</strong>
+<strong class="markLine">        }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#008000">// create the Windows Azure drive and its associated page blob</span></strong>
+<strong class="markLine">        CloudDrive imageStoreDrive = account.CreateCloudDrive(imageStoreBlobUri);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#0000FF">if</span> (CloudDrive.GetMountedDrives().Count == 0)</strong>
+<strong class="markLine">        {</strong>
+<strong class="markLine">            <span style="color:#0000FF">try</span></strong>
+<strong class="markLine">            {</strong>
+<strong class="markLine">                imageStoreDrive.Create(16);</strong>
+<strong class="markLine">            }</strong>
+<strong class="markLine">            <span style="color:#0000FF">catch</span> (CloudDriveException)</strong>
+<strong class="markLine">            {</strong>
+<strong class="markLine">                <span style="color:#008000">// drive already exists</span></strong>
+<strong class="markLine">            }</strong>
+<strong class="markLine">        }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">        <span style="color:#008000">// mount the drive and initialize the application with the path to the image store on the Azure drive</span></strong>
+<strong class="markLine">        Global.ImageStorePath = imageStoreDrive.Mount(cache.MaximumSizeInMegabytes / 2, DriveMountOptions.None);</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine">      <span style="color:#0000FF">catch</span> (CloudDriveException driveException)</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        Trace.WriteLine(<span style="color:#8B0000">&quot;Error: &quot;</span> + driveException.Message);</strong>
+<strong class="markLine">      }</strong>
+ }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>上述代码检索您之前在配置 Web 角色时定义的本地存储路径，然后使用该路径初始化驱动器缓存，并设置它将使用的最大本地磁盘空间容量。下一步，此代码创建一个 <strong>CloudDrive</strong> 对象，以指定之前在角色配置设置中所定义的页 blob 的 URL。最后，此代码将格式化的页 blob 装入一个驱动器盘符，以供 Windows Azure 应用程序开始使用。</p>
+
+<p>注意，为该驱动器分配的缓存只有为该缓存预留的总存储容量的一半。在该练习的稍后部分将创建另一个驱动器，并且将剩余容量分配给该驱动器。</p>
+</blockquote></li>
+<li><p>确保 <strong>Global.asax.cs</strong> 代码文件的开头包含以下命名空间指令。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex4-03-GlobalNamespace-CS</em>）</p>
+
+<!--mark: 1-4 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> System.Diagnostics;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.ServiceRuntime;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.StorageClient;</strong>
+</code></pre></li>
+<li><p>下一步，将突出显示的以下代码插入 <strong>Application_End</strong> 方法中，以便在该 Web 角色关闭时卸载 Windows Azure 驱动器。请将此代码放在该方法的开头。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex4-04-ApplicationEndMethod-CS</em>）</p>
+
+<!--mark: 3-7 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Application_End(<span style="color:#0000FF">object</span> sender, EventArgs e) {
+<strong class="markLine">    <span style="color:#008000">// obtain a reference to the cloud drive and unmount it</span></strong>
+<strong class="markLine">    CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting(<span style="color:#8B0000">&quot;DataConnectionString&quot;</span>);</strong>
+<strong class="markLine">    <span style="color:#0000FF">string</span> imageStoreBlobUri = RoleEnvironment.GetConfigurationSettingValue(<span style="color:#8B0000">&quot;ImageStoreBlobUri&quot;</span>);</strong>
+<strong class="markLine">    CloudDrive imageStoreDrive = account.CreateCloudDrive(imageStoreBlobUri);</strong>
+<strong class="markLine">    imageStoreDrive.Unmount();</strong>
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>以上代码检索对先前装载的云驱动器的引用，然后将其卸载。</p>
+</blockquote></li>
+<li><p>该应用程序现已准备好作为 Windows Azure 服务运行。按 <strong>F5</strong> 在计算模拟器中生成并启动应用程序。该应用程序在启动时显示 Windows Azure 驱动器的内容（最初为空）。注意，页面显示图像存储驱动器已映射到一个驱动器盘符。暂时不要关闭该浏览器窗口。</p>
+
+<p><img src="Images/running-the-application-in-the-compute-emulat.png?raw=true" alt="在具有空图像存储驱动器的计算模拟器中运行该应用程序。" />
+</p>
+
+<p><em>在具有空图像存储驱动器的计算模拟器中运行该应用程序。</em></p></li>
+<li><p>下一步，确定存储模拟器用于模拟云驱动器的文件夹的位置。要显示计算模拟器用户界面，请右键单击 Windows Azure 托盘图标，然后选择<strong>“显示存储模拟器用户界面”</strong>。</p>
+
+<p><img src="Images/viewing-the-status-of-storage-emulator.png?raw=true" alt="显示计算模拟器用户界面" />
+</p>
+
+<p><em>显示存储模拟器用户界面</em></p></li>
+<li><p>在存储模拟器用户界面中，打开<strong>“文件”</strong>菜单，选择<strong>“在 Windows 资源管理器中打开 Azure 驱动器文件夹”</strong>。</p>
+
+<p><img src="Images/opening-the-azure-drive-simulation-folder.png?raw=true" alt="打开 Azure 驱动器模拟文件夹" />
+</p>
+
+<p><em>打开 Azure 驱动器模拟文件夹</em></p>
+<blockquote>
+<p><strong>注意：</strong>当本地运行时，存储模拟器不使用 blob 存储模拟云驱动器，而是将该驱动器映射到本地文件夹。从存储模拟器用户界面可打开一个 Windows 资源管理器窗口，该窗口指向存储模拟器用于存储模拟 Windows Azure 驱动器的临时文件夹。</p>
+</blockquote></li>
+<li><p>在 Azure 驱动器文件夹中，导航到 <strong>devstoreaccount1\mydrives\SamplePictures.vhd</strong>。请注意，该路径与您为存储驱动器而分配的 blob 的 URI 相匹配 - 在存储模拟器中，因此，存储模拟器模拟 <strong>devstoreaccount1</strong> 前缀。</p></li>
+<li><p>现在，打开<strong>“开始”</strong>菜单，选择<strong>“图片”</strong>打开图片库，然后双击 <strong>Sample Pictures</strong> 文件夹，打开一个包含示例图像文件的窗口。</p>
+
+<p><img src="Images/sample-pictures-library-in-windows.png?raw=true" alt="Windows 中的示例图片库" />
+</p>
+
+<p><em>Windows 中的示例图片库</em></p>
+<blockquote>
+<p><strong>注意：</strong>大多数 Windows 安装一般都提供示例图片库，该图片库位于 <em>&quot;%PUBLIC%\Pictures\Sample Pictures&quot;</em>。图片库中包含一个小的图像文件集。如果您的环境中没有该文件夹，可将其替换为包含适用 JPEG 或 PNG 图像文件集合的任何文件夹，例如，位于此实验 <em>Source</em> 文件夹中 <em>Assets\Images</em> 之下的图像文件。</p>
+</blockquote></li>
+<li><p>将一个或多个文件从图片库复制到先前确定的模拟云驱动器中。</p></li>
+<li><p>切换回显示图像存储内容的浏览器窗口，然后刷新页面。注意，更新的页面显示了在上一步中复制的文件。</p>
+
+<p><img src="Images/application-showing-the-updated-contents-of-t.png?raw=true" alt="显示 Windows Azure 驱动器更新内容的应用程序" />
+</p>
+
+<p><em>显示 Windows Azure 驱动器更新内容的应用程序</em></p></li>
+<li><p>关闭浏览器窗口。</p></li>
+</ol>
+
+<p><a name="Ex4Task3"></a></p>
+
+<h4 id="Task_3_-_Creating_a_New_Drive_in_the_Cloud">任务 3 - 在云中创建新驱动器</h4>
+
+<p>在此任务中，您将更新该应用程序，以在云中创建新驱动器、装载该驱动器，然后将原始驱动器的内容复制到其中。</p>
+
+<ol>
+<li><p>在<strong>解决方案资源管理器</strong>中，右键单击 <strong>Default.aspx</strong>，然后选择<strong>“查看标记”</strong>。</p></li>
+<li><p>在页面正文内的 <strong>h1</strong> 和 <strong>h2</strong> 标题标记之间，插入突出显示的标记，如下所示。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex4-05-MountedDrives Panel</em>）</p>
+
+<!--mark: 6-12 -->
+
+<span class="codelanguage">HTML</span><pre><code class="HTML">...
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">body</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">form</span> <span style="color:#FF0000">id</span>=<span style="color:#0000FF">&quot;form1&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span>PhotoAlbum<span style="color:#0000FF">&lt;/</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span>        
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Panel</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;SelectDrive&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">Visible</span>=<span style="color:#0000FF">&quot;false&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LinkButton</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;NewDrive&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">Text</span>=<span style="color:#0000FF">&quot;New Drive&quot;</span> <span style="color:#FF0000">onclick</span>=<span style="color:#0000FF">&quot;NewDrive_Click&quot;</span> <span style="color:#FF0000">CssClass</span>=<span style="color:#0000FF">&quot;newdrive&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">      Mounted Drives: </strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">DropDownList</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;MountedDrives&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">AutoPostBack</span>=<span style="color:#0000FF">&quot;true&quot;</span></strong>
+<strong class="markLine">                        <span style="color:#FF0000">DataTextField</span>=<span style="color:#0000FF">&quot;Name&quot;</span> <span style="color:#FF0000">DataValueField</span>=<span style="color:#0000FF">&quot;Value&quot;</span></strong>
+<strong class="markLine">                        <span style="color:#FF0000">OnSelectedIndexChanged</span>=<span style="color:#0000FF">&quot;MountedDrives_SelectedIndexChanged&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Panel</span><span style="color:#0000FF">&gt;</span></strong>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">h2</span><span style="color:#0000FF">&gt;</span>Image Store Drive: (<span style="background-color:#FFFF00; color:Black">&lt;%</span>=this.CurrentPath<span style="background-color:#FFFF00; color:Black">%&gt;</span>)<span style="color:#0000FF">&lt;/</span><span style="color:#800000">h2</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">GridView</span> <span style="color:#FF0000">DataSourceID</span>=<span style="color:#0000FF">&quot;LinqDataSource1&quot;</span> <span style="color:#FF0000">AutoGenerateColumns</span>=<span style="color:#0000FF">&quot;False&quot;</span> 
+...
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>以上标记显示一个下拉列表，该列表枚举 Web 角色已经装载的驱动器，并包含一个链接按钮用于触发新 Windows Azure 驱动器的创建操作。</p>
+</blockquote></li>
+<li><p>在<strong>解决方案资源管理器</strong>中，右键单击 <strong>Default.aspx</strong>，然后选择<strong>“查看代码”</strong>打开其代码隐藏文件。</p></li>
+<li><p>在文件开头添加以下命名空间指令，以声明 Windows Azure 支持程序集。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex4-06-AzureNamespaces-CS</em>）</p>
+
+<!--mark: 1-4 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.Diagnostics;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.ServiceRuntime;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.StorageClient;</strong>
+</code></pre></li>
+<li><p>找到 <strong>Page_PreRender</strong> 方法，在该方法末尾插入以下突出显示的代码，如下所示。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex4-07-Page_PreRender-CS</em>）</p>
+
+<!--mark: 5-19 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Page_PreRender(<span style="color:#0000FF">object</span> sender, EventArgs e) { GridView1.Columns[GridView1.Columns.Count - 1].Visible = (<span style="color:#0000FF">this</span>.CurrentPath != Global.ImageStorePath);
+
+<strong class="markLine">  <span style="color:#0000FF">if</span> (RoleEnvironment.IsAvailable)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.MountedDrives.DataSource = from item <span style="color:#0000FF">in</span> CloudDrive.GetMountedDrives()</strong>
+<strong class="markLine">                                    select <span style="color:#0000FF">new</span></strong>
+<strong class="markLine">                                    {</strong>
+<strong class="markLine">                                        Name = item.Key + <span style="color:#8B0000">&quot; =&gt; &quot;</span> + item.Value,</strong>
+<strong class="markLine">                                        Value = item.Key</strong>
+<strong class="markLine">                                    };</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.MountedDrives.DataBind();</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.MountedDrives.SelectedValue = <span style="color:#0000FF">this</span>.CurrentPath;</strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.SelectDrive.Visible = <span style="color:#0000FF">true</span>;</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">this</span>.NewDrive.Text = <span style="color:#0000FF">this</span>.MountedDrives.Items.Count &lt; 2 ? <span style="color:#8B0000">&quot;New Drive&quot;</span> : <span style="color:#8B0000">&quot;Delete Drive&quot;</span>;</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>上述代码在一个下拉列表中填充 Web 角色当前所装载的驱动器。该下拉列表显示页 blob URI 与已装载驱动器的相应驱动器盘符之间的映射。</p>
+</blockquote></li>
+<li><p>添加代码以实现 <strong>New Drive</strong>（新建驱动器）链接按钮的事件处理程序。为此，将以下代码粘贴到 <strong>_Default</strong> 类中。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex4-08-NewDrive_Click-CS</em>）</p>
+
+<!--mark: 1-45 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> NewDrive_Click(<span style="color:#0000FF">object</span> sender, EventArgs e)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">  <span style="color:#0000FF">if</span> (RoleEnvironment.IsAvailable)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#008000">// retrieve storage account</span></strong>
+<strong class="markLine">    CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting(<span style="color:#8B0000">&quot;DataConnectionString&quot;</span>);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#008000">// build page blob URI for the new cloud drive by changing the extension in the original URI</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">string</span> imageStoreBlobUri = RoleEnvironment.GetConfigurationSettingValue(<span style="color:#8B0000">&quot;ImageStoreBlobUri&quot;</span>);</strong>
+<strong class="markLine">    <span style="color:#0000FF">string</span> cloneStoreBlobUri = Path.ChangeExtension(imageStoreBlobUri, <span style="color:#8B0000">&quot;bak&quot;</span>);                </strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#008000">// create drive and its associated page blob</span></strong>
+<strong class="markLine">    CloudDrive clonedDrive = account.CreateCloudDrive(cloneStoreBlobUri);</strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (<span style="color:#0000FF">this</span>.MountedDrives.Items.Count &lt; 2)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      <span style="color:#0000FF">try</span></strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        clonedDrive.Create(16);</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine">      <span style="color:#0000FF">catch</span> (CloudDriveException)</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        <span style="color:#008000">// cloud drive already exists</span></strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#008000">// mount the drive and retrieve its path</span></strong>
+<strong class="markLine">      LocalResource cache = RoleEnvironment.GetLocalResource(<span style="color:#8B0000">&quot;LocalDriveCache&quot;</span>);</strong>
+<strong class="markLine">      <span style="color:#0000FF">string</span> clonedStorePath = clonedDrive.Mount(cache.MaximumSizeInMegabytes / 2, DriveMountOptions.None);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#008000">// copy the contents from the original drive to the new drive                </span></strong>
+<strong class="markLine">      <span style="color:#0000FF">foreach</span> (<span style="color:#0000FF">string</span> sourceFileName <span style="color:#0000FF">in</span> Directory.GetFiles(Global.ImageStorePath, <span style="color:#8B0000">&quot;*.*&quot;</span>).Where(name =&gt; name.EndsWith(<span style="color:#8B0000">&quot;.jpg&quot;</span>) || name.EndsWith(<span style="color:#8B0000">&quot;.png&quot;</span>)))</strong>
+<strong class="markLine">      {</strong>
+<strong class="markLine">        <span style="color:#0000FF">string</span> destinationFileName = Path.Combine(clonedStorePath, Path.GetFileName(sourceFileName));</strong>
+<strong class="markLine">        File.Copy(sourceFileName, destinationFileName, <span style="color:#0000FF">true</span>);</strong>
+<strong class="markLine">      }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.SelectImageStore(clonedStorePath);</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">    <span style="color:#0000FF">else</span></strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      clonedDrive.Unmount();</strong>
+<strong class="markLine">      clonedDrive.Delete();</strong>
+<strong class="markLine">      <span style="color:#0000FF">this</span>.SelectImageStore(Global.ImageStorePath);</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">  }</strong>
+<strong class="markLine">}</strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>上述代码检查是否已经装载了另一个驱动器，如果没有，则创建 NTFS 格式的新云驱动器及其关联的页 blob。然后，该代码将最初装载的驱动器的内容复制到第二个驱动器。如果此驱动器已经存在，该代码会首先卸载它，然后将其删除。</p>
+</blockquote></li>
+<li><p>最后，添加已装载驱动器下拉列表的 <strong>SelectedIndexChanged</strong> 事件的事件处理程序。为此，请将以下方法插入 <strong>_Default</strong> 类中。</p>
+
+<p>（代码段 - <em>ExploringStorage-Ex4-09-MountedDrives_SelectedIndexChanged-CS</em>）</p>
+
+<!--mark: 1-4 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> MountedDrives_SelectedIndexChanged(<span style="color:#0000FF">object</span> sender, EventArgs e)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">  <span style="color:#0000FF">this</span>.SelectImageStore(<span style="color:#0000FF">this</span>.MountedDrives.SelectedValue);</strong>
+<strong class="markLine">}</strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>上述代码会触发一个重定向操作，该操作将刷新页面内容并显示新选择的驱动器的目录。</p>
+</blockquote></li>
+<li><p>现在可以测试对该解决方案所做的更改了。按 <strong>F5</strong> 在计算模拟器中启动该应用程序。当该应用程序启动时，可以看到 <strong>Mounted Drives</strong>（已装载的驱动器）下拉列表会显示分配给该驱动器的盘符，以及提供后备存储的页 blob 的相应 URL。</p>
+
+<p><img src="Images/application-showing-currently-mounted-drives.png?raw=true" alt="显示当前装载的驱动器的应用程序" />
+</p>
+
+<p><em>显示当前装载的驱动器的应用程序</em></p></li>
+<li><p>单击 <strong>New Drive</strong>（新建驱动器）链接，以创建一个新驱动器，然后将原始驱动器的内容复制到其中。创建该驱动器后，页面会刷新并显示新驱动器的内容。注意，已装载驱动器下拉列表中现在显示了第二个驱动器。</p>
+
+<p><img src="Images/application-showing-the-newly-created-drive.png?raw=true" alt="显示新建驱动器的应用程序" />
+</p>
+
+<p><em>显示新建驱动器的应用程序</em></p></li>
+<li><p>单击 <strong>Delete</strong>（删除）链接，删除新驱动器中的一个或多个文件。</p>
+
+<p><img src="Images/deleting-files-in-the-second-drive.png?raw=true" alt="删除第二个驱动器中的文件" />
+</p>
+
+<p><em>删除第二个驱动器中的文件</em></p></li>
+<li><p>在 <strong>Mounted Drives</strong>（已装载的驱动器）下拉列表中选择原始驱动器，验证其内容是否完整。</p></li>
+<li><p>最后，单击 <strong>Delete Drive</strong>（删除驱动器）卸载该驱动器并删除其相应的页 blob。</p>
+
+<p><img src="Images/unmounting-the-drive-and-deleting-it.png?raw=true" alt="卸载并删除驱动器" />
+</p>
+
+<p><em>卸载并删除驱动器</em></p></li>
+<li><p>关闭浏览器窗口。现在将在 Windows Azure 中部署并测试该应用程序。</p></li>
+</ol>
+
+<p><a name="Ex4Task4"></a></p>
+
+<h4 id="Task_4_-_Creating_an_NTFS_Formatted_VHD_on_Your_Local_Machine">任务 4 - 在本地计算机上创建 NTFS 格式的虚拟硬盘</h4>
+
+<p>至此，您已经使用计算模拟器提供的模拟环境探索了 Windows Azure 驱动器。在将该应用程序部署到 Windows Azure 环境时，需要一种机制能够将该应用程序所用的信息上载到 blob 存储。一个替代方案是在计算机中本地创建一个虚拟硬盘驱动器 (VHD)，复制所需的信息，然后将 VHD 文件上载到 Windows Azure 页 blob。</p>
+
+<p>在此任务中，您将创建一个 NTFS 格式的 VHD 文件，其中包含可上载到 Windows Azure 存储的示例图像，然后将该 VHD 文件作为 Windows Azure 驱动器的后备存储。</p>
+<blockquote>
+<p><strong>注意：</strong>此任务是可选的，它依赖于当前仅在 Windows 7 和 Windows Server 2008 R2 中提供的功能。如果您的操作系统不是这些版本，可跳过此任务，改用实验 <em>Assets</em> 文件夹中的预建虚拟硬盘。</p>
+
+<p><strong>重要说明：</strong>要完成此练习中的其余任务，您需要有效的 Windows Azure 订阅。有关详细信息，请访问 <a href="http://www.microsoft.com/windowsazure/">Windows Azure 门户网站</a>。</p>
+</blockquote>
+<ol>
+<li><p>打开<strong>“磁盘管理”</strong>控制台。为此，单击<strong>“开始”</strong>按钮，在搜索框中键入 <strong>diskmgmt.msc</strong>，然后按下 <strong>Enter</strong> 启动此工具。</p>
+
+<p><img src="Images/launching-the-disk-management-console.png?raw=true" alt="启动磁盘管理控制台" />
+</p>
+
+<p><em>启动磁盘管理控制台</em></p></li>
+<li><p>在磁盘管理控制台中，打开<strong>“操作”</strong>菜单，然后选择<strong>“创建 VHD”</strong>。</p></li>
+<li><p>在<strong>“创建和附加虚拟硬盘”</strong>对话框中，单击<strong>“浏览”</strong>，导航到 <strong>\Source\Ex4-WorkingWithDrives</strong>，将文件名设为 <strong>SamplePictures.vhd</strong>，然后单击<strong>“保存”</strong>。下一步，将<strong>“虚拟硬盘大小”</strong>设为 <em>16 MB</em>，将<strong>“虚拟硬盘格式”</strong>设为<strong>“固定格式”</strong>，然后单击<strong>“确定”</strong>创建并附加虚拟硬盘。</p>
+
+<p><img src="Images/creating-a-virtual-hard-disk-vhd.png?raw=true" alt="创建虚拟硬盘 (VHD)" />
+</p>
+
+<p><em>创建虚拟硬盘 (VHD)</em></p></li>
+<li><p>新磁盘要经过初始化才能使用。为此，请在<strong>“磁盘管理”</strong>控制台的下窗格中右键单击新建磁盘的磁盘图标，然后选择<strong>“初始化磁盘”</strong>。</p>
+
+<p><img src="Images/initializing-the-virtual-hard-disk-vhd.png?raw=true" alt="初始化虚拟硬盘 (VHD)" />
+</p>
+
+<p><em>初始化虚拟硬盘 (VHD)</em></p></li>
+<li><p>在<strong>“初始化磁盘”</strong>对话框中，确保选中与附加虚拟硬盘对应的磁盘，将分区形式设为<strong>“MBR(主启动记录)”</strong>，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="Images/configuring-disk-initialization-options.png?raw=true" alt="配置磁盘初始化选项" />
+</p>
+
+<p><em>配置磁盘初始化选项</em></p></li>
+<li><p>下一步，右键单击附加虚拟硬盘中标识为未分配的分区区域，然后选择<strong>“新建简单卷”</strong>。</p>
+
+<p><img src="Images/creating-a-volume-in-the-virtual-hard-disk-vh.png?raw=true" alt="在虚拟硬盘 (VHD) 中创建卷" />
+</p>
+
+<p><em>在虚拟硬盘 (VHD) 中创建卷</em></p></li>
+<li><p>在<strong>“新建简单卷向导”</strong>中，单击<strong>“下一步”</strong>取消欢迎页。</p>
+
+<p><img src="Images/new-simple-volume-wizard-welcome-page.png?raw=true" alt="“新建简单卷向导”欢迎页" />
+</p>
+
+<p><em>“新建简单卷向导”欢迎页</em></p></li>
+<li><p>保留<strong>“简单卷大小”</strong>不变（应与<strong>“最大磁盘空间量”</strong>值相同），然后单击<strong>“下一步”</strong>继续。</p>
+
+<p><img src="Images/specifying-the-size-of-the-disk-volume.png?raw=true" alt="指定磁盘卷的大小" />
+</p>
+
+<p><em>指定磁盘卷的大小</em></p></li>
+<li><p>下一步，指定适当的驱动器盘符，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="Images/assigning-a-drive-letter-to-the-volume.png?raw=true" alt="为卷指定驱动器盘符" />
+</p>
+
+<p><em>为卷指定驱动器盘符</em></p></li>
+<li><p>现在，选择格式化新分区。将<strong>“文件系统”</strong>设为 <em>NTFS</em>，保留默认<strong>“分配单元大小”</strong>不变，将<strong>“卷标”</strong>设为 <em>SamplePictures</em>。确保选中标记为<strong>“执行快速格式化”</strong>的选项，保留<strong>“启用文件和文件夹压缩”</strong>选项的禁用状态。单击<strong>“下一步”</strong>继续。</p>
+
+<p><img src="Images/formatting-the-new-disk-partition.png?raw=true" alt="格式化新磁盘分区" />
+</p>
+
+<p><em>格式化新磁盘分区</em></p>
+<blockquote>
+<p><strong>注意：</strong>Windows Azure 驱动器现在要求使用 NTFS 格式的虚拟硬盘驱动器 (VHD)。</p>
+</blockquote></li>
+<li><p>最后，验证该向导在其摘要屏幕中提供的信息，然后单击<strong>“完成”</strong>创建新卷。</p>
+
+<p><img src="Images/completing-the-new-simple-volume-wizard.png?raw=true" alt="完成新建简单卷向导" />
+</p>
+
+<p><em>完成新建简单卷向导</em></p></li>
+<li><p>等待该格式化过程完成 － 应只需几秒钟。如果启用了<strong>“自动播放”</strong>，该功能会提示查看新附加的磁盘中的文件。若如此，请单击<strong>“打开文件夹以查看文件”</strong>。否则，请在磁盘管理控制台中，右键单击该卷，选择<strong>“打开”</strong>，以显示新虚拟硬盘驱动器的内容。暂时不要关闭这个新窗口。</p></li>
+<li><p>现在，打开<strong>“开始”</strong>菜单，选择<strong>“图片”</strong>打开图片库，然后浏览到 <strong>Sample Pictures</strong> 文件夹，以查看示例图像文件。</p>
+<blockquote>
+<p><strong>注意：</strong>如果您的环境中没有该文件夹，可将其替换为包含适用 JPEG 或 PNG 图像文件集合的任何文件夹，例如，位于此实验 <em>Source</em> 文件夹中 <em>Assets\Images</em> 之下的图像文件。</p>
+</blockquote></li>
+<li><p>下一步，将 <strong>Sample Pictures</strong> 文件夹中的所有文件复制并粘贴到第一个窗口中，将此文件夹中包含的所有图像复制到该虚拟硬盘驱动器中。如果该驱动器已满，请不必担心。您只需要几个文件测试该应用程序。</p></li>
+<li><p>切换回磁盘管理控制台，右键单击附加的磁盘（确保指向该磁盘而不是分区区域），然后选择<strong>“分离 VHD”</strong>。</p>
+
+<p><img src="Images/preparing-to-detach-the-virtual-hard-disk-vhd.png?raw=true" alt="准备分离虚拟硬盘 (VHD) 文件" />
+</p>
+
+<p><em>准备分离虚拟硬盘 (VHD) 文件</em></p></li>
+<li><p>在<strong>“分离虚拟硬盘”</strong>对话框中，确保没有选中标记为<strong>“删除磁盘后删除虚拟硬盘文件”</strong>的选项，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="Images/detaching-a-virtual-hard-disk.png?raw=true" alt="分离虚拟硬盘" />
+</p>
+
+<p><em>分离虚拟硬盘</em></p></li>
+<li><p>现在可以将虚拟硬盘 (VHD) 文件上载到 Windows Azure 存储了。</p></li>
+</ol>
+
+<p><a name="Ex4Task5"></a></p>
+
+<h4 id="Task_5_-_Deploying_the_Application_and_Uploading_the_Drive_to_Windows_Azure">任务 5 - 部署应用程序并将驱动器上载到 Windows Azure</h4>
+
+<p>在此任务中，您将先前创建的 NTFS 格式的虚拟硬盘驱动器 (VHD) 上载到 Windows Azure 页 Blob。实验资料中包含一个可执行此操作的工具。</p>
+
+<ol>
+<li><p>在访问 Windows Azure 存储帐户以上载 VHD 文件之前，需要确定帐户的名称和主密钥。要获得存储帐户的信息，请登录 Windows Azure 管理门户 <a href="http://windows.azure.com/">http://windows.azure.com/</a>。</p></li>
+<li><p>单击<strong>“存储”</strong>，然后从列表中选择您的帐户。记下帐户的<strong>名称</strong>。</p>
+
+<p><img src="Images/viewing-windows-azure-storage-accounts.png?raw=true" alt="查看 Windows Azure 存储帐户" title="查看 Windows Azure 存储帐户" />
+</p>
+
+<p><em>查看存储帐户</em></p></li>
+<li><p>单击底部菜单中的<strong>“管理密钥”</strong>，记下存储帐户的<strong>主密钥</strong>（此练习后面将用到该值）。</p>
+
+<p><img src="Images/manage-keys.png?raw=true" alt="管理密钥" title="管理密钥" />
+</p>
+
+<p><em>管理密钥</em></p>
+
+<p><img src="Images/viewing-windows-azure-storage-account-informa.png?raw=true" alt="查看 Windows Azure 存储帐户信息" />
+</p>
+
+<p><em>查看 Windows Azure 存储帐户信息</em></p></li>
+<li><p>下一步，打开命令提示符，将当前目录更改为 <em>\Source\Assets\VHDUpload</em>。</p></li>
+<li><p>在命令提示符处，键入以下命令行，将 <em>&lt;vhdFilePath&gt;</em> 替换成任务 4 中所建 VHD 文件的路径，将 <strong>&lt;accountName&gt;</strong> 和 <strong>&lt;accountKey&gt;</strong> 分别替换成 Windows Azure 存储帐户的名称和主访问密钥。</p>
+<blockquote>
+<p><strong>注意：</strong>如果您当前所在的平台不支持创建和装载 VHD 文件，您未能完成上一个任务，则请使用与该工具处于同一文件夹中的 <strong>SamplePictures.vhd</strong> 文件。</p>
+</blockquote>
+<!--mark: 1 -->
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt"><strong class="markLine">VHDUPLOAD &lt;vhdFilePath&gt; mydrives/SamplePictures.vhd &lt;accountName&gt; &lt;accountKey&gt;</strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>用于指定 blob 存储中 .vhd 文件位置的 Blob 服务 URI 区分大小写。请确保输入与所示相同的值。</p>
+</blockquote></li>
+<li><p>按 <strong>Enter</strong> 开始将虚拟硬盘 (VHD) 文件上载到 blob 存储。等待该过程完成；可能需要几分钟</p>
+
+<p><img src="Images/uploading-a-vhd-file-to-a-windows-azure-page.png?raw=true" alt="将 VHD 文件上载到 Windows Azure 页 blob" />
+</p>
+
+<p><em>将 VHD 文件上载到 Windows Azure 页 blob</em></p></li>
+<li><p>现在，您已将 VHD 文件上载到 Azure 存储，可以部署该应用程序了。</p></li>
+<li><p>重新回到 Visual Studio。</p></li>
+<li><p>首先，需要使用存储帐户信息更新 Web 角色配置。为此，请展开 <strong>PhotoAlbumService</strong> 项目中的<strong>“角色”</strong>节点，然后双击 <strong>PhotoAlbum</strong> 角色以打开该角色的属性窗口。</p></li>
+<li><p>在<strong>“PhotoAlbum [角色]”</strong>窗口中，切换到<strong>“设置”</strong>选项卡，找到 <em>Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString</em> 设置，然后单击位于该行右侧的省略号标记按钮。在<strong>“存储连接字符串”</strong>对话框中，选择<strong>“输入存储凭据”</strong>，然后输入您的 Windows Azure 存储帐户的<strong>帐户名称</strong>和<strong>帐户密钥</strong>。在<strong>“连接”</strong>区域中，确保选中<strong>“使用默认 HTTPS 端点”</strong>选项，然后单击<strong>“确定”</strong>。</p></li>
+<li><p>重复上一步，配置 <em>DataConnectionString</em> 设置。输入先前使用的相同信息，<strong>“连接”</strong>设置除外，应将其设为<strong>“使用默认 HTTP 端点”</strong>。</p>
+
+<p><img src="Images/configuring-the-storage-account-for-the-cloud.png?raw=true" alt="将云驱动器的存储帐户配置为使用 HTTP 端点" />
+</p>
+
+<p><em>将云驱动器的存储帐户配置为使用 HTTP 端点</em></p>
+<blockquote>
+<p><strong>注意：</strong>Windows Azure 驱动器当前仅支持 HTTP 端点。</p>
+</blockquote></li>
+<li><p>现在，您已使用存储帐户设置配置了该应用程序，可以继续部署它。要创建服务包，请右键单击 <strong>PhotoAlbumService</strong> 云服务项目，然后选择<strong>“打包”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>有关将应用程序部署到 Windows Azure 的更多信息，请参阅此培训包中的 <strong>Windows Azure 部署</strong>动手实验。此实验的练习 3 还特别探讨了从 Visual Studio 部署应用程序的做法。</p>
+</blockquote>
+<p><img src="Images/creating-a-service-package-in-visual-studio.png?raw=true" alt="在 Visual Studio 中创建服务包" />
+</p>
+
+<p><em>在 Visual Studio 中创建服务包</em></p></li>
+<li><p>在<strong>“打包 Windows Azure 应用程序”</strong>对话框中，单击<strong>“打包”</strong>以生成包。此操作将打开 Windows 资源管理器，并导航到解决方案文件夹中包含生成的包的文件夹。虽然您可以使用 Windows Azure Tools 中的集成部署功能将服务从 Visual Studio 直接发布到 Windows Azure，但在此实验中您将使用 Windows Azure 管理门户部署该服务。</p></li>
+<li><p>要部署服务包，请转到<a href="https://manage.windowsazure.com/">管理门户</a>并登录。</p></li>
+<li><p>在该门户上，选择将在其中部署应用程序的项目。如果之前尚未创建服务，此时将需要创建一个服务；或者，也可以使用现有服务。若使用现有服务，请跳过以下步骤，直接转到第 20 步。</p></li>
+<li><p>创建执行应用程序代码的计算组件。为此，请单击<strong>“新建”</strong>|<strong>“云服务”</strong>|<strong>“自定义创建”</strong>。</p>
+
+<p><img src="Images/creating-a-new-cloud-service.png?raw=true" alt="创建新的云服务" title="创建新的云服务" />
+</p>
+
+<p><em>创建新的云服务</em></p></li>
+<li><p>在<strong>“创建云服务”</strong>对话框中，为服务选择一个唯一的 <strong>URL</strong> 前缀，然后从列表中选择可用的<strong>地区/地缘组</strong>。</p></li>
+<li><p>选择<strong>“立即部署云服务包”</strong>，然后继续执行下一步。</p>
+
+<p><img src="Images/create-your-cloud-service.png?raw=true" alt="创建云服务" title="创建云服务" />
+</p>
+
+<p><em>创建云服务</em></p></li>
+<li><p>在<strong>“发布云服务”</strong>页面中，选择<strong>“部署名称”</strong>，然后选择在 Visual Studio 中生成的包 <strong>(.cspkg)</strong> 和配置 <strong>(.cscfg)</strong> 文件：这些文件位于发布该包时打开的 Windows 资源管理器窗口所指示的文件系统位置。</p></li>
+<li><p>最后，设置要部署应用程序的<strong>“环境”</strong><em>（“生产”或“过渡”）</em>，选择<strong>“即使一个或多个角色包含一个实例也部署”</strong>，然后完成该向导。</p>
+
+<p><img src="Images/publish-your-cloud-service.png?raw=true" alt="发布云服务" title="发布云服务" />
+</p>
+
+<p><em>发布云服务</em></p>
+<blockquote>
+<p><strong>注意：</strong>Windows Azure 虚拟机运行用于部署服务应用程序的来宾操作系统。要支持 Windows Azure 驱动器功能，操作系统版本必须与 Windows Azure SDK 版本 1.7 兼容。有关可用 Windows Azure 来宾操作系统版本的信息，请参阅 <a href="http://msdn.microsoft.com/zh-CN/library/ee924680(v=MSDN.10).aspx"><a href="http://msdn.microsoft.com/zh-CN/library/ee924680(v=MSDN.10).aspx">http://msdn.microsoft.com/zh-CN/library/ee924680(v=MSDN.10).aspx</a></a>。</p>
+
+<p>总之，建议使用可用的最新操作系统以利用新功能和安全修补程序。如果没有在配置文件中指定版本，则操作系统升级方法将设为自动，在来宾操作系统有最新版本时，Windows Azure 会自动将虚拟机升级到该版本。在此实验中，您将不选择特定版本，而是使用自动升级模式确保应用程序在支持 Windows Azure 驱动器的来宾操作系统下运行。</p>
+</blockquote></li>
+<li><p>等待传输完成。完成时，服务状态应显示<strong>“就绪”</strong>。</p></li>
+<li><p>现在，单击刚刚部署的服务中的 <strong>URL</strong> 链接，在浏览器中打开该应用程序。该应用程序的行为应与本地部署时基本相同。但请注意，已装载驱动器的页 blob 的 URL 现在指向上载了 VHD 文件的页 blob。</p>
+
+<p><img src="Images/running-the-application-in-the-windows-azure.png?raw=true" alt="在 Windows Azure 环境中运行应用程序" />
+</p>
+
+<p><em>在 Windows Azure 环境中运行应用程序</em></p></li>
+</ol>
+
+<hr />
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>在此实验中，您学习了如何使用 Windows Azure 存储的表、blob、队列和驱动器。</p>
+
+<p>表以实体集合的形式存储数据。实体类似于行。实体具有主键和一组属性。属性为名称/值对，与列类似。</p>
+
+<p>Blob 可存储任何二进制数据。在此实验中，您通过 Blob 服务，使用一个 Web 应用程序存储并显示了图像，并关联了元数据。</p>
+
+<p>通过使用队列，您了解了如何调度简单消息（包含字符串、xml 或二进制内容）。这是在 Web 与辅助角色之间实现通信的绝佳方式。</p>
+
+<p>最后，您探索了 Windows Azure 驱动器的使用方法，这些驱动器可使您使用标准文件系统函数读取数据以及将数据写入 blob 存储。</p> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-ExploringStorage/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

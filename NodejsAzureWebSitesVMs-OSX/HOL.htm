@@ -1,0 +1,611 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 针对 Node.js 应用程序的 Windows Azure 网站和虚拟机 (OS X)</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-NodejsAzureWebSitesVMs-OSX" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-NodejsAzureWebSitesVMs-OSX" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="handsonlab"></a></p>
+
+<h1 id="Windows_Azure_Web_Sites_and_Virtual_Machines_for_Nodejs_Applications_OS_X">针对 Node.js 应用程序的 Windows Azure 网站和虚拟机 (OS X)</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>Windows Azure 中的虚拟机是云中您可以控制和管理的服务器。在 Windows Azure 中创建虚拟机后，您随时可以根据需要启动、停止和删除它，并且可以像访问办公室中的服务器一样访问它。在此实验中，您将学习如何创建运行 Linux 的虚拟机并且使用该虚拟机作为 Node.js 应用程序的数据库服务器。您将看到不同技术如何运行 Windows Azure 的基于云的基础结构以及如何与之交互。</p>
+
+<p>在此实验中，您将首先在 Windows Azure 管理门户中从 Linux 映像开始创建一个新的虚拟机。然后，您将在该虚拟机上创建和配置可从 Internet 应用程序访问的 <a href="http://www.mongodb.org/">MongoDB</a> 服务器。一旦配置了该服务器后，您将使用 Windows Azure 网站发布一个 <a href="http://nodejs.org/">Node.js</a> 应用程序，该应用程序连接到在该虚拟机中运行的数据库服务器。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>创建在 Windows Azure 上运行的 Linux 虚拟机</li>
+<li>在 Windows Azure 上运行的 Linux 虚拟机中安装和配置 MongoDB 服务器</li>
+<li>创建一个 Node.js Web 应用程序，该应用程序连接到在 Linux 虚拟机上运行的 MongoDB 服务器</li>
+<li>使用 GIT 将 Node.js Web 应用程序发布到 Windows Azure 网站</li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li><a href="http://www.apple.com/macosx/">Mac OS X</a></li>
+<li><a href="http://git-scm.com/">Git 版本控制系统</a></li>
+<li>启用了网站和虚拟机预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>此实验针对 OS X 而设计。</p>
+</blockquote>
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><p><a href="#Exercise1">在 Windows Azure 中创建 Linux 虚拟机并配置 MongoDB</a></p></li>
+<li><p><a href="#Exercise2">从 Node.js 应用程序连接到虚拟机</a></p></li>
+</ol>
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Creating_a_Linux_Virtual_Machine_in_Windows_Azure_and_Configuring_MongoDB">练习 1：在 Windows Azure 中创建 Linux 虚拟机并配置 MongoDB</h3>
+
+<p>在此练习中，您将使用 Windows Azure 管理门户创建新的 Linux 虚拟机。然后，您将使用 SSH 连接到该虚拟机并且配置和启动 MongoDB 服务器。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_and_Configuring_a_New_Linux_Virtual_Machine">任务 1 - 创建和配置新的 Linux 虚拟机</h4>
+
+<ol>
+<li><p>打开 Safari 并且浏览到 <a href="http://manage.windowsazure.com/">Windows Azure 管理门户</a>。然后，使用与您的 Windows Azure 订阅相关联的 Live ID 凭据登录。</p></li>
+<li><p>在位于底部的菜单中，选择<strong>“新建”|“虚拟机”|“从库中”</strong>开始新建虚拟机。</p>
+
+<p><img src="images/creating-a-new-virtual-machine.png?raw=true" alt="新建虚拟机" />
+</p>
+
+<p><em>新建虚拟机</em></p></li>
+<li><p>在<strong>“选择虚拟机操作系统”</strong>页中，单击左侧菜单中的<strong>“平台映像”</strong>，然后从列表中选择 <strong>openSUSE 12.1</strong> 映像。单击箭头继续。</p>
+
+<p><img src="images/vm-os-selection.png?raw=true" alt="创建虚拟机 - 操作系统选择" title="创建虚拟机 - 操作系统选择" />
+</p>
+
+<p><em>创建虚拟机 - 操作系统选择</em></p>
+<blockquote>
+<p><strong>注意：</strong>还可使用<strong>“映像”</strong>部分上载您自己的针对虚拟机的自定义映像。映像是一个虚拟硬盘 (VHD) 文件，可用作创建新虚拟机的模板。在您选择从某一映像创建虚拟机时，Windows Azure 将从该映像为您创建一个磁盘，然后将该磁盘用于虚拟机。</p>
+</blockquote></li>
+<li><p>在<strong>“虚拟机配置”</strong>页中，键入<strong>虚拟机名称</strong>，将<strong>“新用户名”</strong>设置为<strong>“管理员”</strong>，设置<strong>“密码”</strong>并且为虚拟机保留默认<strong>大小</strong>。单击<strong>向右箭头</strong>继续。记下该管理员用户名和密码，因为在以后您将使用它们连接到虚拟机。</p>
+
+<p><img src="images/creating-a-vm-configuration.png?raw=true" alt="配置自定义虚拟机" />
+</p>
+
+<p><em>创建虚拟机 - 配置</em></p>
+<blockquote>
+<p><strong>注意：</strong>建议对管理用户使用安全密码，因为只要知道 Windows Azure 虚拟机的 DNS 就可以从 Internet 访问它们。</p>
+
+<p>您也可以阅读 Microsoft 安全网站上的以下文档帮助选择安全密码：<a href="http://www.microsoft.com/security/online-privacy/passwords-create.aspx"><a href="http://www.microsoft.com/security/online-privacy/passwords-create.aspx">http://www.microsoft.com/security/online-privacy/passwords-create.aspx</a></a></p>
+</blockquote></li>
+<li><p>在<strong>“虚拟机模式”</strong>页中，选择<strong>“独立虚拟机”</strong>，键入可用 <strong>DNS 名称</strong>，选择应在其中创建该映像的<strong>存储帐户</strong>（或保留默认选项以便自动创建新的<strong>存储帐户</strong>）。最后，选择<strong>“区域/地缘组/虚拟网络”</strong>值。单击<strong>向右箭头</strong>继续。</p>
+
+<p><img src="images/creating-a-vm-vm-mode.png?raw=true" alt="配置自定义虚拟机，虚拟机模式" />
+</p>
+
+<p><em>创建虚拟机 - 虚拟机模式</em></p></li>
+<li><p>在<strong>“虚拟机选项”</strong>页中，单击提交按钮以便新建虚拟机。</p>
+
+<p><img src="images/creating-a-vm--vm-options.png?raw=true" alt="创建虚拟机 - 虚拟机选项" title="创建虚拟机 - 虚拟机选项" />
+</p>
+
+<p><em>创建虚拟机 - 虚拟机选项</em></p></li>
+<li><p>在<strong>“虚拟机”</strong>部分中，您将看到所创建的虚拟机具有<em>“正在配置”</em>状态。等待状态变为<em>“正在运行”</em>，然后再继续后面的步骤。</p>
+<blockquote>
+<p><strong>注意：</strong>配置过程可能需要一段时间才能完成。</p>
+</blockquote>
+<p><img src="images/creating-linux-vm.png?raw=true" alt="创建 Linux 虚拟机" />
+</p>
+
+<p><em>创建 Linux 虚拟机</em></p></li>
+<li><p>现在，您将为虚拟机创建公共端点。这样，您将可以从 Internet 上的其他应用程序连接到在所选端口上运行的虚拟机服务。尤其是，您将打开 MongoDB（您将在 Linux 服务器中安装的 NoSQL 数据库服务器）使用的端口。</p>
+<blockquote>
+<p><strong>注意：</strong>虚拟机使用端点在 Windows Azure 中通信并与 Internet 上的其他资源通信。在 Windows Azure 中创建的所有虚拟机可以与同一云服务或虚拟网络中的其他虚拟机自动通信。不过，您需要为机器添加一个端点，才能使 Internet 上或其他虚拟网络上的其他资源（如 Web 应用程序）与之通信。</p>
+
+<p>为使 Web 应用程序连接到在虚拟机上运行的 MongoDB 服务器，您将需要打开以下专用端口，如下面的步骤中所述。</p>
+
+<p>-端口 <strong>27017</strong>：MongoDB 服务器数据库端口</p>
+
+<p>-端口 <strong>28017</strong>：MongoDB 服务器 Web 接口</p>
+</blockquote></li>
+<li><p>若要创建新端点，请从列表中选择您的 Linux 虚拟机，打开<strong>“仪表板”</strong>页，然后单击<strong>“端点”</strong>。您将注意到，默认配置使用 SSH 连接的端点；您以后将使用该端点访问虚拟机。</p>
+<blockquote>
+<p><strong>注意：</strong>通过 SSH（安全 SHell 的首字母缩写词），您可以在大多数 Linux/Unix 系统上从远程安全地访问 shell（命令行）。SSH 对在计算机之间传输的所有数据进行加密，以便避免恶意用户读取 (<em>sniff</em>) 您运行的用户名、密码和命令。</p>
+</blockquote></li>
+<li><p>单击<strong>“添加端点”</strong>，选择<strong>“添加端点”</strong>选项，然后单击<strong>右箭头</strong>继续。</p>
+
+<p><img src="images/adding-a-new-endpoint.png?raw=true" alt="添加新端点" title="添加新端点" />
+</p>
+
+<p><em>添加新端点</em></p></li>
+<li><p>在<strong>“指定端点详细信息”</strong>页中，在<strong>“名称”</strong>字段中键入 <em>MongoDB</em>，将<strong>“协议”</strong>设置为 <em>TCP</em>，将<strong>“公用端口”</strong>和<strong>“专用端口”</strong>都设置为 <em>27017</em>。</p>
+<blockquote>
+<p><strong>注意：</strong>出于简化的目的，使用相同的值配置公用端口和专用端口。但在生产环境中，出于安全考量，您应该使用不同值。</p>
+</blockquote>
+<p><img src="images/new-endpoint-details.png?raw=true" alt="指定端点详细信息" title="指定端点详细信息" />
+</p>
+
+<p><em>指定端点详细信息</em></p>
+<blockquote>
+<p><strong>注意：</strong>MongoDB 使用 27017 作为默认端口，使用 28017 作为 Web 服务端口。您可以从<a href="http://www.mongodb.org/display/DOCS/Production+Notes#ProductionNotes-TCPPortNumbers">此处</a>查看 MongoDB 默认端口。</p>
+</blockquote></li>
+<li><p>重复前面的步骤，为端口 <strong>28017</strong> 配置端点。</p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Connecting_to_the_Virtual_Machine_Using_an_SSH_Client">任务 2 - 使用 SSH 客户端连接到虚拟机</h4>
+
+<ol>
+<li><p>在 Windows Azure 门户中，从列表中选择 Linux 虚拟机以便进入其<strong>“仪表板”</strong>。找到该页底部的 <strong>URL</strong> 字段，记下值（没有 <strong>http://</strong>）。这是您将用于连接到虚拟机的公共地址。</p>
+
+<p><img src="images/dashboard---dns-name-of-the-virtual-machine.png?raw=true" alt="仪表板 - 虚拟机的 DNS 名称" />
+</p>
+
+<p><em>仪表板 - 虚拟机的 DNS 名称</em></p></li>
+<li><p>单击<strong>“端点”</strong>链接，复制 SSH 端点的公用端口值（专用端口 22）。</p></li>
+<li><p>打开终端（或者任何其他 SSH 客户端），并且使用 <strong>ssh</strong> 命令连接到虚拟机。为此，使用以下命令，并且使用管理员用户名和虚拟机 DNS 名称替代占位符。该命令应该类似于以下命令 <code>ssh admin@linux-mongodb-vm.cloudapp.net -p 50512</code>。</p>
+
+<span class="codelanguage">Bash</span><pre><code class="Bash">ssh [YOUR-ADMIN-USER-NAME]@[YOUR-VM-DNS-NAME] -p [YOUR-SSH-PORT]
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>管理员用户名是您在创建虚拟机时配置的用户名。</p>
+</blockquote></li>
+<li><p>输入用于登录的管理员密码。如果这是您首次连接，则系统可能会提示您接受证书。</p>
+
+<p><img src="images/logging-into-the-vm.png?raw=true" alt="登录到虚拟机" title="登录到虚拟机" />
+</p>
+
+<p><em>登录到 Linux 虚拟机</em></p></li>
+</ol>
+
+<p><a name="Ex1Task3"></a></p>
+
+<h4 id="Task_3_-_Installing_and_Configuring_MongoDB">任务 3 - 安装和配置 MongoDB</h4>
+
+<p>在此任务中，您将在 Linux 虚拟机中安装和配置 MongoDB 服务器。</p>
+
+<p>MongoDB 是一种面向文档的 NoSQL 数据，是为简化开发和提供高伸缩性而设计的，尤其针对 Internet 应用程序和基础结构。</p>
+
+<ol>
+<li><p>在连接到虚拟机后，执行以下命令以便将当前用户切换到 <strong>root</strong> 并获取管理员权限。</p>
+
+<span class="codelanguage">Bash</span><pre><code class="Bash">sudo su -
+</code></pre></li>
+<li><p>执行以下命令以便安装 <strong>wget</strong> 以及 MongoDB 的必备库。</p>
+
+<span class="codelanguage">Bash</span><pre><code class="Bash">zypper install wget zypper install libstdc++46-32bit
+</code></pre></li>
+<li><p>执行以下命令以便在虚拟机中下载和提取 MongoDB。请注意，此命令将下载 MongoDB 版本 2.0.4，如果您喜欢使用更新的版本，则需要相应调整以下命令。</p>
+
+<span class="codelanguage">Bash</span><pre><code class="Bash">wget http://downloads.mongodb.org/linux/mongodb-linux-i686-2.0.4.tgz tar xzf mongodb-linux-i686-2.0.4.tgz
+</code></pre>
+
+<p><img src="images/downloading-mongodb.png?raw=true" alt="下载 MongoDB" title="下载 MongoDB" />
+</p>
+
+<p><em>下载 MongoDB</em></p></li>
+<li><p>创建 <strong>/data/db</strong> 目录，并为当前用户授予权限。默认情况下，MongoDB 将在 <strong>/data/db</strong> 文件夹中存储数据，但必须手动创建目录。</p>
+
+<span class="codelanguage">Bash</span><pre><code class="Bash">mkdir -p /data/db chown [YOUR-ADMIN-USER] /data/db
+</code></pre></li>
+<li><p>输入以下命令以便启动 MongoDB 服务器。请注意，在控制台输出中，处理默认端口为 27017，而 Web 控制台默认端口为 28017，这两个端口都已使用公共端点打开。</p>
+
+<span class="codelanguage">Bash</span><pre><code class="Bash">./mongodb-linux-i686-2.0.4/bin/mongod &amp;
+</code></pre>
+
+<p><img src="images/starting-mongodb-process.png?raw=true" alt="启动 MongoDB 进程" title="启动 MongoDB 进程" />
+</p>
+
+<p><em>启动 MongoDB 进程</em></p>
+<blockquote>
+<p><strong>注意：</strong>您可以选择输入以下命令以便在启动时自动启动 MongoDB 服务器。</p>
+
+<span class="codelanguage">Bash</span><pre><code class="Bash">  chkconfig mongod on
+</code></pre>
+</blockquote></li>
+<li><p>在完成该过程后按下 <strong>Enter</strong>。</p></li>
+<li><p>执行以下命令以便启动 MongoDB shell。该 MongoDB 交互式 shell 是一种 JavaScript shell，可用于从命令行向 MongoDB 发出命令。您可以运行查询并且查看数据库的内容。</p>
+
+<span class="codelanguage">Bash</span><pre><code class="Bash">./mongodb-linux-i686-2.0.4/bin/mongo
+</code></pre>
+
+<p><img src="images/connecting-to-mongo-shell.png?raw=true" alt="连接到 MongoDB shell" />
+</p>
+
+<p><em>连接到 MongoDB shell</em></p></li>
+<li><p>在 shell 中，键入以下查询以便测试连接。这些查询将一个新文档保存在 <em>foo</em> 集合中，然后检索它。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">db.foo.save( { a : 1 } ) db.foo.<span style="color:#0000FF">find</span>()
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>MongoDB 存储在集合中分组的类似 JSON 的文档。在此示例中，<em>foo</em> 是集合，<em>{a : 1}</em> 是文档。</p>
+
+<p>一个集合可以具有任何数目的文档，并且一个集合内的文档可以具有不同架构，这些架构可以是动态的。这是与关系数据库的最大差异之一：关系表中的每个记录都具有相同的字段，而集合中的文档可以存储不同字段。</p>
+</blockquote></li>
+<li><p>然后，键入以下命令以便检索服务器状态。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">db.serverStatus()
+</code></pre>
+
+<p><img src="images/mongodb-server-status-shell.png?raw=true" alt="MongoDB 服务器状态 shell" title="MongoDB 服务器状态 shell" />
+</p>
+
+<p><em>MongoDB 服务器状态 shell</em></p></li>
+<li><p>您现在将从浏览器查看数据库状态。不要关闭 MongoDB shell。</p>
+
+<p>打开浏览器，测试可从 Internet 访问在您的虚拟机中运行的 MongoDB 服务器。使用以下 URL 可通过 JSON 格式获取服务器状态；使用您的虚拟机数据替换占位符。</p>
+
+<pre><code>http://[your-vm-dns-name]:28017/_status
+</code></pre>
+
+<p><img src="images/server-status-output.png?raw=true" alt="服务器状态输出" title="服务器状态输出" />
+</p>
+
+<p><em>服务器状态</em></p></li>
+</ol>
+
+<p><a name="Ex1Task4"></a></p>
+
+<h4 id="Task_4_-_Configuring_Text_Search_on_MongoDB">任务 4 - 在 MongoDB 上配置文本搜索</h4>
+
+<p>在此任务中，您将通过向数据库添加关键字索引，创建数据库和配置文本搜索。MongoDB 上的文本搜索功能必须手动实现。因此，您将创建一个附加的字段，该字段将存储要由搜索查询检索的文本，然后，您将在关键字字段上创建一个索引以便提高性能。</p>
+<blockquote>
+<p><strong>注意：</strong>您可以从<a href="http://www.mongodb.org/display/DOCS/Full+Text+Search+in+Mongo">此处</a>了解有关 MongoDB 全文搜索配置的更多信息。</p>
+</blockquote>
+<ol>
+<li><p>如果尚未打开，则打开 MongoDB shell (<code>./mongodb-linux-i686-2.0.4/bin/mongo</code>)。</p></li>
+<li><p>执行以下脚本可使 MongoDB 创建并选择 <strong>ContactDb</strong> 数据库。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">use ContactDb;
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>使用 <code>use</code> 命令切换到数据库不会立即创建数据库；首次插入数据时将会惰性创建数据库。</p>
+</blockquote></li>
+<li><p>您现在将添加初始数据以便用于下一个练习。您将具有一个 <em>Contacts</em> 集合，集合中包含姓氏、名字、地址和电子邮件字段。若要实现文本搜索，您将添加“关键字”字段，其中包含各字段的值。</p>
+<blockquote>
+<p><strong>注意：</strong>如果您没有指定 ID，MongoDB 将自动创建一个对象 ID。</p>
+</blockquote>
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">db.contacts.save({firstname: <span style="color:#8B0000">&quot;John&quot;</span>, lastname: <span style="color:#8B0000">&quot;Smith&quot;</span>, address:<span style="color:#8B0000">&quot;1 Microsoft Way, Redmond, WA.&quot;</span>, email:<span style="color:#8B0000">&quot;john.smith@live.com&quot;</span>, _keywords: [<span style="color:#8B0000">&quot;john&quot;</span>, <span style="color:#8B0000">&quot;smith&quot;</span>, <span style="color:#8B0000">&quot;john.smith@live.com&quot;</span> ] } );
+</code></pre></li>
+<li><p>如果您想要查找联系人，则可以通过使用 <strong>findOne</strong> 在所有值中进行搜索。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">db.contacts.findOne( {_keywords: <span style="color:#8B0000">&quot;smith&quot;</span>} );
+</code></pre>
+
+<p>若要验证，还可以运行检索 null 值的此命令：</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">db.contacts.findOne( {_keywords: <span style="color:#8B0000">&quot;lee&quot;</span>} );
+</code></pre>
+
+<p><img src="images/finding-a-contact.png?raw=true" alt="查找联系人" title="查找联系人" />
+</p>
+
+<p><em>查找联系人</em></p></li>
+<li><p>执行以下命令向数据库添加更多示例数据。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">db.contacts.save({firstname: <span style="color:#8B0000">&quot;Catherine&quot;</span>, lastname: <span style="color:#8B0000">&quot;Abel&quot;</span>, address:<span style="color:#8B0000">&quot;1 Microsoft Way, Redmond, WA.&quot;</span>, email:<span style="color:#8B0000">&quot;catherine.abel@vannuys.com&quot;</span>, _keywords: [<span style="color:#8B0000">&quot;catherine&quot;</span>, <span style="color:#8B0000">&quot;abel&quot;</span>, <span style="color:#8B0000">&quot;catherine.abel@vannuys.com&quot;</span> ] } ); db.contacts.save({firstname: <span style="color:#8B0000">&quot;Kim&quot;</span>, lastname: <span style="color:#8B0000">&quot;Branch&quot;</span>, address:<span style="color:#8B0000">&quot;1 Microsoft Way, Redmond, WA.&quot;</span>, email:<span style="color:#8B0000">&quot;kim.branch@contoso.com&quot;</span>, _keywords: [<span style="color:#8B0000">&quot;kim&quot;</span>, <span style="color:#8B0000">&quot;branch&quot;</span>, <span style="color:#8B0000">&quot;kim.branch@contoso.com&quot;</span> ] } ); db.contacts.save({firstname: <span style="color:#8B0000">&quot;Mark&quot;</span>, lastname: <span style="color:#8B0000">&quot;Harrington&quot;</span>, address:<span style="color:#8B0000">&quot;1 Microsoft Way, Redmond, WA.&quot;</span>, email:<span style="color:#8B0000">&quot;mark.harrington@adatum.com&quot;</span>, _keywords: [<span style="color:#8B0000">&quot;mark&quot;</span>, <span style="color:#8B0000">&quot;harrington&quot;</span>, <span style="color:#8B0000">&quot;mark.harrington@adatum.com&quot;</span> ] } ); db.contacts.save({firstname: <span style="color:#8B0000">&quot;Keith&quot;</span>, lastname: <span style="color:#8B0000">&quot;Harris&quot;</span>, address:<span style="color:#8B0000">&quot;1 Microsoft Way, Redmond, WA.&quot;</span>, email:<span style="color:#8B0000">&quot;keith.harris@adventureworks.com&quot;</span>, _keywords: [<span style="color:#8B0000">&quot;keith&quot;</span>, <span style="color:#8B0000">&quot;harris&quot;</span>, <span style="color:#8B0000">&quot;keith.harris@adventureworks.com&quot;</span> ] } ); db.contacts.save({firstname: <span style="color:#8B0000">&quot;Wilson&quot;</span>, lastname: <span style="color:#8B0000">&quot;Pais&quot;</span>, address:<span style="color:#8B0000">&quot;1 Microsoft Way, Redmond, WA.&quot;</span>, email:<span style="color:#8B0000">&quot;wilson.pais@alpineskihouse.com&quot;</span>, _keywords: [<span style="color:#8B0000">&quot;wilson&quot;</span>, <span style="color:#8B0000">&quot;pais&quot;</span>, <span style="color:#8B0000">&quot;wilson.pais@alpineskihouse.com&quot;</span> ] } ); db.contacts.save({firstname: <span style="color:#8B0000">&quot;Roger&quot;</span>, lastname: <span style="color:#8B0000">&quot;Harui&quot;</span>, address:<span style="color:#8B0000">&quot;1 Microsoft Way, Redmond, WA.&quot;</span>, email:<span style="color:#8B0000">&quot;roger.harui@baldwinmuseum.com&quot;</span>, _keywords: [<span style="color:#8B0000">&quot;roger&quot;</span>, <span style="color:#8B0000">&quot;harui&quot;</span>, <span style="color:#8B0000">&quot;roger.harui@baldwinmuseum.com&quot;</span> ] } ); db.contacts.save({firstname: <span style="color:#8B0000">&quot;Pilar&quot;</span>, lastname: <span style="color:#8B0000">&quot;Pinilla&quot;</span>, address:<span style="color:#8B0000">&quot;1 Microsoft Way, Redmond, WA.&quot;</span>, email:<span style="color:#8B0000">&quot;pilar.pinilla@blueyonderairlines.com&quot;</span>, _keywords: [<span style="color:#8B0000">&quot;pilar&quot;</span>, <span style="color:#8B0000">&quot;pinilla&quot;</span>, <span style="color:#8B0000">&quot;pilar.pinilla@blueyonderairlines.com&quot;</span> ] } ); db.contacts.save({firstname: <span style="color:#8B0000">&quot;Roger&quot;</span>, lastname: <span style="color:#8B0000">&quot;Harui&quot;</span>, address:<span style="color:#8B0000">&quot;1 Microsoft Way, Redmond, WA.&quot;</span>, email:<span style="color:#8B0000">&quot;roger.harui@baldwinmuseum.com&quot;</span>, _keywords: [<span style="color:#8B0000">&quot;roger&quot;</span>, <span style="color:#8B0000">&quot;harui&quot;</span>, <span style="color:#8B0000">&quot;roger.harui@baldwinmuseum.com&quot;</span> ] } ); db.contacts.save({firstname: <span style="color:#8B0000">&quot;Kari&quot;</span>, lastname: <span style="color:#8B0000">&quot;Hensien&quot;</span>, address:<span style="color:#8B0000">&quot;1 Microsoft Way, Redmond, WA.&quot;</span>, email:<span style="color:#8B0000">&quot;kari.hensien@citypowerlight&quot;</span>, _keywords: [<span style="color:#8B0000">&quot;kari&quot;</span>, <span style="color:#8B0000">&quot;hensien&quot;</span>, <span style="color:#8B0000">&quot;kari.hensien@citypowerlight&quot;</span> ] } ); db.contacts.save({firstname: <span style="color:#8B0000">&quot;Peter&quot;</span>, lastname: <span style="color:#8B0000">&quot;Brehm&quot;</span>, address:<span style="color:#8B0000">&quot;1 Microsoft Way, Redmond, WA.&quot;</span>, email:<span style="color:#8B0000">&quot;peter.brehm@cohowinery.com&quot;</span>, _keywords: [<span style="color:#8B0000">&quot;peter&quot;</span>, <span style="color:#8B0000">&quot;brehm&quot;</span>, <span style="color:#8B0000">&quot;peter.brehm@cohowinery.com&quot;</span> ] } ); db.contacts.save({firstname: <span style="color:#8B0000">&quot;Johny&quot;</span>, lastname: <span style="color:#8B0000">&quot;Porter&quot;</span>, address:<span style="color:#8B0000">&quot;1 Microsoft Way, Redmond, WA.&quot;</span>, email:<span style="color:#8B0000">&quot;johnny.porter@cohowinery.com&quot;</span>, _keywords: [<span style="color:#8B0000">&quot;johny&quot;</span>, <span style="color:#8B0000">&quot;porter&quot;</span>, <span style="color:#8B0000">&quot;johnny.porter@cohowinery.com&quot;</span> ] } ); db.contacts.save({firstname: <span style="color:#8B0000">&quot;John&quot;</span>, lastname: <span style="color:#8B0000">&quot;Harris&quot;</span>, address:<span style="color:#8B0000">&quot;1 Microsoft Way, Redmond, WA.&quot;</span>, email:<span style="color:#8B0000">&quot;john.harris@contoso.com&quot;</span>, _keywords: [<span style="color:#8B0000">&quot;john&quot;</span>, <span style="color:#8B0000">&quot;harris&quot;</span>, <span style="color:#8B0000">&quot;john.harris@contoso.com&quot;</span> ] } );
+</code></pre></li>
+<li><p>在填充了您的数据库后，您将为<strong>“关键字”</strong>字段创建索引。为此，执行 <code>ensureIndex</code> 命令，该命令将创建一个索引（如果索引不存在）。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">db.contacts.ensureIndex( { _keywords: 1 } );
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>您可以从<a href="http://www.mongodb.org/display/DOCS/Indexes">此处</a>了解有关 MongoDB 索引的更多信息。</p>
+
+<p>如果您想要检索现有索引，则可以运行命令 <strong>db.system.indexes.find()</strong> 并且查看是否已创建了关键字索引。</p>
+</blockquote></li>
+</ol>
+
+<p><a name="Ex1Task5"></a></p>
+
+<h4 id="Task_5_-_Creating_Database_Users_in_MongoDB">任务 5 - 在 MongoDB 中创建数据库用户</h4>
+
+<p>在此任务中，您将学习如何配置 MongoDB 安全性。您将首先为服务器创建管理员用户，然后将学习如何为每个数据库添加用户。</p>
+<blockquote>
+<p><strong>注意：</strong>MongoDB 的当前版本仅支持基本的安全性。您在特定数据库的上下文中对用户名和密码进行身份验证。有关 MongoDB 安全性的详细信息，请查看<a href="http://www.mongodb.org/display/DOCS/Security+and+Authentication#SecurityandAuthentication-MongoSecurity">此文章</a>。</p>
+</blockquote>
+<ol>
+<li><p>如果尚未打开，则打开 MongoDB shell (<code>./mongodb-linux-i686-2.0.4/bin/mongo</code>)。</p></li>
+<li><p>为服务器进程创建管理员用户。使用用户名和密码替代占位符。在下一个练习中，您将使用这些凭据从 Web 应用程序连接到数据库服务器。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">use admin db.addUser(<span style="color:#8B0000">&quot;[YOUR-ADMIN-USERNAME]&quot;</span>,<span style="color:#8B0000">&quot;[YOUR-ADMIN-PASSWORD]&quot;</span>)
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>将在 admin 数据库下存储此用户。从现在开始，将只能使用这些凭据访问您的数据库服务器管理。若要通过身份验证连接到数据库，您将需要执行 <code>db.auth(username,password)</code> 命令。</p>
+
+<p>或者，您可为数据库配置用户，如下所示。请注意，该用户将只能连接到此数据库，而以前配置的系统管理员用户具有完全访问权限。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">use [YOUR-DB-NAME] db.addUser(<span style="color:#8B0000">&quot;[username]&quot;</span>,<span style="color:#8B0000">&quot;[password]&quot;</span>)
+</code></pre>
+
+<p><img src="images/adding-a-database-user.png?raw=true" alt="添加数据库用户" title="添加数据库用户" />
+</p>
+
+<p><em>添加数据库用户</em></p>
+</blockquote></li>
+<li><p>运行此命令以查看创建的系统用户。您应该能够看到用户列表。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">db.system.users.<span style="color:#0000FF">find</span>()
+</code></pre>
+
+<p><img src="images/database-users.png?raw=true" alt="数据库用户" title="数据库用户" />
+</p>
+
+<p><em>数据库用户</em></p></li>
+<li><p>键入 <code>exit</code> 退出 MongoDB shell。</p></li>
+<li><p>为了验证该进程现在是安全的，切换回您的浏览器并刷新状态页。请注意，现在需要管理员凭据来检索信息。</p>
+
+<p><img src="images/authentication-verification.png?raw=true" alt="身份验证" title="身份验证" />
+</p>
+
+<p><em>身份验证</em></p></li>
+</ol>
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Connecting_to_the_Virtual_Machine_from__a_Nodejs_Application">练习 2：从 Node.js 应用程序连接到虚拟机</h3>
+
+<p>在此练习中，您将在 Windows Azure 网站中创建一个新网站，并且利用 Windows Azure 提供的新的 GIT 发布功能发布一个 Node.js 应用程序。您将发布的应用程序将使用位于您在练习 1 中配置的 Linux 服务器中的 MongoDB 数据库。</p>
+
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_a_New_Web_Site_Hosted_in_Windows_Azure">任务 1 - 创建在 Windows Azure 中托管的新网站</h4>
+
+<ol>
+<li><p>转到 <a href="http://manage.windowsazure.com/">Windows Azure 管理门户</a>，使用与您的订阅关联的 <strong>Windows Live ID</strong> 凭据登录。</p></li>
+<li><p>在命令栏上，单击<strong>“新建”</strong>。</p>
+
+<p><img src="images/creating-a-new-web-site.png?raw=true" alt="创建新网站" title="创建新网站" />
+</p>
+
+<p><em>创建新网站</em></p></li>
+<li><p>单击<strong>“网站”</strong>，然后单击<strong>“快速创建”</strong>。为这个新网站提供一个可用 URL，然后单击<strong>“创建网站”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>Windows Azure 网站是一个宿主平台，您可以在该平台上控制和管理云中运行的 Web 应用程序。通过“快速创建”选项，可以从门户外将已完成的 Web 应用程序部署到 Windows Azure 网站。它不包含用于设置数据库的步骤。</p>
+</blockquote>
+<p><img src="images/creating-a-new-web-site-using-quick-create.png?raw=true" alt="使用“快速创建”创建新网站" title="使用“快速创建”创建新网站" />
+</p>
+
+<p><em>使用“快速创建”创建新网站</em></p></li>
+<li><p>等待新网站创建完成。</p>
+
+<p><img src="images/creating-a-new-web-site-status.png?raw=true" alt="创建新网站状态" title="创建新网站状态" />
+</p>
+
+<p><em>创建新网站状态</em></p></li>
+<li><p>创建网站之后，单击 <strong>URL</strong> 列下面的链接。检查这个新网站是否工作正常。</p>
+
+<p><img src="images/browsing-to-the-new-web-site.png?raw=true" alt="浏览到新网站" title="浏览到新网站" />
+</p>
+
+<p><em>浏览到新网站</em></p>
+
+<p><img src="images/web-site-running.png?raw=true" alt="网站正在运行" title="网站正在运行" />
+</p>
+
+<p><em>运行中的网站</em></p></li>
+<li><p>返回到门户，然后单击<strong>“名称”</strong>列下的网站名称以显示该网站的管理页。</p>
+
+<p><img src="images/opening-the-web-site-management-pages.png?raw=true" alt="打开网站管理页" title="打开网站管理页" />
+</p>
+
+<p><em>打开网站管理页</em></p></li>
+<li><p>如果这是您首次访问该门户，则可能会重定向到<strong>“快速启动”</strong>页。在菜单中单击<strong>“仪表板”</strong>以继续。</p>
+
+<p><img src="images/opening-web-site-dashboard.png?raw=true" alt="打开网站仪表板" title="打开网站仪表板" />
+</p>
+
+<p><em>打开网站仪表板</em></p></li>
+<li><p>在<strong>“仪表板”</strong>页中的<strong>“速览”</strong>部分下，单击<strong>“设置 Git 发布”</strong>链接。</p>
+
+<p><img src="images/setting-up-git-publishing.png?raw=true" alt="设置 GIT 发布" title="设置 GIT 发布" />
+</p>
+
+<p><em>设置 Git 发布</em></p>
+<blockquote>
+<p><strong>注意：</strong>Git 是一个免费的、开源的分布式版本控制系统，可处理从小型项目到超大型项目的各类项目。在设置 Git 发布之后，每次的 Git 推送都会启动一个新的部署。</p>
+</blockquote></li>
+<li><p>在执行后续任务前，请等待 Git 存储库创建完成并且可以使用。</p>
+<blockquote>
+<p><strong>提示：</strong>在 Git 存储库就绪后，快速启动页将打开，其中包含您为了将 Web 应用程序文件推送到 Windows Azure 而需要执行的一组命令。</p>
+</blockquote>
+<p><img src="images/git-repository-created.png?raw=true" alt="GIT 存储库已创建" title="GIT 存储库已创建" />
+</p></li>
+</ol>
+
+<p><a name="Ex2Task2"></a></p>
+
+<h4 id="Task_2_-_Exploring_the_Nodejs_Application">任务 2 - 探索 Node.js 应用程序</h4>
+
+<p>在此任务中，您将打开并探索此实验中提供的一个简单的 Node.js 应用程序，该应用程序使用您已在练习 1 中配置的 MongoDB 数据库。该应用程序由一个联系人管理器网站构成，您可以在其中存储和搜索联系人。</p>
+
+<ol>
+<li><p>打开位于此实验的 <strong>/Source/Assets</strong> 文件夹中的网站文件。</p></li>
+<li><p>使用文本编辑器打开 <strong>server.js</strong>，这是该 Node.js 应用程序的主要入口点。请注意文件顶部的要求声明。此代码为此应用程序导入两个主要模块：</p>
+
+<ul>
+<li><a href="http://expressjs.com">Express</a>：用于 Node.js 的一个 Web 框架，提供视图呈现、可靠路由等不同功能。</li>
+<li><a href="http://mongoosejs.com/">Mongoose</a>：为 Node.js 设计的 MongoDB 对象模型工具。Mongoose 将管理您对 MongoDb 的连接和查询。</li>
+</ul>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript"><span style="color:#0000FF">var</span> express = require(&#39;express&#39;), mongoose = require(&#39;mongoose&#39;), ...
+</code></pre>
+
+<p>此外，还注意用于创建和初始化 express 应用程序的 <code>express.createServer()</code> 语句。该应用程序使用的视图引擎是 <a href="https://github.com/visionmedia/jade">jade</a>。</p>
+<blockquote>
+<p><strong>注意：</strong>您可以在<a href="http://howtonode.org/getting-started-with-express">此文章</a>中了解与 Express 框架有关的入门指南，在<a href="http://mongoosejs.com/">其文档</a>中了解与 Mongoose 有关的信息。</p>
+</blockquote></li>
+<li><p>为了使用 Mongoose 检索和插入数据，您需要使用 <strong>Schema</strong> Mongoose 接口定义一个<em>模型</em>。该架构主要定义您的文档的结构（在这个示例中为 <em>Contacts</em>）以及您要存储的数据的类型。在架构就位后，通过使用 <code>mongoose.model()</code> 函数实例化该模型。返回的 <strong>ContactModel</strong> 对象将允许您查找文档并将文档插入 <strong>Contact</strong> 集合中。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript"><span style="color:#0000FF">var</span> Contact = <span style="color:#0000FF">new</span> Schema({ id: ObjectId, firstname: <span style="color:#0000FF">String</span>, lastname: <span style="color:#0000FF">String</span>, address: <span style="color:#0000FF">String</span>, email: <span style="color:#0000FF">String</span>, _keywords: <span style="color:#0000FF">Array</span>, index: { unique: <span style="color:#0000FF">false</span> } });
+
+<span style="color:#0000FF">var</span> ContactModel = mongoose.model(&#39;Contact&#39;, Contact); 
+</code></pre></li>
+<li><p>从 <strong>routes</strong> 文件夹打开 <strong>newContacts.js</strong> 并且找到 <strong>newContact</strong> 函数。<code>new self.contactModel()</code> 函数将创建一个新的联系人文档，并且使用 <code>contact.save()</code> 函数将该文档保存到集合中。请注意，<strong>_keywords</strong> 字段存储含联系人的名字、姓氏和电子邮件的数组。然后，使用该字段来检索联系人。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">newContact: <span style="color:#0000FF">function</span> (req, res) {
+    <span style="color:#0000FF">var</span> <span style="color:#0000FF">self</span> = <span style="color:#0000FF">this</span>;
+    <span style="color:#0000FF">var</span> item = req.body.item; contact = <span style="color:#0000FF">new</span> <span style="color:#0000FF">self</span>.contactModel({ firstname: item.firstname, lastname: item.lastname, address: item.address, email: item.email, _keywords: [ item.firstname.toLowerCase(), item.lastname.toLowerCase(), item.email.toLowerCase() ] }); contact.save(<span style="color:#0000FF">function</span> (err) { ... });
+</code></pre></li>
+<li><p>从该解决方案的 <strong>routes</strong> 文件夹打开 <strong>contacts.js</strong>，找到 <strong>filterItems</strong> 函数。请注意 <code>self.contactModel.find()</code> 函数，该函数检索“名字”、“姓氏”和“电子邮件”字段中与搜索词匹配的所有联系人文档。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">filterItems: <span style="color:#0000FF">function</span> (req, res) {
+    <span style="color:#0000FF">var</span> <span style="color:#0000FF">self</span> = <span style="color:#0000FF">this</span>;
+    <span style="color:#0000FF">var</span> search = req.query.search.toLowerCase();
+    <span style="color:#0000FF">self</span>.contactModel.<span style="color:#0000FF">find</span>({_keywords: search}, <span style="color:#0000FF">function</span> (err, contacts) {
+        <span style="color:#0000FF">if</span> (!err) { res.render(&#39;contacts&#39;, { title: &#39;Contact Manager&#39;, layout: <span style="color:#0000FF">true</span>, contactlist: contacts }); } <span style="color:#0000FF">else</span> {
+          <span style="color:#0000FF">return</span> console.log(err); } }); }, ...
+</code></pre></li>
+<li><p>在 <strong>server.js</strong> 中，请注意 <code>mongoose.connect()</code> 语句，该语句将使用 Mongoose 打开与 MongoDb 的连接。使用以前在练习 1 的任务 5 中配置的 mongo 数据库的管理员用户名和密码替代连接占位符。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript"><span style="color:#008000">//</span>
+<span style="color:#008000">//Replace the placeholders with your own database server configuration.</span>
+<span style="color:#008000">//Example connection</span>
+<span style="color:#008000">//db = mongoose.connect(&#39;mongodb://AdminUser:Password!@mongoDBServer1.cloudapp.net:27017/MyDB&#39;, function(err) { if (err) throw err; }); </span>
+<span style="color:#008000">//</span>
+
+db = mongoose.connect(&#39;mongodb:<span style="color:#008000">//[YOUR-ADMIN-USERNAME]:[YOUR-ADMIN-PASSWORD]@[YOUR-VM-DNS-ADDRESS]:27017/ContactDb&#39;, </span>
+<span style="color:#0000FF">function</span>(err) { <span style="color:#0000FF">if</span> (err) <span style="color:#0000FF">throw</span> err; }); 
+</code></pre></li>
+</ol>
+
+<p><a name="Ex2Task3"></a></p>
+
+<h4 id="Task_3_-_Publishing_the_Nodejs_application_using_GIT">任务 3 - 使用 GIT 发布 Node.js 应用程序</h4>
+
+<ol>
+<li><p>返回到 Windows Azure 管理门户。打开网站的<strong>“仪表板”</strong>，在<strong>“速览”</strong>部分下，复制 <strong>Git Clone Url</strong> 值。</p>
+
+<p><img src="images/copying-the-git-clone-url.png?raw=true" alt="复制 GIT Clone URL" title="复制 GIT Clone URL" />
+</p>
+
+<p><em>复制 Git Clone Url</em></p></li>
+<li><p>为了发布您的本地文件，请打开<strong>“命令提示符”</strong>，使用 CD 命令进入您的应用程序文件夹（在这个例子中为此实验的 <strong>/Source/Assets</strong> 文件夹），然后运行以下命令。</p>
+
+<span class="codelanguage">Bash</span><pre><code class="Bash">git init git add . git commit -m &quot;initial commit&quot;
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>您可以在项目文档 <a href="http://git-scm.com/documentation">http://git-scm.com/documentation</a> 中了解与 Git 命令有关的详细信息。</p>
+</blockquote></li>
+<li><p>若要添加远程 Windows Azure 存储库并推送文件，请运行以下命令。使用从门户获取的值替换 <em>{Git Clone Url}</em> 占位符。</p>
+
+<span class="codelanguage">Bash</span><pre><code class="Bash">git remote add azure {Git Clone Url} git push azure master
+</code></pre></li>
+<li><p>出现提示时，请输入部署凭据。</p></li>
+<li><p>转到网站的<strong>“仪表板”</strong>页，单击<strong>“速览”</strong>部分下的<strong>“网站 URL”</strong>链接以便确保该网站正在运行。</p>
+
+<p><img src="images/running-the-nodejs-application.png?raw=true" alt="运行 Node.js 应用程序" title="运行 Node.js 应用程序" />
+</p>
+
+<p><em>运行 Node.js 应用程序</em></p></li>
+<li><p>联系人管理器网站将打开。在下面的步骤中，您将执行一个简要的演练。</p>
+
+<ol>
+<li><p>在联系人管理器主页中，您将看到联系人的完整列表</p>
+
+<p><img src="images/contact-list.png?raw=true" alt="联系人列表" title="联系人列表" />
+</p>
+
+<p><em>联系人列表</em></p></li>
+<li><p>输入 <em>kim</em> 并且按下<strong>“搜索”</strong>以便检索名为 Kim 的所有联系人。</p>
+
+<p><img src="images/text-search-results-by-first-name.png?raw=true" alt="按名字的文本搜索结果" title="按名字的文本搜索结果" />
+</p>
+
+<p><em>按名字的文本搜索结果</em></p></li>
+<li><p>现在，您将按姓氏进行搜索。输入 <em>Harris</em> 并且按下<strong>“搜索”</strong>。该应用程序将检索姓氏为 <em>harris</em> 的所有联系人。</p>
+
+<p><img src="images/text-search-result-last-name.png?raw=true" alt="按姓氏的文本搜索结果" title="按姓氏的文本搜索结果" />
+</p></li>
+</ol>
+
+<p><em>按姓氏的文本搜索结果</em></p></li>
+</ol>
+
+<hr />
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>在此实验中，您首先在 Windows Azure 管理门户中从 Linux 映像开始创建了一个新的虚拟机。然后，您在该虚拟机上创建和配置了可从 Internet 应用程序访问的 MongoDB 服务器。在配置了该服务器后，您使用 Windows Azure 网站发布了一个 Node.js 应用程序，该应用程序连接到在该虚拟机中运行的数据库服务器。</p> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-NodejsAzureWebSitesVMs-OSX/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,603 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 使用 Windows Azure 虚拟机部署 SharePoint 场</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-DeploySharePointVMs" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-DeploySharePointVMs" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="Title"></a></p>
+
+<h1 id="Deploying_a_SharePoint_Farm_with_Windows_Azure_Virtual_Machines">使用 Windows Azure 虚拟机部署 SharePoint 场</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>在此动手实验中，您将学习如何创建与 Active Directory 和 SQL Server 连接的 SharePoint 场。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ol>
+<li>使用 Windows Azure 门户创建 Sharepoint 映像</li>
+<li>将两个虚拟机连接到同一云服务以进行网络连接。</li>
+<li>创建和配置 SharePoint Server 场。</li>
+</ol>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li>完成<em>部署 Active Directory</em> HOL</li>
+<li>完成<em>部署 SQL Server for SharePoint</em> HOL</li>
+<li><a href="http://msdn.microsoft.com/zh-CN/library/windowsazure/jj156055">Windows Azure PowerShell Cmdlet</a></li>
+<li>启用了虚拟机预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>本实验设计为使用 Windows 7 操作系统。</p>
+</blockquote>
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#GettingStarted">创建 SharePoint 映像</a></li>
+<li><a href="#Exercise1">创建 SharePoint 虚拟机</a></li>
+<li><a href="#Exercise2">配置负载平衡</a></li>
+</ol>
+
+<p>完成此实验的估计时间：<strong>50 分钟</strong>。</p>
+
+<p><a name="GettingStarted"></a></p>
+
+<h3 id="Getting_Started_Creating_SharePoint_Image">开始：创建 SharePoint 映像</h3>
+
+<p>您现在将创建执行此动手实验所需的 SharePoint Server 磁盘映像。</p>
+
+<p>请确保在开始实验前创建了此映像。</p>
+
+<p><a name="GSTask1"></a></p>
+
+<h4 id="Task_1_-_Create_a_Windows_Server_VM_from_the_Windows_Azure_portal">任务 1 - 从 Windows Azure 门户创建 Windows Server 虚拟机</h4>
+
+<p>在此任务中，您将使用 Windows Azure 管理门户创建 Windows Server 2008 虚拟机。然后，您将使用此虚拟机安装 SharePoint 并生成可重用的映像。</p>
+
+<ol>
+<li><p>使用 Web 浏览器导航到 <a href="https://manage.windowsazure.com">https://manage.windowsazure.com</a>，然后使用您的 Microsoft 帐户注册。</p></li>
+<li><p>单击左窗格中的<strong>“网络”</strong>。选择所需的<strong>“虚拟网络”</strong>并复制它的地缘组名称。随后您将使用此名称来创建新虚拟机。</p>
+
+<p><img src="images/virtual-networks.png?raw=true" alt="虚拟网络" title="虚拟网络" />
+</p>
+
+<p><em>虚拟网络</em></p></li>
+<li><p>单击页面底部的<strong>“新建”</strong>链接。</p>
+
+<p><img src="images/creating-a-new-vm4.png?raw=true" alt="新建虚拟机" title="新建虚拟机" />
+</p>
+
+<p><em>新建虚拟机</em></p></li>
+<li><p>单击<strong>“虚拟机”</strong>链接，然后选择<strong>“从库中”</strong></p>
+
+<p><img src="images/new-vm-from-gallery.png?raw=true" alt="从库中新建虚拟机" title="从库中新建虚拟机" />
+</p>
+
+<p><em>从库中新建虚拟机</em></p></li>
+<li><p>在<strong>“选择虚拟机操作系统”</strong>页中，单击<strong>“平台映像”</strong>，然后从操作系统列表中选择 <strong>Windows Server 2008 R2 SP1</strong>。然后，单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/vm-os-selection.png?raw=true" alt="选择虚拟机操作系统" title="选择虚拟机操作系统" />
+</p>
+
+<p><em>选择虚拟机操作系统</em></p></li>
+<li><p>将虚拟机的名称设置为 <em>SPImage1</em>，通过填写<strong>“新密码”</strong>和<strong>“确认密码”</strong>字段设置该机管理员的新密码。然后，将<strong>“大小”</strong>设置为<em>“小”</em>，单击<strong>“下一步”</strong>按钮。</p>
+
+<p><img src="images/new-vm-configuration3.png?raw=true" alt="新虚拟机配置" title="新虚拟机配置" />
+</p>
+
+<p><em>新虚拟机配置</em></p></li>
+<li><p>在<strong>“虚拟机模式”</strong>页上，保留模式为<em>“独立虚拟机”</em>，将<strong>“DNS 名称”</strong>设置为 <em>SPImage1</em>。单击<strong>“下一步”</strong>按钮以继续。</p>
+
+<p><img src="images/configuring-the-vm-mode.png?raw=true" alt="配置虚拟机模式" title="配置虚拟机模式" />
+</p>
+
+<p><em>配置虚拟机模式</em></p></li>
+<li><p>在“虚拟机”部分中，您将看到自己创建的虚拟机，其状态为<em>“正在配置”</em>。等待状态变为<em>“正在运行”</em>，以继续执行以下任务。</p></li>
+</ol>
+
+<p><a name="GS2Task2"></a></p>
+
+<h4 id="Task_2_-_Install_SharePoint_and_Dependencies">任务 2 - 安装 SharePoint 和依赖项</h4>
+
+<p>在此任务中，您将下载并安装 SharePoint 2010 和它的依赖项。</p>
+
+<ol>
+<li>在 <strong>Windows Azure 门户</strong>的<strong>“虚拟机”</strong>部分，选择您在任务 1 中创建的 <em>SPImage1</em> 虚拟机，然后单击<strong>“连接”</strong>。</li>
+<li>下载远程桌面客户端。单击<strong>“打开”</strong>并使用您创建虚拟机时定义的管理员凭据登录。</li>
+<li>现在，您需要下载并安装 <strong>SharePoint 2010</strong>。为启用从 Internet Explorer 下载功能，需要更新<strong>“Internet Explorer 增强的安全配置”</strong>。在 Azure 虚拟机中，从<strong>“开始”|“所有程序”|“管理工具”</strong>中打开<strong>“服务器管理器”</strong>。</li>
+<li><p>在<strong>“服务器管理器”</strong>中，单击<strong>“安全信息”</strong>部分的<strong>“配置 IE ESC”</strong>。</p>
+
+<p><img src="images/internet-explorer-enhanced-security.png?raw=true" alt="Internet Explorer 增强的安全配置" />
+</p>
+
+<p><em>Internet Explorer 增强的安全配置</em></p></li>
+<li><p>在<strong>“Internet Explorer 增强的安全配置”</strong>中，<strong>关闭</strong><strong>管理员</strong>的增强安全配置，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="images/internet-explorer-enhanced-security2.png?raw=true" alt="Internet Explorer 增强的安全配置 (2)" />
+</p>
+
+<p><em>Internet Explorer 增强的安全配置</em></p>
+<blockquote>
+<p><strong>注意：</strong>修改<strong>“Internet Explorer 增强的安全配置”</strong>不宜作为常规做法，在此仅为本次特定实验临时使用。正确的做法应是从本地下载文件，然后将文件复制到共享文件夹或直接复制到虚拟机。</p>
+</blockquote></li>
+<li><p>因为您有下载文件的权限，请打开 <strong>Internet Explorer</strong> 浏览器并浏览到 <a href="http://sharepoint.microsoft.com/zh-CN/Pages/Try-It.aspx"><a href="http://sharepoint.microsoft.com/zh-CN/Pages/Try-It.aspx">http://sharepoint.microsoft.com/zh-CN/Pages/Try-It.aspx</a></a>。单击<strong>“立即下载”</strong>。</p></li>
+<li><p>从下拉列表中选择 <strong>SharePoint Server for Internet Sites, Standard</strong> 版本，然后单击<strong>“立即开始”</strong>。</p></li>
+<li><p>使用您的 <strong>Windows Live ID</strong> 帐户登录并填写<strong>“SharePoint Server 2010 for Internet Sites, Standard 试用”</strong>下载表单。您将收到一封电子邮件，其中包含试用版本的产品密钥。</p></li>
+<li><p>下载完成后，双击下载的 <strong>SharePointServer.exe</strong> 文件。</p></li>
+<li><p>单击<strong>“安装必备软件”</strong>并在 <strong>Microsoft SharePoint 2010 产品准备工具</strong>向导的引导下安装必需的产品和更新。</p>
+
+<p><img src="images/sharepoint-server-2010-installation-wizard.png?raw=true" alt="SharePoint Server 2010 安装向导" />
+</p>
+
+<p><em>SharePoint Server 2010 安装向导</em></p></li>
+<li><p>返回到 <strong>SharePoint Server 2010 安装向导</strong>，然后单击<strong>“安装 SharePoint Server”</strong>链接。</p>
+
+<p><img src="images/sharepoint-server-2010-installation-wizard2.png?raw=true" alt="SharePoint Server 2010 安装向导(2)" />
+</p>
+
+<p><em>SharePoint Server 2010 安装向导</em></p>
+<blockquote>
+<p><strong>注意：</strong>在安装 SharePoint Server 前，您可能需要重新启动虚拟机。如果 SharePoint Server 安装要求您重新启动计算机，请立即这样做。</p>
+
+<p>系统重新启动后，打开 SharePoint 安装程序并继续执行后续步骤。</p>
+</blockquote></li>
+<li><p>在<strong>“输入产品密钥”</strong>对话框中，使用您在电子邮件中收到的<strong>产品密钥</strong>。确保您使用 <strong>SharePoint Server 2010 for Internet Sites, standard</strong> 试用版本的产品密钥。</p>
+
+<p><img src="images/microsoft-sharepoint-server-2010-trial.png?raw=true" alt="Microsoft SharePoint Server 2010 试用" />
+</p>
+
+<p><em>Microsoft SharePoint Server 2010 试用</em></p></li>
+<li><p>阅读并接受许可条款，然后单击<strong>“继续”</strong>。</p></li>
+<li><p>在<strong>“选择所需的安装”</strong>页上，单击<strong>“服务器场”</strong>。</p>
+
+<p><img src="images/microsoft-sharepoint-server-2010-trial2.png?raw=true" alt="Microsoft SharePoint Server 2010 试用(2)" />
+</p>
+
+<p><em>Microsoft SharePoint Server 2010 试用</em></p></li>
+<li><p>在<strong>“服务器类型”</strong>页上，选择<strong>“完整”</strong>选项，然后单击<strong>“立即安装”</strong>以开始安装 SharePoint Server 2010。</p>
+
+<p><img src="images/microsoft-sharepoint-server-2010-trial3.png?raw=true" alt="Microsoft SharePoint Server 2010 试用(3)" />
+</p>
+
+<p><em>Microsoft SharePoint Server 2010 试用</em></p></li>
+<li><p>在<strong>“运行配置向导”</strong>页上，取消选中<strong>“立即运行 SharePoint 产品配置向导”</strong>复选框，然后单击<strong>“关闭”</strong>。</p>
+
+<p><img src="images/microsoft-sharepoint-server-2010-trial4.png?raw=true" alt="Microsoft SharePoint Server 2010 试用(4)" />
+</p>
+
+<p><em>Microsoft SharePoint Server 2010 试用</em></p></li>
+<li><p>单击<strong>“退出”</strong>以关闭 SharePoint Server 安装向导。</p></li>
+<li><p>转到 <a href="http://www.microsoft.com/download/en/details.aspx?id=26623"><a href="http://www.microsoft.com/download/en/details.aspx?id=26623">http://www.microsoft.com/download/en/details.aspx?id=26623</a></a>，下载 <strong>Service Pack 1 for SharePoint Server 2010</strong> 并安装它。</p>
+<blockquote>
+<p><strong>注意：</strong>需要 Service Pack 1 以将 SharePoint 与 SQL Server 2012 一起安装。</p>
+</blockquote></li>
+</ol>
+
+<p><a name="GS2Task3"></a></p>
+
+<h4 id="Task_3_-_Capture_the_VM_and_generate_an_image">任务 3 - 捕获虚拟机并生成映像</h4>
+
+<p>在此任务中，您将基于在上一个任务中创建的虚拟机创建映像。然后您将重用该映像来创建 SharePoint 虚拟机。</p>
+
+<ol>
+<li>在虚拟机中，以管理员身份从<strong>“开始”|“所有程序”|“附件”</strong>打开<strong>“命令提示符”</strong>。</li>
+<li><p>您将运行 <strong>Sysprep</strong> 工具来准备用于复制的虚拟机。如果您要捕获现有虚拟机的映像并重用它来创建新的虚拟机，必须运行 <strong>Sysprep</strong>。</p>
+
+<!--mark: 1 -->
+
+<span class="codelanguage">脚本</span><pre><code class="Script"><strong class="markLine">%WINDIR%\system32\sysprep\sysprep.exe /oobe /generalize /shutdown</strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>系统准备实用工具 (Sysprep) 是 Microsoft 提供的工具，它用于准备一个 Windows 系统以进行复制、审核和客户交付。有关 Sysprep 工具的详细信息，请参考此 TechNet 文章：<a href="http://technet.microsoft.com/zh-CN/library/cc721940(WS.10).aspx"><a href="http://technet.microsoft.com/zh-CN/library/cc721940(WS.10).aspx">http://technet.microsoft.com/zh-cn/library/cc721940(WS.10).aspx</a></a>。</p>
+</blockquote></li>
+<li><p>等待<strong>系统准备实用工具</strong>完成，它将关闭虚拟机。</p></li>
+<li><p>如果未打开，请使用 Web 浏览器导航到 <a href="https://manage.windowsazure.com">https://manage.windowsazure.com</a>，然后使用您的 Windows 帐户登录。</p></li>
+<li><p>单击左侧面板菜单上的<strong>“虚拟机”</strong>。</p></li>
+<li><p>选择您在任务 1 中创建的虚拟机 <em>SPImage1</em>，然后单击<strong>“关机”</strong>。等待虚拟机停止运行。</p></li>
+<li><p>现在单击<strong>“捕获”</strong>以从中创建映像。</p>
+
+<p><img src="images/capture-button.png?raw=true" alt="“捕获”按钮" title="“捕获”按钮" />
+</p>
+
+<p><em>捕获虚拟机</em></p></li>
+<li><p>在<strong>“捕获”</strong>对话框中，将<strong>“虚拟机名称”</strong>设置为 <em>sp2010syspreped</em>，填写<strong>“管理员密码”</strong>并选中<strong>“虚拟机已 sysprep”</strong>复选框。</p>
+
+<p><img src="images/capturing-a-vm-image.png?raw=true" alt="捕获虚拟机映像" title="捕获虚拟机映像" />
+</p>
+
+<p><em>捕获虚拟机映像</em></p></li>
+<li><p>在继续执行下一个任务前，等待映像创建完毕。</p>
+
+<p><img src="images/creating-a-virtual-machine-image3.png?raw=true" alt="创建虚拟机映像(3)" />
+</p>
+
+<p><em>创建虚拟机映像</em></p></li>
+</ol>
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Create_a_SharePoint_Virtual_Machine">练习 1：创建 SharePoint 虚拟机</h3>
+
+<p>在此练习中，您将创建 SharePoint 虚拟机。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Create_a_SharePoint_virtual_machine_from_the_SharePoint_Base_Image">任务 1 - 从 SharePoint 基本映像创建 SharePoint 虚拟机</h4>
+
+<p>在此任务中，您将使用 <strong>Windows Azure 门户</strong>从在前一任务中创建的基本映像创建 SharePoint 虚拟机。您随后将使用此虚拟机配置 SharePoint 场。</p>
+
+<ol>
+<li><p>如果您没有域控制器虚拟机的 IP 地址，请使用 Web 浏览器导航到 <strong>Windows Azure 门户</strong>，然后使用与 Windows Azure 帐户关联的 <strong>Microsoft 帐户</strong>登录。</p></li>
+<li><p>转到<strong>“虚拟机”</strong>，选择您在其中部署了 AD 的虚拟机并选择底部面板中的<strong>“连接”</strong>按钮。</p></li>
+<li><p>在虚拟机中，转到<strong>“开始”</strong>，键入 <strong>cmd</strong> 并按 <strong>Enter</strong>。</p></li>
+<li><p>键入 <strong>ipconfig</strong> 并按 <strong>Enter</strong>。记录 <strong>IPv4 地址</strong>，此练习稍后将用到它。关闭<strong>远程桌面</strong>连接。</p></li>
+<li><p>从<strong>“开始”</strong>|<strong>“所有程序”</strong>|<strong>Windows Azure</strong>|<strong>Windows Azure PowerShell</strong> 打开 <strong>Windows Azure PowerShell</strong>，右键单击 <strong>Windows Azure Powershell</strong> 并选择<strong>“以管理员身份运行”</strong>。</p></li>
+<li><p>执行以下命令以获取可用操作系统磁盘映像的名称。记录您在此实验<strong>“开始”</strong>部分中创建的 <strong>SharePoint</strong> 映像磁盘名称。</p>
+
+<!-- mark:1 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">Get-AzureVMImage | Select ImageName</strong>
+</code></pre></li>
+<li><p>执行以下命令为新虚拟机定义操作系统磁盘映像名称。</p>
+
+<!-- mark:1 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">$imgName = '[SHAREPOINT-IMAGE-NAME]'</strong>
+</code></pre></li>
+<li><p>设置虚拟机的 DNS 设置。为此，您将使用在练习 1 中创建的虚拟机，在其中您配置了 Active Directory。替换占位符，然后执行以下命令。使用在练习开头记录的 IP 地址。</p>
+
+<!-- mark:1-4 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">$advmIP = '[AD-IP-ADDRESS]'</strong>
+<strong class="markLine">$advmName = '[AD-VM-NAME]'</strong>
+<strong class="markLine"># Point to IP Address of Domain Controller Created Earlier</strong>
+<strong class="markLine">$dns1 = New-AzureDns -Name $advmName -IPAddress $advmIP</strong>
+</code></pre></li>
+<li><p>设置新虚拟机的配置设置以在设置过程中自动加入域。将占位符替换为管理员和域密码，然后执行命令。</p>
+
+<!-- mark:1-12 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">$vmName = 'spvm1'</strong>
+<strong class="markLine">$adminPassword = '[YOUR-PASSWORD]'</strong>
+<strong class="markLine">$domainPassword = '[YOUR-PASSWORD]'</strong>
+<strong class="markLine">$domainUser = 'administrator'</strong>
+<strong class="markLine">$FQDomainName = 'contoso.com'</strong>
+<strong class="markLine">$subNet = 'AppSubnet'</strong>
+<strong class="markLine"># Configuring VM to Automatically Join Domain</strong>
+<strong class="markLine">$advm1 = New-AzureVMConfig -Name $vmName -InstanceSize Small -ImageName $imgName | </strong>
+<strong class="markLine">            Add-AzureProvisioningConfig -WindowsDomain -Password $adminPassword `</strong>
+<strong class="markLine">            -Domain 'contoso' -DomainPassword $domainPassword `</strong>
+<strong class="markLine">            -DomainUserName $domainUser -JoinDomain $FQDomainName |</strong>
+<strong class="markLine">     Set-AzureSubnet -SubnetNames $subNet</strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>前面的命令假定您使用了在<strong>部署 Active Directory</strong> 动手实验中显示的域名和子网的建议名称。如果您使用了不同的名称，可能需要更新这些值。</p>
+</blockquote></li>
+<li><p>使用在前面步骤中定义的域和 DNS 设置来创建新虚拟机。将占位符替换为唯一的服务名称。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">$serviceName = [YOUR-SERVICE-NAME] $affinityGroup = 'adag' $adVNET = 'ADVNET' # New Cloud Service with VNET and DNS settings New-AzureVM -ServiceName $serviceName -AffinityGroup $affinityGroup ` -VMs $advm1 -DnsSettings $dns1 -VNetName $adVNET
+</code></pre></li>
+<li><p>设置过程完成后，使用远程桌面连接到虚拟机并验证其是否自动加入现有域。为此，请打开服务器管理器并验证该虚拟机已加入域。</p>
+
+<p><img src="images/vm-joined-to-the-domain.png?raw=true" alt="虚拟机已加入域" title="虚拟机已加入域" />
+</p>
+
+<p><em>虚拟机已加入域</em></p></li>
+<li><p>重复步骤 9 到 11，但是使用 <em>spvm2</em> 作为 <strong>$vmName</strong>。将使用这第二个虚拟机来创建 SharePoint 场。</p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Configure_SharePoint">任务 2 - 配置 SharePoint</h4>
+
+<p>在此任务中，您将配置 SharePoint 虚拟机以创建并连接到 SharePoint 场。</p>
+
+<ol>
+<li>如果未打开，请使用 Web 浏览器导航到 <a href="https://manage.windowsazure.com">https://manage.windowsazure.com</a>，然后使用您的 Windows 帐户登录。</li>
+<li>在<strong>“虚拟机”</strong>部分中，选择第一个 SharePoint 虚拟机 (<em>SPVM1</em>)，然后单击<strong>“连接”</strong>以使用<strong>“远程桌面连接”</strong>进行连接。</li>
+<li>从<strong>“开始”|“所有程序”|“Microsoft SharePoint 2010 产品”</strong>打开 <strong>SharePoint 2010 产品配置向导</strong>。</li>
+<li><p>在 <strong>SharePoint 产品配置向导</strong>的引导下进行操作。在<strong>“连接到服务器场”</strong>页上，选择<strong>“创建新的服务器场”</strong>选项。</p>
+
+<p><img src="images/create-a-new-server-farm.png?raw=true" alt="创建新的服务器场" />
+</p>
+
+<p><em>创建新的服务器场</em></p></li>
+<li><p>在<strong>“指定配置数据库设置”</strong>页中，使用以下信息填写字段，然后单击<strong>“下一步”</strong>。</p>
+
+<ol>
+<li><strong>数据库服务器</strong>：键入您安装 SQL Server 的计算机的名称。</li>
+<li><strong>数据库名称</strong>：键入您的 SharePoint 配置数据库的名称。默认名称为 <em>SharePoint_Config</em>。</li>
+<li><p><strong>用户名</strong>：键入服务器场帐户的用户名。确保您采用 DOMAIN\user name 格式键入用户名。对于测试，这可以是您在“部署 Active Directory”动手实验中创建的 contoso\administrator 帐户。</p>
+<blockquote>
+<p><strong>注意</strong>：服务器场帐户用于创建和访问您的配置数据库。它还充当 SharePoint 管理中心应用程序池的应用程序池标识帐户，使用该帐户运行 Microsoft SharePoint Foundation 工作流定时器服务。SharePoint 产品配置向导将此帐户添加到 SQL Server 登录帐户、SQL Server dbcreator 服务器角色和 SQL Server securityadmin 服务器角色。您指定为服务帐户的用户帐户必须是域用户帐户，但是它不必是您的前端 Web 服务器或数据库服务器上任何特定安全组的成员。我们建议您遵循最小权利原则指定一个用户帐户，该帐户不是您的前端 Web 服务器或数据库服务器上 Administrators 组的成员。</p>
+
+<p>可在<a href="http://technet.microsoft.com/zh-CN/library/cc287960.aspx">此处</a>查找有关此主题的更多信息。</p>
+</blockquote></li>
+<li><p><strong>密码</strong>：键入用户的密码。</p>
+
+<p><img src="images/configuration-database-settings.png?raw=true" alt="配置数据库设置" />
+</p>
+
+<p><em>配置数据库设置</em></p></li>
+</ol></li>
+<li><p>在<strong>“指定场安全设置”</strong>页上，键入一个<em>通行短语</em>，然后单击<strong>“下一步”</strong>以继续。</p>
+
+<p><img src="images/farm-security-settings.png?raw=true" alt="场安全设置" />
+</p>
+
+<p><em>场安全设置</em></p>
+<blockquote>
+<p><strong>注意：</strong>通行短语类似于密码，但通常更长以增强安全性。</p>
+</blockquote></li>
+<li><p>在<strong>“配置 SharePoint 管理中心 Web 应用程序”</strong>页上，选择 <em>NTLM</em> 作为<strong>“验证提供程序”</strong>，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/configure-sharepoint-central-administration-w.png?raw=true" alt="配置 SharePoint 管理中心 Web 应用程序" />
+</p>
+
+<p><em>配置 SharePoint 管理中心 Web 应用程序</em></p></li>
+<li><p>查看您的配置设置，然后单击<strong>“下一步”</strong>。应用配置设置后，单击<strong>“完成”</strong>。</p>
+
+<p><img src="images/completing-the-sharepoint-products-configurat2.png?raw=true" alt="完成 SharePoint 产品配置向导" />
+</p>
+
+<p><em>完成 SharePoint 产品配置向导</em></p></li>
+<li><p>现在，您将在 SharePoint Server 中启用匿名访问。为此，请从<strong>“开始”|“所有程序”|“Microsoft SharePoint 2010 产品”</strong>打开<strong>“SharePoint 管理中心”</strong>。</p></li>
+<li><p>在<strong>“管理中心”</strong>部分的<strong>“应用程序管理”</strong>下，单击<strong>“管理 Web 应用程序”</strong>链接。</p>
+
+<p><img src="images/sharepoint-central-administration.png?raw=true" alt="SharePoint 管理中心" />
+</p>
+
+<p><em>SharePoint 管理中心</em></p></li>
+<li><p>选择默认 SharePoint 网站 <em>SharePoint - 80</em>，然后在<strong>“Web 应用程序”</strong>选项卡中单击<strong>“验证提供程序”</strong>。</p>
+
+<p><img src="images/manage-web-applications-page.png?raw=true" alt="“管理 Web 应用程序”页" />
+</p>
+
+<p><em>“管理 Web 应用程序”页</em></p></li>
+<li><p>在<strong>“验证提供程序”</strong>对话框中，单击<strong>“默认值”</strong>区域。</p>
+
+<p><img src="images/authentication-providers-zone.png?raw=true" alt="“验证提供程序”区域" />
+</p>
+
+<p><em>“验证提供程序”区域</em></p></li>
+<li><p>在<strong>“编辑验证”</strong>对话框中，找到<strong>“匿名访问”</strong>部分，然后选中<strong>“启用匿名访问”</strong>复选框。</p>
+
+<p><img src="images/edit-authentication.png?raw=true" alt="编辑验证" />
+</p>
+
+<p><em>编辑验证</em></p></li>
+<li><p>返回到<strong>“Web 应用程序管理”</strong>页，在<strong>“Web 应用程序”</strong>选项卡中单击<strong>“匿名策略”</strong>。</p>
+
+<p><img src="images/anonymous-policy.png?raw=true" alt="匿名策略" />
+</p>
+
+<p><em>匿名策略</em></p></li>
+<li><p>在<strong>“匿名访问限制”</strong>对话框中，找到<strong>“权限”</strong>部分并选择<em>“无 - 无策略”</em>作为<strong>“匿名用户策略”</strong>。</p>
+
+<p><img src="images/anonymous-access-restrictions.png?raw=true" alt="匿名访问限制" />
+</p>
+
+<p><em>匿名访问限制</em></p></li>
+<li><p>现在，配置第二个 SharePoint 虚拟机 (<em>SPVM2</em>) 以连接到在以前步骤中创建的 SharePoint 场。为此，请返回到 <strong>Windows Azure 门户</strong>，转到<strong>“虚拟机”</strong>部分。</p></li>
+<li><p>选择第二个 SharePoint 虚拟机 (<em>SPVM2</em>)，然后单击<strong>“连接”</strong>以使用<strong>“远程桌面连接”</strong>进行连接。</p></li>
+<li><p>从<strong>“开始”|“所有程序”|“Microsoft SharePoint 2010 产品”</strong>打开 <strong>SharePoint 2010 产品配置向导</strong>。</p></li>
+<li><p>在 <strong>SharePoint 产品配置向导</strong>的引导下进行操作。在<strong>“连接到服务器场”</strong>页上，选择<strong>“连接到现有服务器场”</strong>选项。</p>
+
+<p><img src="images/sharepoint-configuration-wizard.png?raw=true" alt="SharePoint 配置向导" />
+</p>
+
+<p><em>SharePoint 配置向导</em></p></li>
+<li><p>在<strong>“指定配置数据库设置”</strong>页上，在<strong>“数据库服务器”</strong>框中键入 SQL Server 实例的名称，然后单击<strong>“检索数据库名称”</strong>。</p></li>
+<li><p>在<strong>“数据库名称”</strong>列表中，选择配置数据库的名称，然后单击<strong>“下一步”</strong>。</p></li>
+<li><p>在<strong>“指定场安全设置”</strong>页上，键入您在 SharePoint Server 场中设置的<strong>通行短语</strong>，然后单击<strong>“下一步”</strong>。</p></li>
+<li><p>完成 <strong>SharePoint 产品配置向导</strong>。该向导结束后，它将启动<strong>场配置向导</strong>。您不必运行此向导，请关闭它以继续。</p></li>
+</ol>
+
+<p><a name="Verification"></a></p>
+
+<h3 id="Verification_-_Create_a_New_SharePoint_Site_Collection">验证 - 创建新的 SharePoint 网站集</h3>
+
+<p>在此任务中，您将通过创建新的 SharePoint 网站集验证已正确配置 SharePoint Server。</p>
+
+<ol>
+<li>如果尚未连接，请使用<strong>“远程桌面连接”</strong>连接到第一个 SharePoint 虚拟机 (<em>SPVM1</em>)。</li>
+<li>从<strong>“开始”|“所有程序”|“Microsoft SharePoint 2010 产品”</strong>打开<strong>“SharePoint 2010 产品管理中心”</strong>。</li>
+<li><p>创建新的网站集。为此，请单击<strong>“管理中心”</strong>页的<strong>“应用程序管理”</strong>部分下的<strong>“创建网站集”</strong>链接。</p>
+
+<p><img src="images/application-management---create-site-collecti.png?raw=true" alt="应用程序管理 - 创建网站集" />
+</p>
+
+<p><em>应用程序管理 - 创建网站集</em></p></li>
+<li><p>在<strong>“创建网站集”</strong>页中，键入网站集的<strong>标题</strong>和<strong>说明</strong>。在<strong>“网站地址”</strong>部分，从下拉列表中选择 <em>/sites/</em>，然后输入 <em>SPFWebApp</em>。</p>
+
+<p><img src="images/create-site-collection.png?raw=true" alt="创建网站集" />
+</p>
+
+<p><em>创建网站集</em></p></li>
+<li><p>在<strong>“模板选择”</strong>部分，切换到<strong>“发布”</strong>选项卡并选择<strong>“发布门户”</strong>模板。然后填写<strong>“网站集的主管理员和第二管理员”</strong>，使用 <em>azuretk\Administrator</em>。</p>
+
+<p><img src="images/create-site-collection2.png?raw=true" alt="创建网站集(2)" />
+</p>
+
+<p><em>创建网站集</em></p></li>
+<li><p>接受<strong>“配额模板”</strong>的默认值，然后单击<strong>“确定”</strong>以创建新的网站集。</p></li>
+<li><p>网站集就绪后，您将看到“已成功创建”消息。要测试该网站，请单击显示的 URL。</p>
+
+<p><img src="images/site-collection-created.png?raw=true" alt="网站集已创建" />
+</p>
+
+<p><em>网站集已创建</em></p></li>
+<li><p>您将看到“拒绝访问”消息。要访问该网站，您将需要使用域帐户（即用于网站集的主管理员的帐户）登录。</p>
+
+<p><img src="images/logging-on-the-new-site.png?raw=true" alt="登录到新网站" />
+</p>
+
+<p><em>登录到新网站</em></p></li>
+<li><p>登录后，您将看到类似以下网站的网站。</p>
+
+<p><img src="images/sites-home-page.png?raw=true" alt="网站的主页" />
+</p>
+
+<p><em>网站的主页</em></p></li>
+<li><p>登录网站后，单击<strong>“网站操作”</strong>|<strong>“网站权限”</strong>，然后单击<strong>“匿名访问”</strong>。</p>
+
+<p><img src="images/configureanonymous.png?raw=true" alt="ConfigureAnonymous" />
+</p>
+
+<p><em>配置匿名访问</em></p></li>
+<li><p>将设置改为<strong>“整个网站”</strong>，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="images/changeanonperms.png?raw=true" alt="changeanonperms" />
+</p></li>
+<li><p>现在，连接到第二个 SharePoint 虚拟机 (<em>SPVM2</em>) 以测试 SharePoint 场。为此，请返回到 <strong>Windows Azure 门户</strong>，转到<strong>“虚拟机”</strong>部分。</p></li>
+<li><p>选择第二个 SharePoint 虚拟机 (<em>SPVM2</em>)，然后单击<strong>“连接”</strong>以使用<strong>“远程桌面连接”</strong>进行连接。</p></li>
+<li><p>从<strong>“开始”|“所有程序”|“Microsoft SharePoint 2010 产品”</strong>打开<strong>“SharePoint 2010 产品管理中心”</strong>。</p></li>
+<li><p>在<strong>“管理中心”</strong>页上，单击<strong>“应用程序管理”</strong>下的<strong>“管理 Web 应用程序”</strong>。</p></li>
+<li><p>在<strong>“Web 应用程序”</strong>页上，选择该 Web 应用程序并单击<strong>“扩展”</strong>。</p></li>
+<li><p>单击左侧菜单中的<strong>“应用程序管理”</strong>，然后单击<strong>“查看所有网站集”</strong>链接。</p></li>
+<li><p>选择您在第一个 SharePoint 服务器 (SPFWebApp) 中创建的网站，复制该网站的 URL 并在 Internet Explorer 浏览器中粘贴它。如果该网站正常工作，您将能登录并访问从第一个 SharePoint 服务器访问的同一主页。</p></li>
+</ol>
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Configuring_Load_Balancing">练习 2：配置负载平衡</h3>
+
+<h4 id="Task_1_-_Adding_load_balancing_endpoints_in_Windows_Azure_portal">任务 1 - 在 Windows Azure 门户中添加负载平衡端点</h4>
+
+<ol>
+<li><p>在 Windows Azure 门户中，单击第一个虚拟机<strong>“SPVM1”|“端点”|“添加端点”</strong>以打开端点创建向导。</p>
+
+<ol>
+<li><p>在<strong>“将端点添加到虚拟机”</strong>页上，选择<strong>“添加端点”</strong>选项，然后单击<strong>右箭头</strong>以继续。</p>
+
+<p><img src="images/add-endpoint.png?raw=true" alt="添加端点" />
+</p>
+
+<p><em>选择“添加端点”</em></p></li>
+<li><p>在<strong>“指定端点详细信息”</strong>页上，在“名称”字段中输入 <em>web</em>，选择 <strong>TCP</strong> 协议，在“公用端口”和“私有端口”字段中输入 <em>80</em>。最后，单击箭头以确认创建端点。</p>
+
+<p><img src="images/webendpoint.png?raw=true" alt="Web 端点" />
+</p>
+
+<p><em>创建 Web 端点</em></p></li>
+</ol></li>
+<li><p>在第一个虚拟机上创建 Web 端点后，您将访问第二个虚拟机并添加一个负载平衡端点。转到第二个虚拟机仪表板，单击<strong>“端点”</strong>链接，然后单击底部栏上的<strong>“添加端点”</strong>按钮以启动端点创建向导。</p>
+
+<ol>
+<li><p>在<strong>“将端点添加到虚拟机”</strong>页上，选择<strong>“在现有端点上平衡负载流量”</strong>选项。然后，从列表中选择 <strong>web</strong> 端点，单击箭头以继续。</p>
+
+<p><img src="images/add-load-balancing-endpoint-wizard.png?raw=true" alt="添加负载平衡端点向导" title="添加负载平衡端点向导" />
+</p>
+
+<p><em>添加负载平衡端点向导</em></p></li>
+<li><p>在<strong>“指定端点详细信息”</strong>页上，定义与上一端点相同的设置。输入名称（如 web）和私有端口（如 80）。单击箭头以创建负载平衡端点。</p>
+
+<p><img src="images/load-balancing-endpoint-details.png?raw=true" alt="负载平衡端点详细信息" title="负载平衡端点详细信息" />
+</p>
+
+<p><em>负载平衡端点详细信息</em></p></li>
+</ol></li>
+<li><p>等待端点创建完成后，在两个虚拟机中启用负载平衡。</p></li>
+<li><p>要验证，请在列表中选择该端点，然后单击<strong>“编辑端点”</strong>。</p>
+
+<p><img src="images/edit-endpoint.png?raw=true" alt="编辑端点" title="编辑端点" />
+</p>
+
+<p><em>编辑端点</em></p></li>
+<li><p>请注意两个虚拟机均配置为负载平衡的机器。如果您访问第一个虚拟机并编辑其 web 端点，它将显示相同的配置。</p>
+
+<p><img src="images/edit-endpoint-details.png?raw=true" alt="编辑端点详细信息" title="编辑端点详细信息" />
+</p>
+
+<p><em>编辑端点详细信息</em></p></li>
+<li><p>访问 SPVM1 仪表板并查找“速览”部分。记录该虚拟机的 DNS 和 IP。</p>
+
+<p><img src="images/vm-ip-load-balancing.png?raw=true" alt="虚拟机 IP 负载平衡" title="虚拟机 IP 负载平衡" />
+</p>
+
+<p><em>虚拟机 IP 负载平衡</em></p></li>
+<li><p>现在访问 SPVM2 仪表板并查找“速览”部分。请注意两个虚拟机具有相同的虚拟 IP 地址和 URL。这意味着在检索网站时负载平衡对于用户是透明的。在内部，Windows Azure 将流量重定向到 SPVM1 或 SPVM2 主机。</p>
+
+<p><img src="images/vm-ip-load-balancing-2.png?raw=true" alt="虚拟机 IP 负载平衡 2" title="虚拟机 IP 负载平衡 2" />
+</p>
+
+<p><em>虚拟机 IP 负载平衡 2</em></p></li>
+<li><p>最后，启动新的浏览器会话并浏览到该虚拟机 URL。</p></li>
+</ol> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-DeploySharePointVMs/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

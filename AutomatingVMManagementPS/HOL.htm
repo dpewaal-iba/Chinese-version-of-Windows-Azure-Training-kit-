@@ -1,0 +1,491 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 使用 Windows Azure PowerShell Cmdlet 管理虚拟机</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-AutomatingVMManagementPS" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-AutomatingVMManagementPS" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name='HOLTop'></a></p>
+
+<h1 id="Managing_Virtual_Machines_with_the_Windows_Azure_PowerShell_Cmdlets">使用 Windows Azure PowerShell Cmdlet 管理虚拟机</h1>
+
+<p><a name='Overview'></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>在本动手实验中，您将了解在 Windows Azure 中自动执行虚拟机部署和管理的功能。</p>
+
+<p><a name='Objectives'></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>设置虚拟机</li>
+<li>设置后配置</li>
+<li>远程重新启动或启动</li>
+<li>管理磁盘和映像库</li>
+<li>导出和导入虚拟机</li>
+</ul>
+
+<p><a name='Prerequisites'></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li><a href="http://msdn.microsoft.com/zh-CN/library/windowsazure/jj156055">Windows Azure PowerShell Cmdlet</a></li>
+<li>启用了虚拟机预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>本实验设计为使用 Windows 7 操作系统。</p>
+</blockquote>
+<p><a name="Setup"></a></p>
+
+<h3 id="Setup">设置</h3>
+
+<p>为了执行此动手实验中的各项练习，需要对环境进行设置。</p>
+
+<ol>
+<li><p>打开 Windows 资源管理器窗口，浏览到此实验的 <strong>Source</strong> 文件夹。</p></li>
+<li><p>使用管理员权限执行 <strong>Setup.cmd</strong> 文件以启动设置过程，该过程将配置您的环境并安装此实验的 Visual Studio 代码段。</p></li>
+<li><p>如果显示“用户帐户控制”对话框，请确认操作以继续。</p>
+<blockquote>
+<p><strong>注意：</strong>请务必在运行安装程序前检查此实验的所有依赖项。</p>
+</blockquote></li>
+</ol>
+
+<hr />
+
+<p><a name='Exercises'></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#Exercise1">使用 PowerShell CmdLet 设置虚拟机</a></li>
+<li><a href="#Exercise2">使用 PowerShell CmdLet 进行高级设置</a></li>
+</ol>
+
+<p><a name='gettingstarted'></a></p>
+
+<h3 id="Getting_Started_Obtaining_Subscriptions_Credentials">入门：获取订阅凭据</h3>
+
+<p>为了完成此实验，您将需要获得订阅的安全凭据。Windows Azure 允许您下载发布设置文件，其中包含在开发环境中管理帐户所需的所有信息。</p>
+
+<h4 id="Task_1_-_Downloading_and_Importing_a_Publish-settings_File">任务 1 - 下载和导入发布设置文件</h4>
+<blockquote>
+<p><strong>注意：</strong>如果您已经在之前的实验中在同一计算机上完成了这些步骤，则可以转到练习 1。</p>
+</blockquote>
+<p>在本任务中，您将登录到 Windows Azure 门户并下载发布设置文件。此文件包含安全凭据以及有关在开发环境中使用的 Windows Azure 订阅的其他信息。然后，您将使用 Windows Azure Cmdlet 导入此文件，以便安装证书并获取帐户信息。</p>
+
+<ol>
+<li><p>打开 Internet Explorer 浏览器，转到 <a href="https://windows.azure.com/download/publishprofile.aspx">https://windows.azure.com/download/publishprofile.aspx</a>。</p></li>
+<li><p>使用与您的 Windows Azure 帐户关联的凭据登录。</p></li>
+<li><p>将发布设置文件<strong>保存</strong>到本地计算机。</p>
+
+<p><img src="images/downloading-publish-settings-file.png?raw=true" alt="下载发布设置文件" title="下载发布设置文件" />
+</p>
+
+<p><em>下载发布设置文件</em></p>
+<blockquote>
+<p><strong>注意：</strong>下载页面说明如何使用 Visual Studio 发布框导入发布设置文件。此实验将说明如何改用 Windows Azure PowerShell Cmdlet 执行导入。</p>
+</blockquote></li>
+<li><p>在 <strong>Windows Azure</strong> 下的开始菜单中，右键单击 <strong>Windows Azure PowerShell</strong>，然后选择<strong>“以管理员身份运行”</strong>。</p></li>
+<li><p>将 PowerShell 执行策略更改为 <strong>RemoteSigned</strong>。在要求确认时，按 <strong>Y</strong>，然后按 <strong>Enter</strong>。</p>
+
+<!-- mark:1 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">Set-ExecutionPolicy RemoteSigned</strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>通过 Set-ExecutionPolicy cmdlet 可以确定允许在计算机上运行的 Windows PowerShell 脚本（如果有）。Windows PowerShell 有四种不同的执行策略：</p>
+
+<ul>
+<li><em>Restricted</em> - 任何脚本都不能运行。Windows PowerShell 只能在交互模式中使用。</li>
+<li><em>AllSigned</em> - 只有由受信任的发布者签名的脚本可以运行。</li>
+<li><em>RemoteSigned</em> - 下载的脚本必须由受信任的发布者签名，才可以运行。</li>
+<li><em>Unrestricted</em> - 没有限制，所有 Windows PowerShell 脚本都可以运行。</li>
+</ul>
+
+<p>有关执行策略的详细信息，请参阅 TechNet 文章：<a href="http://technet.microsoft.com/zh-CN/library/ee176961.aspx">http://technet.microsoft.com/zh-CN/library/ee176961.aspx</a></p>
+</blockquote></li>
+<li><p>下面的脚本导入发布设置文件并使用您的帐户信息生成一个 XML 文件。您将在实验过程中使用这些值来管理您的 Windows Azure 订阅。将占位符替换为发布设置文件的路径并执行脚本。</p>
+
+<!-- mark:1 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">Import-AzurePublishSettingsFile '[YOUR-PUBLISH-SETTINGS-PATH]'   </strong>
+</code></pre></li>
+<li><p>执行以下命令，记录订阅名称和存储帐户名称以备本练习使用。</p>
+
+<!-- mark:1-3 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">Get-AzureSubscription | select SubscriptionName</strong>
+<strong class="markLine">Get-AzureStorageAccount | select StorageAccountName </strong>
+</code></pre></li>
+<li><p>如果您使用上面的命令没有返回存储帐户，应先创建一个。<br/>运行以下命令，确定要在其中创建存储帐户的数据中心。确保选择支持 PersistentVMRole 的数据中心。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Get-AzureLocation  
+</code></pre></li>
+<li><p>创建存储帐户：</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">New-AzureStorageAccount -StorageAccountName '[YOUR-SUBSCRIPTION-NAME]' -Location '[DC-LOCATION]'
+</code></pre></li>
+<li><p>执行以下命令以便设置您的订阅的当前存储帐户。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Set-AzureSubscription -SubscriptionName '[YOUR-SUBSCRIPTION-NAME]' -CurrentStorageAccount '[YOUR-STORAGE-ACCOUNT]'
+</code></pre></li>
+</ol>
+
+<p><a name='Exercise1'></a></p>
+
+<h3 id="Exercise_1_Provisioning_a_Virtual_Machine_using_PowerShell_CmdLets">练习 1：使用 PowerShell CmdLet 设置虚拟机</h3>
+
+<p>在本练习中，您将学习如何在 Windows Azure 门户中使用 PowerShell 设置一个简单的虚拟机。</p>
+
+<p><a name='Ex1Task1'></a></p>
+
+<h4 id="Task_1_-_Provisioning_a_Virtual_Machine">任务 1 - 设置虚拟机</h4>
+
+<p>在 Windows Azure 中创建虚拟机的第一步是定义虚拟机的配置，例如端点或数据磁盘之类的项，然后定义将要承载该虚拟机的云服务和数据中心。</p>
+
+<ol>
+<li><p>执行以下命令检索可用数据中心位置。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Get-AzureLocation | select name
+</code></pre></li>
+<li><p>使用要部署到的数据中心的名称定义 $dclocation 变量。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">$dclocation = '[YOUR-LOCATION]'
+</code></pre>
+
+<p>在选择该位置后，您将需要创建虚拟机配置。</p>
+
+<p>若要创建虚拟机，您将需要提供几个信息：将要承载虚拟机的云服务以及虚拟机映像名称。</p></li>
+<li><p>为您的云服务选择一个唯一的名称。为了验证该名称未在使用中，您可以使用 <strong>Test-AzureName</strong> cmdlet。如果该服务名称已存在，该命令将返回 true。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Test-AzureName -Service '[YOUR-CLOUD-SERVICE-NAME]' $cloudSvcName = '[YOUR-CLOUD-SERVICE-NAME]'
+</code></pre></li>
+<li><p>选择您想要用来建立虚拟机的基础虚拟机映像。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"># Retrieves all available VM Images Get-AzureVMImage | select ImageName
+</code></pre>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">$image = '[YOUR-SELECTED-IMAGE-NAME]'
+</code></pre></li>
+<li><p>接下来，基于您是选择了 Windows 还是 Linux，选择下面的虚拟机创建脚本。</p>
+
+<ol>
+<li><p>从映像创建 Windows 虚拟机。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">$adminPassword = '[YOUR-PASSWORD]' $vmname = 'mytestvm1' New-AzureQuickVM -Windows -ServiceName $cloudSvcName -Name $vmname -ImageName $image -Password $adminPassword -Location $dclocation
+</code></pre></li>
+<li><p>从映像创建 Linux 虚拟机。请注意，该映像已更改，并且 -OS 开关将 Linux 指定为操作系统。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">$linuxuser = '[CHOOSE-USERNAME]' $adminPassword = '[YOUR-PASSWORD]' $vmname = 'mytestvm1' New-AzureQuickVM -Linux -ServiceName $cloudSvcName -Name $vmname -ImageName $image -LinuxUser $linuxuser -Password $adminPassword -Location $dclocation
+</code></pre></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>在 New-AzureQuickVM 或 New-AzureVM 上指定 -Location 会指示 cmdlet 尝试将某一云服务创建为虚拟机的容器。在创建第一个虚拟机时需要使用此选项，在将新虚拟机添加到同一个云服务时可以省略此选项。</p>
+</blockquote></li>
+<li><p>一旦创建了虚拟机后，您就可以使用 <strong>Get-AzureVM</strong> cmdlet 检查它。以下命令将枚举云服务中所有虚拟机的详细信息。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Get-AzureVM -ServiceName $cloudSvcName 
+</code></pre>
+
+<p>若要获得更具体的信息，您可以使用 -Name 参数。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Get-AzureVM -ServiceName $cloudSvcName -Name $vmname
+</code></pre></li>
+<li><p><strong>Windows Azure PowerShell Cmdlet</strong> 也使用 <strong>Restart-AzureVM</strong>、<strong>Stop-AzureVM</strong> 和 <strong>Start-AzureVM</strong> 命令支持重新启动、停止和启动操作。</p>
+
+<p>使用以下命令，您将能够启动、停止和重新启动您的虚拟机。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"># Restart Restart-AzureVM -ServiceName $cloudSvcName -Name $vmname # Shutdown Stop-AzureVM -ServiceName $cloudSvcName -Name $vmname # Start Start-AzureVM -ServiceName $cloudSvcName -Name $vmname
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>请确保在执行这些命令之前您的虚拟机完成了设置。</p>
+</blockquote></li>
+</ol>
+
+<p><a name='Exercise2'></a></p>
+
+<h3 id="Exercise_2_Using_PowerShell_CmdLets_for_Advanced_Provisioning">练习 2：使用 PowerShell CmdLet 进行高级设置</h3>
+
+<p>您不仅仅可以创建单个未自定义的虚拟机，还可以配置数据磁盘、磁盘缓存设置、网络端点，并且在设置时自动配置加入域设置，以及使用 New-AzureVMConfig/New-AzureVM cmdlet 组合成批创建虚拟机。</p>
+
+<p>下面的示例将创建两个新虚拟机，每个虚拟机附加了 50 GB 数据磁盘，以及一个在端口 80 侦听 http 通信的负载平衡端点。</p>
+<blockquote>
+<p><strong>注意：</strong>您仍将需要登录到计算机上并且通过磁盘管理器配置/格式化数据磁盘。在下一节中，将提供针对这些步骤的演练。</p>
+</blockquote>
+<p>示例：创建多个虚拟机 (Windows)</p> <span class="codelanguage">PowerShell</span><pre><code class="PowerShell">   $vmname2 = 'mytestvm2' $vmname3 = 'mytestvm3' $vm2 = New-AzureVMConfig -Name $vmname2 -InstanceSize ExtraSmall -ImageName $image | Add-AzureProvisioningConfig -Windows -Password $adminPassword | Add-AzureDataDisk -CreateNew -DiskSizeInGB 50 -DiskLabel 'datadisk1' -LUN 0 | Add-AzureEndpoint -Protocol tcp -LocalPort 80 -PublicPort 80 -Name 'web' ` -LBSetName 'lbweb' -ProbePort 80 -ProbeProtocol http -ProbePath '/' $vm3 = New-AzureVMConfig -Name $vmname3 -InstanceSize ExtraSmall -ImageName $image | Add-AzureProvisioningConfig -Windows -Password $adminPassword | Add-AzureDataDisk -CreateNew -DiskSizeInGB 50 -DiskLabel 'datadisk2' -LUN 0 | Add-AzureEndpoint -Protocol tcp -LocalPort 80 -PublicPort 80 -Name 'web' ` -LBSetName 'lbweb' -ProbePort 80 -ProbeProtocol http -ProbePath '/' New-AzureVM -ServiceName $cloudSvcName -VMs $vm2,$vm3
+</code></pre>
+
+<p>示例：创建第二个虚拟机 (Linux)</p> <span class="codelanguage">PowerShell</span><pre><code class="PowerShell">   $vmname2 = 'mytestvm2' $vmname3 = 'mytestvm3' $vm2 = New-AzureVMConfig -Name $vmname2 -InstanceSize ExtraSmall -ImageName $image | Add-AzureProvisioningConfig -Linux -LinuxUser $linuxUser -Password $adminPassword | Add-AzureDataDisk -CreateNew -DiskSizeInGB 50 -DiskLabel 'datadisk1' -LUN 0 | Add-AzureEndpoint -Protocol tcp -LocalPort 80 -PublicPort 80 -Name 'web' ` -LBSetName 'lbweb' -ProbePort 80 -ProbeProtocol http -ProbePath '/' $vm3 = New-AzureVMConfig -Name $vmname3 -InstanceSize ExtraSmall -ImageName $image | Add-AzureProvisioningConfig -Linux -LinuxUser $linuxUser -Password $adminPassword | Add-AzureDataDisk -CreateNew -DiskSizeInGB 50 -DiskLabel 'datadisk2' -LUN 0 | Add-AzureEndpoint -Protocol tcp -LocalPort 80 -PublicPort 80 -Name 'web' ` -LBSetName 'lbweb' -ProbePort 80 -ProbeProtocol http -ProbePath '/' New-AzureVM -ServiceName $cloudSvcName -VMs $vm2,$vm3
+</code></pre>
+
+<p><a name='Ex2Task1'></a></p>
+
+<h4 id="Task_1_-_Post_Provisioning_Configuration">任务 1 - 设置后配置</h4>
+
+<p>修改现有虚拟机要求通过调用 <strong>Get-AzureVM</strong> 检索当前设置、对这些设置进行修改，然后调用 <strong>Update-AzureVM</strong> cmdlet 来保存更改。</p>
+
+<p>您可以热添加和删除数据磁盘和网络端点。更改磁盘缓存设置要求重新启动，就像更改虚拟机的实例大小一样。</p>
+
+<p>下面的示例使用 <strong>Get-AzureVM</strong> cmdlet 检索虚拟机对象并将该对象发送到 PowerShell 管道。</p>
+
+<p>通过具有 <strong>CreateNew</strong> 参数的 <strong>Add-AzureDataDisk</strong>，您可以将存储动态添加到虚拟机。在这个例子中，我们调用它两次，以便将未格式化的空白 VHD 附加到服务器，每个存储各 50 G。-LUN 参数指示要附加的设备的顺序，并且可以使用 -MediaLocation 指定存储中用来保存新创建的 VHD 的位置。</p>
+
+<p><strong>Add-AzureDataDisk</strong> 还支持 <strong>Import</strong> 参数，以便在磁盘库中附加磁盘，并且支持 <strong>-ImportFrom</strong> 以便附加已在存储中存在的磁盘。</p>
+
+<p>该示例还使用 <strong>Add-AzureEndpoint</strong> 命令在内部为 TCP 端口 1433 添加一个新端点，该端点在外部侦听端口 2000。</p>
+<blockquote>
+<p><strong>注意：</strong>若要连接到 SQL，您仍需要在要连接的 Windows Server 防火墙上启用端口 1433</p>
+</blockquote>
+<ol>
+<li><p>使用以下脚本可以将数据磁盘和端点热添加到现有虚拟机。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">$vmname = 'mytestvm1' $vm = Get-AzureVM -Name $vmname -ServiceName $cloudSvcName | Add-AzureDataDisk -CreateNew -DiskSizeInGB 50 -DiskLabel 'datadisk1' -LUN 0 | Add-AzureDataDisk -CreateNew -DiskSizeInGB 50 -DiskLabel 'translogs1' -LUN 1 | Add-AzureEndpoint -Protocol tcp -LocalPort 1433 -PublicPort 2000 -Name 'sql' | Update-AzureVM 
+</code></pre></li>
+<li><p>在 <strong>Update-AzureVM</strong> 调用完成后，您将需要登录到计算机以便完成对磁盘的设置，或者启用远程管理以便通过 PowerShell 完成磁盘初始化。</p>
+
+<p><img src="images/uninitdisk.png?raw=true" alt="未初始化的磁盘" />
+</p>
+
+<p><em>虚拟机磁盘</em></p></li>
+<li><p>右键单击每个磁盘（位于左侧），将其标记为联机。</p></li>
+<li><p>这些磁盘联机后，右键单击一个磁盘（左侧）并单击<strong>“初始化”</strong>。</p>
+
+<p><img src="images/initializedisk.png?raw=true" alt="初始化磁盘" />
+</p>
+
+<p><em>初始化磁盘</em></p></li>
+<li><p>磁盘初始化后，右键单击右侧并选择<strong>“创建简单卷”</strong>（也支持软件 RAID，因此这些也是可用选项）。通过<strong>“创建简单卷”</strong>向导可以格式化磁盘，并且装载磁盘以备使用。</p>
+
+<p><img src="images/formatteddisks.png?raw=true" alt="已格式化的磁盘" />
+</p>
+
+<p><em>已格式化的磁盘</em></p></li>
+<li><p>您可以通过调用 <strong>Set-AzureDataDisk</strong> 并且配置 HostCaching 参数，控制数据磁盘的磁盘缓存设置。HostCaching 的有效值为 <em>ReadOnly</em>〕<em>ReadWrite</em> 和 <em>None</em>。</p>
+<blockquote>
+<p><strong>注意：</strong>此更改是在主机级别进行的，将不会反映在磁盘管理器中。默认情况下将禁用写入缓存，并且在数据磁盘上启用读取缓存。</p>
+</blockquote></li>
+<li><p>使用以下脚本，您在数据磁盘上启用写入缓存和查看最终生成的更改。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">$vm = Get-AzureVM -Name $vmName -ServiceName $cloudSvcName | Set-AzureDataDisk -HostCaching ReadWrite -LUN 0 | Set-AzureDataDisk -HostCaching ReadWrite -LUN 1 | Update-AzureVM Get-AzureVM -ServiceName $cloudSvcName -Name $vmname | Get-AzureDataDisk
+</code></pre></li>
+</ol>
+
+<p><a name='Ex2Task2'></a></p>
+
+<h4 id="Task_2_-_Changes_that_Require_a_Reboot">任务 2 - 要求重新启动的更改</h4>
+
+<p>某些更改要求在应用后<strong>重新启动</strong>虚拟机。对基础硬件进行的更改（通过使用 Set-AzureRoleSize 更改实例大小、使用 Set-AzureOSDisk 修改操作系统磁盘缓存设置或者使用 Set-Subnet 在子网之间移动虚拟机）都将导致自动重新启动虚拟机。</p>
+
+<ol>
+<li><p>运行以下脚本以便禁用写入磁盘缓存，并且将操作系统磁盘的写入缓存设置从<em>“启用写入缓存”</em>更改为<em>“禁用写入缓存”</em>。在执行后，虚拟机将使用新设置重新启动。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Get-AzureVM -ServiceName $cloudSvcName -Name $vmName | Set-AzureDataDisk -HostCaching ReadOnly -LUN 0| Set-AzureDataDisk -HostCaching ReadOnly -LUN 1| Update-AzureVM 
+</code></pre></li>
+<li><p>运行以下脚本以便更改虚拟机的实例大小。</p>
+<blockquote>
+<p><strong>注意：</strong>下面的代码段将设置指定虚拟机的实例大小。这会要求重新启动，因为对新硬件进行了设置。</p>
+</blockquote>
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Get-AzureVM -ServiceName $cloudSvcName -Name $vmName | Set-AzureVMSize -InstanceSize Medium | Update-AzureVM
+</code></pre></li>
+</ol>
+
+<p><a name='Ex2Task3'></a></p>
+
+<h4 id="Task_3_-_Managing_disk_images">任务 3 - 管理磁盘映像</h4>
+
+<p>使用 PowerShell 查看所有数据磁盘或者磁盘和映像存储库中的映像十分简单。运行 Get-AzureDisk 命令将枚举您的订阅中的所有数据磁盘。</p>
+
+<ol>
+<li><p>使用以下命令以便检索您的所有订阅磁盘。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Get-AzureDisk
+</code></pre></li>
+<li><p>您可以使用 PowerShell 的内置功能对结果进行限制。例如，通过这个示例，您将能够找到特定虚拟机的 VHD 映像。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">$vmname = 'mytestvm2' Get-AzureDisk | Where { $_.AttachedTo.RoleName -eq $vmname }
+</code></pre></li>
+<li><p>目前，在删除某一虚拟机时并不删除基础 VHD。通过 PowerShell，您可以在删除某一虚拟机时清除基础存储。</p>
+
+<p>下面的脚本删除特定虚拟机及其磁盘。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">$vmname = 'mytestvm2' $vmDisks = Get-AzureDisk | Where { $_.AttachedTo.RoleName -eq $vmname } Remove-AzureVM -ServiceName $cloudSvcName -Name $vmname $vmDisks | foreach { Remove-AzureDisk -DiskName $_.DiskName -DeleteVHD }
+</code></pre></li>
+<li><p>存在用于管理您的订阅上的映像存储库的类似功能。使用此脚本，您将标识用户创建的映像。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Get-AzureVMImage | Where { $_.Category -eq 'User' }
+</code></pre></li>
+</ol>
+
+<p><a name='Ex2Task4'></a></p>
+
+<h4 id="Task_4_-_Imaging_Exporting_and_Importing_Virtual_Machine_Configurations">任务 4 - 建立映像、导出和导入虚拟机配置</h4>
+
+<p>Windows Azure IaaS 提供的功能可自定义虚拟机、使用 sysprep 之类的工具对虚拟机执行通用化，然后将虚拟机捕获到映像库。通过此功能，您可以创建自定义的映像，然后重复使用这些映像以便生成多个完全相同的计算机。使用 PowerShell 完成此操作的步骤相对而言比较简单。</p>
+
+<ol>
+<li><p>执行以下脚本可创建将作为映像的开始的虚拟机。</p>
+
+<ol>
+<li><p>对于 Windows 虚拟机。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">$vmname = 'winvmforimg' New-AzureVMConfig -Name $vmname -InstanceSize Small -ImageName $image | Add-AzureProvisioningConfig -Windows -Password $adminPassword | New-AzureVM -ServiceName $cloudSvcName 
+</code></pre></li>
+<li><p>对于 Linux 虚拟机。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">$vmname = 'linuxvmforimg' New-AzureVMConfig -Name $vmname -InstanceSize Small -ImageName $image | Add-AzureProvisioningConfig -Linux -LinuxUser $linuxuser -Password $adminPassword | New-AzureVM -ServiceName $cloudSvcName 
+</code></pre></li>
+</ol></li>
+<li><p>对虚拟机执行通用化以供捕获。此时，您将要使用捕获的映像所需的设置对虚拟机进行自定义。</p>
+
+<ol>
+<li>使用 RDP 或 SSH 连接到虚拟机</li>
+<li><p>对于 Windows，从 Windows 内使用 sysprep。选择整个系统全新体验 (OOBE)，选中<strong>“通用化”</strong>，然后选择<strong>“关闭”</strong>。</p>
+
+<p><img src="images/sysprep.png?raw=true" alt="sysprep" />
+</p>
+
+<p><em>SysPrep</em></p></li>
+<li><p>对于 Linux 虚拟机，运行以下脚本。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">sudo /user/sbin/waagent -deprovision+user
+</code></pre></li>
+</ol></li>
+<li><p>使用 <strong>Save-AzureVMImage</strong> cmdlet 生成一个新映像。</p>
+<blockquote>
+<p><strong>注意：</strong>在运行 Save-AzureVMImage cmdlet 之前，虚拟机必须完全关闭。您可以通过键入 Get-AzureVM -Name vmname，查看虚拟机的状态。</p>
+</blockquote>
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Save-AzureVMImage -ServiceName $cloudSvcName -Name $vmname -NewImageName [YOUR-NEW-VM-IMAGE-NAME] -NewImageLabel [YOUR-NEW-IMAGE-LABEL] -PostCaptureAction Delete
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>Save-AzureVMImage</strong> cmdlet 使正在运行的永久性的虚拟机能够作为可供重复使用的映像提供。对于 Windows 虚拟机，应在捕获前对映像执行 sysprep 操作。在执行捕获后，您可以通过使用具有 Delete|Reprovision 值的 PostCaptureAction 参数，删除或重新设置虚拟机。</p>
+</blockquote></li>
+</ol>
+
+<p><a name='Ex2Task5'></a></p>
+
+<h4 id="Task_5_-_Exporting_and_Importing_VM_configuration">任务 5 - 导出和导入虚拟机设置</h4>
+
+<p>Windows Azure PowerShell Cmdlet 提供保存虚拟机的配置的能力。这在您需要完全删除虚拟机、但在某些时候（轻松地）将其恢复的情况下很有用。了解下面这个事实对您完成此任务很有帮助：在您默认删除某一虚拟机时，并不删除存储中的基础数据和操作系统磁盘。Export-AzureVM 将虚拟机的所有配置（包括磁盘名称、端点设置等）保存到某一 XML 文件。这样，在您删除虚拟机后，可在以后通过使用保存的配置重新创建该虚拟机。</p>
+
+<ol>
+<li><p>运行以下脚本可导出虚拟机配置和删除部署。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">$vmname = 'mytestvm1' Export-AzureVM -ServiceName $cloudSvcName -Name $vmname -Path 'c:\Temp\mytestvm1-config.xml' Remove-AzureVM -ServiceName $cloudSvcName -Name $vmname
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>此代码保存 mytestvm1 虚拟机的配置，然后通过删除虚拟机来删除该配置。</p>
+
+<p>请确保在执行该命令前在 C: 驱动器内创建了 Temp 文件夹。</p>
+</blockquote></li>
+<li><p>在删除了部署后，可从已保存状态重新创建虚拟机。运行以下脚本可将虚拟机配置导入到一个新部署。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Import-AzureVM -Path 'c:\Temp\mytestvm1-config.xml' | New-AzureVM -ServiceName $cloudSvcName 
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>在具有虚拟网络的部署中，这将导致一个新的 IP 地址，因此，对于要求永久性 IP（例如域控制器）的虚拟机，不建议这样做。</p>
+</blockquote></li>
+</ol>
+
+<p><a name='Ex2Task6'></a></p>
+
+<h4 id="Task_6_-_Managing_RDP_and_SSH_Connectivity">任务 6 - 管理 RDP 和 SSH 连接线</h4>
+
+<p>默认情况下，从 Windows Azure PowerShell cmdlet 创建的所有新虚拟机都将允许用于 Windows 的 RDP 或 SSH。若要禁用自动端点创建，请使用 <strong>DisableRDP</strong> 或 <strong>DisableSSH</strong> 参数。这指示 cmdlet 在设置过程中不创建 RDP 或 SSH 端点。</p>
+
+<p>为了发现针对这些端点的端口，您可以使用 Get-AzureEndpoint 了解 RDP 或 SSH 输入端点的公共端口。</p>
+
+<ol>
+<li><p>端点发现。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Get-AzureVM -ServiceName $cloudSvcName -Name $vmname | Get-AzureEndpoint
+</code></pre></li>
+<li><p>将 RDP 文件保存到文件系统。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Get-AzureRemoteDesktopFile -ServiceName $cloudSvcName -Name $vmname -LocalPath C:\Temp\myvmconnection.rdp
+</code></pre></li>
+<li><p>在加载 RDF 文件后直接启动 RDP 客户端。</p>
+
+<p>您可以使用 Windows Azure PowerShell cmdlet 保存用于 Windows 计算机的 RDP 文件或者直接从 PowerShell 启动它。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Get-AzureRemoteDesktopFile -ServiceName $cloudSvcName -Name $vmname -LocalPath C:\Temp\myvmconnection-2.rdp -Launch 
+</code></pre></li>
+</ol>
+
+<hr />
+
+<p><a name='Summary'></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>在本动手实验中，向您展示了如何配置您的订阅 ID 和证书以便管理 Windows Azure 虚拟机。还向您展示了如何设置虚拟机和使用热添加功能修改虚拟机的基础知识，以及要求重新启动的更改（例如，更改实例大小）。</p>
+
+<p>此外，还向您展示了如何使用 Windows Azure PowerShell cmdlet 管理您的磁盘和映像库，以及导出和导入虚拟机配置的功能。</p> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-AutomatingVMManagementPS/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

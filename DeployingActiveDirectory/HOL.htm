@@ -1,0 +1,479 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 在 Windows Azure 中部署 Active Directory</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-DeployingActiveDirectory/" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-DeployingActiveDirectory/" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="handsonlab"></a></p>
+
+<h1 id="Deploying_Active_Directory_in_Windows_Azure">在 Windows Azure 中部署 Active Directory</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>在此动手实验中，您将演练在云中部署 Active Directory 域并将新虚拟机设置到域中所需的步骤。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>配置虚拟网络</li>
+<li>部署域控制器</li>
+<li>在域中创建新虚拟机</li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<ul>
+<li><a href="http://msdn.microsoft.com/zh-CN/library/windowsazure/jj156055">Windows Azure PowerShell Cmdlet</a></li>
+<li>启用了虚拟机预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+
+<h3 id="Setup">设置</h3>
+
+<p>此实验需要 Windows Azure PowerShell Cmdlet。如果尚未配置它们，请参阅<strong>使用 PowerShell 实现 Windows Azure 自动化</strong>模块中的<strong>自动执行虚拟机管理</strong>动手实验。</p>
+<blockquote>
+<p><strong>注意：</strong>要运行完整的动手实验，您必须要有网络连接。</p>
+</blockquote>
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#Exercise1">配置虚拟网络</a></li>
+<li><a href="#Exercise2">部署第一个域控制器</a></li>
+<li><a href="#Exercise3">将新虚拟机设置到域中</a></li>
+</ol>
+
+<p>完成此实验的估计时间：<strong>60 分钟</strong>。</p>
+
+<p><a name='gettingstarted'></a></p>
+
+<h3 id="Getting_Started_Obtaining_Subscriptions_Credentials">入门：获取订阅凭据</h3>
+
+<p>为了完成此实验，您将需要获得订阅的安全凭据。Windows Azure 允许您下载发布设置文件，其中包含在开发环境中管理帐户所需的所有信息。</p>
+
+<h4 id="Task_1_-_Downloading_and_Importing_a_Publish-settings_File">任务 1 - 下载和导入发布设置文件</h4>
+<blockquote>
+<p><strong>注意：</strong>如果您已经在之前的实验中在同一计算机上完成了这些步骤，则可以转到练习 1。</p>
+</blockquote>
+<p>在本任务中，您将登录到 Windows Azure 门户并下载发布设置文件。此文件包含安全凭据以及有关在开发环境中使用的 Windows Azure 订阅的其他信息。然后，您将使用 Windows Azure Cmdlet 导入此文件，以便安装证书并获取帐户信息。</p>
+
+<ol>
+<li><p>打开 Internet Explorer 浏览器，转到 <a href="https://windows.azure.com/download/publishprofile.aspx">https://windows.azure.com/download/publishprofile.aspx</a>。</p></li>
+<li><p>使用与您的 <strong>Windows Azure</strong> 帐户关联的 <strong>Microsoft 帐户</strong>登录。</p></li>
+<li><p>将发布设置文件<strong>保存</strong>到本地计算机。</p>
+
+<p><img src="images/downloading-publish-settings-file.png?raw=true" alt="下载发布设置文件" title="下载发布设置文件" />
+</p>
+
+<p><em>下载发布设置文件</em></p>
+<blockquote>
+<p><strong>注意：</strong>下载页面说明如何使用 Visual Studio 发布框导入发布设置文件。此实验将说明如何改用 Windows Azure PowerShell Cmdlet 执行导入。</p>
+</blockquote></li>
+<li><p>在 <strong>Windows Azure</strong> 下的开始菜单中，右键单击 <strong>Windows Azure PowerShell</strong>，然后选择<strong>“以管理员身份运行”</strong>。</p></li>
+<li><p>将 PowerShell 执行策略更改为 <strong>RemoteSigned</strong>。在要求确认时，按 <strong>Y</strong>，然后按 <strong>Enter</strong>。</p>
+
+<!-- mark:1 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">Set-ExecutionPolicy RemoteSigned</strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>通过 Set-ExecutionPolicy cmdlet 可以确定允许在计算机上运行的 Windows PowerShell 脚本（如果有）。Windows PowerShell 有四种不同的执行策略：</p>
+
+<ul>
+<li><em>Restricted</em> - 任何脚本都不能运行。Windows PowerShell 只能在交互模式中使用。</li>
+<li><em>AllSigned</em> - 只有由受信任的发布者签名的脚本可以运行。</li>
+<li><em>RemoteSigned</em> - 下载的脚本必须由受信任的发布者签名，才可以运行。</li>
+<li><em>Unrestricted</em> - 没有限制，所有 Windows PowerShell 脚本都可以运行。</li>
+</ul>
+
+<p>有关执行策略的详细信息，请参阅 TechNet 文章：<a href="http://technet.microsoft.com/zh-CN/library/ee176961.aspx">http://technet.microsoft.com/zh-CN/library/ee176961.aspx</a></p>
+</blockquote></li>
+<li><p>下面的脚本导入发布设置文件并使用您的帐户信息生成一个 XML 文件。您将在实验过程中使用这些值来管理您的 Windows Azure 订阅。将占位符替换为发布设置文件的路径并执行脚本。</p>
+
+<!-- mark:1 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">Import-AzurePublishSettingsFile '[YOUR-PUBLISH-SETTINGS-PATH]'   </strong>
+</code></pre></li>
+<li><p>执行以下命令，记录订阅名称和存储帐户名称以备本练习使用。</p>
+
+<!-- mark:1-3 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">Get-AzureSubscription | select SubscriptionName</strong>
+<strong class="markLine">Get-AzureStorageAccount | select StorageAccountName </strong>
+</code></pre></li>
+<li><p>如果您使用上面的命令没有返回存储帐户，应先创建一个。</p>
+
+<ol>
+<li><p>运行以下命令，确定要在其中创建存储帐户的数据中心。确保选择支持 PersistentVMRole 的数据中心。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Get-AzureLocation  
+</code></pre></li>
+<li><p>创建存储帐户：</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">New-AzureStorageAccount -StorageAccountName '[YOUR-SUBSCRIPTION-NAME]' -Location '[DC-LOCATION]'
+</code></pre></li>
+</ol></li>
+<li><p>执行以下命令以便设置您的订阅的当前存储帐户。</p>
+
+<!-- mark:1 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">Set-AzureSubscription -SubscriptionName '[YOUR-SUBSCRIPTION-NAME]' -CurrentStorageAccount '[YOUR-STORAGE-ACCOUNT]'</strong>
+</code></pre></li>
+</ol>
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Configuring_Virtual_Networking">练习 1：配置虚拟网络</h3>
+
+<p>运行 Active Directory 域需要永久性 IP 地址，并需要 Active Directory 域的客户端指向启用了 AD 的 DNS 服务器。Windows Azure 中的默认内部 DNS 服务 (iDNS) 不是可接受的解决方案，因为分配给每个虚拟机的 IP 地址都不是永久性的。对于此解决方案，您将定义一个虚拟网络，在这里，您可以将虚拟机分配给特定子网。</p>
+
+<p>此实验所用的网络配置定义的内容如下：</p>
+
+<ul>
+<li>名为 ADVNET 的虚拟网络，其地址前缀：192.168.0.0/16</li>
+<li>名为 ADSubnet 的子网，其地址前缀：192.168.1.0/24</li>
+<li>名为 AppSubnet 的子网，其地址前缀：192.168.2.0/24</li>
+</ul>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_an_Affinity_Group">任务 1 - 创建地缘组</h4>
+
+<p>第一个任务是为虚拟网络创建一个地缘组。</p>
+
+<ol>
+<li><p>打开浏览器并转到 <a href="https://manage.windowsazure.com/"><a href="https://manage.windowsazure.com/">https://manage.windowsazure.com/</a></a>。提示时，使用您的 <strong>Windows Azure</strong> 凭据登录。在 Windows Azure 门户中，单击<strong>“网络”</strong>、<strong>“地缘组”</strong>，然后在底部单击<strong>“创建”</strong>。</p></li>
+<li><p>将该地缘组命名为 <em>adag</em>、包括说明并选择一个<strong>区域</strong>。单击“完成”按钮创建该地缘组。</p>
+
+<p><img src="images/creating-an-affinity-group.png?raw=true" alt="创建地缘组" />
+</p>
+
+<p><em>创建地缘组</em></p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Creating_a_new_Virtual_Network">任务 2 - 新建虚拟网络</h4>
+
+<p>下一步是在您的订阅中新建一个虚拟网络。</p>
+
+<ol>
+<li><p>在 Windows Azure 门户中，单击<strong>“网络”</strong>、<strong>“虚拟网络”</strong>，然后在底部单击<strong>“创建”</strong>。</p></li>
+<li><p>指定虚拟网络名称 <em>ADVNET</em> 和说明，然后单击箭头按钮继续。</p>
+
+<p><img src="images/creating-a-new-virtual-network.png?raw=true" alt="新建虚拟网络" />
+</p>
+
+<p><em>新建虚拟网络</em></p></li>
+<li><p>将<strong>“地址空间”</strong>值设置为 <em>192.168.0.0/16</em> 并添加 2 个子网，一个名为 <em>ADSubnet</em>（前缀为 <em>192.168.1.0/24</em>），另一个名为 <em>AppSubnet</em>（前缀为 <em>192.168.2.0/24</em>）。</p>
+
+<p><img src="images/adding-an-address-space-and-subnets.png?raw=true" alt="添加地址空间和子网" />
+</p>
+
+<p><em>添加地址空间和子网</em></p></li>
+<li><p>保留 DNS 的默认设置并单击完成按钮。</p>
+
+<p><img src="images/creating-the-virtual-network.png?raw=true" alt="创建虚拟网络" title="创建虚拟网络" />
+</p>
+
+<p><em>创建虚拟网络</em></p></li>
+</ol>
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Deploying_the_first_Domain_Controller">练习 2：部署第一个域控制器</h3>
+
+<p>我们可以选择是使用 Windows Azure 门户还是 PowerShell 来设置将成为域控制器的虚拟机。在此实验中，您将使用 Windows Azure 门户。</p>
+
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_a_new_Virtual_Machine">任务 1 - 新建虚拟机</h4>
+
+<ol>
+<li><p>在 Windows Azure 门户中，单击<strong>“新建”</strong>，然后选择<strong>“虚拟机”</strong>、<strong>“从库中”</strong>。</p>
+
+<p><img src="images/new-virtual-machine-from-gallery.png?raw=true" alt="从库中新建虚拟机" />
+</p>
+
+<p><em>从库中新建虚拟机</em></p></li>
+<li><p>单击左侧菜单中的<strong>“平台映像”</strong>，然后从列表中选择 <strong>Windows Server 2008 R2 SP1</strong> 映像。单击箭头继续。</p></li>
+<li><p>输入 <em>ad-dc</em> 作为<strong>“虚拟机名称”</strong>并设置 <strong>Administrator</strong> 用户的密码。单击箭头继续。</p>
+
+<p><img src="images/creating-a-new-virtual-machine.png?raw=true" alt="新建虚拟机" />
+</p>
+
+<p><em>新建虚拟机</em></p></li>
+<li><p>DNS 名称需要是唯一的，以使此实验有创意。您可以选择某一现有<strong>存储帐户</strong>，或者自动生成一个新的存储帐户。从下拉列表<strong>“区域/地缘组/虚拟网络”</strong>中选择您的虚拟网络。单击箭头继续。</p>
+
+<p><img src="images/selecting-the-virtual-network-for-the-virtual.png?raw=true" alt="为虚拟机选择虚拟网络" />
+</p>
+
+<p><em>为虚拟机选择虚拟网络</em></p></li>
+<li><p>从<strong>“虚拟网络子网”</strong>列表中选中 <strong>ADSUBNET</strong> 选项。单击“完成”按钮创建虚拟机。</p>
+
+<p><img src="images/selecting-the-ad-subnet.png?raw=true" alt="选择 AD 子网" />
+</p>
+
+<p><em>选择 AD 子网</em></p></li>
+<li><p>请等待虚拟机创建完成。单击该虚拟机名称并选择<strong>“仪表板”</strong>。</p></li>
+<li><p>单击页面底部菜单中的<strong>“附加”</strong>，然后选择<strong>“附加空磁盘”</strong>。</p>
+
+<p><img src="images/attach-empty-disk.png?raw=true" alt="附加空磁盘" title="附加空磁盘" />
+</p>
+
+<p><em>附加空磁盘</em></p></li>
+<li><p>在<strong>“将空磁盘附加到虚拟机”</strong>页中，将<strong>“大小”</strong>设置为 <em>20</em> GB 并单击“完成”按钮以创建磁盘。</p>
+
+<p><img src="images/creating-a-new-disk.png?raw=true" alt="创建新磁盘" title="创建新磁盘" />
+</p>
+
+<p><em>创建新磁盘</em></p></li>
+</ol>
+
+<p><a name="Ex2Task2"></a></p>
+
+<h4 id="Task_2_-_Creating_the_Domain_Controller">任务 2 - 创建域控制器</h4>
+
+<ol>
+<li><p>在前一任务中创建的虚拟机状态变为<strong>“正在运行”</strong>后，选择它并单击<strong>“连接”</strong>。如果您使用了建议的名称，此虚拟机应名为 <strong>ad-dc</strong>。</p></li>
+<li><p>系统会要求您下载远程桌面客户端。单击<strong>“打开”</strong>并使用您在创建虚拟机时定义的管理员凭据登录。</p></li>
+<li><p>在 Azure 虚拟机中，启动控制台会话并运行命令 <strong>IPConfig</strong>，然后记录返回的 IPv4 IP 地址。</p></li>
+<li><p>通过转到<strong>“开始”</strong>|<strong>“所有程序”</strong>|<strong>“管理工具”</strong>|<strong>“计算机管理”</strong>，打开<strong>“计算机管理”</strong>。</p></li>
+<li><p>展开<strong>“存储”</strong>节点，然后选择<strong>“磁盘管理”</strong>。</p>
+
+<p><img src="images/opening-disk-management.png?raw=true" alt="打开磁盘管理" />
+</p>
+
+<p><em>打开磁盘管理</em></p></li>
+<li><p>通过单击<strong>“初始化磁盘”</strong>对话框中的<strong>“确定”</strong>，初始化<strong>磁盘 2</strong>。</p>
+
+<p><img src="images/initializing-disk.png?raw=true" alt="初始化磁盘" />
+</p>
+
+<p><em>初始化磁盘</em></p></li>
+<li><p>右键单击未分配的磁盘空间，选择<strong>“新建简单卷”</strong>。</p>
+
+<p><img src="images/creating-a-new-simple-volume.png?raw=true" alt="创建新简单卷" />
+</p>
+
+<p><em>创建新简单卷</em></p></li>
+<li><p>将启动<strong>“新建简单卷向导”</strong>。单击<strong>“下一步”</strong>并接受<em>“指定卷大小”</em>和<em>“分配驱动器号或路径”</em>屏幕中的默认值。</p></li>
+<li><p>在<em>“格式化分区”</em>屏幕中，将<strong>“卷标”</strong>设置为 <em>DIT</em>，然后单击<strong>“下一步”</strong>。</p></li>
+<li><p>单击<strong>“完成”</strong>以开始格式化。格式化完成后，磁盘就可以使用了。</p>
+
+<p><img src="images/formatted-disk.png?raw=true" alt="已格式化的磁盘" />
+</p>
+
+<p><em>已格式化的磁盘</em></p></li>
+<li><p>现在，将启动 <strong>Active Directory 域服务安装向导</strong>。为此，请单击“开始”和“运行”，然后键入 <em>DCPromo</em> 并按 <strong>Enter</strong>。等待 ADDS 二进制文件安装完成。</p>
+
+<p><img src="images/dcpromostart.png?raw=true" alt="dcpromo 启动" />
+   </p>
+
+<p><em>Active Directory 域服务安装向导</em></p></li>
+<li><p>单击两次<strong>“下一步”</strong>。</p></li>
+<li><p>选择<strong>“在新林中新建域”</strong>，单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/newforest.png?raw=true" alt="新林" />
+</p>
+
+<p><em>在新林中新建域</em></p></li>
+<li><p>将<strong>“目录林根级域”</strong>命名为 <em>contoso.com</em>，单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/setting-the-domain-name.png?raw=true" alt="域名" />
+</p>
+
+<p><em>设置域名</em></p></li>
+<li><p>将功能级别设置为 <strong>Windows Server 2008 R2</strong>。单击<strong>“下一步”</strong>，等待该过程完成。</p>
+
+<p><img src="images/functionallevel.png?raw=true" alt="功能级别" />
+</p>
+
+<p><em>选择林功能级别</em></p></li>
+<li><p>使用默认选择创建 <strong>DNS 服务器</strong>。单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/dnsselection.png?raw=true" alt="DNS 选择" />
+</p>
+
+<p><em>选择其他选项</em></p></li>
+<li><p>选择<strong>“是”</strong>，计算机将使用由 DHCP 服务器自动分配的 IP 地址（不推荐）。</p>
+
+<p><img src="images/dhcp-address.png?raw=true" alt="dhcp 地址" />
+</p>
+
+<p><em>使用自动分配的 IP</em></p>
+<blockquote>
+<p><strong>注意：</strong>使用带有 Windows Azure IaaS 的虚拟网络时，IP 地址的生存期为虚拟机租赁期。不要将 IP 地址设置为静态。</p>
+</blockquote></li>
+<li><p>在此实验中不集成到现有的 AD 环境中，因此单击<strong>“是”</strong>。</p>
+
+<p><img src="images/dns-warning.png?raw=true" alt="dns 警告" />
+</p>
+
+<p><em>DNS 创建警告</em></p></li>
+<li><p>将<strong>数据库</strong>、<strong>日志文件</strong>和 <strong>SYSVOL</strong> 文件夹位置设置为刚刚格式化的数据磁盘（例如 <em>F:\NTDS</em> 用于数据库，<em>F:\NTDSLogs</em> 用于日志，<em>F:\SYSVOL</em> 用于 SYSVOL）。单击<strong>“下一步”</strong>继续。</p>
+
+<p><img src="images/dit-location.png?raw=true" alt="dit 位置" />
+</p>
+
+<p><em>为数据库、日志和 SYSVOL 文件夹设置值</em></p></li>
+<li><p>键入设置原始计算机时所使用的密码，单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/ad-password.png?raw=true" alt="ad 密码" />
+</p>
+
+<p><em>设置域管理员密码</em></p></li>
+<li><p>最后，再次单击<strong>“下一步”</strong>并允许对 Active Directory 进行配置，这将需要几分钟。在提示是否允许重新启动时，选择<strong>“立即重新启动”</strong>。</p></li>
+</ol>
+
+<p><a name="Exercise3"></a></p>
+
+<h3 id="Exercise_3_Provisioning_new_Virtual_Machines_into_the_Domain">练习 3：将新虚拟机设置为加入域</h3>
+
+<p>下面的示例演示如何自动将新虚拟机设置为在启动时加入 Active Directory 域。</p>
+<blockquote>
+<p><strong>注意：</strong>对于此练习，您将需要在上一练习中创建的虚拟机的 IP 地址。</p>
+</blockquote>
+<ol>
+<li><p>从<strong>“开始”</strong>|<strong>“所有程序”</strong>|<strong>Windows Azure</strong>|<strong>Windows Azure PowerShell</strong> 打开 <strong>Windows Azure PowerShell</strong>，右键单击 <strong>Windows Azure Powershell</strong> 并选择<strong>“以管理员身份运行”</strong>。</p></li>
+<li><p>执行以下命令以获取可用操作系统磁盘映像的名称。记录 <strong>Windows Server 2008</strong> 映像磁盘名称。</p>
+
+<!-- mark:1 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">Get-AzureVMImage | Select ImageName</strong>
+</code></pre></li>
+<li><p>执行以下命令为新虚拟机定义操作系统磁盘映像名称。</p>
+
+<!-- mark:1 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">$imgName = '[OS-IMAGE-NAME]'</strong>
+</code></pre></li>
+<li><p>设置虚拟机的 DNS 设置。为此，您将使用在练习 1 中创建的虚拟机，在其中您配置了 Active Directory。替换占位符，然后执行以下命令。使用在练习开头记录的 IP 地址。</p>
+
+<!-- mark:1-4 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">$advmIP = '[AD-IP-ADDRESS]'</strong>
+<strong class="markLine">$advmName = '[AD-VM-NAME]'</strong>
+<strong class="markLine"># Point to IP Address of Domain Controller Created Earlier</strong>
+<strong class="markLine">$dns1 = New-AzureDns -Name $advmName -IPAddress $advmIP</strong>
+</code></pre></li>
+<li><p>设置新虚拟机的配置设置以在设置过程中自动加入域。将占位符替换为管理员和域密码，然后执行命令。</p>
+
+<!-- mark:1-12 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">$vmName = 'advm1'</strong>
+<strong class="markLine">$adminPassword = '[YOUR-PASSWORD]'</strong>
+<strong class="markLine">$domainPassword = '[YOUR-PASSWORD]'</strong>
+<strong class="markLine">$domainUser = 'administrator'</strong>
+<strong class="markLine">$FQDomainName = 'contoso.com'</strong>
+<strong class="markLine">$subNet = 'AppSubnet'</strong>
+<strong class="markLine"># Configuring VM to Automatically Join Domain</strong>
+<strong class="markLine">$advm1 = New-AzureVMConfig -Name $vmName -InstanceSize Small -ImageName $imgName | </strong>
+<strong class="markLine">            Add-AzureProvisioningConfig -WindowsDomain -Password $adminPassword `</strong>
+<strong class="markLine">            -Domain 'contoso' -DomainPassword $domainPassword `</strong>
+<strong class="markLine">            -DomainUserName $domainUser -JoinDomain $FQDomainName |</strong>
+<strong class="markLine">     Set-AzureSubnet -SubnetNames $subNet</strong>
+
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>前面的命令假定您使用了在此实验中显示的域名和子网的建议名称。如果您使用了不同的名称，可能需要更新这些值。</p>
+</blockquote></li>
+<li><p>使用在前面步骤中定义的域和 DNS 设置来创建新虚拟机。将占位符替换为唯一的服务名称。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">$serviceName = '[YOUR-SERVICE-NAME]' $affinityGroup = 'adag' $adVNET = 'ADVNET' # New Cloud Service with VNET and DNS settings New-AzureVM -ServiceName $serviceName -AffinityGroup $affinityGroup ` -VMs $advm1 -DnsSettings $dns1 -VNetName $adVNET
+</code></pre>
+
+<p><img src="images/ad-architecturepng.png?raw=true" alt="AD 体系结构" />
+</p>
+
+<p><em>得到的体系结构</em></p></li>
+<li><p>等待设置好虚拟机。</p></li>
+<li><p>在 Windows Azure 门户中，通过选择这个新虚拟机并单击底部的<strong>“连接”</strong>登录到它。</p></li>
+<li><p>登录后，在<strong>“初始配置任务”</strong>窗口中，通过选中<em>“计算机全名”</em>和<em>“域”</em>属性来验证该机已自动加入 <em>contoso.com</em> 域。</p>
+
+<p><img src="images/initial-configuration-tasks.png?raw=true" alt="初始配置任务" title="初始配置任务" />
+</p>
+
+<p><em>初始配置任务</em></p></li>
+</ol>
+
+<hr />
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>在此实验中，您演练了使用 Windows Azure 虚拟机和简单的虚拟网络来部署新的 Active Directory 域所需的步骤。</p> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-DeployingActiveDirectory//issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

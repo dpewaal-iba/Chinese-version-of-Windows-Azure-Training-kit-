@@ -1,0 +1,287 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 在 Windows Azure 中创建网站 (OS X)</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /><span class="mainHomepageSubTitle"> 培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-WebAppGalleryAzureWebSites-OSX" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-WebAppGalleryAzureWebSites-OSX" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="Title"></a></p>
+
+<h1 id="Creating_Web_Sites_in_Windows_Azure_OS_X">在 Windows Azure 中创建网站 (OS X)</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>在此动手实验中，您将学习如何使用预打包应用程序库中的模板在 Windows Azure 中创建新网站。网站创建后，您将使用文本编辑器来编辑网站并使用 FTP 来更新网站。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>使用模板库中的预打包应用程序在 Windows Azure 中创建新网站</li>
+<li>使用文本编辑器编辑文件来更新网站，并使用 FTP 来更新网站</li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li>启用了网站预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>本实验设计为使用 Mac OS X 操作系统</p>
+</blockquote>
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#Exercise1">练习 1：使用应用程序库创建 Windows Azure 网站</a></li>
+<li><a href="#Exercise2">练习 2：使用文本编辑器在 OS X 上自定义网站，并使用 FTP 更新网站</a></li>
+</ol>
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Creating_a_Windows_Azure_Web_Site_using_the_Applications_Gallery">练习 1：使用应用程序库创建 Windows Azure 网站</h3>
+
+<p>在本练习中，您将使用应用程序库中的预打包 Web 应用程序创建一个新网站。</p>
+
+<ol>
+<li><p>转到 <a href="https://manage.windowsazure.com/">Windows Azure 管理门户</a>，并使用与您的订阅相关联的 Microsoft 凭据登录。</p>
+
+<p><img src="images/login.png?raw=true" alt="登录到 Windows Azure 门户" title="登录到 Windows Azure 门户" />
+</p>
+
+<p><em>登录到 Windows Azure 管理门户</em></p></li>
+<li><p>在命令栏上，单击<strong>“新建”</strong>。</p>
+
+<p><img src="images/new-website.png?raw=true" alt="创建新网站" title="创建新网站" />
+</p>
+
+<p><em>创建新网站</em></p></li>
+<li><p>单击<strong>“网站”</strong>，然后单击<strong>“从库中”</strong>。</p>
+
+<p><img src="images/new-web-site-from-the-gallery.png?raw=true" alt="从库创建新网站" title="从库创建新网站" />
+</p>
+
+<p><em>从库创建新网站</em></p></li>
+<li><p>在<strong>“博客”</strong>类别中选择 <strong>WordPress</strong> 应用程序。</p>
+
+<p><img src="images/wordpress-application.png?raw=true" alt="库中的 WordPress 应用程序" title="库中的 WordPress 应用程序" />
+</p>
+
+<p><em>库中的 WordPress 应用程序</em></p></li>
+<li><p>在<strong>“配置应用”</strong>页中键入一个可用 <strong>Url</strong>（例如 <em>wpressSample</em>），然后从<strong>“数据库”</strong>下拉列表中选择<strong>“创建新的 MySQL 数据库”</strong>。</p>
+
+<p><img src="images/web-site-settings.png?raw=true" alt="配置网站" title="配置网站" />
+</p>
+
+<p><em>配置网站</em></p></li>
+<li><p>在<strong>“创建新的数据库”</strong>页上，键入数据库名称，或者使用门户提供的默认名称。选中此复选框接受法律条款，然后单击确认按钮以完成创建网站。</p>
+
+<p><img src="images/database-settings.png?raw=true" alt="配置数据库设置" title="配置数据库设置" />
+</p>
+
+<p><em>配置<strong>数据库设置</strong></em></p></li>
+<li><p>创建网站后，您就可以看到<strong>“网站”</strong>部分中列出了此网站。</p>
+
+<p><img src="images/wordpress-web-site.png?raw=true" alt="WordPress 网站" title="WordPress 网站" />
+</p>
+
+<p><em>WordPress 网站</em></p></li>
+<li><p>单击网站打开其<strong>仪表板</strong>，然后单击<strong>“网站 URL”</strong>链接以浏览至新网站。</p>
+
+<p><img src="images/wordpress-web-site-administration.png?raw=true" alt="WordPress 网站仪表板" title="WordPress 网站仪表板" />
+</p>
+
+<p><em>WordPress 网站仪表板</em></p></li>
+<li><p>现在将配置 <strong>WordPress</strong> 在 <strong>Windows Azure</strong> 上运行。填写<strong>“网站标题”</strong>、<strong>“用户名”</strong>、<strong>“密码”</strong>和<strong>“电子邮件”</strong>字段。然后，单击<strong>“安装 WordPress”</strong>。</p>
+
+<p><img src="images/configuring-wordpress-application.png?raw=true" alt="配置 WordPress 应用程序" title="WordPress 网站管理" />
+</p>
+
+<p><em>安装 WordPress 应用程序</em></p></li>
+<li><p>将开始安装 WordPress。一旦安装过程完成，就会打开一个屏幕，其中显示最终状态。单击<strong>“登录”</strong>以访问 Word Press 应用程序。</p>
+
+<p><img src="images/wordpress-installation-success.png?raw=true" alt="成功安装" title="成功安装" />
+</p>
+
+<p><em>成功安装</em></p></li>
+<li><p>输入先前配置的<strong>“用户名”</strong>和<strong>“密码”</strong>，然后单击<strong>“登录”</strong>以打开管理网站。</p>
+
+<p><img src="images/wordpress-login-screen.png?raw=true" alt="WordPress 登录" title="WordPress 登录" />
+</p>
+
+<p><em>WordPress 登录</em></p></li>
+<li><p>要打开 WordPress 博客，在管理网站上，您可以单击具有该网站名称的链接（位于页面的左上角），在此情况下是 <strong>WordPress 示例</strong>。</p>
+
+<p><img src="images/wordpress-sample-admin.png?raw=true" alt="WordPress 管理网站" title="WordPress 管理网站" />
+</p>
+
+<p><em>WordPress 管理网站</em></p></li>
+<li><p>此时将显示示例“Hello World”博客文章。在下一个练习中，您将学会如何使用 FTP 发布功能来自定义博客页。</p>
+
+<p><img src="images/wordpress-sample-site.png?raw=true" alt="WordPress“Hello World”示例博客" title="WordPress“Hello World”示例博客" />
+</p>
+
+<p><em>WordPress“Hello World”示例博客</em></p></li>
+</ol>
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Customizing_a_Web_Site_on_OS_X_using_a_text_editor_and_update_the_site_using_FTP">练习 2：使用文本编辑器在 OS X 上自定义网站，并使用 FTP 更新网站</h3>
+
+<p>在此练习中，您将使用 FTP 发布功能来更新网站，在博客文章中添加一个 Facebook 的 <strong>Like</strong> 按钮。</p>
+
+<ol>
+<li><p>转到 Windows Azure 门户仪表板并复制<strong>“FTP 主机名”</strong>。</p>
+
+<p><img src="images/ftp-hostname.png?raw=true" alt="获取 FTP 部署主机名" title="获取 FTP 部署主机名" />
+</p>
+
+<p><em>获取 FTP 部署主机名</em></p></li>
+<li><p>回到命令提示符，并通过运行以下命令连接到 FTP 发布服务（将主机名替换为从门户获得的值）。</p>
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">ftp waws-prod-blu-001.ftp.azurewebsites.windows.net
+</code></pre>
+
+<p><img src="images/ftp-connect.png?raw=true" alt="连接到 FTP 服务器" title="连接到 FTP 服务器" />
+</p>
+
+<p><em>连接到 FTP 服务器</em></p>
+<blockquote>
+<p><strong>注意：</strong>将第一个 <strong>waws-prod-blu-001.ftp.azurewebsites.windows.net</strong> 值替换为从门户中获得的值。此外，还删除上述的 <strong>ftp://</strong> 前缀。</p>
+</blockquote></li>
+<li><p>提供部署凭据的<strong>“用户名”</strong>和<strong>“密码”</strong>。确保<strong>“用户名”</strong>前面有<strong>“网站”</strong>的名称（例如，<strong>wpressSample\admin</strong>）</p>
+
+<p><img src="images/ftp-user-pass.png?raw=true" alt="提供 FTP 凭据" title="提供 FTP 凭据" />
+ </p>
+
+<p><em>提供 FTP 凭据</em></p>
+<blockquote>
+<p><strong>注意：</strong>部署凭据不同于与您的 Windows Azure 订阅关联的 Live ID，并适用于与您的订阅关联的所有 Windows Azure 网站。如果您不知道自己的部署凭据，使用管理门户可以轻松重置它们。打开网站的<strong>“仪表板”</strong>页，单击<strong>“重置部署凭据”</strong>链接。提供一个新密码，然后单击“确定”。</p>
+
+<p><img src="images/deployment-credentials.png?raw=true" alt="输入用户名和密码" title="设置用户名和密码" />
+</p>
+
+<p><em>输入用户名和密码</em></p>
+</blockquote></li>
+<li><p>转至 <strong>wp-content | themes | twentyeleven</strong> 文件夹，使用 <strong>GET</strong> ftp 命令下载 <strong>single.php</strong>。</p></li>
+</ol> <span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">   get site/wwwroot/wp-content/themes/twentyeleven/single.php single.php
+</code></pre>
+
+<p><img src="images/ftp-download-single.png?raw=true" alt="下载 single.php" title="下载 single.php" />
+</p>
+
+<p><em>下载 single.php</em></p>
+
+<ol>
+<li><p>在文本编辑器中打开 <strong>single.php</strong>。</p>
+
+<p><img src="images/textedit-edit-single.png?raw=true" alt="打开 single.php" title="打开 single.php" />
+</p>
+
+<p><em>打开 single.php</em></p></li>
+<li><p>将以下代码添加到 <code>&lt;div id=&quot;content&quot; role=&quot;main&quot;&gt;</code> 元素之前。保存该文件。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript">&lt;div id=<span style="color:#8B0000">&quot;fb-root&quot;</span>&gt;&lt;/div&gt; &lt;script src=<span style="color:#8B0000">&quot;http://connect.facebook.net/en_US/all.js#xfbml=1&quot;</span>&gt;&lt;/script&gt; &lt;fb:like href=<span style="color:#8B0000">&quot;&lt;?php echo get_permalink(); ?&gt;&quot;</span> show_faces=<span style="color:#8B0000">&quot;true&quot;</span> width=<span style="color:#8B0000">&quot;450&quot;</span>&gt;&lt;/fb:like&gt;
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>此代码将包含 JavaScript SDK (JS SDK)，使您可以使用 Facebook 社交插件。您可以在<a href="http://developers.facebook.com/docs/reference/plugins/like/">此处</a>了解有关 Facebook 的“Like”按钮的更多信息。</p>
+</blockquote>
+<p><img src="images/single-fbsdk.png?raw=true" alt="添加 Facebook 的 Like 按钮" title="添加 Facebook 的 Like 按钮" />
+</p>
+
+<p><em>添加 Facebook 的 Like 按钮</em></p></li>
+<li><p>使用 <strong>PUT</strong> ftp 命令上载 <strong>single.php</strong> 文件。</p>
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">put single.php site/wwwroot/wp-content/themes/twentyeleven/single.php
+</code></pre>
+
+<p><img src="images/ftp-put.png?raw=true" alt="上载 single.php 文件" title="上载 single.php 文件" />
+</p>
+
+<p><em>上载 single.php 文件</em></p></li>
+<li><p>现在，打开 WordPress 博客，以查看您刚刚添加的 Facebook 的 <strong>Like 按钮</strong>。</p>
+
+<p><img src="images/wordpress-fb-like-button.png?raw=true" alt="Facebook 的 Like 按钮" title="Facebook 的 Like 按钮" />
+</p>
+
+<p><em>Facebook 的 Like 按钮</em></p></li>
+</ol>
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>在此动手实验中，您学习了如何使用预打包应用程序库中的模板在 Windows Azure 中创建新网站。网站创建后，您使用文本编辑器更新了网站，并使用 FTP 更新了网站。</p> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-WebAppGalleryAzureWebSites-OSX/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

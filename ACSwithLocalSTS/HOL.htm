@@ -1,0 +1,1004 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 使用本地 STS 的访问控制服务</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-ACSwithLocalSTS" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-ACSwithLocalSTS" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="AccessControlWithLocalSTS"></a></p>
+
+<h1 id="Access_Control_Service_with_local_STS">使用本地 STS 的访问控制服务</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>对于任何解决方案，无论是部署在本地、云端还是同时部署在两地，将云服务连接至用户都是最基本的一个要求。</p>
+
+<p>各种标准的出现正帮助打破不同网站和业务实体所存储的帐户之间由来已久的隔离屏障，然而，为多方来源的用户提供云服务访问仍然困难重重。如今，若要向来自 Facebook、Live ID、Google 和业务用户资料库的用户开放云服务，最直接的方式是依赖并实现四种不同的身份验证协议。然而，如今瞬息万变的环境又迫使您必须随时更新协议的实现方式，才能跟上用户存储库身份验证机制的最新发展步伐。所有这一切可能需要消耗更大比例的资源，使处理业务的资源捉襟见肘。</p>
+
+<p><img src="./images/A-functional-view-of-the-Access-Control-Service.png?raw=true" alt="访问控制服务的功能视图" title="访问控制服务的功能视图" />
+</p>
+
+<p><em>访问控制服务的功能视图</em></p>
+
+<p>是时候采用 Windows Azure 访问控制服务 (ACS) 了。通过 ACS，您可以将身份验证功能外包，并免除云服务与所用全部标识提供者之间维持直接关系的复杂工作。ACS 可以采纳使用各自身份验证协议的每个标识提供者，无论用户来自何处，均可在 .NET Framework 工具（即 Windows Identity Foundation 技术，简称 WIF）所支持的协议中对身份验证结果进行规范化转换。借助 WIF，您只须几次点击操作即可选择 ACS 作为云服务的身份验证管理器；此后，所有操作即由 ACS 接管，包括为用户提供 UI 供其在所有已识别标识提供者中进行选择。</p>
+
+<p>不仅如此，ACS 还可以让您更好地控制为每个身份验证事件分配哪些用户属性；结合 WIF 技术，很容易访问这些属性（称为“声明”）以便作出授权决策，而开发人员不必真正理解身份验证协议所涉及的底层机制，甚至对此一无所知也无妨。</p>
+
+<p>在这个中级动手实验中，您将学习如何使用访问控制服务来管理与多个商业标识提供者之间的信任关系。两个不同组织的用户经过身份验证后将可以访问您的云服务；但是您不需要编写任何特殊代码来处理两个组织的差异。您将学习如何使用 ACS 来建立关系和规范化属性，而无需修改云服务的源代码。本实验将演示如何通过 Windows Azure 门户和管理 API 来配置 ACS。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li><p>使用门户通过元数据文档添加商业标识提供者</p></li>
+<li><p>使用门户建立声明转换规则以规范化用户的属性</p></li>
+<li><p>通过管理 API 执行上述所有操作</p></li>
+<li><p>将云服务的身份验证外包给 ACS</p></li>
+<li><p>使用 ACS 处理主区域发现问题</p></li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li><p>IIS 7（带 ASP.NET）</p></li>
+<li><p><a href="http://go.microsoft.com/fwlink/?linkid=186916">Microsoft .NET Framework 4.0</a></p></li>
+<li><p><a href="http://msdn.microsoft.com/vstudio/products/">Microsoft Visual Studio 2010</a></p></li>
+<li><p><a href="http://support.microsoft.com/kb/974405">Microsoft Windows Identity Foundation Runtime</a></p></li>
+<li><p><a href="http://www.microsoft.com/downloads/details.aspx?FamilyID=c148b2df-c7af-46bb-9162-2c9422208504">Microsoft Windows Identity Foundation SDK for .NET 4.0</a></p></li>
+<li><p>Microsoft Windows PowerShell</p></li>
+<li><p>Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></p></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>本实验设计为使用 Windows 7 操作系统。</p>
+</blockquote>
+<hr />
+
+<p><a name="Setup"></a></p>
+
+<h3 id="Setup">设置</h3>
+
+<p>为了执行此动手实验中的各项练习，需要对环境进行设置。</p>
+
+<ol>
+<li><p>打开 Windows 资源管理器窗口，浏览到此实验的 <strong>Source</strong> 文件夹。</p></li>
+<li><p>右键单击 <strong>Setup.cmd</strong> 并选择<strong>“以管理员身份运行”</strong>以启动设置过程，该过程将配置您的环境并安装此实验的 Visual Studio 代码段。此步骤也将安装本地 STS 所用的本地主机证书。</p></li>
+<li><p>如果显示“用户帐户控制”对话框，请确认操作以继续。</p></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>请务必在运行安装程序前检查此实验的所有依赖项。</p>
+
+<p>此过程安装自签名证书以启用 SSL 绑定。如果已有使用者名称为 CN=localhost 的证书，则必须先备份证书，并在完成本指南的步骤之后还原证书。</p>
+</blockquote>
+<p><a name="CodeSnippets"></a> </p>
+
+<h3 id="Using_the_Code_Snippets">使用代码段</h3>
+
+<p>实验文档将指导您插入代码块。为方便起见，大部分代码是以 Visual Studio 代码段的形式提供的，您可以在 Visual Studio 2010 中使用而不必手动添加。</p>
+
+<p>如果不熟悉 Visual Studio 代码段，并且希望了解如何使用这些代码段，可参考培训包的 <strong>Assets</strong> 文件夹中的 <strong>Setup.docx</strong> 文档，该文档中有一节说明如何使用这些代码段。</p>
+
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包含一个练习：</p>
+
+<ol>
+<li><a href="#Exercise1">使用访问控制服务来与多个商业标识提供者联合</a></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>每个练习都附带一个起始解决方案，它位于练习的 Begin 文件夹中，允许您独立执行每个练习。请注意，在练习期间添加的代码段不包含在这些起始解决方案中，在您完成练习前，这些代码段不一定起作用。在练习的源代码内，您还会看到一个 End 文件夹，其中包含在完成相应练习中的步骤之后所生成的 Visual Studio 解决方案代码。如果在进行此动手实验时需要更多帮助，可以使用这些解决方案作为指南。</p>
+</blockquote>
+<p>完成此实验的估计时间：<strong>30 分钟</strong></p>
+
+<p><a name="GettingStarted"></a></p>
+
+<h3 id="Getting_Started_Creating_a_Service_Namespace">开始：创建服务命名空间</h3>
+
+<p>要完成此实验以及所有练习，需要先创建一个 Windows Azure 服务命名空间。命名空间创建后，它可以用于所有访问控制实验和您自己的项目。</p>
+
+<p><a name="GettingStartedTask1"></a></p>
+
+<h4 id="Task_1_-_Creating_your_Service_Namespace">任务 1 - 创建服务命名空间</h4>
+
+<ol>
+<li><p>导航到 <a href="https://manage.windowsazure.com/"><a href="https://manage.windowsazure.com/">https://manage.windowsazure.com/</a></a>。如果您尚未登录，系统会提示您输入 Microsoft 帐户凭据。</p>
+
+<p><img src="images/windows-azure-login-page.png?raw=true" alt="Windows Azure 登录页" title="Windows Azure 登录页" />
+</p>
+
+<p><em>Windows Azure 登录页</em></p></li>
+<li><p>要使用访问控制，您需要访问旧版管理门户。为此，请将鼠标悬停在主页标题中的<strong>“预览”</strong>上并单击<strong>“转到以前的门户”</strong>。</p>
+
+<p><img src="images/switch-to-previous-portal.png?raw=true" alt="切换到以前的门户" title="切换到以前的门户" />
+</p>
+
+<p><em>切换到以前的门户</em></p></li>
+<li><p>在以前的门户中，选择导航窗格下的<strong>“Service Bus、访问控制和 Caching”</strong>。</p></li>
+<li><p>选择导航窗格中的<strong>“访问控制”</strong>项。</p></li>
+<li><p>此时将要添加<strong>新的访问控制服务命名空间</strong>。访问控制服务命名空间是地址的一个独特组成部分，在此可以使用访问控制服务上您的所有端点。为此，请单击左上角的<strong>“新建”</strong>。</p>
+
+<p><img src="./images/Add-Namespace.png?raw=true" alt="添加命名空间" title="添加命名空间" />
+</p>
+
+<p><em>添加命名空间</em></p></li>
+<li><p>在<strong>“创建新服务命名空间”</strong>对话框中，键入<strong>命名空间</strong>的名称，选择一个<strong>区域</strong>和<strong>订阅</strong>，然后单击<strong>“创建命名空间”</strong>按钮。首先请务必验证名称的可用性。服务名称必须<strong>全局唯一</strong>，因为它们部署在云环境中，可由经过授权的任何用户访问。</p>
+
+<p><img src="./images/Creating-New-Access-Control-Service-Namespace.png?raw=true" alt="创建新的访问控制服务命名空间" title="创建新的访问控制服务命名空间" />
+</p>
+
+<p><em>创建新的访问控制服务命名空间</em></p>
+
+<p>服务正在激活时，请耐心等待。设置所有必要的资源可能需要几分钟时间。</p>
+
+<p><img src="./images/Active-Service-Namespace.png?raw=true" alt="活动的服务命名空间" title="活动的服务命名空间" />
+</p>
+
+<p><em>活动的服务命名空间</em></p></li>
+</ol>
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Use_ACS_to_Federate_with_Multiple_Business_Identity_Providers">练习 1：使用 ACS 来与多个商业标识提供者联合</h3>
+
+<p>在此练习中，您将把新建的网站的身份验证任务外包给 ACS。您将使用门户和管理 API 两种方式配置 ACS 以将身份验证委托给两个不同的商业标识提供者。如果您已完成介绍性的动手实验，就会发现需要遵循的步骤与使用 Web 标识提供者时所执行的步骤一致。</p>
+
+<p>在实际解决方案中，商业标识提供者会使用 Active Directory Federation Services 2 或提供 STS 的类似打包软件公开其身份验证功能。为了使实验的系统要求简单一点，在这里您将使用在本地计算机上运行的实用工具并模拟合适的标识提供者。不过，您配置 ACS 所需的步骤与在实际系统上所需的步骤完全相同。</p>
+<blockquote>
+<p><strong>注意：</strong>您需要一个 Windows Azure 服务命名空间来完成此练习。如果您尚未创建服务命名空间，请完成“开始：创建服务命名空间”部分中的步骤。</p>
+</blockquote>
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_the_Initial_Solution">任务 1 - 创建初始解决方案</h4>
+
+<ol>
+<li><p>以管理员权限打开 Microsoft Visual Studio 2010。从<strong>“开始”|“所有程序”|“Microsoft Visual Studio 2010”</strong>，右键单击 <strong>Microsoft Visual Studio 2010</strong> 并选择<strong>“以管理员身份运行”</strong>。</p></li>
+<li><p>打开位于此实验 <strong>\Source\Ex01-ACSLabsV2Federation\Begin</strong> 文件夹中的空白解决方案文件 <strong>WebSiteAdvancedACS.sln</strong>。</p></li>
+<li><p>创建新的空白网站。从<strong>“文件”|“添加”|“新建网站”</strong>，选择<strong>“已安装的模板”</strong>部分中的 <strong>Visual C#</strong>，然后单击<strong>“ASP.NET 网站”</strong>。将<strong>“Web 位置”</strong>字段更改为使用 <strong>HTTP</strong>，并将字段值设置为 <strong>https://localhost/WebSiteAdvancedACS</strong>。</p>
+
+<p><img src="./images/Add-New-Web-Site.png?raw=true" alt="添加新网站" title="添加新网站" />
+</p>
+
+<p><em>添加新网站</em></p></li>
+<li><p>在<strong>解决方案资源管理器</strong>中，从网站中删除以下文件夹：</p>
+
+<p>-<strong>Account</strong></p>
+
+<p>-<strong>Scripts</strong></p></li>
+<li><p>删除以下文件：</p>
+
+<p>-<strong>About.aspx</strong></p>
+
+<p>-<strong>Global.asax</strong></p></li>
+<li><p>您的解决方案应类似于：</p>
+
+<p><img src="./images/Solution-Explorer.png?raw=true" alt="解决方案资源管理器" title="解决方案资源管理器" />
+</p>
+
+<p><em>解决方案资源管理器</em></p></li>
+<li><p>打开 <strong>Site.master</strong> 文件，删除类名为 <strong>loginDisplay</strong> 的 <strong>DIV</strong> 元素以及 <strong>NavigationMenu</strong> 菜单控件。</p>
+
+<!-- strike:9-19,21-26 -->
+
+<span class="codelanguage">HTML</span><pre><code class="HTML">...
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;page&quot;</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;header&quot;</span><span style="color:#0000FF">&gt;</span>
+        <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;title&quot;</span><span style="color:#0000FF">&gt;</span>
+            <span style="color:#0000FF">&lt;</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span>
+                My ASP.NET Application
+            <span style="color:#0000FF">&lt;/</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span>
+        <span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span>
+<span class="strikeLine" style="text-decoration:line-through;">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;loginDisplay&quot;</span><span style="color:#0000FF">&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">            <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LoginView</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;HeadLoginView&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">EnableViewState</span>=<span style="color:#0000FF">&quot;false&quot;</span><span style="color:#0000FF">&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">                <span style="color:#0000FF">&lt;</span><span style="color:#800000">AnonymousTemplate</span><span style="color:#0000FF">&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">                    [ <span style="color:#0000FF">&lt;</span><span style="color:#800000">a</span> <span style="color:#FF0000">href</span>=<span style="color:#0000FF">&quot;~/Account/Login.aspx&quot;</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;HeadLoginStatus&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span><span style="color:#0000FF">&gt;</span>Log In<span style="color:#0000FF">&lt;/</span><span style="color:#800000">a</span><span style="color:#0000FF">&gt;</span> ]</span>
+<span class="strikeLine" style="text-decoration:line-through;">                <span style="color:#0000FF">&lt;/</span><span style="color:#800000">AnonymousTemplate</span><span style="color:#0000FF">&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">                <span style="color:#0000FF">&lt;</span><span style="color:#800000">LoggedInTemplate</span><span style="color:#0000FF">&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">                    Welcome <span style="color:#0000FF">&lt;</span><span style="color:#800000">span</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;bold&quot;</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LoginName</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;HeadLoginName&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#0000FF">/&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">span</span><span style="color:#0000FF">&gt;</span>!</span>
+<span class="strikeLine" style="text-decoration:line-through;">                    [ <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LoginStatus</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;HeadLoginStatus&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">LogoutAction</span>=<span style="color:#0000FF">&quot;Redirect&quot;</span> <span style="color:#FF0000">LogoutText</span>=<span style="color:#0000FF">&quot;Log Out&quot;</span> <span style="color:#FF0000">LogoutPageUrl</span>=<span style="color:#0000FF">&quot;~/&quot;</span><span style="color:#0000FF">/&gt;</span> ]</span>
+<span class="strikeLine" style="text-decoration:line-through;">                <span style="color:#0000FF">&lt;/</span><span style="color:#800000">LoggedInTemplate</span><span style="color:#0000FF">&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">            <span style="color:#0000FF">&lt;/</span><span style="color:#C71585">asp</span>:<span style="color:#800000">LoginView</span><span style="color:#0000FF">&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">        <span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span></span>
+        <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;clear hideSkiplink&quot;</span><span style="color:#0000FF">&gt;</span>
+<span class="strikeLine" style="text-decoration:line-through;">            <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Menu</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;NavigationMenu&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">CssClass</span>=<span style="color:#0000FF">&quot;menu&quot;</span> <span style="color:#FF0000">EnableViewState</span>=<span style="color:#0000FF">&quot;false&quot;</span> <span style="color:#FF0000">IncludeStyleBlock</span>=<span style="color:#0000FF">&quot;false&quot;</span> <span style="color:#FF0000">Orientation</span>=<span style="color:#0000FF">&quot;Horizontal&quot;</span><span style="color:#0000FF">&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">                <span style="color:#0000FF">&lt;</span><span style="color:#800000">Items</span><span style="color:#0000FF">&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">                    <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">MenuItem</span> <span style="color:#FF0000">NavigateUrl</span>=<span style="color:#0000FF">&quot;~/Default.aspx&quot;</span> <span style="color:#FF0000">Text</span>=<span style="color:#0000FF">&quot;Home&quot;</span><span style="color:#0000FF">/&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">                    <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">MenuItem</span> <span style="color:#FF0000">NavigateUrl</span>=<span style="color:#0000FF">&quot;~/About.aspx&quot;</span> <span style="color:#FF0000">Text</span>=<span style="color:#0000FF">&quot;About&quot;</span><span style="color:#0000FF">/&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">                <span style="color:#0000FF">&lt;/</span><span style="color:#800000">Items</span><span style="color:#0000FF">&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">            <span style="color:#0000FF">&lt;/</span><span style="color:#C71585">asp</span>:<span style="color:#800000">Menu</span><span style="color:#0000FF">&gt;</span></span>
+        <span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span>
+...
+</code></pre></li>
+<li><p>打开 <strong>Web.config</strong> 文件并删除以下部分：</p>
+
+<p>-<strong>connectionStrings</strong></p>
+
+<p>-<strong>system.web/authentication</strong></p>
+
+<p>-<strong>system.web/membership</strong></p>
+
+<p>-<strong>system.web/profile</strong></p>
+
+<p>-<strong>system.web/roleManager</strong></p>
+
+<p>最终的 <strong>Web.config</strong> 代码应该如下所示：</p>
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;?</span>xml version=&quot;1.0&quot;<span style="color:#0000FF">?&gt;</span>
+<span style="color:#008000">&lt;!-- For more information on how to configure your ASP.NET application, please visit http://go.microsoft.com/fwlink/?LinkId=169433 --&gt;</span>
+
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">compilation</span> <span style="color:#FF0000">debug</span>=<span style="color:#0000FF">&quot;false&quot;</span> <span style="color:#FF0000">targetFramework</span>=<span style="color:#0000FF">&quot;4.0&quot;</span> <span style="color:#0000FF">/&gt;</span>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.webServer</span><span style="color:#0000FF">&gt;</span>
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">modules</span> <span style="color:#FF0000">runAllManagedModulesForAllRequests</span>=<span style="color:#0000FF">&quot;true&quot;</span><span style="color:#0000FF">/&gt;</span>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.webServer</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>所有这些清理并不是必须的，但这么做有助于保持简单化并突出强调了与 ACS 集成所需的代码。</p>
+</blockquote></li>
+<li><p>按 <strong>F5</strong> 以运行网站并确保它按预期工作。如果出现<strong>“未启用调试”</strong>提示，请选择<strong>“修改 Web.config 文件以启用调试”</strong>，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="./images/Debugger-Not-Enabled-Alert.png?raw=true" alt="&quot;未启用调试器&quot; 提示" title="&quot;未启用调试器&quot; 提示" />
+</p>
+
+<p><em>“未启用调试器”提示</em></p>
+
+<p><img src="./images/Running-the-Application.png?raw=true" alt="运行服务" title="运行服务" />
+</p>
+
+<p><em>运行服务</em></p></li>
+<li><p>关闭浏览器。</p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Configure_one_entry_for_the_cloud_service_in_the_Access_Control_Service_with_the_Windows_Azure_Portal">任务 2 - 使用 Windows Azure 门户在访问控制服务中配置云服务的条目</h4>
+
+<p>在可以使用 ACS 进行身份验证前，您需要让 ACS 了解您的云服务。在管理门户中，只需对 Windows Azure 命名空间稍加处理，即可轻松实现此目标。</p>
+
+<ol>
+<li><p>导航到 <a href="https://manage.windowsazure.com/"><a href="https://manage.windowsazure.com/">https://manage.windowsazure.com/</a></a>。如果您尚未登录，系统会提示您输入 Microsoft 帐户凭据。</p></li>
+<li><p>要使用访问控制，您需要访问旧版管理门户。为此，请将鼠标悬停在主页标题中的<strong>“预览”</strong>上并单击<strong>“转到以前的门户”</strong>。</p>
+
+<p><img src="images/switch-to-previous-portal.png?raw=true" alt="切换到以前的门户" title="切换到以前的门户" />
+</p>
+
+<p><em>切换到以前的门户</em></p></li>
+<li><p>在以前的门户中，转到导航窗格下的<strong>“Service Bus、访问控制和 Caching”</strong>。</p></li>
+<li><p>选择导航窗格中的<strong>“访问控制”</strong>项。</p></li>
+<li><p>选中该<strong>命名空间</strong>后，单击顶部工具栏上的<strong>“访问控制服务”</strong>。请确保您的浏览器允许 appservices.azure.com 显示弹出窗口。</p>
+
+<p><img src="./images/Click-the-Access-Control-Service--Manage-button.png?raw=true" alt="单击“访问控制服务 - 管理”按钮" title="单击“访问控制服务 - 管理”按钮" />
+</p>
+
+<p><em>单击“访问控制服务 - 管理”</em></p></li>
+<li><p>这将在一个单独的浏览器窗口或选项卡中启动<strong>访问控制服务管理门户</strong>，如下图所示。</p>
+
+<p><img src="./images/Access-Control-Service-Management-Portal.png?raw=true" alt="访问控制服务管理门户" title="访问控制服务管理门户" />
+</p>
+
+<p><em>访问控制服务管理门户</em></p>
+<blockquote>
+<p><strong>注意：</strong>该管理门户提供了 ACS 中可修改的所有设置的全局视图。在此任务中，我们要添加新的云服务：在标识 jargon 中，您使用表达式“信赖方”指代一个云服务。</p>
+</blockquote></li>
+<li><p>单击导航菜单中的<strong>“信赖方应用程序”</strong>链接，以便向 ACS 注册您的网站。“信赖方”是代表云服务的标识，是使用标识的实体；另外，您可能也猜到了，“标识提供者”是指负责存储标识并能够对用户进行身份验证的实体。</p>
+
+<p><img src="./images/Identity-Providers-configured.png?raw=true" alt="已配置的标识提供者" title="已配置的标识提供者" />
+</p>
+
+<p><em>已配置的标识提供者</em></p></li>
+<li><p>单击“信赖方应用程序”表上方的<strong>“添加”</strong>链接，并将表单内容填写如下：</p>
+
+<p>-<strong>名称：</strong>WebSiteAdvancedACS -<strong>模式：</strong>手动输入设置 -<strong>区域：</strong>https://localhost/WebSiteAdvancedACS/ -<strong>返回 URL：</strong>https://localhost/WebSiteAdvancedACS/Default.aspx -<strong>错误 URL：</strong>将此字段留空 -<strong>令牌格式：</strong>SAML 1.1 -<strong>令牌加密策略：</strong>无 -<strong>令牌生存期(秒)：</strong>600 -<strong>标识提供者：</strong>保留默认值 (Windows Live ID) -<strong>规则组：</strong>创建新规则组 -<strong>令牌签名：</strong>使用服务命名空间证书（标准）</p>
+<blockquote>
+<p><strong>注意：</strong>这些值向 ACS 提供了用于处理您的云服务的身份验证所需的所有信息。我们将在后面详细介绍：在此处只是告诉您在身份验证成功后，ACS 会向云服务发回一个安全令牌（如 XML 片段、一段二进制或 json 代码或用于数据签名的任何项目）作为身份验证已成功完成的证明。为此，ACS 需要知道应将令牌返回给的云服务的地址、要创建的令牌具有的特征等。</p>
+</blockquote>
+<p>在此实验中，我们将提供如何使方案正常运行的说明，但是不详细介绍相关的基础安全机制和协议。如果您想详细了解在此期间后台发生的操作，请观看培训包的演示和视频部分。</p>
+
+<p><img src="./images/Add-Relying-Party-Application.png?raw=true" alt="添加信赖方应用程序" title="添加信赖方应用程序" />
+</p>
+
+<p><em>添加信赖方应用程序</em></p>
+<blockquote>
+<p><strong>注意：</strong>“区域”<em></em>字段必须具有结尾的斜杠，否则身份验证操作将失败。</p>
+</blockquote></li>
+<li><p>单击<strong>“保存”</strong>。</p></li>
+<li><p>在导航菜单的<strong>“开发”</strong>部分，单击<strong>“应用程序集成”</strong>链接。当配置云服务以利用 ACS 时，此处提供了各种便利的 URI。</p></li>
+<li><p>进入<strong>“端点引用”</strong>部分并复制 <strong>WS 联合身份验证元数据</strong>的值。在下一步一开始，您就会明白它是什么以及它用来做什么。</p>
+
+<p><img src="./images/Copying-WS-Federation-Metadata.png?raw=true" alt="复制 WS 联合身份验证元数据" title="复制 WS 联合身份验证元数据" />
+</p>
+
+<p><em>复制 WS 联合身份验证元数据</em></p></li>
+</ol>
+
+<p><a name="Ex1Task3"></a></p>
+
+<h4 id="Task_3_-_Configuring_a_Website_to_Accept_Tokens_from_Access_Control_Service">任务 3 - 配置网站以接受来自访问控制服务的令牌</h4>
+
+<p>对于云服务，将身份验证外包给 ACS 意味着未经过身份验证的用户的每个请求都会转发到 ACS。ACS 将执行一些操作来触发身份验证（参见下面的详细信息），而且我们在前文中已经看到，结果是生成一个安全令牌。所有这些重定向通常是根据特定协议来执行的，而这些协议与平台和供应商无关。</p>
+
+<p>ACS 可以用各种协议发出不同类型的令牌。对于网站来说，默认协议是 WS 联合身份验证。无须深入太多细节，只须知道一点就足够了：WS 联合身份验证是一种 Windows Identity Foundation (WIF) 本身能够理解的协议，它是 .NET Framework 的扩展，可以用来将云服务身份验证轻松地外包给令牌源，例如 ACS 本身。具体来说，WIF 用向导对 Visual Studio 进行扩展，无须您写任何代码，该向导即可自动配置云服务将身份验证外包。它唯一需要的就是待用令牌源的机器可读描述的地址：在本例中，该描述为任务 3 最后步骤所保存的 WS 联合身份验证元数据地址。用标识术语来说，发出安全令牌的服务称为安全令牌服务 (STS)。</p>
+
+<p>在此任务中，您将使用 WIF 向导将身份验证外包给 ACS。</p>
+
+<ol>
+<li><p>返回到 Visual Studio，在<strong>解决方案资源管理器</strong>中，右键单击 <strong>https://localhost/WebSiteAdvancedACS/</strong> 项目并选择<strong>“添加 STS 引用”</strong>。</p></li>
+<li><p>当显示<strong>“联合实用工具”</strong>窗口时，按向导的每个步骤完成以下任务。</p>
+
+<ol>
+<li><p>在<strong>“欢迎”</strong>页上单击<strong>“下一步”</strong>，以继续使用预填的字段值。</p>
+
+<p><img src="./images/Federation-Utility-Wizard.png?raw=true" alt="联合实用工具向导" title="联合实用工具向导" />
+</p>
+
+<p><em>联合实用工具向导</em></p></li>
+<li><p>在<strong>“安全令牌服务”</strong>页上，选择<strong>“使用现有 STS”</strong>并将<strong>任务 2 的步骤 10</strong> 中获得的端点地址粘贴到<strong>“使用现有 STS”</strong>字段，然后单击<strong>“下一步”</strong>。该端点提供描述 WS 联合身份验证 STS（ACS 在您的 Windows Azure 命名空间中公开它）的文档。</p>
+
+<p><img src="./images/Use-an-Existing-STS-option.png?raw=true" alt="“使用现有 STS”选项" title="“使用现有 STS”选项" />
+</p>
+
+<p><em>“使用现有 STS”选项</em></p></li>
+<li><p>在<strong>“STS 签名证书链验证错误”</strong>页上，选择<strong>“禁用证书链验证”</strong>并单击<strong>“下一步”</strong>。</p>
+
+<p><img src="./images/Disable-certificate-chain-validation-option.png?raw=true" alt="“禁用证书链验证”选项" title="“禁用证书链验证”选项" />
+</p>
+
+<p><em>“禁用证书链验证”选项</em></p></li>
+<li><p>在<strong>“安全令牌加密”</strong>页上，选择<strong>“无加密”</strong>并单击<strong>“下一步”</strong>。</p>
+
+<p><img src="./images/Security-Token-encryption.png?raw=true" alt="安全令牌加密" title="安全令牌加密" />
+</p>
+
+<p><em>安全令牌加密</em></p></li>
+<li><p>在<strong>“提供的声明”</strong>页上，单击<strong>“下一步”</strong>。</p>
+
+<p><img src="./images/Offered-Claims.png?raw=true" alt="提供的声明" title="提供的声明" />
+</p>
+
+<p><em>提供的声明</em></p>
+<blockquote>
+<p><strong>注意：</strong>WS 联合身份验证元数据可以包含对端点所提供声明的描述。向导显示这些描述信息，以便您了解在云服务中将可以处理的传入用户的什么信息。在本例中，ACS 声明它可以发布信息说明身份验证实际使用了哪个标识提供者，并指出用户标识符。</p>
+</blockquote></li>
+<li><p>在<strong>“摘要”</strong>页检查要做的修改，然后单击<strong>“完成”</strong>。</p></li>
+</ol></li>
+</ol>
+
+<p><a name="Ex1Task4"></a></p>
+
+<h4 id="Task_4_-_Use_the_ACS_Management_Portal_to_Trust_a_Business_Identity_Provider_and_Process_User_Attributes_via_Claims_Mapping_Rules">任务 4 - 使用 ACS 管理门户通过声明映射规则信任商业标识提供者和处理用户属性</h4>
+
+<p><img src="./images/ACS-does-not-directly-authenticate-users,-but-it-brokers-authentication-between-your-application-and-.png?raw=true" alt="ACS 不直接对用户进行身份验证，而是作为您的云服务和多个提供者之间的身份验证中介" title="ACS 不直接对用户进行身份验证，而是作为您的云服务和多个提供者之间的身份验证中介" />
+</p>
+
+<p><em>ACS 不直接对用户进行身份验证，而是作为您的云服务和多个提供者之间的身份验证中介。此图显示简化的身份验证流程，此流程将在以下任务中进行说明</em></p>
+
+<p>ACS 不直接对用户进行身份验证：在大多数常见案例中，它不维护用户名和密码等凭据，而是作为您的云服务和其他提供者之间的身份验证中介。假定您正在为仓库开发一个库存云服务，两个合作伙伴公司需要访问它以出售您的商品。您希望这两个合作伙伴公司的员工可以对您的云服务进行经过身份验证的访问，但是不想管理它们的标识。ACS 可以解决这个问题：假定这些公司也公开自己的 STS，ACS 只需要将未经过身份验证的请求重定向到一个或另一个公司的标识提供者，处理所得的令牌并将新的身份验证令牌发回您的云服务。这样用户不必将自己的凭据暴露在其基础结构外部，您也不必管理自己不拥有的凭据。通过 STS 公开验证用户身份功能的组织称为标识提供者（简称为 IP）。</p>
+
+<p>在此任务中，您将使用门户来配置 ACS，以接受两个标识提供者中的第一个提供者的用户。</p>
+
+<ol>
+<li><p>返回到浏览器，单击菜单的<strong>“信任关系”</strong>部分的<strong>“标识提供者”</strong>链接。该管理门户的主要工作区将显示一个有助于管理云服务用户使用的标识提供者的页面。</p>
+
+<p><img src="./images/Identity-Providers.png?raw=true" alt="标识提供者" title="标识提供者" />
+</p>
+
+<p><em>标识提供者</em></p></li>
+<li><p>单击“标识提供者”表上面的<strong>“添加”</strong>链接，选择<strong>“WS 联合身份验证标识提供者”</strong>，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="./images/Adding-Identity-Provider.png?raw=true" alt="添加标识提供者" title="添加标识提供者" />
+</p>
+
+<p><em>添加标识提供者</em></p>
+<blockquote>
+<p><strong>注意：</strong>ACS 可以用作不同类型的标识提供者的身份验证中介。Windows Live ID、Google、Yahoo 和 Facebook 等 Web IP 是在公共 Internet 上提供的所有服务，这些服务由它们各自的 STS（或等效项）地址、它们共享的有关用户的属性（声明）集合以及它们所使用的身份验证协议来定义。</p>
+
+<p>相反，商业 IP 的行为略有不同。每个公司将具有自己的 STS 地址，共享有关用户的不同声明等等。在 ACS 中，您可以添加多个商业 IP：ACS 的一个优势是它可以帮助管理很多信任关系而不必加重云服务代码的负担。</p>
+
+<p>到目前为止，ACS 用于处理云服务商业 IP 的协议为 WS 联合身份验证。在 Windows 平台上，公开 STS 的标准方式是使用 Active Directory Federation Services 2.0，而这正是用于添加商业 IP 的“添加”按钮标注成图 22 中那样的原因。但是，任何 WS 联合身份验证 STS 都应有效，即使来自非 Windows 平台（WS 联合身份验证是与供应商无关的开放式标准）。</p>
+</blockquote></li>
+<li><p>使用以下信息填写表单：</p>
+
+<p>-<strong>标识提供者设置</strong></p>
+
+<p>-显示名称：<em>SelfSTS1</em></p>
+
+<p>-WS 联合身份验证元数据：<em></em>选择<strong>“文件”</strong>，然后通过<strong>浏览</strong>找到实验文件夹中的 Source\Assets\SelfSTS1\FederationMetada.xml<em></em> 文件</p>
+
+<p>-<strong>登录页设置</strong></p>
+
+<p>-登录链接文本：<em>SelfSTS1</em></p>
+
+<p>-图像 URL：<em>（留空）</em></p>
+
+<p>-电子邮件域名：<em>（留空）</em></p>
+
+<p>-<strong>使用者</strong></p>
+
+<p>-信赖方应用程序：<em>WebSiteAdvancedACS</em></p>
+
+<p><img src="./images/Filling-information-about-the-first-business-IP-in-the-ACS-portal.png?raw=true" alt="在 ACS 门户中填写有关第一个商业 IP 的信息" title="在 ACS 门户中填写有关第一个商业 IP 的信息" />
+</p>
+
+<p><em>在 ACS 门户中填写有关第一个商业 IP 的信息</em></p>
+<blockquote>
+<p><strong>注意：</strong>您刚填写的表单在功能上与任务 3 中在云服务上运行的向导等效，这次是应用到 ACS。该向导是配置云服务以将未经过身份验证的请求重定向到 ACS 并接受所得的令牌作为身份验证证明；而此表单则是配置 ACS 以将未经过身份验证的请求重定向到第一个商业 IP 并接受它发出的令牌作为身份验证证明。</p>
+
+<p>在下面您将了解我们在此实验中用于模拟商业 IP 的 STS 的详细信息。</p>
+</blockquote></li>
+<li><p>单击<strong>“保存”</strong>。</p></li>
+<li><p>在导航菜单的<strong>“信任关系”</strong>部分，单击<strong>“规则组”</strong>链接以便为您的云服务选择默认的规则组。</p>
+
+<p><img src="./images/The-current-rule-groups-list-contains-just-the-default-rule-group-.png?raw=true" alt="当前规则组列表仅包含默认规则组" title="当前规则组列表仅包含默认规则组" />
+</p>
+
+<p><em>当前规则组列表仅包含默认规则组</em></p>
+<blockquote>
+<p><strong>注意：</strong>安全令牌的一个很重要的方面是它们包含声明（即描述由源 STS 声称的经过身份验证的用户的属性）。这些声明可以是有关用户的任何方面的信息（名称、电子邮件、组成员身份、权限、消费限制等），它们提供驱动身份验证和授权过程的关键信息。ACS 提供了相应的规则引擎，可以处理在传入的令牌中收到的声明，并在要发回云服务的令牌中包含转换后的声明。输出令牌中的声明通常是从 IP 接收的值的简单传递，但是在很多情况下，ACS 将执行重要的转换，如基于源组织中的组成员身份将云服务特定的角色分配给传入的用户。在下面的步骤中，您将了解如何设置一些简单的转换规则。</p>
+</blockquote></li>
+<li><p>单击<strong>“WebsiteAdvacedACS 的默认规则组”</strong><strong></strong>。</p></li>
+<li><p>单击<strong>“添加”</strong>链接。</p>
+
+<p><img src="./images/Add-Rule-link.png?raw=true" alt="“添加规则”链接" title="“添加规则”链接" />
+</p>
+
+<p><em>“添加规则”链接</em></p></li>
+<li><p>使用以下值填写规则：</p>
+
+<p>-<strong>如果...</strong></p>
+
+<p>-<strong>声明颁发者：</strong>选择<em><strong>“标识提供者”</strong></em>，然后在下拉列表中选择 <em>SelfSTS1</em></p>
+
+<p>-<strong>输入声明类型：</strong>选择<em><strong>“选择类型”</strong></em>，然后在下拉列表中选择 <em><a href="http://selfsts1.com/claims/name">http://selfsts1.com/claims/name</a></em> 值</p>
+
+<p>-<strong>输入声明值：</strong>选择<em><strong>“任意”</strong></em></p>
+
+<p>-<strong>则</strong>...</p>
+
+<p>-<strong>输出声明类型：</strong>选择<em><strong>“选择类型”</strong></em>，然后选择 <em>shttp://schemas.xmlsoap.org/ws/2005/05/identity/claims/name</em></p>
+
+<p>-<strong>输出声明值：</strong>选择<em><strong>“传递输入声明值”</strong></em></p>
+
+<p>-<strong>规则信息</strong></p>
+
+<p>-<strong>说明：</strong>传递 SelfSTS1 的“name”声明作为“name”</p>
+
+<p><img src="./images/Adding-name-pass-through-Rule.png?raw=true" alt="添加名称传递规则" title="添加名称传递规则" />
+</p>
+
+<p><em>添加名称传递规则</em></p></li>
+<li><p>单击<strong>“保存”</strong>。</p></li>
+<li><p>重复之前的步骤以添加以下 3 个额外规则：</p>
+
+<table><thead>
+<tr>
+<td><strong>规则 2</strong></td>
+<td><strong>值</strong></td>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>声明颁发者</strong></td>
+<td><strong>标识提供者</strong> - SelfSTS1</td>
+</tr>
+<tr>
+<td><strong>(与) 输入声明类型</strong></td>
+<td><strong>选择类型</strong> - <a href="http://selfsts1.com/claims/emailaddress">http://selfsts1.com/claims/emailaddress</a></td>
+</tr>
+<tr>
+<td><strong>(与) 输入声明值</strong></td>
+<td><strong>任意</strong></td>
+</tr>
+<tr>
+<td><strong>输出声明类型</strong></td>
+<td><strong>选择类型</strong> - <a href="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress">http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress</a></td>
+</tr>
+<tr>
+<td><strong>输出声明值</strong></td>
+<td><strong>传递输入声明值</strong></td>
+</tr>
+<tr>
+<td><strong>说明</strong></td>
+<td>传递 SelfSTS1 的“emailaddress”声明作为“emailaddress”</td>
+</tr>
+</tbody></table>
+<table><thead>
+<tr>
+<td><strong>规则 3</strong></td>
+<td><strong>值</strong></td>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>声明颁发者</strong></td>
+<td><strong>标识提供者</strong> - SelfSTS1</td>
+</tr>
+<tr>
+<td><strong>(与) 输入声明类型</strong></td>
+<td><strong>选择类型</strong> - <a href="http://selfsts1.com/claims/Group">http://selfsts1.com/claims/Group</a></td>
+</tr>
+<tr>
+<td><strong>(与) 输入声明值</strong></td>
+<td><strong>输入值</strong> - Administrators</td>
+</tr>
+<tr>
+<td><strong>输出声明类型</strong></td>
+<td><strong>输入类型</strong> - <a href="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/role">http://schemas.xmlsoap.org/ws/2005/05/identity/claims/role</a></td>
+</tr>
+<tr>
+<td><strong>输出声明值</strong></td>
+<td><strong>输入值</strong> - Gold</td>
+</tr>
+<tr>
+<td><strong>说明</strong></td>
+<td>映射 Gold 规则</td>
+</tr>
+</tbody></table>
+<table><thead>
+<tr>
+<td><strong>规则 4</strong></td>
+<td><strong>值</strong></td>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>声明颁发者</strong></td>
+<td><strong>标识提供者</strong> - SelfSTS1</td>
+</tr>
+<tr>
+<td><strong>(与) 输入声明类型</strong></td>
+<td><strong>选择类型</strong> - <a href="http://selfsts1.com/claims/Group">http://selfsts1.com/claims/Group</a></td>
+</tr>
+<tr>
+<td><strong>(与) 输入声明值</strong></td>
+<td><strong>输入值</strong> - Users</td>
+</tr>
+<tr>
+<td><strong>输出声明类型</strong></td>
+<td><strong>输入类型</strong> - <a href="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/role">http://schemas.xmlsoap.org/ws/2005/05/identity/claims/role</a></td>
+</tr>
+<tr>
+<td><strong>输出声明值</strong></td>
+<td><strong>输入值</strong> - Silver</td>
+</tr>
+<tr>
+<td><strong>说明</strong></td>
+<td>映射 Silver 规则</td>
+</tr>
+</tbody></table><blockquote>
+<p><strong>注意：</strong>您添加的前三个规则只是传递名称、组和电子邮件声明。规则 #3 和 #4 将 SelfSTS1 商业 IP 的组声明映射到 ACS 中的角色声明：分别将 Administrators 和 Users 角色映射到 Gold 和 Silver 角色。这是保持您的云服务代码不受组织特定因素影响的好方法。您的云服务只需要关注当前用户是 silver 还是 gold 并授予相应的访问权限即可。如果合作公司的业务发生变化，从现在开始 Users 和 Administrator 角色都应被授予 Gold 角色，您只需要更改规则 4：无需修改云服务代码。</p>
+</blockquote></li>
+<li><p>在<strong>“编辑规则组”</strong>页中，验证您刚刚创建的规则并单击<strong>“保存”</strong>。</p>
+
+<p><img src="./images/Saving-group-rules.png?raw=true" alt="保存规则组" title="保存规则组" />
+</p>
+
+<p><em>保存规则组</em></p></li>
+<li><p>您已完成 SelfSTS1（ACS 中的第一个商业 IP）的整个配置并设置您的网站以信任 ACS。现在您将通过运行 SelfSTS1 来验证其行为。现在应该验证一切是否按预期那样工作。为此，请执行 <strong>\Source\Assets\SelfSTS1</strong> 中的 SelfSTS.exe 文件。</p>
+<blockquote>
+<p><strong>注意：</strong>在实际设置中，商业 IP 将通过 ADFS2.0 公开其 STS。但是，这将需要很多基础结构，包括 Active Directory 和要启用所需服务器角色的 Windows Server 计算机。不过，我们希望您能使用此方案做实验，即使您只有一台独立 PC。为此，此动手实验使用 SelfSTS，后者是公开最小 WS 联合身份验证 STS 端点的简单实用工具。SelfSTS 只是一个 Windows Forms 应用程序，它甚至不需要设置就可以在提供 WIF 运行时的任何系统上运行。在开发使用 Windows Identity Foundation 保护的网站时，SelfSTS 可用作测试 STS。您可以在 SelfSTS MSDN 代码页上找到更多信息。</p>
+
+<p>您在 ACS 上作为应用程序开发者配置商业 IP 所需执行的所有任务与您使用 ADFS2.0（而非 SelfSTS）时执行的任务完全相同。</p>
+</blockquote>
+<p><img src="./images/The-SelfSTS-utility-is-here-used-for-simulating-the-first-business-IP-in-the-scenario.png?raw=true" alt="SelfSTS 实用工具在此处用于模拟方案中的第一个商业 IP" title="SelfSTS 实用工具在此处用于模拟方案中的第一个商业 IP" />
+</p>
+
+<p><em>SelfSTS 实用工具在此处用于模拟方案中的第一个商业 IP</em></p></li>
+<li><p>单击<strong>“启动”</strong>：SelfSTS 端点将开始在所示端口上侦听请求。</p>
+
+<p><img src="./images/The-SelfSTS-is-now-listening-for-requests-on-the-specified-local-port.png?raw=true" alt="SelfSTS 现在正在指定的本地端口上侦听请求" title="SelfSTS 现在正在指定的本地端口上侦听请求" />
+</p>
+
+<p><em>SelfSTS 现在正在指定的本地端口上侦听请求</em></p></li>
+<li><p>返回到浏览器，单击<strong>“信任关系”</strong>部分下的<strong>“信赖方应用程序”</strong>链接。</p></li>
+<li><p>单击 <strong>WebSiteAdvancedACS</strong> 信赖方。</p>
+
+<p><img src="./images/The-WebSiteAdvancedACS-Relying-Party-configured-in-ACS.png?raw=true" alt="在 ACS 中配置的 WebSiteAdvancedACS 信赖方" title="在 ACS 中配置的 WebSiteAdvancedACS 信赖方" />
+</p>
+
+<p><em>在 ACS 中配置的 WebSiteAdvancedACS 信赖方</em></p></li>
+<li><p>在<strong>“编辑信赖方应用程序”</strong>页上，取消选中“标识提供者”列表中的 <strong>Windows Live ID</strong> 选项，然后单击<strong>“保存”</strong>。</p>
+
+<p><img src="./images/Removing-Windows-Live-ID-Identity-Provider.png?raw=true" alt="删除 Windows Live ID 标识提供者" title="删除 Windows Live ID 标识提供者" />
+</p>
+
+<p><em>删除 Windows Live ID 标识提供者</em></p>
+<blockquote>
+<p><strong>注意：</strong>Windows Live ID 是当您创建信赖方时 ACS 作为初始选择添加的 IP。对于开发而言，它是合理的默认值，因为它是开发者肯定与其有关系的唯一 IP（需要一个 Windows Live ID 帐户来注册 ACS 实验和创建 Windows Azure 命名空间）。但是在此方案中，我们只关注如何处理两个特定商业 IP 的标识，因此不选择它。</p>
+
+<p>我们发现一个有趣的事：ACS 可以轻松解决我们一直想解决的难题，即用户可以既来自 Web IP（Windows Live ID、Facebook、Google、Yahoo）又可以来自商业 IP。</p>
+</blockquote></li>
+<li><p>返回到 Visual Studio，按 <strong>F5</strong> 以运行该网站。</p></li>
+<li><p>信赖方云服务 <em>(https://localhost/WebSiteAdvancedACS/)</em> 将重定向到<strong>“访问控制服务”</strong>来进行身份验证。</p></li>
+<li><p>访问控制向云服务发送它预期的声明，此时我们通过身份验证。</p>
+
+<p><img src="./images/User-Authenticated.png?raw=true" alt="用户通过身份验证" title="用户通过身份验证" />
+</p>
+
+<p><em>用户通过身份验证</em></p>
+<blockquote>
+<p><strong>注意：</strong>如果在浏览器中打开云服务时您认真查看其地址栏，可以看到整个重定向操作进行的顺序：首先是网站，其次是 STS，然后返回网站。如果您要查看详细流程，可以利用一些实用工具（如 Fiddler 或 Internet Explorer 9 流量捕获实用工具）。</p>
+
+<p><strong>注意：</strong>为了使此动手实验简单一点，我们不向将利用传入声明的网站添加任何代码（即将对某个页的访问权限授予 gold 用户但不授予其他人）。通过 WIF 可以轻松完成这个过程：如果您想了解如何在云服务访问策略中利用传入声明，请参考此培训包中的 WIF 动手实验。</p>
+</blockquote></li>
+<li><p>关闭浏览器。</p></li>
+</ol>
+
+<p><a name="Ex1Task5"></a></p>
+
+<h4 id="Task_5_-_Use_the_ACS_Management_API_to_Trust_a_Second_Business_Identity_Provider_and_Create_Claims_Mapping_Rules">任务 5 - 使用 ACS 管理 API 信任第二个商业标识提供者并创建声明映射规则</h4>
+
+<p>使用 ACS 管理门户管理信任关系和转换规则很方便。但是，在某些情况下无法使用交互式方法。例如，您可能需要将自动设置新 IP 作为现有批处理过程的一部分，或需要更改访问规则以响应编程事件。对于这些情况，ACS 提供了一个基于详尽 OData 的 API，该 API 允许您更改可以使用门户进行更改的所有设置。下一个任务将使您了解可以使用管理 API 做什么：您将通过 API 添加第二个商业 IP（由另一 SelfSTS 实例模拟）并配置相关的声明转换规则。</p>
+
+<ol>
+<li><p>返回到浏览器，单击菜单的<strong>“管理”</strong>部分下的<strong>“管理服务”</strong>链接。</p></li>
+<li><p>在<strong>“管理服务”</strong>页的<strong>“管理服务帐户”</strong>部分，单击 <strong>ManagementClient</strong> 链接。</p>
+
+<p><img src="./images/Selecting-ManagementClient.png?raw=true" alt="选择 ManagementClient" title="选择 ManagementClient" />
+</p>
+
+<p><em>选择 ManagementClient</em></p></li>
+<li><p>在<strong>“凭据”</strong>部分，单击<strong>“密码”</strong>链接。</p>
+
+<p><img src="./images/Access-Control-Management-Service-Identity-Password..png?raw=true" alt="访问控制管理服务标识密码。" title="访问控制管理服务标识密码。" />
+</p>
+
+<p><em>访问控制管理服务标识密码。</em></p>
+<blockquote>
+<p><strong>注意：</strong>当然要对所有管理 API 的调用进行身份验证。您需要使用 ACS 中为此命名空间定义的凭据。</p>
+</blockquote></li>
+<li><p>将<strong>“密码”</strong>字段的值复制到记事本，因为您将在接下来的步骤中使用它，然后单击<strong>“取消”</strong>。</p>
+
+<p><img src="./images/Copying-the-management-key.png?raw=true" alt="复制管理密钥" title="复制管理密钥" />
+</p>
+
+<p><em>复制管理密钥</em></p></li>
+<li><p>返回到 Visual Studio，添加 <strong>ManagementServiceProject</strong> 项目。为此，右键单击 <strong>WebSiteAdvancedACS</strong> 解决方案，然后选择<strong>“添加”|“现有项目”</strong>。</p></li>
+<li><p>在<strong>“添加现有项目”</strong>对话框中，选择此试验的 <strong>\Source\Assets\ManagementService</strong> 文件夹下的 <strong>ManagementServiceProject.csproj</strong> 文件，然后单击<strong>“打开”</strong>。</p>
+
+<p><img src="./images/Adding-the-ManagementServiceProject.png?raw=true" alt="添加 ManagementServiceProject" title="添加 ManagementServiceProject" />
+</p>
+
+<p><em>添加 ManagementServiceProject</em></p></li>
+<li><p>在 <strong>ManagementServiceProject</strong> 中，打开 <strong>ManagementServiceHelper.cs</strong> 文件。</p></li>
+<li><p>更新以下值。使用记事本中复制的密码更改 <strong>{yourManagementServiceKey}</strong> 占位符。使用您的 ServiceNamespace 更改 <strong>{youServiceNamespace}</strong> 占位符，然后保存该文件。</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">static</span> <span style="color:#0000FF">string</span> serviceIdentityUsernameForManagement = <span style="color:#8B0000">&quot;ManagementClient&quot;</span>;
+<span style="color:#0000FF">static</span> <span style="color:#0000FF">string</span> serviceIdentityPasswordForManagement = **<span style="color:#8B0000">&quot;{yourManagementServiceKey}&quot;</span>;**
+
+<span style="color:#0000FF">static</span> <span style="color:#0000FF">string</span> serviceNamespace = **<span style="color:#8B0000">&quot;{yourServiceNamespace}&quot;</span>**;
+<span style="color:#0000FF">static</span> <span style="color:#0000FF">string</span> acsHostName = <span style="color:#8B0000">&quot;accesscontrol.windows.net&quot;</span>;
+</code></pre></li>
+<li><p>添加名为 <strong>IdentityProviderSetup</strong> 的新控制台应用程序项目。为此，右键单击 <strong>WebSiteAdvancedACS</strong> 解决方案并选择<strong>“添加”|“新建项目”</strong>。然后选择“控制台应用程序”模板，将名称更新为 <strong>IdentityProviderSetup</strong>，单击<strong>“确定”</strong>。</p>
+
+<p><img src="./images/Creating-a-new-Console-Application.png?raw=true" alt="创建新的控制台应用程序" title="创建新的控制台应用程序" />
+</p>
+
+<p><em>创建新的控制台应用程序</em></p></li>
+<li><p>右键单击 <strong>IdentityProviderSetup</strong> 项目并选择<strong>“属性”</strong>。</p></li>
+<li><p>在<strong>“应用程序”</strong>选项卡中，将<strong>“目标 Framework”</strong>更新为 <strong>.Net Framework 4</strong>。在<strong>“目标 Framework 更改”</strong>消息对话框中，单击<strong>“是”</strong>以重新加载该项目。</p>
+
+<p><img src="./images/Updating-the-project-to-target-.Net-Framework-4.png?raw=true" alt="将项目更新为目标 .Net Framework 4" title="将项目更新为目标 .Net Framework 4" />
+</p>
+
+<p><em>将项目更新为目标 .Net Framework 4</em></p></li>
+<li><p>创建名为 <strong>Resources</strong> 的新文件夹。为此，右键单击 <strong>IdentityProviderSetup</strong> 项目，然后单击<strong>“添加”|“新建文件夹”</strong>。将新文件夹命名为 <strong>Resources</strong>。</p></li>
+<li><p>在您刚创建的文件夹中添加位于 <strong>\Source\Assets\SelfSTS2</strong> 下的 <strong>SelfSTS.cer</strong> 文件。</p>
+
+<p><img src="./images/Adding-the-Certificate-for-the-second-Identity-Provider.png?raw=true" alt="添加第二个标识提供者的证书" title="添加第二个标识提供者的证书" />
+</p>
+
+<p><em>添加第二个标识提供者的证书</em></p>
+<blockquote>
+<p><strong>注意：</strong>如前文所述，令牌经过数字签名。为了信任 IP，ACS 需要了解应使用哪个密钥来验证此特定签名。在此处，我们将准备 SelfSTS.cer（即 ACS 应用于验证来自 SelfSTS 的令牌的密钥），在创建信任关系时将该密钥上载。</p>
+</blockquote></li>
+<li><p>右键单击 <strong>Resources\SelfSTS.cer</strong>，在属性上查看<strong>“复制到输出目录”</strong>是否为<strong>“始终复制”</strong>。</p>
+
+<p><img src="./images/Configuring-copy-always-on-the-Certificate-file.png?raw=true" alt="对证书文件配置“始终复制”" title="对证书文件配置“始终复制”" />
+</p>
+
+<p><em>对证书文件配置“始终复制”</em></p></li>
+<li><p>在 <strong>IdentityProviderSetup</strong> 项目中，添加对 <strong>Microsoft.IdentityModel</strong>、<strong>System.Data.Services.Client</strong> 程序集和对 <strong>ManagementServiceProject</strong> 项目的引用。<strong></strong></p></li>
+<li><p>打开 <strong>Program.cs</strong> 并添加以下<strong>加粗的</strong> using 语句。</p>
+
+<p>（代码段 - <em>ACSwithLocalSTS - Ex01 Task5 01 - Using Statements</em> - C#）</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">using</span> System;
+<span style="color:#0000FF">using</span> System.Collections.Generic;
+<span style="color:#0000FF">using</span> System.Linq;
+<span style="color:#0000FF">using</span> System.Text;  <span style="color:#0000FF">using</span> System.Data.Services.Client;
+<span style="color:#0000FF">using</span> System.IO;
+<span style="color:#0000FF">using</span> ACS.Management;
+<span style="color:#0000FF">using</span> Common.ACS.Management;
+</code></pre></li>
+<li><p>在 <strong>Program.cs</strong> 文件中添加以下内部类。</p>
+
+<p>（代码段 - <em>ACSwithLocalSTS - Ex01 Task5 02- RuleTypes Class</em> - C#）</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">internal</span> <span style="color:#0000FF">class</span> RuleTypes {
+  <span style="color:#0000FF">public</span> <span style="color:#0000FF">const</span> <span style="color:#0000FF">string</span> Simple = <span style="color:#8B0000">&quot;Simple&quot;</span>;
+  <span style="color:#0000FF">public</span> <span style="color:#0000FF">const</span> <span style="color:#0000FF">string</span> Passthrough = <span style="color:#8B0000">&quot;Passthrough&quot;</span>; }
+</code></pre></li>
+<li><p>要创建新的<strong>标识提供者</strong>，请将以下方法添加到 <strong>Program.cs</strong> 文件的 <strong>Program</strong> 类中。</p>
+
+<p>（代码段 - <em>ACSwithLocalSTS - Ex01 Task5 03 - CreateIdpManually Method</em> - C#）</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#808080">/// &lt;summary&gt;</span>
+<span style="color:#808080">/// Add an Identity Provider</span>
+<span style="color:#808080">/// &lt;/summary&gt;</span>
+<span style="color:#0000FF">private</span> <span style="color:#0000FF">static</span> Issuer CreateIdpManually(DateTime startDate, DateTime endDate, ManagementService svc0, <span style="color:#0000FF">string</span> idpName, <span style="color:#0000FF">string</span> idpDisplayName, <span style="color:#0000FF">string</span> idpAddress, 
+<span style="color:#0000FF">string</span> idpKeyDisplayName) {
+    <span style="color:#0000FF">var</span> issuer = <span style="color:#0000FF">new</span> Issuer { Name = idpName };
+
+    <span style="color:#008000">// Check the Issuer does not exist previouly (if it exists, delete it)            </span>
+    <span style="color:#0000FF">var</span> oldIssuer = svc0.Issuers.Where(ip =&gt; ip.Name == issuer.Name).FirstOrDefault();
+    <span style="color:#0000FF">if</span> (oldIssuer != <span style="color:#0000FF">null</span>) { svc0.DeleteObject(oldIssuer); svc0.SaveChanges(); }
+
+    <span style="color:#008000">// Add Issuer</span>
+    svc0.AddToIssuers(issuer); svc0.SaveChanges(SaveChangesOptions.Batch); Console.WriteLine(<span style="color:#8B0000">&quot;Info: Issuer created: {0}&quot;</span>, idpName);
+
+    <span style="color:#0000FF">var</span> idp = <span style="color:#0000FF">new</span> IdentityProvider { DisplayName = idpDisplayName, LoginLinkName = idpDisplayName, WebSSOProtocolType = <span style="color:#8B0000">&quot;WsFederation&quot;</span>, IssuerId = issuer.Id };
+
+    <span style="color:#008000">// Check the IP does not exist previouly (if it exists, delete it)            </span>
+    <span style="color:#0000FF">var</span> oldIdentityProvider = svc0.IdentityProviders.Where(ip =&gt; ip.DisplayName == idp.DisplayName).FirstOrDefault();
+    <span style="color:#0000FF">if</span> (oldIdentityProvider != <span style="color:#0000FF">null</span>) { svc0.DeleteObject(oldIdentityProvider); svc0.SaveChanges(); }
+
+    <span style="color:#008000">// Add the new IP to ACS</span>
+    svc0.AddObject(<span style="color:#8B0000">&quot;IdentityProviders&quot;</span>, idp);
+
+    <span style="color:#008000">// Console.WriteLine(&quot;Info: Identity Provider created: {0}&quot;, idp.Name);</span>
+    Console.WriteLine(<span style="color:#8B0000">&quot;Info: Identity Provider created: {0}&quot;</span>, idp.DisplayName);
+
+    <span style="color:#008000">// Identity provider public key to verify the signature</span>
+    <span style="color:#0000FF">var</span> cert = File.ReadAllBytes(@&quot;<span style="color:#8B0000">Resources\SelfSTS.cer</span>&quot;);
+    <span style="color:#0000FF">var</span> key = <span style="color:#0000FF">new</span> IdentityProviderKey { IdentityProvider = idp, DisplayName = idpKeyDisplayName, EndDate = endDate, StartDate = startDate, Type = <span style="color:#8B0000">&quot;X509Certificate&quot;</span>, Usage = <span style="color:#8B0000">&quot;Signing&quot;</span>, Value = cert }; svc0.AddRelatedObject(idp, <span style="color:#8B0000">&quot;IdentityProviderKeys&quot;</span>, key); svc0.SaveChanges(SaveChangesOptions.Batch); Console.WriteLine(<span style="color:#8B0000">&quot;Info: Identity Provider Key added: {0}&quot;</span>, idpKeyDisplayName);
+
+    <span style="color:#008000">// WS-Federation sign-in URL</span>
+    <span style="color:#0000FF">var</span> idpaSignIn = <span style="color:#0000FF">new</span> IdentityProviderAddress { IdentityProviderId = idp.Id, EndpointType = <span style="color:#8B0000">&quot;SignIn&quot;</span>, Address = idpAddress }; svc0.AddRelatedObject(idp, <span style="color:#8B0000">&quot;IdentityProviderAddresses&quot;</span>, idpaSignIn); svc0.SaveChanges(SaveChangesOptions.Batch); Console.WriteLine(<span style="color:#8B0000">&quot;Info: Identity Provider Address added: {0}&quot;</span>, idpAddress);
+
+    <span style="color:#0000FF">string</span> labRelyingPartyName = <span style="color:#8B0000">&quot;WebSiteAdvancedACS&quot;</span>;
+
+    <span style="color:#008000">// Relying Party related to the Identity Provider</span>
+    <span style="color:#0000FF">foreach</span> (<span style="color:#0000FF">var</span> existingRelyingParty <span style="color:#0000FF">in</span> svc0.RelyingParties) {
+        <span style="color:#0000FF">var</span> rpid = <span style="color:#0000FF">new</span> RelyingPartyIdentityProvider { IdentityProviderId = idp.Id, RelyingPartyId = existingRelyingParty.Id }; existingRelyingParty.RelyingPartyIdentityProviders.Add(rpid); idp.RelyingPartyIdentityProviders.Add(rpid); svc0.AddToRelyingPartyIdentityProviders(rpid); } svc0.SaveChanges(SaveChangesOptions.Batch); Console.WriteLine(<span style="color:#8B0000">&quot;Info: Relying Party added to Identity Provider: {0}&quot;</span>, labRelyingPartyName);
+
+    <span style="color:#0000FF">return</span> issuer; }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>这里的代码有点多，但是如果您花几分钟查看它，将发现它非常简单：它只提供在您添加新的商业标识提供者时通过门户 UI 所添加的同一信息，并对集合进行一些管理。</p>
+</blockquote></li>
+<li><p>要在现有<strong>规则组</strong>中创建新<strong>规则</strong>，请在 <strong>Program</strong> 类中添加以下方法。</p>
+
+<p>（代码段 - <em>ACSwithLocalSTS - Ex01 Task5 04 - AddRulesToRuleGroup Method</em> - C#）</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#808080">/// &lt;summary&gt;</span>
+<span style="color:#808080">/// Add the Rules into a Rule Group.</span>
+<span style="color:#808080">/// &lt;/summary&gt;</span>
+<span style="color:#0000FF">private</span> <span style="color:#0000FF">static</span> <span style="color:#0000FF">void</span> AddRulesToRuleGroup(<span style="color:#0000FF">string</span> ruleGroupName, <span style="color:#0000FF">string</span> issuerName) { ManagementService svc = ManagementServiceHelper.CreateManagementServiceClient(); RuleGroup rg = svc.RuleGroups.AddQueryOption(<span style="color:#8B0000">&quot;$filter&quot;</span>, <span style="color:#8B0000">&quot;Name eq &#39;&quot;</span> + ruleGroupName + <span style="color:#8B0000">&quot;&#39;&quot;</span>).FirstOrDefault(); Issuer issuer = svc.Issuers.Where(i =&gt; i.Name == issuerName).ToArray()[0]; Rule namePassthroughRule = <span style="color:#0000FF">new</span> Rule() { Issuer = issuer, IssuerId = issuer.Id,
+
+        <span style="color:#008000">//InputClaimIssuerId = issuer.Id,</span>
+        InputClaimType = 
+<span style="color:#8B0000">&quot;http://www.theselfsts2.net/claims/nome&quot;</span>, OutputClaimType = 
+<span style="color:#8B0000">&quot;http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name&quot;</span>, RuleGroup = rg,
+        <span style="color:#008000">//RuleType = RuleTypes.Passthrough,                </span>
+        Description = <span style="color:#8B0000">&quot;Passthrough \&quot;nome\&quot; claim from SelfSTS2 as \&quot;name\&quot;&quot;</span>
+    }; svc.AddRelatedObject(rg, <span style="color:#8B0000">&quot;Rules&quot;</span>, namePassthroughRule); Rule emailPassthroughRule = <span style="color:#0000FF">new</span> Rule() { Issuer = issuer, IssuerId = issuer.Id, InputClaimType = <span style="color:#8B0000">&quot;http://www.theselfsts2.net/claims/postaelettronica&quot;</span>, OutputClaimType = <span style="color:#8B0000">&quot;http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress&quot;</span>, RuleGroup = rg, Description = <span style="color:#8B0000">&quot;Passthrough \&quot;postaelettronica\&quot; claim from SelfSTS2 as \&quot;emailaddress\&quot;&quot;</span>
+    }; svc.AddRelatedObject(rg, <span style="color:#8B0000">&quot;Rules&quot;</span>, emailPassthroughRule); Rule goldenRule = <span style="color:#0000FF">new</span> Rule() { Issuer = issuer, IssuerId = issuer.Id, InputClaimType = <span style="color:#8B0000">&quot;http://www.theselfsts2.net/claims/gruppo&quot;</span>, InputClaimValue = <span style="color:#8B0000">&quot;Amministratori&quot;</span>, OutputClaimType = <span style="color:#8B0000">&quot;http://schemas.xmlsoap.org/ws/2005/05/identity/claims/role&quot;</span>, OutputClaimValue = <span style="color:#8B0000">&quot;Gold&quot;</span>, RuleGroup = rg, Description = <span style="color:#8B0000">&quot;Map Gold Role SelfSTS2&quot;</span>
+    }; svc.AddRelatedObject(rg, <span style="color:#8B0000">&quot;Rules&quot;</span>, goldenRule); Rule silverRule = <span style="color:#0000FF">new</span> Rule() { Issuer = issuer, IssuerId = issuer.Id, InputClaimType = <span style="color:#8B0000">&quot;http://www.theselfsts2.net/claims/gruppo&quot;</span>, InputClaimValue = <span style="color:#8B0000">&quot;Utenti&quot;</span>, OutputClaimType = <span style="color:#8B0000">&quot;http://schemas.xmlsoap.org/ws/2005/05/identity/claims/role&quot;</span>, OutputClaimValue = <span style="color:#8B0000">&quot;Silver&quot;</span>, RuleGroup = rg, Description = <span style="color:#8B0000">&quot;Map Silver Role SelfSTS2&quot;</span>
+    }; svc.AddRelatedObject(rg, <span style="color:#8B0000">&quot;Rules&quot;</span>, silverRule); svc.SaveChanges(SaveChangesOptions.Batch); Console.WriteLine(); Console.WriteLine(<span style="color:#8B0000">&quot;-----------------------------------&quot;</span>); Console.WriteLine(<span style="color:#8B0000">&quot;Info: Passthrough Rules:&quot;</span>); Console.WriteLine(<span style="color:#8B0000">&quot;Info: Passthrough Name Rule created: {0}&quot;</span>, namePassthroughRule.Description); Console.WriteLine(<span style="color:#8B0000">&quot;Info: Passthrough Email Rule created: {0}&quot;</span>, emailPassthroughRule.Description); Console.WriteLine(); Console.WriteLine(<span style="color:#8B0000">&quot;-----------------------------------&quot;</span>); Console.WriteLine(<span style="color:#8B0000">&quot;Info: Roles Rules:&quot;</span>); Console.WriteLine(<span style="color:#8B0000">&quot;Info: Golden Rule created: {0}&quot;</span>, goldenRule.Description); Console.WriteLine(<span style="color:#8B0000">&quot;Info: Silver Rule created: {0}&quot;</span>, silverRule.Description); }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>同样，代码看起来似乎有点多，但实际上它和我们提供的数据是成比例的。</p>
+
+<p>如果您查看上述代码，将发现第二个商业标识提供者发出的声明类型不同：在这个特定示例中，它们采用意大利语。这是典型的示例，在其中没有像 ACS 这样的中介来免除您的云服务和标识提供者的关联，您必须编写特定的代码来处理不同合作伙伴在管理和表示用户信息方面的差异。</p>
+
+<p>使用 ACS，您可以编写一些规则，它们将处理传入的声明、提取所需的信息并创建规范化的令牌，无论是从何种原始数据创建这些令牌，它们始终具有一致的格式。您的云服务只需要了解当前用户是 gold 还是 silver，无需担忧“Amministratori”和“Administrators”之间的差异。</p>
+</blockquote></li>
+<li><p>现在添加以下方法，它使用以前创建的方法来创建具有相应规则的标识提供者。</p>
+
+<p>（代码段 - <em>ACSwithLocalSTS - Ex01 Task5 05 - CreateIdentityProviderWithRules Method</em> - C#）</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">private</span> <span style="color:#0000FF">static</span> <span style="color:#0000FF">void</span> CreateIdentityProviderWithRules() { ManagementService svc = ManagementServiceHelper.CreateManagementServiceClient();
+
+            <span style="color:#008000">//Create Identity Provider</span>
+            <span style="color:#0000FF">var</span> issuer = CreateIdpManually(DateTime.UtcNow, DateTime.UtcNow.AddYears(1), svc,
+<span style="color:#8B0000">&quot;SelfSTS2&quot;</span>, <span style="color:#8B0000">&quot;SelfSTS2&quot;</span>, <span style="color:#8B0000">&quot;http://localhost:9000/STS/Issue/&quot;</span>, <span style="color:#8B0000">&quot;IdentityTKStsCertForSigning&quot;</span>);
+
+            <span style="color:#008000">//Add the Rules</span>
+            <span style="color:#0000FF">string</span> ruleGroupname = <span style="color:#8B0000">&quot;Default Rule Group for WebSiteAdvancedACS&quot;</span>; AddRulesToRuleGroup(ruleGroupname, issuer.Name); Console.WriteLine(<span style="color:#8B0000">&quot;Done!&quot;</span>); }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>ManagementService 类很简单，主要用于执行 OData 调用。</p>
+</blockquote></li>
+<li><p>最后，使用以下代码更改 Main 方法。</p>
+
+<p>（代码段 - <em>ACSwithLocalSTS - Ex01 Task5 06 - Update Main Method</em> - C#）</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#">  <span style="color:#0000FF">public</span> <span style="color:#0000FF">static</span> <span style="color:#0000FF">void</span> Main(<span style="color:#0000FF">string</span>[] args) { CreateIdentityProviderWithRules(); Console.ReadLine(); }
+</code></pre></li>
+<li><p>右键单击 <strong>IdentityProviderSetup</strong> 项目并选择<strong>“设为启动项目”</strong>。</p></li>
+<li><p>按 <strong>F5</strong> 以运行控制台应用程序。您可以看到控制台并验证是否创建了标识提供者和规则。</p>
+
+<p><img src="./images/The-output-on-the-console-of-the-identity-provider-and-rules-creation-code.png?raw=true" alt="标识提供者和规则创建代码的控制台上的输出" title="标识提供者和规则创建代码的控制台上的输出" />
+</p>
+
+<p><em>标识提供者和规则创建代码的控制台上的输出</em></p></li>
+<li><p>您还可以导航回门户来验证是否创建了标识提供者和规则。为此，请在<strong>“编辑管理服务帐户”</strong>页上，单击<strong>“返回到管理服务”</strong>链接。</p></li>
+<li><p>单击<strong>“返回到访问控制服务”</strong>以回到<strong>“访问控制服务”</strong>页。</p></li>
+<li><p>在<strong>“信任关系”</strong>部分，单击<strong>“标识提供者”</strong>链接。将看到已创建了 SelfSTS2 标识提供者。</p>
+
+<p><img src="./images/SelfSTS2-Identity-Provider-verification.png?raw=true" alt="SelfSTS2 标识提供者验证" title="SelfSTS2 标识提供者验证" />
+</p>
+
+<p><em>SelfSTS2 标识提供者验证</em></p></li>
+<li><p>关闭浏览器。</p></li>
+<li><p>要验证新的 SelftSTS2 标识提供者是否按预期方式工作，请执行此实验的 <strong>\Source\Assets\SelfSTS2</strong> 文件夹中的 <strong>SelfSTS.exe</strong> 文件。</p>
+
+<p><img src="./images/The-second-SelfSTS-instance-represents-the-second-Identity-Provider.png?raw=true" alt="第二个 SelfSTS 实例表示第二个标识提供者" title="第二个 SelfSTS 实例表示第二个标识提供者" />
+</p>
+
+<p><em>第二个 SelfSTS 实例表示第二个标识提供者</em></p></li>
+<li><p>单击<strong>“启动”</strong>。</p>
+
+<p><img src="./images/The-second-SelfSTS-instance-now-listening-for-requests.png?raw=true" alt="第二个 SelfSTS 实例现在正在侦听请求" title="第二个 SelfSTS 实例现在正在侦听请求" />
+</p>
+
+<p><em>第二个 SelfSTS 实例现在正在侦听请求</em></p>
+<blockquote>
+<p><strong>注意：</strong>我们现在有两个正在运行的 SelfSTS 实用工具实例，它们在不同的本地端口上侦听。在实际系统中，IP 可能位于完全不同的系统，表示不同的企业实体。</p>
+</blockquote></li>
+<li><p>返回到 Visual Studio，右键单击 https://localhost/WebSiteAdvancedACS/ 项目并选择<strong>“设为启动项目”</strong>。</p></li>
+<li><p>按 <strong>F5</strong> 以启动网站。</p></li>
+<li><p>验证新的标识提供者 <strong>SelfSTS2</strong> 是否显示在<strong>“登录”</strong>表单上（您可能需要单击<strong>“显示更多选项”</strong>链接）。</p>
+
+<p><img src="./images/The-ACS-HDR-default-page.png?raw=true" alt="ACS HDR 默认页" title="ACS HDR 默认页" />
+</p>
+
+<p><em>ACS HDR 默认页</em></p>
+<blockquote>
+<p><strong>注意：</strong>当我们在 ACS 中只配置了一个商业 IP 时，如果您排除地址栏中的某些更改，身份验证阶段将透明进行。现在我们有两个可以将用户重定向以进行身份验证的可能 IP，此时我们无法知道 ACS 如何决定通过哪个 IP 来重定向。做出此决定的问题称为“主区域发现”问题或 HRD，在具有多个标识提供者选择时几乎都面临这样的问题。ACS 提供各种工具来解决 HDR 问题。一个是您在图 47 中看到的大多数定向方法，此时 ACS 自动生成一个页，其中包含与配置的 IP 数相同的按钮数。另一个方法是：提示用户输入电子邮件地址并使用它的域部分确定用户来自哪个 IP（请参见图 24）。第二个方法的优势是它不在页上公开披露 IP 的标识。</p>
+
+<p>这两个方法可以混合和匹配，ACS 甚至可以通过编程方式提供 HDR 信息，以便您可以为 HDR 生成自己的 chrome，例如，如果您要维护与云服务其余部分一致的外观。</p>
+</blockquote></li>
+<li><p>关闭浏览器。</p></li>
+<li><p>您现在将使用安全令牌可视化程序控件来查看 ACS 提供的不同声明。为此，请返回到 Visual Studio，打开 <strong>WebSiteAdvancedACS</strong> 项目中的 <strong>Default.aspx</strong> 文件。</p></li>
+<li><p>从 <strong>Visual Studio 工具箱</strong>中将主内容控件底部的一个<strong>“安全令牌可视化程序控件”</strong>拖放到 <strong>Default.aspx</strong> 页：</p>
+
+<p><img src="./images/The-Security-Token-Visualizer-Control-in-Toolbox.png?raw=true" alt="工具箱中的安全令牌可视化程序控件" title="工具箱中的安全令牌可视化程序控件" />
+</p>
+
+<p><em>工具箱中的安全令牌可视化程序控件</em></p>
+<blockquote>
+<p><strong>注意：</strong>我们在此处使用的控件提供了一种快速获取有关传入安全令牌的调试信息的方式，而无需编写任何代码：不过访问您的代码隐藏文件中的声明信息很方便，如果您要了解更多信息，请参考此培训包中与 WIF 有关的动手实验。</p>
+</blockquote>
+<span class="codelanguage">HTML</span><pre><code class="HTML">...
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">cc1</span>:<span style="color:#FF0000">SecurityTokenVisualizerControl</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;SecurityTokenVisualizerControl1&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#0000FF">/&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">content</span><span style="color:#0000FF">/&gt;</span>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>将该控件拖放到页面上时如果没有出现任何代码，请关闭 Visual Studio，重新运行安装程序脚本，再重新启动 Visual Studio。</p>
+</blockquote></li>
+<li><p>打开 https://localhost/WebSiteAdvancedACS/ 项目中的 <strong>Web.config</strong> 文件并启用 <strong>microsoft.identityModel</strong> 部分中的 <strong>saveBootstrapTokens</strong> 属性：</p>
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">microsoft.identityModel</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">service</span> <span style="color:#FF0000">saveBootstrapTokens</span>=<span style="color:#0000FF">&quot;true&quot;</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">audienceUris</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>按 <strong>F5</strong> 以开始调试云服务。</p></li>
+<li><p>在<strong>“登录”</strong>页上，选择 <strong>SelfSTS1</strong> 标识提供者以对访问网站的用户进行身份验证（您可能需要单击<strong>“显示更多选项”</strong>链接）。</p></li>
+<li><p>将看到 SelfSTS1 标识提供者的特定声明。</p>
+
+<p><img src="./images/The-Security-Token-Visualizer-Control-showing-the-content-of-the-token-coming-from-the-first-.png?raw=true" alt="安全令牌可视化程序控件显示来自第一个商业 IP 的令牌内容" title="安全令牌可视化程序控件显示来自第一个商业 IP 的令牌内容" />
+</p>
+
+<p><em>安全令牌可视化程序控件显示来自第一个商业 IP 的令牌内容</em></p></li>
+<li><p>选择浏览器并按 <strong>F5</strong> 以再次运行该解决方案。</p></li>
+<li><p>选择 <strong>SelfSTS2</strong> 标识提供者以对访问网站的用户进行身份验证（您可能需要单击<strong>“显示更多选项”</strong>链接）。</p></li>
+<li><p>将看到 SelfSTS2 IP 的特定声明。</p>
+
+<p><img src="./images/The-Security-Token-Visualizer-Control-showing-the-content-of-the-token-coming-from-the-.png?raw=true" alt="安全令牌可视化程序控件显示来自第二个商业 IP 的令牌内容" title="安全令牌可视化程序控件显示来自第二个商业 IP 的令牌内容" />
+</p>
+
+<p><em>安全令牌可视化程序控件显示来自第二个商业 IP 的令牌内容</em></p></li>
+<li><p>关闭浏览器。</p></li>
+</ol>
+
+<p><a name="Ex1Summary"></a></p>
+
+<h4 id="Exercise_1_Summary">练习 1：摘要</h4>
+
+<p>在此练习中，您利用 ACS 作为网站和多个商业标识提供者之间身份验证的中介：这种情况很常见，每当您要允许业务合作伙伴访问您的一个云服务时，就会遇到这个问题，它属于业务应用程序或“软件即服务 (SaaS)”解决方案范畴。您有机会了解体系结构中的 ACS 如何可以简化以下任务：建立信任关系并确保您的云服务不受合作伙伴处理用户信息的变化和差异的影响。可以通过管理门户或管理 API 配置 ACS：在此动手实验中，您尝试了这两种方法。</p>
+
+<hr />
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>通过完成此动手实验，您学习了如何：</p>
+
+<ul>
+<li><p>使用门户通过元数据文档添加商业标识提供者</p></li>
+<li><p>使用门户建立声明转换规则以规范化用户的属性</p></li>
+<li><p>通过管理 API 执行上述所有操作</p></li>
+<li><p>将云服务的身份验证外包给 ACS</p></li>
+<li><p>使用 ACS 处理主区域发现问题</p></li>
+</ul>
+
+<p>Windows Azure 访问控制服务是承接身份验证外包的理想服务，因为它可以轻松将处理多个商业标识提供者（如由 Active Directory Federation Services 或类似服务所增强的目录）甚至 Web 和社交提供者（如 Windows Live ID、Facebook、Google 和 Yahoo!）的复杂性抽象屏蔽掉。此外，ACS 还提供强大的工具，可以控制用户标识在抵达云服务之前的处理方式。</p>
+
+<p>通过这个中级实验，您大致了解了 ACS 如何帮助解决一些典型企业访问问题，如添加新的合作伙伴、处理多个源的身份验证和保护云服务不受更改和边缘案例的影响。在这里我们重点讲述了访问网站的问题，但是 ACS 也可以处理 SOAP 和 REST Web 服务的问题。我们重点讲述了商业标识提供者，但是 ACS 通过易于使用的功能（它们可以满足基于 Web 的解决方案灵活性的要求）也提供对 Web 标识的广泛支持。如果您想进一步了解这些功能，请参考介绍性的动手实验。最后，如果您对 REST 解决方案感兴趣，可以查看即将发布的、有关在 ACS 中利用 OAuth2 功能的新实验。</p> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-ACSwithLocalSTS/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,620 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 使用 Windows Azure 和 Windows 推送通知服务发送 Windows 8 推送通知 (JS)</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-Windows8NotificationsHTMLJS/" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-Windows8NotificationsHTMLJS/" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="HOLTop"></a></p>
+
+<h1 id="Sending_Windows_8_Push_Notifications_using_Windows_Azure_and_the_Windows_Push_Notification_Service_JS">使用 Windows Azure 和 Windows 推送通知服务发送 Windows 8 推送通知 (JS)</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>在此动手实验中，您将学习如何将 <a href="http://watwindows8.codeplex.com/">Windows Azure Toolkit for Windows 8</a> 的某个版本部署到 Windows Azure，然后使用此部署通过 <a href="http://msdn.microsoft.com/zh-CN/library/windows/apps/hh465460(v=vs.85).aspx">Windows 推送通知服务 (WNS)</a> 向客户端应用程序发送通知。在本实验结束时，您将拥有一个功能完善的门户，可用于将 Toast、磁贴和徽章通知发送到 Windows 8 样式 UI 客户端和应用程序。</p>
+
+<p><img src="./Images/windows-azure-toolkit-for-windows-8-deliverin.png?raw=true" alt="Windows Azure Toolkit for Windows 8 通过 WNS 发送通知" />
+</p>
+
+<p><em>Windows Azure Toolkit for Windows 8 通过 WNS 发送通知</em></p>
+
+<p>如果您希望了解有关此实验的工作原理的详细信息，请观看<a href="http://channel9.msdn.com/Events/TechDays/TechDays-2012-Belgium/272">此视频</a>。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>使用 Windows Azure 管理门户创建存储帐户和托管服务组件。</li>
+<li>使用 Windows 推送通知和 Live Connect 门户请求要用于 WNS 的凭据。</li>
+<li>使用 Web 部署来部署网站。</li>
+<li>配置 Windows 8 样式 UI 客户端来接收通知。</li>
+<li>测试使用 Windows Azure Toolkit for Windows 8 门户通过 WNS 将推送通知发送到客户端应用程序的过程</li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>若要完成此实验，必须具备以下项：</p>
+
+<ul>
+<li><a href="http://www.microsoft.com/visualstudio/">Visual Studio Express 2012 for Web</a> 或更高版本。</li>
+<li><a href="http://msdn.microsoft.com/zh-CN/windows/apps/hh852659">Visual Studio 2012 Express for Windows 8</a> 或更高版本。</li>
+<li>启用了网站预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>本实验设计为使用 Windows 8 操作系统。</p>
+</blockquote>
+<p><a name="Setup"></a></p>
+
+<h3 id="Setup">设置</h3>
+
+<p>为了执行此动手实验中的各项练习，需要对环境进行设置。</p>
+
+<ol>
+<li><p>打开 Windows 资源管理器窗口，浏览到此实验的 <strong>Source</strong> 文件夹。</p></li>
+<li><p>使用管理员权限执行 <strong>Setup.cmd</strong> 文件以启动设置过程，该过程将配置您的环境。</p></li>
+<li><p>如果显示“用户帐户控制”对话框，请确认操作以继续。</p></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>请务必在运行安装程序前检查此实验的所有依赖项。</p>
+</blockquote>
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ul>
+<li>  <a href="#GettingStarted">入门：使用 Web 部署来部署通知应用程序服务器</a></li>
+<li>  <a href="#Exercise1">练习 1：配置 Windows 8 样式 UI 客户端应用程序处理推送通知</a></li>
+<li>  <a href="#Exercise2">练习 2：发送推送通知</a></li>
+</ul>
+
+<p>完成此实验的估计时间：<strong>45 分钟</strong>。</p>
+
+<p><a name="GettingStarted"></a></p>
+
+<h3 id="Getting_Started_Deploying_the_Notification_App_Server_Using_Web_Deploy">入门：使用 Web 部署来部署通知应用程序服务器</h3>
+
+<p>在本练习中，您将使用 Web 部署将通知应用程序服务器部署至 Windows Azure。为此，您需要在管理门户中设置必要的服务组件，从 WNS 和 Live Connect 门户请求凭据，并使用 Web 部署来部署到 Windows Azure。</p>
+
+<p><a name="GSTask1"></a></p>
+
+<h4 id="Task_1_-_Creating_a_Storage_Account_and_Web_Site">任务 1 - 创建存储帐户和网站</h4>
+
+<p>在本练习中部署的应用程序需要一个网站和一个存储帐户。在本任务中，您将创建一个新存储帐户以允许应用程序保留其数据。另外，您还将定义一个网站以承载通知应用程序服务器。</p>
+
+<ol>
+<li><p>使用 Web 浏览器浏览 <a href="https://manage.windowsazure.com"><a href="https://manage.windowsazure.com">https://manage.windowsazure.com</a></a>，然后使用与您的 Windows Azure 帐户关联的 Microsoft 帐户进行登录。</p>
+
+<p><img src="./Images/signing-in-to-the-windows-azure-platform-mana.png?raw=true" alt="登录到 Windows Azure 平台管理门户" />
+</p>
+
+<p><em>登录到 Windows Azure 平台管理门户</em></p></li>
+<li><p>首先，创建应用程序将用来存储其数据的<strong>存储帐户</strong>。在 Windows Azure 管理门户中，单击<strong>“新建”</strong>|<strong>“数据服务”</strong>|<strong>“存储”</strong>|<strong>“快速创建”</strong>。</p></li>
+<li><p>设置唯一的 <strong>URL</strong>（例如，<em>notificationapp</em>），然后选择<strong>“创建存储帐户”</strong>。</p>
+
+<p><img src="./Images/creating-a-new-storage-account.png?raw=true" alt="创建新存储帐户" />
+</p>
+
+<p><em>创建新存储帐户</em></p>
+<blockquote>
+<p><strong>注意：</strong>用于存储帐户的 URL 对应一个 DNS 名称，遵守标准的 DNS 命名规则。此外，该名称公开可见，因而必须唯一。门户会检验名称是否遵循命名规则和当前是否可用，以确保名称有效。如果输入的名称不合规则，系统将显示验证错误。</p>
+
+<p><img src="./Images/url-validation.png?raw=true" alt="URL 验证" />
+</p>
+</blockquote></li>
+<li><p>请等待存储帐户创建完成。单击您的存储帐户名称以转到其<strong>仪表板</strong>。</p>
+
+<p><img src="./Images/storage-accounts-page.png?raw=true" alt="存储帐户页" title="存储帐户页" />
+</p>
+
+<p><em>存储帐户页</em></p></li>
+<li><p>单击该页底部的<strong>“管理密钥”</strong>以显示该存储帐户的访问密钥。</p>
+
+<p><img src="./Images/manage-keys-option.png?raw=true" alt="管理密钥" title="管理密钥" />
+</p>
+
+<p><em>管理存储帐户密钥</em></p></li>
+<li><p>复制<strong>“存储帐户名称”</strong>和<strong>“主访问密钥”</strong>。您随后将使用这些值来配置应用程序。</p>
+
+<p><img src="./Images/manage-storage-account-keys.png?raw=true" alt="管理存储帐户密钥" title="管理存储帐户密钥" />
+</p>
+
+<p><em>管理存储帐户密钥</em></p>
+<blockquote>
+<p><strong>注意：</strong><strong>主访问密钥</strong>和<strong>辅助访问密钥</strong>都提供可用于访问存储的共享密钥。辅助密钥提供与主密钥相同的访问权限，旨在用作备份。在任一密钥泄露时，可独立地重新生成每个密钥。</p>
+</blockquote></li>
+<li><p>返回到门户主页，然后选择<strong>“网站”</strong>。</p></li>
+<li><p>选择<strong>“新建”</strong>，接着从列表中选择<strong>“计算”</strong>|<strong>“网站”</strong>，然后选择<strong>“快速创建”</strong>。</p></li>
+<li><p>为网站选择名称，然后选择<strong>“创建网站”</strong>。</p>
+
+<p><img src="./Images/creating-a-new-web-site.png?raw=true" alt="创建新网站" />
+</p>
+
+<p><em>创建新网站</em></p></li>
+</ol>
+
+<p><a name="GSTask2"></a></p>
+
+<h4 id="Task_2_-_Updating_the_application_with_your_Storage_Account_Name_and_Key">任务 2 - 使用您的存储帐户名称和密钥更新应用程序</h4>
+
+<p>在此任务中，我们将使用您在前一个任务中创建的存储帐户来更新 Web 配置文件中的“连接字符串”值。</p>
+
+<ol>
+<li><p>在 <strong>Visual Studio 2012</strong> 的新实例中，打开位于 <strong>Source/Assets/Server/Notifications.Backend</strong> 文件夹中的 <strong>Services.sln</strong>。这是通知应用程序服务器。</p></li>
+<li><p>打开 <strong>Web.config</strong>。在 <strong>appsettings</strong> 部分，使用建议的格式替换 <strong>DataConnectionString</strong> 设置的值，如下面的代码段的注释行中所示。</p>
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#008000">&lt;!-- When deploying to Windows Azure, replace the DataConnectionString setting with the connection string for your Windows Azure Storage account. For example: &quot;DefaultEndpointsProtocol=https;AccountName={your storage account name};AccountKey={your storage account key}&quot; --&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">key</span>=<span style="color:#0000FF">&quot;DataConnectionString&quot;</span> <span style="color:#FF0000">value</span>=<span style="color:#0000FF">&quot;DefaultEndpointsProtocol=https;AccountName={your storage account};AccountKey={your storage account key}&quot;</span><span style="color:#0000FF">/&gt;</span>
+</code></pre></li>
+<li><p>按 <strong>Ctrl+Shift+B</strong> 生成解决方案。</p></li>
+</ol>
+
+<p><a name="GSTask3"></a></p>
+
+<h4 id="Task_3_-_Requesting_WNS_Credentials_and_updating_the_Webconfig">任务 3 - 请求 WNS 凭据并更新 Web.config</h4>
+
+<p>在此任务中，您将获得 Windows 推送通知服务 (WNS) 凭据，并使用它们来更新 Web 配置文件。</p>
+
+<ol>
+<li><p>在 <strong>Visual Studio 2012</strong> 的新实例中，打开现有的 HTML5/JS Windows 8 样式 UI 应用程序，或者创建一个新的应用程序（单击<strong>“文件”|“新建项目”|“已安装的模板”| JavaScript |“Windows 应用商店”|“空白应用”</strong>）。</p>
+<blockquote>
+<p><strong>注意：</strong>如果您是首次创建 Windows Syle UI 应用程序，系统将会提示您获取 Windows 8 开发者许可证以便开发此类型的应用程序。在“开发者许可证”窗口中，单击<strong>“我同意”</strong>。</p>
+
+<p><img src="Images/getting-developer-license.png?raw=true" alt="获取开发者许可证" title="获取开发者许可证" />
+</p>
+
+<p>系统将要求您使用 Microsoft 凭据登录。然后，单击<strong>“登录”</strong>。现在您拥有了一个开发者许可证。</p>
+
+<p><img src="Images/inserting-credentials-developer-license.png?raw=true" alt="插入凭据以便获取开发者许可证" title="插入凭据以便获取开发者许可证" />
+</p>
+
+<p><img src="Images/developer-license-succesfully-obtained.png?raw=true" alt="开发者许可证成功获取" title="开发者许可证成功获取" />
+</p>
+</blockquote></li>
+<li><p>在解决方案资源管理器中，打开您的 <strong>package.appxmanifest</strong> 并选择<strong>“打包”</strong>选项卡。我们将使用<strong>“包显示名称”</strong>来创建您的 <strong>WNS</strong> 凭据。</p>
+
+<p><img src="./Images/opening-packageappxmanifest.png?raw=true" alt="打开 package.appxmanifest" />
+</p>
+
+<p><em>打开 package.appxmanifest</em></p></li>
+<li><p>在 Visual Studio 菜单中单击<strong>“应用商店”</strong>并选择<strong>“保留应用程序名称”</strong>。</p>
+
+<p><img src="./Images/reserving-app-name.png?raw=true" alt="保留应用程序名称" />
+</p>
+
+<p><em>在 Windows 应用商店中保留应用程序名称</em></p></li>
+<li><p>浏览器将显示 Windows 应用商店页，您将使用该页来获取您的 WNS 凭据。在“提交应用程序”部分中，单击<strong>“应用程序名称”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>您需要使用 Microsoft 帐户登录才能访问 Windows 应用商店。</p>
+</blockquote>
+<p><img src="./Images/giving-app-name-windows-store.png?raw=true" alt="为您的应用程序提供唯一名称" />
+</p>
+
+<p><em>为您的应用程序提供唯一名称</em></p></li>
+<li><p>在“应用程序名称”字段中，插入位于解决方案的 <strong>package.appxmanifest</strong> 文件内的“Package Display Name”，然后单击<strong>“保留应用程序名称”</strong>。然后单击<strong>“保存”</strong>以确认保留操作。</p>
+
+<p><img src="./Images/app-name-windows-store.png?raw=true" alt="保留应用程序名称" />
+</p>
+
+<p><em>保留应用程序名称</em></p>
+
+<p><img src="./Images/name-reservation-successful-win-store.png?raw=true" alt="确认保留应用程序名称" />
+</p>
+
+<p><em>确认保留应用程序名称</em></p></li>
+<li><p>现在，您将需要标识您的应用程序以便获取要插入 <strong>package.appxmanifest</strong> 文件的名称和发布者。在“提交应用程序”页中，单击<strong>“高级功能”</strong>。</p>
+
+<p><img src="./Images/app-name-reverved-completely-windows-store.png?raw=true" alt="为 Notifications.Client 应用配置推送通知" />
+</p>
+
+<p><em>为 Notifications.Client 应用配置推送通知</em></p></li>
+<li><p>在“高级功能”页中，单击<strong>“推送通知和 Live Connect 服务信息”</strong>。</p>
+
+<p><img src="./Images/push-notif-live-connect-service-info.png?raw=true" alt="“高级功能”页" />
+</p>
+
+<p><em>“高级功能”页</em></p></li>
+<li><p>进入“推送通知和 Live Connect 服务信息”部分中后，单击<strong>“标识你的应用”</strong>。</p>
+
+<p><img src="./Images/identifying-your-app.png?raw=true" alt="“推送通知概述”页" />
+</p>
+
+<p><em>“推送通知概述”页</em></p></li>
+<li><p>现在，我们需要用 Windows 应用商店中的信息设置 <strong>package.appxmanifest</strong> 文件的标识名称和发布者。返回到 Visual Studio，右键单击 <strong>package.appxmanifest</strong> 并选择<strong>“查看代码”</strong>。使用在 Windows 应用商店中获取的项替换 Identity 元素的 Name 和 Publisher 属性。单击<strong>“正在对你的服务进行身份验证”</strong>。</p>
+
+<p><img src="./Images/app-identification.png?raw=true" alt="设置标识名称和发布者" />
+</p>
+
+<p><em>设置标识名称和发布者</em></p></li>
+<li><p>最后，我们获取了<strong>“程序包安全标识符(SID)”</strong>和<strong>“客户端密钥”</strong>，它们是我们更新通知应用程序服务器的 Web 配置所需的 WNS 凭据。</p>
+
+<p><img src="./Images/sid-client-secret.png?raw=true" alt="程序包安全标识符 (SID) 和客户端密钥" />
+</p>
+
+<p><em>程序包安全标识符 (SID) 和客户端密钥</em></p></li>
+<li><p>切换到通知应用程序服务器，打开 <strong>Web.config</strong> 文件，将 <em>[YOUR_WNS_PACKAGE_SID]</em> 替换为<strong>“程序包安全标识符 (SID)”</strong>，并将 <em>[YOUR_WNS_CLIENT_SECRET]</em> 替换为<strong>“客户端密钥”</strong>（这是您从 Windows 应用商店或 Windows 推送通知和 Live Connect 门户获得的）。</p>
+
+<p><img src="./Images/updating-webconfig-with-wns-cred.png?raw=true" alt="使用 WNS 凭据更新 Web.config" />
+</p>
+
+<p><em>使用 WNS 凭据更新 Web.config</em></p>
+<blockquote>
+<p><strong>注意：</strong>确保您在 <strong>Web.config</strong> 中没有复制值的开头或末尾空格，并且已将<strong>“程序包 SID”</strong>和<strong>“客户端密钥”</strong>复制到正确的字段中。</p>
+</blockquote></li>
+<li><p>您的通知应用程序服务器现在已准备就绪，可以部署到 Windows Azure 了。注意您的帐户是否限于一个内核。</p></li>
+</ol>
+
+<p><a name="GSTask4"></a></p>
+
+<h4 id="Task_4_-_Deploy_your_Notification_App_Server_to_Windows_Azure_using_Web_Deploy">任务 4 - 使用 Web 部署将通知应用程序服务器部署至 Windows Azure</h4>
+
+<p>在本任务中，您将使用 Web 部署将通知应用程序服务器部署至 Windows Azure。</p>
+
+<ol>
+<li><p>在 Windows Azure 门户中，选择<strong>“网站”</strong>，然后选择您自己的网站以打开<strong>“仪表板”</strong>。在<strong>“仪表板”</strong>页中的<strong>“速览”</strong>部分下，单击<strong>“下载发布配置文件”</strong>链接并且将该文件保存到一个已知的位置。您将在后面使用这些设置从 Visual Studio 发布网站。</p>
+<blockquote>
+<p><strong>注意：</strong>对于启用的每种发布方法，<em>发布配置文件</em> 包含将 Web 应用程序发布到 Windows Azure 网站所需的全部信息。发布配置文件包含有启用了发布方法的每个端点的 URL，以及连接到这些端点和进行身份验证所需的用户凭据和数据库字符串。<strong>Microsoft Visual Studio</strong> 支持读取发布配置文件以便自动执行发布配置，从而将 Web 应用程序发布到 Windows Azure 网站。</p>
+</blockquote>
+<p><img src="./Images/download-publish-profile.png?raw=true" alt="下载发布配置文件" title="下载发布配置文件" />
+</p>
+
+<p><em>下载发布配置文件</em></p></li>
+<li><p>在 Visual Studio 的解决方案资源管理器中，右键单击<strong>“通知应用程序服务器”</strong>项目节点，然后选择<strong>“发布”</strong>以便打开“发布 Web”向导。</p>
+
+<p><img src="./Images/publishing-the-service.png?raw=true" alt="发布服务" title="发布服务" />
+</p>
+
+<p><em>发布服务</em></p></li>
+<li><p>在<strong>“配置文件”</strong>页中，单击<strong>“导入”</strong>按钮并且选择您的发布配置文件。单击<strong>“下一步”</strong>。</p>
+
+<p><img src="./Images/publishing-profile-profile-selection.png?raw=true" alt="发布配置文件选择" />
+</p>
+
+<p><em>选择发布配置文件</em></p></li>
+<li><p>在<strong>“连接”</strong>页中，保留导入的值，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="./Images/publishing-profile-imported.png?raw=true" alt="导入的发布配置文件" title="导入的发布配置文件" />
+</p>
+
+<p><em>导入了发布配置文件</em></p></li>
+<li><p>在<strong>“设置”</strong>页中，保留默认值，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="./Images/publishing-profile-settings-page.png?raw=true" alt="发布配置文件，“设置”页" title="发布配置文件，“设置”页" />
+</p>
+
+<p><em>发布配置文件 - 设置</em></p></li>
+<li><p>在<strong>“预览”</strong>页上，单击<strong>“发布”</strong>。</p>
+
+<p><img src="./Images/publishing-profile-preview-page.png?raw=true" alt="发布配置文件 -“预览”页" title="发布配置文件 -“预览”页" />
+</p>
+
+<p><em>发布配置文件 -“预览”页</em></p></li>
+<li><p>导航到您部署的网站，以确认网站已设置完毕且正常运行。</p>
+
+<p><img src="./Images/notification-app-server-portal-running-in-win.png?raw=true" alt="在 Windows Azure 中运行的通知应用程序服务器门户" />
+</p>
+
+<p><em>在 Windows Azure 中运行的通知应用程序服务器门户</em></p></li>
+</ol>
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Configure_a_Windows_8_Style_UI_Client_application_for_Notifications">练习 1：配置 Windows 8 样式 UI 客户端应用程序处理通知</h3>
+
+<p>在此练习中，您将客户端应用程序配置为从 WNS 请求通知通道，并向在 Windows Azure 中运行的通知应用程序服务器注册此通道。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Configuring_the_packageappmanifest_for_Push_Notifications">任务 1 - 配置 package.appmanifest 处理推送通知</h4>
+
+<p>在此任务中，我将使用 Visual Studio 2012 更新 package.appmanifest，以接收长方形磁贴通知。</p>
+
+<ol>
+<li><p>在 <strong>Visual Studio 2012 Express for Windows 8</strong> 中返回到 Windows 8 样式 UI 客户端应用程序。</p></li>
+<li><p>在<strong>解决方案资源管理器</strong>中，双击 <strong>package.appmanifest</strong>。</p>
+
+<p><img src="./Images/updating-your-client-app-with-wns-credentials.png?raw=true" alt="使用 WNS 凭据更新客户端应用程序" />
+</p>
+
+<p><em>使用 WNS 凭据更新客户端应用程序</em></p></li>
+<li><p>为了使应用程序能够收到<strong>“长方形磁贴”</strong>通知，请单击“宽徽标”上的<strong>“浏览”</strong>，然后导航到 <strong>Source/Assets/Client/JS</strong> 文件夹。然后，选择 <strong>widelogo.png</strong> 并单击<strong>“打开”</strong>。</p>
+
+<p><img src="./Images/adding-a-wide-logo-to-your-application.png?raw=true" alt="将宽徽标添加到应用程序" />
+</p>
+
+<p><em>将宽徽标添加到应用程序</em></p></li>
+<li><p>向下滚动并将<strong>“支持 Toast 通知”</strong>下拉列表更改为<strong>“是”</strong>。</p>
+
+<p><img src="./Images/configuring-your-client-application-to-allow.png?raw=true" alt="配置客户端应用程序以允许 Toast 通知" />
+</p>
+
+<p><em>配置客户端应用程序以允许 Toast 通知</em></p>
+<blockquote>
+<p><strong>注意：</strong>在此任务的以下步骤中，您将您的应用程序与 Windows 应用商店相关联。如果您已从 Windows 推送通知和 Live Connect 门户获得 WNS 凭据，则不需要执行这些步骤。</p>
+</blockquote></li>
+<li><p>在 Visual Studio 菜单中单击<strong>“应用商店”</strong>，然后选择<strong>“将应用程序与应用商店关联”</strong>。</p>
+
+<p><img src="./Images/associating-app-with-store.png?raw=true" alt="将应用程序与应用商店关联" />
+</p>
+
+<p><em>将应用程序与应用商店关联</em></p></li>
+<li><p>在“将应用程序与 Windows 应用商店关联”向导中，单击<strong>“登录”</strong>。</p>
+
+<p><img src="./Images/associate-app-with-store.png?raw=true" alt="“将应用程序与应用商店关联”向导" />
+</p>
+
+<p><em>“将应用程序与应用商店关联”向导</em></p></li>
+<li><p>输入您的凭据并单击<strong>“登录”</strong>。</p>
+
+<p><img src="./Images/sign-in-for-association.png?raw=true" alt="插入您的凭据以便在 Windows 应用商店中关联您的应用程序" />
+</p>
+
+<p><em>插入您的凭据以便在 Windows 应用商店中关联您的应用程序</em></p></li>
+<li><p>在“选择应用程序名称”步骤中，选择 <strong>Notifications.Client</strong> 并单击<strong>“下一步”</strong>。</p>
+
+<p><img src="./Images/selecting-app-name.png?raw=true" alt="选择应用程序名称" />
+</p>
+
+<p><em>选择应用程序名称</em></p></li>
+<li><p>查看将在清单文件中添加的值的摘要。单击<strong>“关联”</strong>。</p>
+
+<p><img src="./Images/association-summary.png?raw=true" alt="将应用程序与 Windows 应用商店关联摘要" />
+</p>
+
+<p><em>将应用程序与 Windows 应用商店关联摘要</em></p></li>
+<li><p><strong>关闭</strong>并<strong>保存</strong>对 <strong>package.appmanifest</strong> 所做的更改。</p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Updating_the_Client_Codebase_for_Notifications">任务 2 - 更新通知的客户端代码库</h4>
+
+<p>在此任务中，您将更新客户端应用程序，使其能够使用通知应用程序服务器来发送推送通知。</p>
+
+<ol>
+<li><p>在解决方案资源管理器中，<strong>右键单击</strong> <strong>js</strong> 文件夹，然后选择<strong>“添加”|“现有项”</strong>。</p></li>
+<li><p>浏览到 <strong>Source/Assets/Client/JS</strong> 文件夹，选择 <strong>notifications.js</strong>，然后单击<strong>“添加”</strong>。</p>
+
+<p><img src="./Images/add-notificationsjs-to-your-client-applicatio.png?raw=true" alt="将 notifications.js 添加到您的客户端应用程序" />
+</p>
+
+<p><em>将 notifications.js 添加到您的客户端应用程序</em></p></li>
+<li><p>打开 <strong>notifications.js</strong> 文件，并将 URL 更新为指向正确的端点。更新 http://<em>[YOUR_WEBSITE_DOMAIN]</em>/endpoints 中的 <strong>serverUrl</strong> 值 <em>[YOUR_DNS_NAME]</em>。您将获得在前面的练习中在 <strong>Windows Azure 管理门户</strong>中创建的网站的 <strong>DNS</strong> 值。</p>
+
+<p><code>var serverUrl = &quot;http://[YOUR_WEBSITE_DOMAIN]/endpoints&quot;;</code></p></li>
+<li><p>在解决方案资源管理器中打开 <strong>default.html</strong>，添加一个对 <em>/js/notifications.js</em> 的<strong>脚本引用</strong>，并添加一个 ID 为 <em>statusMessage</em> 的 <strong>div</strong> 标记。</p>
+
+<!-- mark:15,18 -->
+
+<span class="codelanguage">HTML</span><pre><code class="HTML"><span style="color:#0000FF">&lt;</span>!DOCTYPE html<span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">html</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">head</span><span style="color:#0000FF">&gt;</span>
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">meta</span> <span style="color:#FF0000">charset</span>=<span style="color:#0000FF">&quot;utf-8&quot;</span><span style="color:#0000FF">&gt;</span>
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">title</span><span style="color:#0000FF">&gt;</span>Application21<span style="color:#0000FF">&lt;/</span><span style="color:#800000">title</span><span style="color:#0000FF">&gt;</span>
+
+     <span style="color:#008000">&lt;!-- WinJS references --&gt;</span>
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">link</span> <span style="color:#FF0000">href</span>=<span style="color:#0000FF">&quot;//Microsoft.WinJS.0.6/css/ui-dark.css&quot;</span> <span style="color:#FF0000">rel</span>=<span style="color:#0000FF">&quot;stylesheet&quot;</span><span style="color:#0000FF">&gt;</span>
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">script</span> <span style="color:#FF0000">src</span>=<span style="color:#0000FF">&quot;//Microsoft.WinJS.0.6/js/base.js&quot;</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">script</span><span style="color:#0000FF">&gt;</span>
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">script</span> <span style="color:#FF0000">src</span>=<span style="color:#0000FF">&quot;//Microsoft.WinJS.0.6/js/ui.js&quot;</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">script</span><span style="color:#0000FF">&gt;</span>
+
+     <span style="color:#008000">&lt;!-- Application21 references --&gt;</span>
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">link</span> <span style="color:#FF0000">href</span>=<span style="color:#0000FF">&quot;/css/default.css&quot;</span> <span style="color:#FF0000">rel</span>=<span style="color:#0000FF">&quot;stylesheet&quot;</span><span style="color:#0000FF">&gt;</span>
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">script</span> <span style="color:#FF0000">src</span>=<span style="color:#0000FF">&quot;/js/default.js&quot;</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">script</span><span style="color:#0000FF">&gt;</span>
+<strong class="markLine">     <span style="color:#0000FF">&lt;</span><span style="color:#800000">script</span> <span style="color:#FF0000">src</span>=<span style="color:#0000FF">&quot;/js/notifications.js&quot;</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">script</span><span style="color:#0000FF">&gt;</span></strong>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">head</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">body</span><span style="color:#0000FF">&gt;</span>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">id</span>=<span style="color:#0000FF">&quot;statusMessage&quot;</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span></strong>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">body</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">html</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>打开 <strong>js</strong> 文件中的 <strong>default.js</strong>，并添加一个针对 <strong>notifications.js</strong> 的 <strong>openNotificationsChannel()</strong> 的调用。</p>
+
+<p><img src="./Images/adding-a-call-to-opennotificationschannel-to.png?raw=true" alt="添加对 openNotificationsChannel() 的调用可确保通道是从 WNS 请求的并向通知应用程序服务器注册。" />
+</p>
+
+<p><em>添加对 openNotificationsChannel() 的调用可确保通道是从 WNS 请求的并向通知应用程序服务器注册。</em></p></li>
+<li><p>通过<strong>“文件”</strong>|<strong>“全部保存”</strong>（或者按 <strong>Ctrl + Shift + S</strong>）保存所有更改。</p></li>
+<li><p>在<strong>“生成”</strong>菜单上，单击<strong>“生成解决方案”</strong>以确保生成解决方案。</p></li>
+<li><p>打开 <strong>notifications.js</strong> 并找到 <strong>openNotificationsChannel()</strong> 方法。此方法将为通知应用程序服务器创建一个推送通知通道。</p></li>
+</ol>
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Sending_Push_Notifications">练习 2：发送推送通知</h3>
+
+<p>这部分介绍如何运行您的客户端应用程序，并通过在前面的练习中部署到 Windows Azure 中的通知应用程序服务器来向此客户端应用程序发送通知。</p>
+
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_-_Running_the_Notification_enabled_Windows_8_Style_UI_App">任务 1 - 运行启用了通知的 Windows 8 样式 UI 应用程序</h4>
+
+<p>在此任务中，您将运行您在前面的练习中创建的客户端应用程序，以便为 WNS 创建通道，然后向通知应用程序服务器注册此通道。</p>
+
+<ol>
+<li><p>打开位于 <strong>Source/Ex2-SendingPushNotifications/Begin</strong> 文件夹下的 <strong>Notifications.Client.sln</strong> 样式 UI 应用程序。或者，也可以继续使用在完成前一个练习后得到的解决方案。</p>
+<blockquote>
+<p><strong>注意：</strong>如果您选择打开 Begin 文件夹中的解决方案，则必须打开 <strong>notifications.js</strong> 文件，并更新 URL 以指向正确的端点。更新 http://<em>[YOUR_WEBSITE_DOMAIN]</em>/endpoints 中的 <strong>serverUrl</strong> 值 <em>[YOUR_DNS_NAME]</em>。您将获得在 <strong>Windows Azure 管理门户</strong>中创建的网站的 <strong>DNS</strong> 值。</p>
+
+<p><code>var serverUrl = &quot;http://[YOUR_WEBSITE_DOMAIN]/endpoints&quot;;</code></p>
+</blockquote></li>
+<li><p>打开解决方案之后，请按 <strong>F5</strong>。根据先前的配置内容，当应用程序启动时，它将调用 <strong>openNotificationsChannel()</strong> 方法。这会从 <strong>WNS</strong> 请求一个通道，并将其提交到您部署到 Windows Azure 的<strong>“通知应用程序服务器”</strong>。在 <strong>statusMessage</strong> div 中，您将看到<strong>“通道 URI”</strong>已成功发送到您的服务。</p>
+
+<p><img src="./Images/client-output-after-successful-channel-reques.png?raw=true" alt="从 WNS 成功请求通道后的客户端输出和向通知应用程序服务器注册" />
+</p>
+
+<p><em>从 WNS 成功请求通道后的客户端输出和向通知应用程序服务器注册</em></p></li>
+</ol>
+
+<p><a name="Ex2Task2"></a></p>
+
+<h4 id="Task_2_-_Sending_Push_Notifications_using_the_ASP_NET_MVC_4_Portal">任务 2 - 使用 ASP .NET MVC 4 门户发送推送通知</h4>
+
+<p>既然已经从 WNS 成功请求了通道并已向通知应用程序服务器注册了此通道，那么现在就可以开始通过门户发送通知了。</p>
+
+<ol>
+<li><p>切换到 Web 浏览器，并使用以下凭据登录到已部署的应用程序（例如 http://<em>[YOUR_SUBDOMAIN]</em>/.cloudapp.net）：</p>
+
+<ol>
+<li>用户名：<strong>admin</strong></li>
+<li>密码：<img src="./Images/password.png?raw=true" alt="密码" />（带一个零）</li>
+</ol></li>
+<li><p>一旦登录，则将显示其他菜单选项，以允许您发送推送通知并管理在发送通知时使用的图像 (blob)。</p>
+
+<p><img src="./Images/notification-app-server-home-page.png?raw=true" alt="通知应用程序服务器主页" />
+</p>
+
+<p><em>通知应用程序服务器主页</em></p></li>
+<li><p>单击<strong>“推送通知”</strong>菜单选项。此处，您将看到您使用通过您的 Web 角色注册的示例 Windows 8 样式 UI 应用程序所请求的通道。</p>
+
+<p><img src="./Images/pushing-notifications.png?raw=true" alt="推送通知" />
+</p>
+
+<p><em>推送通知</em></p>
+<blockquote>
+<p><strong>注意：</strong>如果您从客户端应用程序中重新注册了通道，则尽管此页处于打开状态，但也值得刷新此页面，以确保您捕获了最新的通道 URI。</p>
+</blockquote></li>
+<li><p>您现在可以向此通道发送第一个 <em>toast</em> 通知。单击<strong>“发送通知”</strong>按钮以打开通知模板对话框窗口。</p></li>
+<li><p>在第一个下拉列表中选择 <strong>Toast</strong>，然后选择 <strong>ToastImageAndText01</strong> 模板。</p></li>
+<li><p>使用您的方形 <strong>WindowsAzureLogo.png</strong> 配置模板列，并在<strong>“常规文本”</strong>中键入一些文本，如下所示：</p>
+
+<p><img src="./Images/selecting-notification-type-and-template.png?raw=true" alt="选择通知类型和模板" />
+</p>
+
+<p><em>选择通知类型和模板</em></p></li>
+<li><p>单击<strong>“发送”</strong>，观察 Web 门户指示消息已成功发送到 <strong>WNS</strong>，并且 <em>Toast</em> 通知到达了客户端应用程序。</p>
+
+<p><img src="./Images/notification-sent-confirmation.png?raw=true" alt="通知已发送确认" />
+</p>
+
+<p><em>通知已发送确认</em></p>
+<blockquote>
+<p><strong>注意：</strong>如果您收到 403 未授权通知或者根本没有显示通知，请尝试刷新页面，以确保刷新了您正发送到的通道。然后，请检查您使用 package.appxmanifest 中的正确 CN 创建了 WNS 凭据，并且您已正确地配置了 package.appxmanifest 和 Web.config。</p>
+</blockquote></li>
+<li><p>现在，您将看到如何发送<em>磁贴</em> 通知。在第一个下拉列表中选择<strong>“磁贴”</strong>，然后选择 <strong>TileWideImageAndText01</strong> 模板。</p></li>
+<li><p>使用以下各项配置模板列：</p>
+
+<ol>
+<li> 您的宽徽标 <strong>WindowsAzureLogoWide.png</strong>。</li>
+<li> 要显示在<strong>“大型文本”</strong>和<strong>“常规文本”</strong>中的自定义文本</li>
+<li><p>单击<strong>“发送”</strong>。</p>
+
+<p><img src="./Images/pushing-a-tile-notification.png?raw=true" alt="推送磁贴通知" />
+</p>
+
+<p><em>推送磁贴通知</em></p></li>
+</ol></li>
+<li><p>通过按<strong>“Windows 键”</strong>(<img src="./Images/start.png?raw=true" alt="开始" />) 返回到<strong>“开始”</strong>，并观察您的<em>磁贴</em> 通知现已发送并正在显示。</p>
+
+<p><img src="./Images/delivered-tile-notification.png?raw=true" alt="已发送磁贴通知" />
+</p>
+
+<p><em>已发送磁贴通知</em></p></li>
+<li><p>现在，您将看到如何发送<em>徽章</em> 通知。在第一个下拉列表中选择<strong>徽章</strong>，然后选择<strong>“符号”</strong>模板。</p></li>
+<li><p>在模板列中，选择 <strong>NewMessage</strong> 选项，然后单击<strong>“发送”</strong>。</p>
+
+<p><img src="./Images/pushing-a-badge-notification.png?raw=true" alt="推送徽章通知" />
+</p>
+
+<p><em>推送徽章通知</em></p></li>
+<li><p>通过按<strong>“Windows 键”</strong>(<img src="./Images/start.png?raw=true" alt="开始" />) 返回到<strong>“开始”</strong>，并观察您的<em>磁贴</em> 现已更新了<em>徽章</em> 以显示 NewMessage 符号类型：</p>
+
+<p><img src="./Images/updated-tile-notification-with-a-badge.png?raw=true" alt="更新了磁贴通知以及徽章" />
+</p>
+
+<p><em>更新了磁贴通知以及徽章</em></p>
+<blockquote>
+<p><strong>注意：</strong>本文概括总结了如何使用 Windows Azure Toolkit for Windows 8 发送 Toast、磁贴和徽章通知。作为一项练习，建议您花些时间来了解每种不同的通知类型可用的丰富模板集，以及您如何使用 blob 存储来存储通知的图像资产。</p>
+</blockquote></li>
+</ol>
+
+<hr />
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>通过完成此动手实验，您学习了如何：</p>
+
+<ul>
+<li>   使用 Windows Azure 管理门户创建存储帐户和网站组件。</li>
+<li>  使用 WNS 和 Live Connect 门户请求要用于 WNS 的凭据。</li>
+<li>  使用 Web 部署来部署网站。</li>
+<li>  配置 Windows 8 样式 UI 客户端来接收通知。</li>
+<li>  测试使用 Windows Azure Toolkit for Windows 8 门户通过 WNS 将推送通知发送到客户端应用程序的过程</li>
+</ul>
+
+<p>如果您希望为自己的应用程序更新<strong>“通知应用程序服务器”</strong>的完整代码库，请下载 <strong>Windows Azure Training Kit for Windows 8</strong> (<a href="http://watwindows8.codeplex.com">http://watwindows8.codeplex.com</a>)。</p>
+
+<hr /> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-Windows8NotificationsHTMLJS//issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

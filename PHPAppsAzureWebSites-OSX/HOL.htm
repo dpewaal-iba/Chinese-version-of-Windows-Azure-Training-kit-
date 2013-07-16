@@ -1,0 +1,397 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 使用 Windows Azure 网站构建和发布 PHP 应用程序 (OS X)</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /><span class="mainHomepageSubTitle"> 培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-PHPAppsAzureWebSites-OSX" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-PHPAppsAzureWebSites-OSX" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="Title"></a></p>
+
+<h1 id="Building_and_Publishing_PHP_Applications_with_Windows_Azure_Web_Sites_OS_X">使用 Windows Azure 网站构建和发布 PHP 应用程序 (OS X)</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>在此动手实验中，您将创建一个简单的 <a href="http://www.php.net">PHP</a> 应用程序，并使用 <strong>FTP 部署</strong>来部署此应用程序，从而了解 Windows Azure <strong>网站</strong>服务的基本元素。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>从 Windows Azure 门户创建网站</li>
+<li>创建简单的 PHP 应用程序并使用 FTP 部署它</li>
+<li>使用“Git 发布”功能（该功能是使用“适用于 Mac 和 Linux 的 Windows Azure 命令行工具”启用的）创建一个新网站，然后使用 GIT 部署此应用程序</li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li><a href="http://www.apple.com/macosx/">Mac OS X</a></li>
+<li><a href="http://git-scm.com/download">GIT 版本控制系统</a></li>
+<li><a href="http://nodejs.org/#download">Node.js</a></li>
+<li><p><a href="https://www.windowsazure.com/en-us/develop/nodejs/how-to-guides/command-line-tools/">适用于 Mac 和 Linux 的 Windows Azure 命令行工具</a></p>
+<blockquote>
+<p><strong>注意：</strong>如果您没有安装适用于 Mac 和 Linux 的 Windows Azure 命令行工具，请打开一个终端，然后运行以下命令：</p>
+
+<span class="codelanguage">ShellScript</span><pre><code class="ShellScript">sudo npm install azure-cli -g
+</code></pre>
+
+<p>通过使用 -g，Windows Azure 命令行工具将全局安装在您的计算机上。这意味着，您将可以从任何位置执行 Azure 命令。</p>
+</blockquote></li>
+<li><p>启用了网站预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></p></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>本实验设计为使用 OS X 操作系统。</p>
+</blockquote>
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li> <a href="#Exercise1">在 Windows Azure 网站中创建和发布 PHP 应用程序</a></li>
+<li> <a href="#Exercise2">使用适用于 Mac 和 Linux 的 Windows Azure 命令行工具发布 PHP 应用程序</a></li>
+</ol>
+
+<hr />
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Creating_and_Publishing_PHP_Applications_in_Windows_Azure_Web_Sites">练习 1：在 Windows Azure 网站中创建和发布 PHP 应用程序</h3>
+
+<p>在第一个练习中，您将在 Windows Azure 门户中设置一个新网站，使用 FTP 创建一个简单的 PHP 应用程序，最后利用 Windows Azure 提供的 FTP 端点发布此应用程序。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_a_new_Web_Site_from_Windows_Azure_Portal">任务 1 - 从 Windows Azure 门户创建新网站</h4>
+
+<ol>
+<li><p>转到 <a href="https://manage.windowsazure.com/">Windows Azure 门户</a>并使用您的帐户凭据登录。</p>
+
+<p><img src="images/login.png?raw=true" alt="登录到 Windows Azure 门户" title="登录到 Windows Azure 门户" />
+</p>
+
+<p><em>登录到 Windows Azure 门户</em></p></li>
+<li><p>单击底部的<strong>“新建”</strong>链接。</p>
+
+<p><img src="images/new-web-site.png?raw=true" alt="创建新网站" title="创建新网站" />
+</p>
+
+<p><em>创建新网站</em></p></li>
+<li><p>选择<strong>“网站”|“快速创建”</strong>。为这个新网站提供一个可用前缀，然后单击<strong>“创建网站”</strong>。</p>
+
+<p><img src="images/quick-create.png?raw=true" alt="使用“快速创建”创建新网站" title="使用“快速创建”选项创建新网站" />
+</p>
+
+<p><em>使用“快速创建”创建新网站</em></p></li>
+<li><p>等待新网站创建完成。</p>
+
+<p><img src="images/creating.png?raw=true" alt="创建新网站状态" title="创建新网站状态" />
+</p>
+
+<p><em>创建新网站状态</em></p></li>
+<li><p>创建了网站后，单击 <strong>URL</strong> 链接以便检查它是否工作正常。</p>
+
+<p><img src="images/navigate-website.png?raw=true" alt="导航占位符网站" title="导航占位符网站" />
+</p>
+
+<p><em>导航占位符网站</em></p></li>
+<li><p>回到门户，然后单击网站<strong>“名称”</strong>列以打开网站仪表板。</p>
+
+<p><img src="images/go-to-the-dashboard.png?raw=true" alt="选择“仪表板”选项卡" title="选择“仪表板”选项卡" />
+</p>
+
+<p><em>选择“仪表板”选项卡</em></p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Creating_a_New_Simple_PHP_Application_and_Publishing_it_Using_FTP">任务 2 - 新建简单的 PHP 应用程序并使用 FTP 发布它</h4>
+
+<ol>
+<li><p>打开新的命令行提示符窗口，为网站创建一个新文件夹（例如 <strong>phpsample</strong>）。然后，将当前目录更改为您创建的这个目录。</p>
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">mkdir phpsample cd phpsample
+</code></pre>
+
+<p><img src="images/create-website-folder2.png?raw=true" alt="创建 phpsample 文件夹" title="创建 phpsample 文件夹" />
+</p>
+
+<p><em>创建 phpsample 文件夹</em></p></li>
+<li><p>创建一个新文件，并将其命名为 <strong>index.php</strong>。</p>
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">touch index.php
+</code></pre></li>
+<li><p>使用 <strong>TextEdit</strong> 打开 <strong>index.php</strong>，然后编写以下代码段。</p>
+
+<span class="codelanguage">php</span><pre><code class="php"><span style="color:#0000FF">&lt;</span>!DOCTYPE html<span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">html</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">head</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">title</span><span style="color:#0000FF">&gt;</span>Windows Azure Web Sites - Hello World sample!<span style="color:#0000FF">&lt;/</span><span style="color:#800000">title</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">head</span><span style="color:#0000FF">&gt;</span>
+
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">body</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span>Windows Azure Web Sites - Hello World sample!<span style="color:#0000FF">&lt;/</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span>
+
+    <span style="color:#0000FF">&lt;?</span>php
+        <span style="color:#008000">// Show all information, defaults to INFO_ALL</span>
+        <a href="http://www.php.net/phpinfo" style="color:#FFA500">phpinfo</a>();
+    <span style="color:#0000FF">?&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">body</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">html</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+
+<p><img src="images/index-php.png?raw=true" alt="编写 PHP hello world 示例代码" title="编写 PHP hello world 示例代码" />
+</p>
+
+<p><em>编写 PHP hello world 示例代码</em></p></li>
+<li><p>保存 <strong>index.php</strong> 文件并关闭 TextEdit。</p></li>
+<li><p>转到 Windows Azure 门户仪表板并复制<strong>“FTP 主机名”</strong>。</p>
+
+<p><img src="images/ftp-hostname.png?raw=true" alt="获取 FTP 部署主机名" title="获取 FTP 部署主机名" />
+</p>
+
+<p><em>获取 FTP 部署主机名</em></p></li>
+<li><p>回到命令提示符，并通过运行以下命令连接到 FTP 发布服务（将主机名替换为从门户获得的值）。</p>
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">ftp s1.ftp.azurewebsites.com
+</code></pre>
+<blockquote>
+<p><strong>注意</strong>：将第一个 <strong>s1.ftp.azurewebsites.com</strong> 值替换为从门户获得的值（无 <strong>ftp://</strong> 前缀）。</p>
+</blockquote></li>
+<li><p>输入部署凭据的<strong>“用户名”</strong>和<strong>“密码”</strong>。确保<strong>“用户名”</strong>前面有网站的名称（例如，<strong>phpsample\admin</strong>）。</p>
+<blockquote>
+<p><strong>注意</strong>：部署凭据适用于与您的订阅关联的所有 Windows Azure 网站。如果您不知道自己的部署凭据，使用管理门户可以轻松重置它们。打开网站的<strong>“仪表板”</strong>页，单击<strong>“重置部署凭据”</strong>链接。提供一个新密码，然后单击“确定”。</p>
+
+<p><img src="images/deployment-credentials.png?raw=true" alt="输入用户名和密码" title="设置用户名和密码" />
+</p>
+
+<p><em>输入用户名和密码</em></p>
+</blockquote></li>
+<li><p>使用 <strong>PUT</strong> ftp 命令上载 <strong>index.php</strong> 文件。</p>
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">put index.php /site/wwwroot/index.php
+</code></pre>
+
+<p><img src="images/ftp-put.png?raw=true" alt="上载 index.php 文件" title="上载 index.php 文件" />
+</p>
+
+<p><em>上载 index.php 文件</em></p></li>
+<li><p>最后，浏览到发布的网站，以确保应用程序成功运行（您可以在 Windows Azure 门户仪表板中找到网站 <strong>URL</strong>）。</p>
+
+<p><img src="images/site-url.png?raw=true" alt="获取网站 URL" title="获取网站 URL" />
+</p>
+
+<p><em>获取网站 URL</em></p>
+
+<p><img src="images/sample-running.png?raw=true" alt="浏览到在线示例" title="浏览到在线示例" />
+</p>
+
+<p><em>浏览到在线示例</em></p></li>
+</ol>
+
+<hr />
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Using_the_Windows_Azure_Command-Line_Tools_for_Mac_and_Linux_for_Publishing_PHP_Applications">练习 2：使用适用于 Mac 和 Linux 的 Windows Azure 命令行工具发布 PHP 应用程序</h3>
+
+<p>在此练习中，您将使用适用于 Mac 和 Linux 的 Windows Azure 命令行工具下载您的管理证书，在启用 GIT 发布的情况下创建一个新网站，最后创建一个简单的 PHP 文件并通过将更改推送到远程存储库来部署此文件。</p>
+
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_-_Downloading_and_Importing_your_Management_Certificate">任务 1 - 下载和导入管理证书</h4>
+
+<ol>
+<li><p>打开一个新的终端窗口，执行 <strong>account download</strong> 命令以下载您的 Windows Azure 订阅<strong>“发布设置”</strong>文件。</p>
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">azure account download
+</code></pre>
+
+<p><img src="images/account-download.png?raw=true" alt="下载发布设置文件" title="下载发布设置文件" />
+</p>
+
+<p><em>下载发布设置文件</em></p>
+<blockquote>
+<p><strong>注意：</strong>此设置文件包含证书信息。</p>
+</blockquote></li>
+<li><p>此时将弹出一个新的浏览器窗口。使用与您的 Windows Azure 订阅相关联的凭据登录。</p>
+
+<p><img src="images/login.png?raw=true" alt="登录到 Windows Azure 门户" title="登录到 Windows Azure 门户" />
+</p>
+
+<p><em>登录到 Windows Azure 门户</em></p></li>
+<li><p>您的发布设置将下载到浏览器的默认下载文件夹（通常为 ~/Downloads），并将显示一个新页面，其中提供了相关的信息。</p>
+
+<p><img src="images/publish-profile-info.png?raw=true" alt="如何导入帐户的发布设置文件" title="如何导入帐户的发布设置文件" />
+</p>
+
+<p><em>如何导入帐户的发布设置文件</em></p></li>
+<li><p>返回命令提示符，然后通过运行以下命令导入在上一步中下载的文件。指定<strong>“发布配置文件”</strong>文件路径。</p>
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">azure account import ~/Downloads/account-credentials.publishsettings
+</code></pre>
+
+<p><img src="images/import-publish-settings.png?raw=true" alt="导入发布设置文件" title="导入发布设置文件" />
+</p>
+
+<p><em>导入发布设置文件</em></p></li>
+</ol>
+
+<p><a name="Ex2Task2"></a></p>
+
+<h4 id="Task_2_-_Creating_a_new_Web_Site_with_GIT_Publishing">任务 2 - 使用 GIT 发布创建新网站</h4>
+
+<ol>
+<li><p>为新网站创建一个新的文件夹（例如 <strong>phpsamplecli</strong>），然后将当前目录更改到此文件夹。</p>
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">mkdir phpsamplecli cd phpsamplecli
+</code></pre></li>
+<li><p>在启用了<strong>“GIT 发布”</strong>功能的情况下，运行以下 <strong>site create</strong> 命令以创建新网站。出现提示时，选择区域。</p>
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">azure site create --git phpsamplecli
+</code></pre>
+
+<p><img src="images/create-website-with-git.png?raw=true" alt="创建新网站并启用 GIT 发布" title="创建新网站并启用 GIT 发布" />
+</p>
+
+<p><em>创建新网站并启用 GIT 发布</em></p></li>
+<li><p>返回终端窗口，并创建名为 <strong>index.php</strong> 的新文件。</p>
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">touch index.php
+</code></pre>
+
+<p><img src="images/create-index-file.png?raw=true" alt="创建新的 index.php 文件" title="创建新的 index.php 文件" />
+</p>
+
+<p><em>创建新的 index.php 文件</em></p></li>
+<li><p>使用 <strong>TextEdit</strong> 打开 <strong>index.php</strong> 文件，然后编写以下代码段。</p>
+
+<span class="codelanguage">php</span><pre><code class="php"><span style="color:#0000FF">&lt;</span>!DOCTYPE html<span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">html</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">head</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">title</span><span style="color:#0000FF">&gt;</span>Windows Azure Web Sites - Hello World sample!<span style="color:#0000FF">&lt;/</span><span style="color:#800000">title</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">head</span><span style="color:#0000FF">&gt;</span>
+
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">body</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span>Windows Azure Web Sites - Hello World sample!<span style="color:#0000FF">&lt;/</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span>
+
+    <span style="color:#0000FF">&lt;?</span>php
+        <span style="color:#008000">// Show all information, defaults to INFO_ALL</span>
+        <a href="http://www.php.net/phpinfo" style="color:#FFA500">phpinfo</a>();
+    <span style="color:#0000FF">?&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">body</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">html</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+
+<p><img src="images/index-php.png?raw=true" alt="编写 PHP hello world 示例代码" title="编写 PHP hello world 示例代码" />
+</p>
+
+<p><em>编写 PHP hello world 示例代码</em></p></li>
+<li><p>保存 <strong>index.php</strong> 文件并关闭 TextEdit。</p></li>
+</ol>
+
+<p><a name="Ex2Task3"></a></p>
+
+<h4 id="Task_3_-_Deploying_the_Web_Site_using_GIT">任务 3 - 使用 GIT 部署网站</h4>
+
+<ol>
+<li><p>暂存新文件，通过运行下面的命令将更改提交并推送到 GIT 存储库。出现提示时，请输入部署密码。</p>
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">git add . git commit -a -m &quot;# initial commit&quot; git push azure master
+</code></pre>
+
+<p><img src="images/git-deployment.png?raw=true" alt="使用 GIT 部署网站" title="使用 GIT 部署网站" />
+</p>
+
+<p><em>使用 GIT 部署网站</em></p>
+<blockquote>
+<p>部署凭据不同于与您的 Windows Azure 订阅关联的帐户，并适用于与您的订阅关联的所有 Windows Azure 网站。如果您不知道自己的部署凭据，使用管理门户可以轻松重置它们。打开网站的<strong>“仪表板”</strong>页，单击<strong>“重置部署凭据”</strong>链接。提供一个新密码，然后单击“确定”。</p>
+
+<p><img src="images/deployment-credentials.png?raw=true" alt="输入用户名和密码" title="设置用户名和密码" />
+</p>
+
+<p><em>输入用户名和密码</em></p>
+</blockquote></li>
+<li><p>使用 <strong>site browse</strong> 命令以确保部署了站点。</p>
+
+<span class="codelanguage">CommandPrompt</span><pre><code class="CommandPrompt">azure site browse phpsamplecli
+</code></pre>
+
+<p><img src="images/browse-command.png?raw=true" alt="浏览网站" title="浏览网站" />
+</p>
+
+<p><em>浏览网站</em></p></li>
+</ol>
+
+<hr /> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-PHPAppsAzureWebSites-OSX/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

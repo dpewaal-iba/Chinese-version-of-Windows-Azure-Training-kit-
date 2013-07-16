@@ -1,0 +1,640 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 使用 Windows Azure Mobile Services 构建 Windows 应用商店应用简介 (JS)</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-Windows8AndMobileServicesJS" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-Windows8AndMobileServicesJS" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="title"></a></p>
+
+<h1 id="Introduction_to_Building_Windows_Store_Apps_with_Windows_Azure_Mobile_Services_JS">使用 Windows Azure Mobile Services 构建 Windows 应用商店应用简介 (JS)</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>在此 HOL 中，您将学会如何利用 Visual Studio 2012 和 Windows Azure Mobile Services 来添加结构化存储，将通知、集成的身份验证和计划的作业推送到 Windows 应用商店应用。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<ul>
+<li>创建 Windows Azure 移动服务</li>
+<li>使用 Windows Azure Mobile Services SDK</li>
+<li>了解如何从移动服务中插入、更新、读取和删除行</li>
+<li>将推送通知添加到您的应用程序</li>
+<li>锁定您的移动服务，以便只有经过身份验证的用户才能使用它</li>
+<li><p>添加计划的作业，以便轮询 Twitter API 和发送磁贴更新<a name="technologies"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3></li>
+<li><p>Windows Azure 订阅（已启用 Mobile Services 预览）- <a href="http://www.windowsazure.com/en-us/develop/mobile/tutorials/create-a-windows-azure-account/">创建 Windows Azure 帐户并启用预览功能</a></p></li>
+<li><p><a href="http://www.microsoft.com/visualstudio/">Visual Studio Express 2012 for Windows 8</a> 或更高版本</p></li>
+</ul>
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#Exercise1">创建您的第一个移动服务</a></li>
+<li><a href="#Exercise2">将推送通知添加到您的应用程序</a></li>
+<li><a href="#Exercise3">将身份验证添加到您的应用程序和服务</a></li>
+<li><a href="#Exercise4">将计划的作业添加到您的移动服务</a></li>
+</ol>
+
+<p><a name="Exercise1"></a></p>
+
+<h2 id="Exercise_1_Creating_your_first_Mobile_Service">练习 1：创建您的第一个移动服务</h2>
+
+<p>此练习介绍如何使用 Windows Azure Mobile Services 将基于云的后端服务添加到 Windows 8 应用程序。您将同时创建一个新的移动服务和一个简单的 <em>To do list</em> 应用程序，后者会将应用程序数据存储在新的移动服务中。</p>
+
+<p>已完成的应用程序的屏幕快照如下所示：</p>
+
+<p><img src="Images/image-1.png?raw=true" alt="图像 1" />
+</p>
+
+<p><a name="create-a-new-mobile-service"></a></p>
+
+<h3 id="Task_1-_Create_a_new_mobile_service">任务 1 - 创建新的移动服务</h3>
+
+<p>请按照下面的步骤来创建新的移动服务。</p>
+
+<ol>
+<li><p>登录到 <a href="https://manage.windowsazure.com">Windows Azure 管理门户</a>并导航到 Mobile Services。</p></li>
+<li><p>单击<strong>“+新建”</strong>按钮，然后依次单击<strong>“移动服务”</strong>和<strong>“创建”</strong></p>
+
+<p><img src="Images/image-2.png?raw=true" alt="图像-2" />
+</p></li>
+<li><p>展开<strong>“移动服务”</strong>，然后单击<strong>“创建”</strong></p>
+
+<p><img src="Images/image-3.png?raw=true" alt="图像 3" />
+</p>
+
+<p>此时将显示<strong>“新建移动服务”</strong>对话框。</p></li>
+<li><p>在<strong>“创建移动服务”</strong>页上，在 <strong>URL</strong> 文本框中键入新移动服务的子域名，然后等待名称验证。完成名称验证后，单击右箭头按钮转至下一页。</p>
+
+<p><img src="Images/image-4.png?raw=true" alt="图像 4" />
+</p>
+
+<p>此时将显示<strong>“指定数据库设置”</strong>页。</p>
+<blockquote>
+<p><strong>注意：</strong>作为本教程的一部分，您要创建一个新的 SQL Database 实例和服务器。您可以像对待其他任何 SQL Database 实例一样重复使用和管理这个新的数据库。如果您在新移动服务所在的同一区域中已经有了一个数据库，则可以选择“使用现有数据库”，然后选择该数据库。建议不要使用不同区域中的数据库，因为这会带来额外的带宽成本和更高的延迟。</p>
+</blockquote></li>
+<li><p>在<strong>“名称”</strong>中，键入新数据库的名称，然后键入<strong>“登录名”</strong>（这是新 SQL Database 服务器的管理员登录名），键入并确认密码，然后单击复选按钮以完成此过程。</p>
+
+<p><img src="Images/image-5.png?raw=true" alt="图像 5" />
+</p>
+<blockquote>
+<p><strong>注意：</strong>当您提供的密码不满足最低要求或者不匹配时，将显示警告。我们建议您记下您指定的管理员登录名和密码；当您将来要重复使用 SQL Database 实例或服务器时，需要用到这些信息。现在，您创建了一个可供您的移动应用程序使用的新移动服务。</p>
+</blockquote></li>
+</ol>
+
+<p>现在，您创建了一个可供您的移动应用程序使用的新移动服务。</p>
+
+<p><a name="create-a-new-app"></a></p>
+
+<h3 id="Task_2_-_Create_a_new_app">任务 2 - 创建新的应用程序</h3>
+
+<p>一旦创建了移动服务，您就可以在管理门户中，快速、轻松地开始创建新的 Windows 应用商店应用或修改现有应用，以连接到您的移动服务。</p>
+
+<ol>
+<li><p>在管理门户中，单击 <strong>Mobile Services</strong>，然后单击您刚创建的移动服务。</p></li>
+<li><p>在“快速启动”选项卡上，展开<strong>“创建新的 Windows 8 应用商店”</strong>。</p>
+
+<p><img src="Images/image-6.png?raw=true" alt="图像 6" />
+</p>
+
+<p>此处显示了创建与您的移动服务相连的 Windows 8 应用程序的三个简单步骤。</p>
+
+<p><img src="Images/image-7.png?raw=true" alt="图像 7" />
+</p></li>
+<li><p>在您的本地计算机或虚拟机上，下载和安装 <a href="http://go.microsoft.com/fwlink/?LinkId=257546&amp;clcid=0x804">Visual Studio 2012 Express for Windows 8</a> 和 <a href="http://go.microsoft.com/fwlink/?LinkId=257545&amp;clcid=0x804">Mobile Services SDK</a>（如果尚未执行此操作）。</p>
+
+<p>此时将下载与示例 <em>To do list</em> 应用程序（与您的移动服务相连）对应的项目。将压缩的项目文件保存到本地计算机上，并记下您保存此文件的位置。</p></li>
+</ol>
+
+<p><a name="run-your-app"></a></p>
+
+<h3 id="Task_3_-_Run_your_app">任务 3 - 运行您的应用程序</h3>
+
+<ol>
+<li><p>浏览至您保存压缩项目文件的位置，在您的计算机上展开这些文件，然后在 Visual Studio 2012 Express for Windows 8 中打开解决方案文件。</p>
+
+<p><img src="Images/todolist-solution-files.png?raw=true" alt="TodoList 解决方案文件" />
+</p></li>
+<li><p>按 <strong>F5</strong> 键重新生成项目并启动应用程序。</p></li>
+<li><p>在应用程序中，在 <strong>Insert a TodoItem</strong>（插入待办事项）文本框中键入有意义的文本，例如 <em>Complete the demo</em>，然后单击 <strong>Save</strong>（保存）。</p>
+
+<p><img src="Images/image-9.png?raw=true" alt="图像 9" />
+</p>
+
+<p>这会向 Windows Azure 中托管的新移动服务发送 POST 请求。来自请求的数据将插入到 TodoItem 表中。存储在表中的项由移动服务返回，而数据显示在应用程序内的第二列中。</p>
+<blockquote>
+<p><strong>注意：</strong>您可以查看用于访问移动服务以便查询和插入数据的代码，此代码可在 MainPage.xaml.cs 文件（C#/XAML 项目）或 default.js（JavaScript/HTML 项目）文件中找到。</p>
+</blockquote></li>
+<li><p>回到管理门户，单击<strong>“数据”</strong>选项卡，然后单击 <strong>TodoItems</strong> 表并观察数据已成功存储</p>
+
+<p><img src="Images/image-10.png?raw=true" alt="图像 10" />
+</p>
+
+<p>这可让您浏览由应用程序插入到表中的数据。</p>
+
+<p><img src="Images/image-11.png?raw=true" alt="图像 11" />
+</p></li>
+</ol>
+
+<p><a name="Explore-your-app-code"></a></p>
+
+<h3 id="Task_4_-_Explore_your_app_code">任务 4 - 浏览您的应用程序代码</h3>
+
+<p>在此步骤中，我们浏览 <em>To do list</em> 应用程序代码，并了解通过 Windows Azure Mobile Services 客户端 SDK 使其与 Windows Azure Mobile Services 进行交互是多么简单。</p>
+
+<ol>
+<li><p>在 Visual Studio 2012 中返回到下载的 <em>To do list</em> 应用程序</p></li>
+<li><p>在解决方案资源管理器中，<strong>展开引用文件夹</strong>，并显示 Windows Azure Mobile Services 客户端 SDK 引用。</p>
+<blockquote>
+<p><strong>注意：</strong>您还可以从任何 Windows 应用商店应用中添加对 Windows Azure Mobile Services 客户端 SDK 的引用。使用“添加引用”对话框</p>
+</blockquote></li>
+<li><p>打开 <strong>js</strong> 文件夹下的 <strong>default.js</strong>。这是 Mobile Services 客户端 SDK 提供的 Javascript 函数，它提供了一种让应用程序与 <strong>Windows Azure Mobile Services</strong> 进行交互的方法。找到代码中对新的 <strong>MobileServiceClient</strong> 类进行实例化的部分。构造函数中的第一个参数是移动服务端点，第二个参数是移动服务的应用程序键。</p>
+
+<span class="codelanguage">Javascript</span><pre><code class="Javascript"> <span style="color:#0000FF">var</span> client = <span style="color:#0000FF">new</span> Microsoft.WindowsAzure.MobileServices.MobileServiceClient(
+            <span style="color:#8B0000">&quot;https://todolist.azure-mobile.net/&quot;</span>,
+            <span style="color:#8B0000">&quot;UrHdABRWplXRUyRsfnXBXyHdIlKRLH21&quot;</span>
+        );
+
+</code></pre></li>
+<li><p>在先前的代码之下，您可以看到移动服务客户端如何用于执行插入、更新、读取和删除等操作：</p>
+
+<ul>
+<li><p>为针对表的操作创建句柄的源代码</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">var</span> todoTable = client.getTable(&#39;TodoItem&#39;);
+
+</code></pre></li>
+<li><p>执行插入</p>
+
+<!-- mark:4-6; -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">var</span> insertTodoItem = function (todoItem) {
+        <span style="color:#008000">// This code inserts a new TodoItem into the database. When the operation completes</span>
+        <span style="color:#008000">// and Mobile Services has assigned an id, the item is added to the Binding List</span>
+<strong class="markLine">        todoTable.insert(todoItem).done(function (item) {</strong>
+<strong class="markLine">            todoItems.push(item);</strong>
+<strong class="markLine">        });</strong>
+    };
+
+</code></pre></li>
+<li><p>执行更新</p>
+
+<!-- mark:4-6 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">var</span> updateCheckedTodoItem = function (todoItem) {
+        <span style="color:#008000">// This code takes a freshly completed TodoItem and updates the database. When the MobileService </span>
+        <span style="color:#008000">// responds, the item is removed from the list </span>
+<strong class="markLine">        todoTable.update(todoItem).done(function (item) {</strong>
+<strong class="markLine">            todoItems.splice(todoItems.indexOf(item), 1);</strong>
+<strong class="markLine">        });</strong>
+    };
+</code></pre></li>
+<li><p>执行读取</p>
+
+<!-- mark:3-9 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">var</span> refreshTodoItems = function () {
+        <span style="color:#008000">// This code refreshes the entries in the list view be querying the TodoItems table.</span>
+<strong class="markLine">        <span style="color:#008000">// The query excludes completed TodoItems                </span></strong>
+<strong class="markLine">        todoTable.where({ complete: <span style="color:#0000FF">false</span> })</strong>
+<strong class="markLine">            .read()</strong>
+<strong class="markLine">            .done(function (results) {</strong>
+<strong class="markLine">                todoItems = <span style="color:#0000FF">new</span> WinJS.Binding.List(results);</strong>
+<strong class="markLine">                listItems.winControl.itemDataSource = todoItems.dataSource;</strong>
+<strong class="markLine">            });</strong>
+    };
+</code></pre></li>
+</ul></li>
+</ol>
+
+<p><a name="Exercise2"></a></p>
+
+<h2 id="Exercise_2_Adding_Push_Notifications_to_your_app">练习 2：将推送通知添加到您的应用程序</h2>
+
+<p>在演示中，您可以使用 Windows 推送通知服务 (WNS) 将推送通知添加到快速启动项目。完成后，移动服务 todolist 表中的插入操作将生成要返回给应用程序的推送通知。</p>
+
+<p><a name="Register-your-app-for-push-notifications-and-configure-Mobile-Services"></a></p>
+
+<h3 id="Task_1_-_Register_your_app_for_push_notifications_and_configure_Mobile_Services">任务 1 - 注册应用程序以发送推送通知，并配置 Mobile Services</h3>
+
+<ol>
+<li><p>在 Visual Studio 菜单中单击<strong>“应用商店”</strong>并选择<strong>“保留应用程序名称”</strong>。</p>
+
+<p><img src="./Images/reserving-app-name.png?raw=true" alt="保留应用程序名称" />
+</p></li>
+<li><p>浏览器将显示 Windows 应用商店页，您将使用该页来获取您的 WNS 凭据。在“提交应用程序”部分中，单击<strong>“应用程序名称”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>您需要使用 Microsoft 帐户登录才能访问 Windows 应用商店。</p>
+</blockquote>
+<p><img src="./Images/giving-app-name-windows-store.png?raw=true" alt="为您的应用程序提供唯一名称" />
+</p></li>
+<li><p>在“应用程序名称”字段中，插入位于解决方案的 <strong>package.appxmanifest</strong> 文件内的“Package Display Name”，然后单击<strong>“保留应用程序名称”</strong>。然后单击<strong>“保存”</strong>以确认保留操作。</p>
+
+<p><img src="./Images/app-name-windows-store.png?raw=true" alt="保留应用程序名称" />
+</p>
+
+<p><img src="./Images/name-reservation-successful-win-store.png?raw=true" alt="确认保留应用程序名称" />
+</p></li>
+<li><p>现在，您将需要标识您的应用程序以便获取要插入 <strong>package.appxmanifest</strong> 文件的名称和发布者。在“提交应用程序”页中，单击<strong>“高级功能”</strong>。</p>
+
+<p><img src="./Images/app-name-reverved-completely-windows-store.png?raw=true" alt="为 Notifications.Client 应用配置推送通知" />
+</p></li>
+<li><p>在“高级功能”页中，单击<strong>“推送通知和 Live Connect 服务信息”</strong>。</p>
+
+<p><img src="./Images/push-notif-live-connect-service-info.png?raw=true" alt="“高级功能”页" />
+</p></li>
+<li><p>进入“推送通知和 Live Connect 服务信息”部分中后，单击<strong>“标识你的应用”</strong>。</p>
+
+<p><img src="./Images/identifying-your-app.png?raw=true" alt="“推送通知概述”页" />
+</p></li>
+<li><p>现在，我们需要用 Windows 应用商店中的信息设置 <strong>package.appxmanifest</strong> 文件的标识名称和发布者。返回到 Visual Studio，右键单击 <strong>package.appxmanifest</strong> 并选择<strong>“查看代码”</strong>。使用在 Windows 应用商店中获取的项替换 Identity 元素的 Name 和 Publisher 属性。单击<strong>“正在对你的服务进行身份验证”</strong>。</p>
+
+<p><img src="./Images/app-identification.png?raw=true" alt="设置标识名称和发布者" />
+</p></li>
+<li><p>最后，我们获取了<strong>“程序包安全标识符(SID)”</strong>和<strong>“客户端密钥”</strong>，它们是我们更新通知应用程序服务器的 Web 配置所需的 WNS 凭据。</p>
+
+<p><img src="./Images/sid-client-secret.png?raw=true" alt="程序包安全标识符 (SID) 和客户端密钥" />
+</p>
+<blockquote>
+<p><strong>注意：</strong>客户端密钥和程序包 SID 是重要的安全凭据。请不要与任何人共享这些密钥或与您的应用程序一起分发这些密钥。</p>
+</blockquote></li>
+<li><p>登录到 <a href="https://manage.windowsazure.com/">Windows Azure 管理门户</a>，单击 <strong>Mobile Services</strong>，然后单击您的应用程序。</p>
+
+<p><img src="Images/image-13.png?raw=true" alt="图像 13" />
+</p></li>
+<li><p>单击<strong>“推送”</strong>选项卡，输入前面为 WNS 获取的<strong>“客户端密钥”</strong>和<strong>“程序包 SID”</strong>值，然后单击<strong>“保存”</strong>。</p>
+
+<p><img src="Images/image-14.png?raw=true" alt="图像 14" />
+</p>
+<blockquote>
+<p><strong>注意：</strong>在以下操作步骤中，您需要将您的应用程序与 Windows 应用商店关联起来。如果您已从 Windows 推送通知和 Live Connect 门户获得 WNS 凭据，则不需要执行这些步骤。</p>
+</blockquote></li>
+<li><p>在 Visual Studio 菜单中单击<strong>“应用商店”</strong>，然后选择<strong>“将应用程序与应用商店关联”</strong>。</p>
+
+<p><img src="./Images/associating-app-with-store.png?raw=true" alt="将应用程序与应用商店关联" />
+</p></li>
+<li><p>在“将应用程序与 Windows 应用商店关联”向导中，单击<strong>“登录”</strong>。</p>
+
+<p><img src="./Images/associate-app-with-store.png?raw=true" alt="“将应用程序与应用商店关联”向导" />
+</p></li>
+<li><p>输入您的凭据并单击<strong>“登录”</strong>。</p>
+
+<p><img src="./Images/sign-in-for-association.png?raw=true" alt="插入您的凭据以便在 Windows 应用商店中关联您的应用程序" />
+</p></li>
+<li><p>在“选择应用程序名称”步骤中，选择 <strong>Notifications.Client</strong> 并单击<strong>“下一步”</strong>。</p>
+
+<p><img src="./Images/selecting-app-name.png?raw=true" alt="选择应用程序名称" />
+</p></li>
+<li><p>查看将在清单文件中添加的值的摘要。单击<strong>“关联”</strong>。</p>
+
+<p><img src="./Images/association-summary.png?raw=true" alt="将应用程序与 Windows 应用商店关联摘要" />
+</p></li>
+<li><p><strong>关闭</strong>并<strong>保存</strong>对 <strong>package.appmanifest</strong> 所做的更改。</p></li>
+</ol>
+
+<p><a name="Add-push-notifications-to-the-app"></a></p>
+
+<h3 id="Task_2_-_Add_push_notifications_to_the_app">任务 2 - 将推送通知添加到应用程序</h3>
+
+<ol>
+<li><p>在 Visual Studio 中，打开 <strong>package.appxmanifest</strong>，选择<strong>“应用程序用户界面”</strong>选项卡并确保<strong>“支持 Toast 通知”</strong>设置为“是”。</p>
+<blockquote>
+<p><strong>注意：</strong>如果您希望发送长方形磁贴，则必须在“宽徽标”字段中提供默认的长方形磁贴。</p>
+</blockquote></li>
+<li><p>打开 <strong>js</strong> 文件夹下的 <strong>default.js</strong> 文件。</p></li>
+<li><p>将以下代码插入到 <strong>app.OnActivated</strong> 方法重载（就在 args.SetPromise 方法之后）。</p>
+
+<span class="codelanguage">Javascript</span><pre><code class="Javascript"><span style="color:#008000">// Get the channel for the application. </span>
+<span style="color:#0000FF">var</span> channel; 
+<span style="color:#0000FF">var</span> channelOperation = Windows.Networking.PushNotifications .PushNotificationChannelManager .createPushNotificationChannelForApplicationAsync() .then(<span style="color:#0000FF">function</span> (newChannel) { channel = newChannel; });
+</code></pre></li>
+<li><p>将以下代码插入到创建 <strong>MobileServiceClient</strong> 示例的代码之后：</p>
+
+<span class="codelanguage">Javascript</span><pre><code class="Javascript"><span style="color:#008000">// Insert the new channel URI into the Channel table.</span>
+<span style="color:#0000FF">var</span> channelTable = client.getTable(&#39;Channel&#39;); channelTable.insert({ uri: channel.uri });
+</code></pre></li>
+</ol>
+
+<p>既然我们已经连接了客户端以请求通道并将其写入我们的移动服务，我们现在就需要向移动服务添加一个 Channel 表，并添加服务器端脚本来发送推送通知。</p>
+
+<p><a name="Insert-data-to-receive-notifications"></a></p>
+
+<h3 id="Task_3_-_Insert_data_to_receive_notifications">任务 3 - 插入数据以接收通知</h3>
+
+<p>在本节中，我们添加一个 Channel 表以及服务器端脚本，以便在用户每次插入 todolist 时都发送推送通知。</p>
+
+<ol>
+<li><p>返回到 <a href="https://manage.windowsazure.com/">Windows Azure 管理门户</a>，单击 <strong>Mobile Services</strong>，然后单击您的应用程序。</p></li>
+<li><p>选择<strong>“数据”</strong>选项卡</p></li>
+<li><p>在底部工具栏中，单击<strong>“+ 创建”</strong></p>
+
+<p><img src="Images/image-19.png?raw=true" alt="图像 19" />
+</p></li>
+<li><p>在<strong>“表名”</strong>中，键入 <em>Channel</em>，然后单击检查按钮。</p>
+
+<p><img src="Images/image-20.png?raw=true" alt="图像 20" />
+</p></li>
+<li><p>单击新的 <strong>Channel</strong> 表，并验证是否没有数据行。</p></li>
+<li><p>单击<strong>“列”</strong>选项卡，并验证只有一个 <strong>id</strong> 列，这是自动为您创建的列。这是针对 Mobile Services 中的表的最低要求。</p>
+<blockquote>
+<p><strong>注意：</strong>如果在移动服务中启用了动态架构，则当插入或更新操作向移动服务发送 JSON 对象时，将自动创建新列。</p>
+</blockquote></li>
+<li><p>单击“脚本”选项卡，然后选择<strong>“插入”</strong>操作</p></li>
+<li><p>用以下脚本替换现有脚本。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript"><span style="color:#0000FF">function</span> insert(item, user, request) { 
+    <span style="color:#0000FF">var</span> channelTable = tables.getTable(&#39;Channel&#39;); channelTable.where({ uri: item.Uri }) .read({ success: insertChannelIfNotFound});     
+
+    <span style="color:#0000FF">function</span> insertChannelIfNotFound(existingChannels) { 
+        <span style="color:#0000FF">if</span>(existingChannels.<span style="color:#0000FF">length</span> &gt; 0) { request.respond(200, existingChannels[0]); } <span style="color:#0000FF">else</span> { request.execute(); } } }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>此脚本的目的是确保每次 OnLaunched 处理程序在示例应用程序中执行时，都不提交具有相同 Uri 的多个通道。此代码足以应对 HOL 方案，但在实际应用中，您应使用 ID，而不是使用 uri: item.Uri 匹配来确定要替换的通道。原因是通道过期，而将被新的唯一通道 Uri 所取代。</p>
+</blockquote></li>
+<li><p>在底部工具栏中，单击<strong>“保存”</strong></p>
+
+<p><img src="Images/image-21.png?raw=true" alt="图像 21" />
+</p></li>
+<li><p>现在，在左侧的导航栏中，选择 <strong>TodoItem</strong> 表</p></li>
+<li><p>单击<strong>“脚本”</strong>选项卡并选择<strong>“插入”</strong>操作，然后将现有脚本替换为以下脚本并演练以下代码</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript"><span style="color:#0000FF">function</span> insert(item, user, request) { request.execute({ success: <span style="color:#0000FF">function</span>(){ request.respond(); sendNotifications(item); }, error: <span style="color:#0000FF">function</span>(err){ request.respond(500, <span style="color:#8B0000">&quot;Error&quot;</span>); } }); }
+
+<span style="color:#0000FF">function</span> sendNotifications(item){                        
+  <span style="color:#0000FF">var</span> channelTable = tables.getTable(&#39;Channel&#39;); channelTable.read({ success: <span style="color:#0000FF">function</span>(channels){ channels.forEach(<span style="color:#0000FF">function</span>(channel){ push.wns.sendToastText04(channel.Uri, { text1: item.text, text2: <span style="color:#8B0000">&quot;Hello World 1&quot;</span>, text3:  <span style="color:#8B0000">&quot;Hello World 2&quot;</span>
+             }, { success: <span style="color:#0000FF">function</span>(response){ console.log(response); }, error: <span style="color:#0000FF">function</span>(err){ console.error(err); } }); }); } }); }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>当每次对 Todoitem 表执行插入操作时，都会执行此脚本。通过 sendNotifications 方法，我们选择 Channels 表中的所有通道，然后遍历这些通道，以便向每个通道 URI 发送推送通知。尽管我们只演示了一个 toast 模板，但 push.wns.* 命名空间提供了发送 Toast、磁贴和徽章更新所需的易于使用的方法。正如您在此方案中看到的那样，我们要发送一个 ToastText04 模板，该模板需要三个文本行。当您构建应用程序时，我们建议您不要如此频繁地发送 Toast 通知，而仅当有关键或重要消息时，才向应用程序的用户发送消息。</p>
+</blockquote>
+<p><img src="Images/image-22.png?raw=true" alt="图像 22" />
+</p></li>
+</ol>
+
+<p>接下来，我们来看看您如何保护移动服务端点的安全</p>
+
+<p><a name="Exercise3"></a></p>
+
+<h2 id="Exercise_3_Adding_Auth_to_Your_App_and_Services">练习 3：将身份验证添加到您的应用程序和服务</h2>
+
+<p>此演示介绍如何通过 Windows 8 应用程序，在 Windows Azure Mobile Services 中验证用户的身份。在本演示中，您可以使用 Live Connect 将身份验证添加到快速启动项目。当 Live Connect 成功地进行了身份验证后，已登录的用户将能够使用您的移动服务。</p>
+
+<p><a name="Register-your-app"></a></p>
+
+<h3 id="Task_1_-_Register_your_app">任务 1 - 注册您的应用程序</h3>
+
+<p>若要能够对用户进行身份验证，您必须在 Live Connect 开发中心注册您的 Windows 8 应用程序。然后，您必须注册客户端密钥，才能将 Live Connect 与 Mobile Services 相集成。</p>
+
+<ol>
+<li><p>导航到 <a href="http://go.microsoft.com/fwlink/?LinkID=257677&amp;clcid=0x804">Windows 推送通知和 Live Connect</a> 页，使用您的 Microsoft 帐户进行登录（如果需要）。</p></li>
+<li><p>若要启用身份验证，您现在必须导航到 Live Connect 开发中心的<a href="http://go.microsoft.com/fwlink/?LinkId=262039&amp;clcid=0x804">我的应用程序仪表板</a>，并在<strong>“我的应用程序”</strong>列表中单击您的应用程序。</p>
+
+<p><img src="Images/image-24.png?raw=true" alt="图像 24" />
+</p></li>
+<li><p>单击<strong>“编辑设置”</strong>，接着单击<strong>“API 设置”</strong>，然后记下<strong>“客户端 ID”</strong>和<strong>“客户端密钥”</strong>的值。</p>
+
+<p><img src="Images/image-25.png?raw=true" alt="图像 25" />
+</p>
+
+<p>您必须向 Mobile Services 提供此值，才能使用 Live Connect 进行身份验证。</p>
+<blockquote>
+<p><strong>注意：</strong>客户端密钥是重要的安全凭据。请不要与任何人共享客户端密钥或与您的应用程序一起分发该密钥。</p>
+</blockquote></li>
+<li><p>在<strong>“重定向域”</strong>中，以 <strong>https://</strong><strong>service-name</strong><strong>.azure-mobile.net/</strong> 格式输入移动服务的域，其中 <em>service-name</em> 是移动服务的名称，然后单击<strong>“保存”</strong>。</p></li>
+<li><p>返回到 <a href="https://manage.windowsazure.com/">Windows Azure 管理门户</a>，单击 <strong>Mobile Services</strong>，然后单击您的应用程序。</p>
+
+<p><img src="Images/image-26.png?raw=true" alt="图像 26" />
+</p></li>
+<li><p>单击<strong>“身份”</strong>选项卡，输入从 Live Connect 获取的<strong>“客户端密钥”</strong>，然后单击<strong>“保存”</strong>。</p>
+
+<p><img src="Images/updating-client-secret.png?raw=true" alt="更新客户端密钥" />
+</p></li>
+</ol>
+
+<p><a name="Restrict-permissions"></a></p>
+
+<h3 id="Task_2_-_Restrict_permissions">任务 2 - 限制权限</h3>
+
+<ol>
+<li><p>在管理门户中，单击<strong>“数据”</strong>选项卡，然后单击 <strong>TodoItem</strong> 表。</p>
+
+<p><img src="Images/image-28.png?raw=true" alt="图像 28" />
+</p></li>
+<li><p>单击<strong>“权限”</strong>选项卡，将所有权限设置为<strong>“仅经过身份验证的用户”</strong>，然后单击<strong>“保存”</strong>。这可确保针对 <strong>TodoItem</strong> 表的所有操作都要求由经过身份验证的用户执行。这也简化了下一个教程中的脚本，因为它们不必考虑匿名用户的可能性。</p>
+
+<p><img src="Images/image-29.png?raw=true" alt="图像 29" />
+</p></li>
+<li><p>返回到 Visual Studio 2012，并按 <strong>F5</strong> 键运行这一基于快速启动的应用程序；验证引发了一个异常，状态代码为 401（未经授权）。之所以发生这种情况，是因为应用程序以未经身份验证的用户来访问 Mobile Services，但 <em>TodoItem</em> 表现在要求身份验证。</p></li>
+</ol>
+
+<p>接下来，您将更新应用程序，以便使用 Microsoft 帐户对用户进行身份验证，然后从移动服务请求资源。</p>
+
+<p><a name="Add-authentication"></a></p>
+
+<h3 id="Task_3_-_Add_authentication">任务 3 - 添加身份验证</h3>
+
+<ol>
+<li><p>下载并安装 <a href="http://go.microsoft.com/fwlink/?LinkId=262253&amp;clcid=0x804">Live SDK for Windows</a></p></li>
+<li><p>在 Visual Studio 的项目中，单击<strong>“添加引用”</strong>，然后展开 <strong>Windows</strong>，单击<strong>“扩展插件”</strong>，选中 <strong>Live SDK</strong>，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="Images/adding-the-live-sdk-extension.png?raw=true" alt="添加 Live SDK 扩展插件" />
+</p></li>
+<li><p>打开 <strong>default.html</strong> 文件，然后在 <strong>&lt;head&gt;</strong> 元素中添加以下 <strong>&lt;script&gt;</strong> 元素。</p>
+
+<span class="codelanguage">HTML</span><pre><code class="HTML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">script</span> <span style="color:#FF0000">src</span>=<span style="color:#0000FF">&quot;///LiveSDKHTML/js/wl.js&quot;</span><span style="color:#0000FF">&gt;</span><span style="color:#0000FF">&lt;/</span><span style="color:#800000">script</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>这会在 default.html 文件中启用 <strong>Microsoft IntelliSense</strong>。</p>
+</blockquote></li>
+<li><p>打开 <strong>default.js</strong>，然后将以下注释添加到文件的顶部。</p>
+
+<span class="codelanguage">Javascript</span><pre><code class="Javascript"><span style="color:#008000">/// &lt;reference path=&quot;///LiveSDKHTML/js/wl.js&quot; /&gt;</span>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>这会在 default.js 文件中启用 <strong>Microsoft IntelliSense</strong>。</p>
+</blockquote></li>
+<li><p>在 <strong>app.OnActivated</strong> 方法重载中，将对 <strong>refreshTodoItems</strong> 方法的调用替换为以下代码：</p>
+
+<span class="codelanguage">Javascript</span><pre><code class="Javascript"><span style="color:#0000FF">var</span> session = <span style="color:#0000FF">null</span>;                     
+<span style="color:#0000FF">var</span> login = <span style="color:#0000FF">function</span> () {
+     <span style="color:#0000FF">return</span> <span style="color:#0000FF">new</span> WinJS.Promise(<span style="color:#0000FF">function</span> (complete) { WL.login({ scope: <span style="color:#8B0000">&quot;wl.basic&quot;</span>}).then(<span style="color:#0000FF">function</span> (result) { session = result.session; WinJS.Promise.join([ WL.api({ path: <span style="color:#8B0000">&quot;me&quot;</span>, method: <span style="color:#8B0000">&quot;GET&quot;</span> }), client.login(result.session.authentication_token) ]).done(<span style="color:#0000FF">function</span> (results) {
+                <span style="color:#0000FF">var</span> profile = results[0];
+                <span style="color:#0000FF">var</span> mobileServicesUser = results[1]; refreshTodoItems();
+                <span style="color:#0000FF">var</span> title = <span style="color:#8B0000">&quot;Welcome &quot;</span> + profile.first_name + <span style="color:#8B0000">&quot;!&quot;</span>;
+                <span style="color:#0000FF">var</span> message = <span style="color:#8B0000">&quot;You are now logged in as: &quot;</span> + mobileServicesUser.userId;
+                <span style="color:#0000FF">var</span> dialog = <span style="color:#0000FF">new</span> Windows.UI.Popups.MessageDialog(message, title); dialog.showAsync().done(complete); }); }, <span style="color:#0000FF">function</span> (error) { session = <span style="color:#0000FF">null</span>;
+          <span style="color:#0000FF">var</span> dialog = <span style="color:#0000FF">new</span> Windows.UI.Popups.MessageDialog(<span style="color:#8B0000">&quot;You must log in.&quot;</span>, <span style="color:#8B0000">&quot;Login Required&quot;</span>); dialog.showAsync().done(complete); }); }); }
+
+<span style="color:#0000FF">var</span> authenticate = <span style="color:#0000FF">function</span> () { login().then(<span style="color:#0000FF">function</span> () {
+          <span style="color:#0000FF">if</span> (session === <span style="color:#0000FF">null</span>) {
+
+          <span style="color:#008000">// Authentication failed, try again.</span>
+          authenticate(); } }); } WL.init({ redirect_uri: <span style="color:#8B0000">&quot;&lt;&lt; INSERT REDIRECT DOMAIN HERE &gt;&gt;&quot;</span>
+}); authenticate();
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>这会初始化 <strong>Live Connect</strong> 客户端，向 <strong>Live Connect</strong> 发送登录请求，将返回的身份验证令牌发送给 Mobile Services，然后显示有关已登录用户的信息。</p>
+</blockquote></li>
+<li><p>使用当在 <strong>Live Connect</strong> 中设置应用程序时指定的重定向域来更新上一步中的 <strong>redirect_uri</strong> 值，值的格式为 <strong><a href="https://service-name.azure-mobile.net/">https://service-name.azure-mobile.net/</a></strong>。</p></li>
+<li><p>按 F5 键运行此应用程序，然后使用您的 <strong>Microsoft</strong> 帐户登录到 <strong>Live Connect</strong>。</p>
+
+<p>成功登录后，应用程序应运行而不会出现错误，您应能够查询 Mobile Services 并对数据进行更新。</p></li>
+</ol>
+
+<p><a name="Exercise4"></a></p>
+
+<h2 id="Exercise_4_Adding_a_Scheduled_Job_to_your_Mobile_Service">练习 4：将计划的作业添加到您的移动服务</h2>
+
+<p>在此演示中，您将学习如何使用 <strong>Windows Azure Mobile Services</strong> 按计划执行脚本。在此方案中，我们将计划程序配置为每 15 分钟轮询一次 Twitter，然后发送磁贴更新以及最新的推文。</p>
+
+<h3 id="Task_1_-_Configure_your_Windows_store_app_for_Wide_Tiles">任务 1 - 将 Windows 应用商店应用配置为发送长方形磁贴</h3>
+
+<ol>
+<li><p>在 Visual Studio 中，打开您的 <strong>package.appxmanifest</strong></p></li>
+<li><p>选择“应用程序用户界面”选项卡</p></li>
+<li><p>提供一个 310x150 像素的长方形磁贴徽标。</p></li>
+</ol>
+
+<p><img src="Images/image-47.png?raw=true" alt="图像 47" />
+</p>
+<blockquote>
+<p><strong>注意：</strong>请注意，如果您没有这些尺寸的图像，可以使用 Microsoft 画图程序快速创建一个</p>
+</blockquote>
+<h3 id="Task_2_-_Configure_the_Mobile_Services_scheduler">任务 2 - 配置 Mobile Services 计划程序</h3>
+
+<ol>
+<li><p>创建计划程序作业，以便每 15 分钟向注册的客户端发送一次推送通知以及针对特定 twitter 句柄的最新 Twitter 更新。</p>
+
+<p><img src="Images/image-39.png?raw=true" alt="图像 39" />
+</p></li>
+<li><p>为作业指定名称，并确保计划频率设置为<strong>每 15 分钟</strong>。单击复选标记以创建该作业。</p>
+
+<p><img src="Images/image-40.png?raw=true" alt="图像 40" />
+</p></li>
+<li><p>从作业列表中选择创建的作业。</p>
+
+<p><img src="Images/image-41.png?raw=true" alt="图像 41" />
+</p></li>
+<li><p>选择<strong>“脚本”</strong>选项卡并粘贴其下面的代码，这两者轮询 Twitter，然后组成推送通知，以便使用 push.wns.* 更新您的开始屏幕磁贴。</p>
+
+<span class="codelanguage">JavaScript</span><pre><code class="JavaScript"><span style="color:#0000FF">function</span> CheckFeed() { getUpdatesAndNotify(); }
+
+<span style="color:#0000FF">var</span> request = require(&#39;request&#39;);
+<span style="color:#0000FF">function</span> getUpdatesAndNotify() { request(&#39;http:<span style="color:#008000">//search.twitter.com/search.json?q=@cloudnick&amp;rpp=2&#39;, </span>
+          <span style="color:#0000FF">function</span> tweetsLoaded (error, response, body) {
+              <span style="color:#0000FF">var</span> results = JSON.parse(body).results;
+              <span style="color:#0000FF">if</span>(results){ results.forEach(<span style="color:#0000FF">function</span> visitResult(tweet){ sendNotifications(tweet); }); } }); }
+
+<span style="color:#0000FF">function</span> sendNotifications(tweet){    
+
+     <span style="color:#0000FF">var</span> channelTable = tables.getTable(&#39;Channel&#39;); channelTable.read({ success: <span style="color:#0000FF">function</span>(channels) { channels.forEach(<span style="color:#0000FF">function</span>(channel) { push.wns.sendTileWideSmallImageAndText04(channel.uri, { image1src: tweet.profile_image_url, text1: &#39;@&#39; + tweet.from_user, text2: tweet.text }); }); } }); }
+</code></pre></li>
+<li><p>一旦将脚本粘贴到编辑器中，请单击<strong>“保存”</strong>按钮，以便将更改保存到脚本</p>
+
+<p><img src="Images/image-42.png?raw=true" alt="图像 42" />
+</p></li>
+<li><p>在 Visual Studio 中，按 <strong>F5</strong> 生成并运行该应用程序。这将确保您的通道 URI 是最新的，并将确保默认长方形磁贴现在出现在您的开始屏幕上</p></li>
+<li><p>返回到 Windows Azure 管理门户，选择移动服务的<strong>“计划程序”</strong>选项卡，然后单击命令栏中的<strong>“启用”</strong>以允许运行作业。</p>
+
+<p><img src="Images/image-44.png?raw=true" alt="图像 44" />
+</p></li>
+<li><p>要立即测试脚本，而不是等待 15 分钟来安排计划，请单击命令栏中的<strong>“运行一次”</strong>。</p>
+
+<p><img src="Images/image-45.png?raw=true" alt="图像 45" />
+</p></li>
+<li><p>返回到开始屏幕，您将看到应用程序磁贴上的最新更新</p>
+
+<p><img src="Images/image-46.png?raw=true" alt="图像 46" />
+</p></li>
+</ol>
+
+<hr />
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>通过完成此动手实验，您学习了如何：</p>
+
+<ul>
+<li>创建 Windows Azure 移动服务</li>
+<li>使用 Windows Azure Mobile Services SDK</li>
+<li>了解如何从移动服务中插入、更新、读取和删除行</li>
+<li>将推送通知添加到您的应用程序</li>
+<li>锁定您的移动服务，以便只有经过身份验证的用户才能使用它</li>
+<li>使用计划程序按计划的间隔执行脚本</li>
+</ul>
+
+<hr /> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-Windows8AndMobileServicesJS/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

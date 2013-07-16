@@ -1,0 +1,406 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 了解通过捕获制作虚拟机映像</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /><span class="mainHomepageSubTitle"> 培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-UnderstandingVMImagingWithCapture/" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-UnderstandingVMImagingWithCapture/" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="Title"></a></p>
+
+<h1 id="Understanding_Virtual_Machine_Imaging_with_Capture">了解通过捕获制作虚拟机映像</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>在此动手实验中，您将演练如何创建一个自定义虚拟机，该虚拟机经过自定义可通过 PowerShell 远程管理。然后，您将学习如何对该虚拟机进行通用化处理并将其保存为映像，从而使以该虚拟机为基础设置的所有新虚拟机默认都可以进行远程管理。</p>
+
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>新建虚拟机</li>
+<li>自定义并通用化虚拟机</li>
+<li>将映像保存到映像库中</li>
+<li>以映像为基础设置新虚拟机</li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>若要完成此实验，必须具备以下项：</p>
+
+<ul>
+<li><a href="http://msdn.microsoft.com/zh-CN/library/windowsazure/jj156055">Windows Azure PowerShell Cmdlet</a></li>
+<li>启用了虚拟机预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>本实验设计为使用 Windows 7 操作系统。</p>
+</blockquote>
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#Exercise1">新建虚拟机</a></li>
+<li><a href="#Exercise2">自定义并通用化虚拟机</a></li>
+<li><a href="#Exercise3">将映像保存到映像库中</a></li>
+<li><a href="#Exercise4">以映像为基础设置新虚拟机</a></li>
+</ol>
+
+<p>完成此实验的估计时间：<strong>60 分钟</strong></p>
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Creating_a_New_Virtual_Machine">练习 1：新建虚拟机</h3>
+
+<p>在本练习中，您将演练设置新虚拟机和启用 Windows 远程管理的各个步骤。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_Creating_a_New_Virtual_Machine">任务 1：新建虚拟机</h4>
+
+<p>在此任务中，您将使用“快速创建”虚拟机创建选项设置要自定义的虚拟机。</p>
+
+<ol>
+<li><p>使用您的 Microsoft 帐户登录 Windows Azure 门户：<a href="https://manage.windowsazure.com">https://manage.windowsazure.com</a>。</p></li>
+<li><p>单击<strong>“新建”</strong>，然后选择<strong>“虚拟机”</strong>|<strong>“从库中”</strong>。</p>
+
+<p><img src="images/creating-a-virtual-machine-from-gallery.png?raw=true" alt="从库中创建虚拟机" title="从库中创建虚拟机" />
+</p>
+
+<p><em>从库中创建虚拟机</em></p></li>
+<li><p>在<strong>“选择虚拟机操作系统”</strong>页中，单击<strong>“平台映像”</strong>，然后选择 <strong>Windows Server 2008 R2 SP1</strong>。</p>
+
+<p><img src="images/virtual-machine-os-selection.png?raw=true" alt="选择虚拟机操作系统" title="选择虚拟机操作系统" />
+</p>
+
+<p><em>选择虚拟机操作系统</em></p></li>
+<li><p>在<strong>“虚拟机配置”</strong>页上，为虚拟机<strong>“名称”</strong>指定 <em>imgtest1</em>，并设置两个密码框。让虚拟机<strong>“大小”</strong>留为<em>“小”</em>值。</p>
+
+<p><img src="images/virtual-machine-configuration-page.png?raw=true" alt="虚拟机配置页" title="虚拟机配置页" />
+</p>
+
+<p><em>虚拟机配置页</em></p></li>
+<li><p>在<strong>“虚拟机模式”</strong>页中，选择<strong>“独立虚拟机”</strong>，然后设置<strong>“DNS 名称”</strong>。其余字段保留为其默认值。</p>
+
+<p><img src="images/virtual-machine-mode-page.png?raw=true" alt="虚拟机模式页" title="虚拟机模式页" />
+</p>
+
+<p><em>虚拟机模式页</em></p></li>
+<li><p>最后，让<strong>“虚拟机选项”</strong>页保留默认值，并完成虚拟机向导。</p></li>
+<li><p>一直等待，直到创建了虚拟机，此时您可以在 Windows Azure 管理门户的<strong>“虚拟机”</strong>页中检查其状态。然后，单击您的虚拟机名称以打开<strong>仪表板</strong>。</p>
+
+<p><img src="images/virtual-machine-created.png?raw=true" alt="创建了虚拟机" title="创建了虚拟机" />
+</p>
+
+<p><em>创建了虚拟机</em></p></li>
+<li><p>在底部菜单中，单击<strong>“连接”</strong>以下载 <em>.rdp</em> 文件，以便使用远程桌面连接来连接到虚拟机。</p>
+
+<p><img src="images/connect.png?raw=true" alt="连接" />
+</p>
+
+<p><em>连接到虚拟机</em></p>
+<blockquote>
+<p><strong>注意：</strong>当要求您登录时，请写入您创建虚拟机时使用的相同凭据。</p>
+</blockquote></li>
+<li><p>请不要关闭连接，下一练习中还要使用。</p></li>
+</ol>
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Customize_and_Generalize_the_Virtual_Machine">练习 2：自定义并通用化虚拟机</h3>
+
+<p>在此练习中，我们将启用 Windows 远程管理，配置 SSL 并允许远程 PowerShell。</p>
+
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_Configure_PowerShell_for_Script_Execution_in_the_New_Virtual_Machine">任务 1：在新虚拟机中配置 PowerShell 以执行脚本</h4>
+
+<ol>
+<li><p>在<strong>“开始”</strong>|<strong>“所有程序”</strong>|<strong>“附件”</strong>下，启动 <strong>Windows PowerShell</strong>。</p></li>
+<li><p>在 PowerShell 控制台中执行以下命令。在系统提示时，选择<strong>“是”</strong>。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">Set-ExecutionPolicy remotesigned
+</code></pre></li>
+<li><p>关闭 PowerShell 控制台。</p></li>
+</ol>
+
+<p><a name="Ex2Task2"></a></p>
+
+<h4 id="Task_2_Configure_the_HTTPS_Endpoint_for_WinRMPowerShell">任务 2：为 WinRM/PowerShell 配置 HTTPS 端点</h4>
+
+<p>在此方案中，您将配置虚拟机启动时运行的脚本。此脚本将创建自签名证书并配置 Windows 远程管理使用 SSL 侦听端口 5986。</p>
+
+<ol>
+<li><p>使用 Windows 资源管理器在 <strong>C:</strong> 驱动器上创建一个名为 <strong>EnablePSRemote</strong> 的文件夹。</p></li>
+<li><p>在<strong>“工具”</strong>-&gt;<strong>“文件夹选项”</strong>-&gt;<strong>“查看”</strong>下，取消选中<strong>“隐藏已知文件类型的扩展名”</strong>。</p>
+
+<p><img src="images/hide-extensions-for-known-file-types.png?raw=true" alt="隐藏已知文件类型的扩展名" title="隐藏已知文件类型的扩展名" />
+</p>
+
+<p><em>隐藏已知文件类型的扩展名</em></p></li>
+<li><p>在 <strong>EnablePSRemote</strong> 窗口中右键单击，选择<strong>“新建”</strong>|<strong>“文本文档”</strong>，将其命名为 <em>EnablePSRemote.ps1</em>。</p></li>
+<li><p>使用文本编辑器（例如，<em>记事本</em>）打开此文件。</p></li>
+<li><p>将以下脚本复制并粘贴到 <strong>EnablePSRemote.ps1</strong> 中。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">function Create-Certificate($hostname) { $name = new-object -com &quot;X509Enrollment.CX500DistinguishedName.1&quot; $name.Encode(&quot;CN=$hostname&quot;, 0) $key = new-object -com &quot;X509Enrollment.CX509PrivateKey.1&quot; $key.ProviderName = &quot;Microsoft RSA SChannel Cryptographic Provider&quot; $key.KeySpec = 1 $key.Length = 1024 $key.SecurityDescriptor = &quot;D:PAI(A;;0xd01f01ff;;;SY)(A;;0xd01f01ff;;;BA)(A;;0x80120089;;;NS)&quot; $key.MachineContext = 1 $key.Create() $serverauthoid = new-object -com &quot;X509Enrollment.CObjectId.1&quot; $serverauthoid.InitializeFromValue(&quot;1.3.6.1.5.5.7.3.1&quot;) $ekuoids = new-object -com &quot;X509Enrollment.CObjectIds.1&quot; $ekuoids.add($serverauthoid) $ekuext = new-object -com &quot;X509Enrollment.CX509ExtensionEnhancedKeyUsage.1&quot; $ekuext.InitializeEncode($ekuoids) $cert = new-object -com &quot;X509Enrollment.CX509CertificateRequestCertificate.1&quot; $cert.InitializeFromPrivateKey(2, $key, &quot;&quot;) $cert.Subject = $name $cert.Issuer = $cert.Subject $cert.NotBefore = get-date $cert.NotAfter = $cert.NotBefore.AddDays(180) $cert.X509Extensions.Add($ekuext) $cert.Encode() $enrollment = new-object -com &quot;X509Enrollment.CX509Enrollment.1&quot; $enrollment.InitializeFromRequest($cert) $certdata = $enrollment.CreateRequest(0) $enrollment.InstallResponse(2, $certdata, 0, &quot;&quot;) } $hostname = $env:COMPUTERNAME $output = &amp; winrm g winrm/config/Listener?Address=*+Transport=HTTPS | Out-String if($lastexitcode -eq 0) { # HTTPS Listener Already Configured Return return } # HTTPS Listener Not Configured - Configure Now # Enable PS remoting Enable-PSRemoting -Force # Create the self signed certificate (Only for testing) Create-Certificate $hostname # Get the certificate thumbprint $certTp = get-childitem -path cert:\LocalMachine\My* -Recurse | Where { ($_.Issuer -eq &quot;CN=&quot; + $hostname) -and ($_.Subject -eq &quot;CN=&quot; + $hostname) } | Select Thumbprint $certTp = $certTP.Thumbprint # Open up 5986 for WinRM HTTPS &amp; netsh advfirewall firewall delete rule name=&quot;WinRM HTTPS&quot; dir=in protocol=TCP localport=5986 &amp; netsh advfirewall firewall add rule name=&quot;WinRM HTTPS&quot; dir=in action=allow protocol=TCP localport=5986 # Specify the newly created cert thumbprint $certString = &quot;@{Hostname=&quot;&quot;&quot; + $hostname + &quot;&quot;&quot;;CertificateThumbprint=&quot;&quot;&quot; + $certTp + &quot;&quot;&quot;}&quot; # Create the HTTPS listener &amp; WinRM create winrm/config/Listener?Address=*+Transport=HTTPS $certString # Enable Basic Authentication WinRM set winrm/config/service/auth '@{Basic=&quot;true&quot;}'
+
+</code></pre></li>
+<li><p>保存并关闭该文件。</p></li>
+</ol>
+
+<p><a name="Ex2Task3"></a></p>
+
+<h4 id="Task_3_Create_a_batch_file_to_use_the_task_scheduler_to_launch_the_script_on_boot">任务 3：创建一个批处理文件，以在启动时使用任务计划程序启动脚本。</h4>
+
+<ol>
+<li><p>在 <strong>EnablePSRemote</strong> 文件夹中，新建一个名为 <em>taskscheduler.cmd</em> 的文本文件。</p></li>
+<li><p>使用文本编辑器（例如，<em>记事本</em>）打开此文件。</p></li>
+<li><p>复制并粘贴以下命令（将两个位置的 [YOUR-PASSWORD] 替换为您为虚拟机指定的密码）。</p>
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell">net user scheduser [YOUR-PASSWORD] /add net localgroup Administrators scheduser /add schtasks /CREATE /TN &quot;EnablePS-Remote&quot; /SC ONCE /SD 01/01/2020 /ST 00:00:00 /RL HIGHEST /RU scheduser /RP [YOUR-PASSWORD] /TR &quot;powershell -file C:\EnablePSRemote\EnablePSRemote.ps1&quot; /F schtasks /RUN /TN &quot;EnablePS-Remote&quot;
+</code></pre></li>
+<li><p>保存并关闭该文件。</p></li>
+</ol>
+
+<p><a name="Ex2Task4"></a></p>
+
+<h4 id="Task_4_Configure_a_Startup_Task_for_the_cmd_file">任务 4：为 cmd 文件配置启动任务</h4>
+
+<ol>
+<li><p>在<strong>“运行”</strong>框中，键入 <em>mmc.exe</em>，然后单击<strong>“确定”</strong>。</p></li>
+<li><p>在<strong>“文件”</strong>|<strong>“添加/删除管理单元”</strong>，选择<strong>“组策略对象编辑器”</strong>并单击<strong>“添加”</strong>。</p></li>
+<li><p>接受默认值，单击<strong>“完成”</strong>，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="images/group-policy-objects.png?raw=true" alt="组策略对象" title="组策略对象" />
+</p>
+
+<p><em>组策略对象</em></p></li>
+<li><p>展开<strong>“本地计算机策略”</strong>|<strong>“计算机配置”</strong>|<strong>“Windows 设置”</strong>，然后单击<strong>“脚本”</strong>。</p>
+
+<p><img src="images/local-computer-policy.png?raw=true" alt="本地计算机策略" title="本地计算机策略" />
+</p>
+
+<p><em>本地计算机策略</em></p></li>
+<li><p>双击<strong>“启动”</strong>，然后单击<strong>“添加”</strong>。</p></li>
+<li><p>将以下内容添加到<strong>“脚本名称”</strong>框中：<em>c:\EnablePSRemote\taskscheduler.cmd</em>，然后单击<strong>“确定”</strong>两次以退出对话框。</p>
+
+<p><img src="images/configuretaskscheduler.png?raw=true" alt="配置任务计划程序" />
+</p>
+
+<p><em>配置任务计划程序</em></p></li>
+</ol>
+
+<p><a name="Ex2Task5"></a></p>
+
+<h4 id="Task_5_Generalize_the_Machine_with_SysPrep">任务 5：使用 SysPrep 通用化虚拟机</h4>
+
+<p>在此步骤中，我们将运行 sysprep 对映像做通用化处理，以使在此映像基础上创建的多个虚拟机都拥有相同的自定义设置（启用远程 PowerShell）。</p>
+
+<ol>
+<li><p>在<strong>“开始”</strong>|<strong>“运行”</strong>框中，键入 <em>c:\Windows\System32\sysprep\sysprep.exe</em>，然后按 Enter。</p></li>
+<li><p>选择<strong>“通用”</strong>，将<strong>“关机选项”</strong>更改为<em>“关机”</em>，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="images/sysprep.png?raw=true" alt="sysprep" title="sysprep" />
+</p>
+
+<p><em>Sysprep 对话框</em></p></li>
+</ol>
+
+<p><a name="Exercise3"></a></p>
+
+<h3 id="Exercise_3_Saving_an_Image_in_the_Image_Library">练习 3：将映像保存到映像库中</h3>
+
+<p>在此练习中，您将使用 Windows Azure IaaS 的捕获功能根据（之前创建的）现有虚拟机创建新映像。</p>
+<blockquote>
+<p><strong>注意：</strong>在继续操作前，请确保 <strong>imgtest1</strong> VM 虚拟机已关闭。</p>
+</blockquote>
+<p><a name="Ex3Task1"></a></p>
+
+<h4 id="Task_1_Saving_an_Image_in_the_Image_Library">任务 1：将映像保存到映像库中</h4>
+
+<ol>
+<li><p>打开 Windows Azure 门户，然后单击<strong>“虚拟机”</strong>。</p></li>
+<li><p>单击 <strong>imgtest1</strong> 虚拟机以打开其<strong>仪表板</strong>。</p>
+
+<p><img src="images/opening-virtual-machine-dashboard.png?raw=true" alt="打开虚拟机仪表板" title="打开虚拟机仪表板" />
+</p>
+
+<p><em>打开虚拟机仪表板</em></p></li>
+<li><p>单击屏幕底部的<strong>“捕获”</strong>。</p>
+
+<p><img src="images/capturing-image.png?raw=true" alt="捕获映像" title="捕获映像" />
+</p>
+
+<p><em>捕获映像</em></p></li>
+<li><p>在<strong>“捕获虚拟机”</strong>页上，将<strong>“虚拟机名称”</strong>设置为 <em>remotepsimg</em>，然后选择<strong>“我已对虚拟机执行 Sysprep”</strong>，然后将其存储为映像。</p>
+
+<p><img src="images/capturedlg.png?raw=true" alt="capturedlg" />
+</p>
+
+<p><em>映像详细信息</em></p></li>
+</ol>
+
+<p><a name="Exercise4"></a></p>
+
+<h3 id="Exercise_4_Provision_New_VMs_based_on_the_created_Image">练习 4：以创建的映像为基础设置新虚拟机</h3>
+
+<p>在此练习中，您将使用练习 3 中创建的映像创建一台新虚拟机。</p>
+<blockquote>
+<p><strong>注意：</strong>在继续之前，请等到 <strong>remotepsimg</strong> 映像完成设置（查看 <strong>imgtest1</strong> 虚拟机的状态）。您可能必须刷新浏览器，才能在“创建虚拟机”对话框中看到新映像。</p>
+</blockquote>
+<p><a name="Ex4Task1"></a></p>
+
+<h4 id="Task_1_Create_a_new_VM_using_a_base-image">任务 1：使用基础映像创建新虚拟机</h4>
+
+<ol>
+<li><p>登录 Windows Azure 门户：<a href="https://manage.windowsazure.com">https://manage.windowsazure.com</a>。</p></li>
+<li><p>单击<strong>“新建”</strong>|<strong>“虚拟机”</strong>|<strong>“快速创建”</strong>。</p></li>
+<li><p>将<strong>“DNS 名称”</strong>设置为 <em>remotepsimg</em>，然后选择之前创建的<strong>映像</strong>（例如，<em>remotepsimg</em>）。</p></li>
+<li><p>然后，为管理员登录指定<strong>“密码”</strong>，并单击<strong>“创建虚拟机”</strong>。</p>
+
+<p><img src="images/createvmfromimage.png?raw=true" alt="createvmfromimage" />
+</p>
+
+<p><em>从映像中创建虚拟机</em></p></li>
+<li><p>虚拟机设置完成后，转至其<strong>仪表板</strong>，然后单击<strong>“连接”</strong>。提示时，使用<em>管理员</em>凭据登录。</p></li>
+</ol>
+
+<p><a name="Ex4Task2"></a></p>
+
+<h4 id="Task_2_Create_an_Endpoint_to_Allow_Traffic_to_the_VM">任务 2：创建端点以允许指向虚拟机的流量</h4>
+
+<ol>
+<li><p>从 <a href="https://manage.windowsazure.com">https://manage.windowsazure.com</a> 打开 Windows Azure 门户，然后单击<strong>“虚拟机”</strong>。</p></li>
+<li><p>单击 <strong>remotepsvm1</strong> 虚拟机以打开其<strong>仪表板</strong>，然后单击<strong>“端点”</strong>。</p>
+
+<p><img src="images/virtual-machine-endpoints.png?raw=true" alt="虚拟机端点" title="虚拟机端点" />
+</p>
+
+<p><em>虚拟机端点</em></p></li>
+<li><p>单击页面底部的<strong>“添加端点”</strong>，选择<strong>“添加端点”</strong>选项，然后单击<strong>“下一步”</strong>。</p></li>
+<li><p>在<strong>“指定端点详细信息”</strong>页上，使用以下设置：</p>
+
+<p><img src="images/add-endpoint.png?raw=true" alt="添加端点" />
+</p></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>在继续操作前，请确保端点已完成配置</p>
+</blockquote>
+<p><a name="Ex4Task3"></a></p>
+
+<h4 id="Task_3_Connect_from_a_Remote_Client_using_PowerShell">任务 3：使用 PowerShell 从远程客户端连接</h4>
+
+<ol>
+<li><p>要远程进行连接，您需要有关虚拟机的一些信息。要获得此信息，您应登录到 Windows Azure 门户，并转至虚拟机的<strong>仪表板</strong>。</p></li>
+<li><p>在<strong>“仪表板”</strong>页中，找到并记下公共 DNS（也即 <strong>URL</strong> 前缀）。</p>
+
+<p><img src="images/obtaining-vm-information.png?raw=true" alt="获取虚拟机信息" title="获取虚拟机信息" />
+</p>
+
+<p><em>获取虚拟机信息</em></p></li>
+<li><p>从<strong>“开始”</strong>|<strong>“所有程序”</strong>|<strong>“附件”</strong>打开 <strong>Windows PowerShell</strong> 控制台（如果尚未打开）。</p></li>
+<li><p>使用以下命令测试虚拟机连接。将占位符更新为虚拟机主机名。</p>
+
+<!-- mark:1 -->
+
+<span class="codelanguage">PowerShell</span><pre><code class="PowerShell"><strong class="markLine">enter-pssession -computername [HOSTNAME].cloudapp.net -authentication Basic -Credential administrator -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)</strong>
+
+</code></pre></li>
+<li><p>若要测试您已成功地连接到虚拟机，您将运行以下命令来查看远程文件系统。注意，在提示符左侧，您可以看到您连接到的主机名。</p>
+
+<span class="codelanguage">CMD</span><pre><code class="CMD">cd\ dir
+</code></pre>
+
+<p><img src="images/remote-prompt.png?raw=true" alt="远程提示" />
+</p>
+
+<p><em>远程文件系统</em></p></li>
+</ol>
+
+<hr />
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>通过完成此动手实验，您学习了如何：</p>
+
+<ul>
+<li>配置 PowerShell 通过 HTTPS 进行远程连接</li>
+<li>自定义虚拟机并将其捕获到映像库</li>
+<li>在 Windows Azure IaaS 中对虚拟机运行远程命令</li>
+</ul>
+
+<p><a name="Appendix"></a></p>
+
+<h2 id="Appendix">附录</h2>
+<blockquote>
+<p><strong>注意：</strong>要为加入域的计算机配置相同的方案，您需要使用 -Authentication Negotiate 而不是 Basic。</p>
+</blockquote> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-UnderstandingVMImagingWithCapture//issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

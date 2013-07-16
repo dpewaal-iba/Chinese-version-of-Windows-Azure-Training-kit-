@@ -1,0 +1,356 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 使用 Windows Azure 网站构建和发布 Node.js 应用程序 (OS X)</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-NodejsAzureWebSites-OSX" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-NodejsAzureWebSites-OSX" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="Title"></a></p>
+
+<h1 id="Building_and_Publishing_Nodejs_Applications_with_Windows_Azure_Web_Sites_OS_X">使用 Windows Azure 网站构建和发布 Node.js 应用程序 (OS X)</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>在此动手实验中，您将学习针对 Node.js 应用程序的 Windows Azure 网站服务的基础知识。在练习 1 中，您将看到如何使用 Windows Azure 门户创建一个网站，然后使用 GIT 发布一个“Hello World”Node.js 应用程序。在练习 2 中，您将学习如何使用 Windows Azure 命令行工具发布应用程序。<a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何使用以下各项创建和发布 Node.js 应用程序：</p>
+
+<ul>
+<li>Git</li>
+<li>适用于 Mac 和 Linux 的 Windows Azure 命令行工具</li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li><a href="http://git-scm.com/">Git 版本控制系统</a></li>
+<li><a href="http://nodejs.org/#download">Node.js</a></li>
+<li><p><a href="https://www.windowsazure.com/en-us/develop/nodejs/how-to-guides/command-line-tools/">适用于 Mac 和 Linux 的 Windows Azure 命令行工具</a>（仅用于练习 2）</p>
+<blockquote>
+<p><strong>注意：</strong>如果您没有安装适用于 Mac 和 Linux 的 Windows Azure 命令行工具，请打开一个终端，然后运行以下命令：</p>
+
+<span class="codelanguage">ShellScript</span><pre><code class="ShellScript">sudo npm install azure-cli -g
+</code></pre>
+
+<p>通过使用 -g，Windows Azure 命令行工具将全局安装在您的计算机上。这意味着，您将可以从任何位置执行 Azure 命令。</p>
+</blockquote></li>
+<li><p>启用了网站预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></p></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>本实验设计为使用 OS X 操作系统。</p>
+</blockquote>
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#Exercise1">使用 GIT 构建和发布 Node.js 网站</a></li>
+<li><a href="#Exercise2">使用命令行工具构建和发布 Node.js 网站</a></li>
+</ol>
+
+<hr />
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Building_and_Publishing_a_Nodejs_Web_Site_using_GIT">练习 1：使用 GIT 构建和发布 Node.js 网站</h3>
+
+<p>在第一个练习中，您将在 Windows Azure 门户中创建一个新网站，创建一个“Hello World”Node.js 应用程序并最后发布此应用程序（利用 Windows Azure 提供的新的 GIT 发布功能）。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_a_New_Web_Site_Hosted_in_Windows_Azure">任务 1 - 创建在 Windows Azure 中托管的新网站</h4>
+
+<ol>
+<li><p>转到 <a href="https://manage.windowsazure.com/">Windows Azure 门户</a><strong></strong>，使用与您的订阅关联的 <strong>Microsoft 帐户</strong>凭据登录。</p>
+
+<p><img src="images/log-in-into-windows-azure-portal.png?raw=true" alt="登录到 Windows Azure 门户" title="登录到 Windows Azure 门户" />
+</p>
+
+<p><em>登录到 Windows Azure 门户</em></p></li>
+<li><p>在 Windows Azure 门户主页中，单击位于底部栏中的<strong>“新建”</strong>按钮。</p>
+
+<p><img src="images/creating-a-new-web-site.png?raw=true" alt="创建新网站" title="创建新网站" />
+</p>
+
+<p><em>创建新网站</em></p></li>
+<li><p>单击<strong>“网站”|“快速创建”</strong>。为这个新网站提供一个可用 URL，选择某一区域，然后单击<strong>“创建网站”</strong>。</p>
+
+<p><img src="images/creating-a-new-web-site-using-quick-create-op.png?raw=true" alt="使用“快速创建”选项创建新网站" title="使用“快速创建”选项创建新网站" />
+</p>
+
+<p><em>使用“快速创建”选项创建新网站</em></p></li>
+<li><p>等待新网站创建完成。</p>
+
+<p><img src="images/creating-new-web-site-status.png?raw=true" alt="创建新网站状态" title="创建新网站状态" />
+</p>
+
+<p><em>创建新网站状态</em></p></li>
+<li><p>创建了网站后，单击 <strong>URL</strong> 链接以便检查这个新网站是否工作正常。</p>
+
+<p><img src="images/browsing-to-new-site.png?raw=true" alt="浏览到新网站" title="浏览到新网站" />
+</p>
+
+<p><em>浏览到新网站</em></p>
+
+<p><img src="images/web-site-running.png?raw=true" alt="网站正在运行" title="网站正在运行" />
+</p>
+
+<p><em>运行中的网站</em></p></li>
+<li><p>回到门户，然后单击网站名称列以转到网站的仪表板。</p>
+
+<p><img src="images/selecting-the-dashboard-tab.png?raw=true" alt="选择“仪表板”选项卡" title="选择“仪表板”选项卡" />
+</p>
+
+<p><em>选择“仪表板”选项卡</em></p></li>
+<li><p>单击<strong>“设置 Git 发布”</strong>链接。</p>
+
+<p><img src="images/setting-up-git-publishing.png?raw=true" alt="设置 Git 发布" title="设置 Git 发布" />
+</p>
+
+<p><em>设置 Git 发布</em></p></li>
+<li><p>等待几秒钟，直到 Git 存储库就绪。</p>
+
+<p><img src="images/git-repository-created.png?raw=true" alt="Git 存储库已创建" title="Git 存储库已创建" />
+</p>
+
+<p><em>Git 存储库已创建</em></p></li>
+<li><p>不要关闭该门户。</p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Creating_a_new_Nodejs_Website">任务 2 - 创建新的 Node.js 网站</h4>
+
+<ol>
+<li><p>在可以轻松访问的位置中创建一个新文件夹。</p></li>
+<li><p>打开您喜爱的文本编辑器并复制以下代码，该代码将字符串 <em>Hello World</em> 发送到浏览器。使用 <strong>server.js</strong> 名称将该文件保存到之前创建的文件夹中。</p>
+
+<span class="codelanguage">Javascript</span><pre><code class="Javascript"><span style="color:#0000FF">var</span> http = require(&#39;http&#39;);
+<span style="color:#0000FF">var</span> port = process.env.port || 1337; http.createServer(<span style="color:#0000FF">function</span> (req, res) { res.writeHead(200, { &#39;Content-Type&#39;: &#39;text/plain&#39; }); res.end(&#39;Hello World\n&#39;); }).listen(port);
+</code></pre></li>
+<li><p>创建一个新的文本文件并且粘贴以下代码。将该文件以 <strong>package.json</strong> 的名称另存到同一个文件夹中。</p>
+
+<span class="codelanguage">Json</span><pre><code class="Json">{ &quot;name&quot;: &quot;HelloWorld&quot;, &quot;version&quot;: &quot;0.0.1&quot;, &quot;description&quot;: &quot;&quot;, &quot;main&quot;: &quot;./server.js&quot;, &quot;engines&quot;: { &quot;node&quot;: &quot;&gt;= 0.6.0&quot; } }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>package.json 文件指示 Node.js 包管理器 (npm) 如何建立包结构以及哪些是模块依赖项。因为此应用程序非常简单，所以它不要求依赖项，但在更复杂的应用程序中，您将可能需要指定 &quot;dependencies&quot; 属性。在使用 Git 发布应用程序时，Windows Azure 平台将自动安装在此文件中声明的所有依赖项。</p>
+</blockquote></li>
+<li><p>在文本编辑器中，创建一个新的文件并且粘贴以下代码。此配置指示 <strong>server.js</strong> 文件是应该由 <strong>iisnode</strong> 模块处理的 Node.js 应用程序。</p>
+<blockquote>
+<p><strong>注意：</strong><a href="https://github.com/tjanczuk/iisnode">iisnode</a> 项目提供一个本机 IIS 7.x 模块，该模块将允许在 IIS 7.x 中承载 node.js 应用程序。</p>
+</blockquote>
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;?</span>xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;<span style="color:#0000FF">?&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.webServer</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">modules</span> <span style="color:#FF0000">runAllManagedModulesForAllRequests</span>=<span style="color:#0000FF">&quot;false&quot;</span> <span style="color:#0000FF">/&gt;</span>
+
+          <span style="color:#008000">&lt;!-- indicates that the server.js file is a node.js application to be handled by the iisnode module --&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">handlers</span><span style="color:#0000FF">&gt;</span>
+            <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;iisnode&quot;</span> <span style="color:#FF0000">path</span>=<span style="color:#0000FF">&quot;server.js&quot;</span> <span style="color:#FF0000">verb</span>=<span style="color:#0000FF">&quot;*&quot;</span> <span style="color:#FF0000">modules</span>=<span style="color:#0000FF">&quot;iisnode&quot;</span> <span style="color:#0000FF">/&gt;</span>
+          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">handlers</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">rewrite</span><span style="color:#0000FF">&gt;</span>
+            <span style="color:#0000FF">&lt;</span><span style="color:#800000">rules</span><span style="color:#0000FF">&gt;</span>
+              <span style="color:#0000FF">&lt;</span><span style="color:#800000">clear</span> <span style="color:#0000FF">/&gt;</span>
+              <span style="color:#0000FF">&lt;</span><span style="color:#800000">rule</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;app&quot;</span> <span style="color:#FF0000">enabled</span>=<span style="color:#0000FF">&quot;true&quot;</span> <span style="color:#FF0000">patternSyntax</span>=<span style="color:#0000FF">&quot;ECMAScript&quot;</span> <span style="color:#FF0000">stopProcessing</span>=<span style="color:#0000FF">&quot;true&quot;</span><span style="color:#0000FF">&gt;</span>
+                <span style="color:#0000FF">&lt;</span><span style="color:#800000">match</span> <span style="color:#FF0000">url</span>=<span style="color:#0000FF">&quot;server\.js.+&quot;</span> <span style="color:#FF0000">negate</span>=<span style="color:#0000FF">&quot;true&quot;</span> <span style="color:#0000FF">/&gt;</span>
+                <span style="color:#0000FF">&lt;</span><span style="color:#800000">conditions</span> <span style="color:#FF0000">logicalGrouping</span>=<span style="color:#0000FF">&quot;MatchAll&quot;</span> <span style="color:#FF0000">trackAllCaptures</span>=<span style="color:#0000FF">&quot;false&quot;</span> <span style="color:#0000FF">/&gt;</span>
+                <span style="color:#0000FF">&lt;</span><span style="color:#800000">action</span> <span style="color:#FF0000">type</span>=<span style="color:#0000FF">&quot;Rewrite&quot;</span> <span style="color:#FF0000">url</span>=<span style="color:#0000FF">&quot;server.js&quot;</span> <span style="color:#0000FF">/&gt;</span>
+              <span style="color:#0000FF">&lt;/</span><span style="color:#800000">rule</span><span style="color:#0000FF">&gt;</span>
+            <span style="color:#0000FF">&lt;/</span><span style="color:#800000">rules</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">rewrite</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.webServer</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>将该文件以 <strong>web.config</strong> 的名称另存到您的网站文件夹中。</p></li>
+</ol>
+
+<p><a name="Ex1Task3"></a></p>
+
+<h4 id="Task_3_-_Publishing_the_Nodejs_application_using_Git">任务 3 - 使用 Git 发布 Node.js 应用程序</h4>
+
+<ol>
+<li><p>返回到门户。打开网站的<strong>“仪表板”</strong>，复制该页面底部的 <strong>Git Clone Url</strong> 值。</p>
+
+<p><img src="images/git-clone-url.png?raw=true" alt="Git Clone Url" />
+</p>
+
+<p><em>复制 Git Clone Url</em></p></li>
+<li><p>为了发布您的本地文件，请打开<strong>“终端”</strong>控制台，将目录更改到您的应用程序文件夹并运行以下命令。</p>
+
+<span class="codelanguage">终端</span><pre><code class="Terminal">git init git add . git commit -m &quot;initial commit&quot;
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>您可以在 <a href="http://git-scm.com/documentation">http://git-scm.com/documentation</a> 中了解与 Git 命令有关的详细信息。</p>
+</blockquote></li>
+<li><p>若要添加远程 Windows Azure 存储库并推送文件，请运行以下命令。使用从门户获取的值替换 <em>{Git Clone Url}</em> 占位符。</p>
+
+<span class="codelanguage">终端</span><pre><code class="Terminal">git remote add azure {Git Clone Url} git push azure master
+</code></pre></li>
+<li><p>出现提示时，请输入部署凭据。</p>
+<blockquote>
+<p><strong>注意：</strong>部署凭据不同于与您的 Windows Azure 订阅关联的 <strong>Microsoft 帐户</strong>，并适用于与您的订阅关联的所有 Windows Azure 网站。如果您不知道自己的部署凭据，使用管理门户可以轻松重置它们。打开网站的<strong>“仪表板”</strong>页，单击<strong>“重置部署凭据”</strong>链接。提供一个新密码，然后单击“确定”。</p>
+
+<p><img src="images/deployment-credentials.png?raw=true" alt="重置部署凭据" title="重置部署凭据" />
+</p>
+
+<p><em>重置部署凭据</em></p>
+</blockquote></li>
+<li><p>转到网站的<strong>“仪表板”</strong>，单击<strong>“站点 URL”</strong>链接以便确保该网站正在运行。将会显示 <em>Hello Word</em> 消息。</p>
+
+<p><img src="images/running-the-nodejs-application.png?raw=true" alt="运行 Node.js 应用程序" title="运行 Node.js 应用程序" />
+</p>
+
+<p><em>运行 Node.js 应用程序</em></p></li>
+</ol>
+
+<hr />
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Building_and_Publishing_a_Nodejs_Web_Site_using_the_Command-Line_Tools">练习 2：使用命令行工具构建和发布 Node.js 网站</h3>
+
+<p>在此练习中，您将学习如何使用适用于 Mac 和 Linux 的 Windows Azure 命令行工具管理网站。</p>
+<blockquote>
+<p><strong>注意：</strong>以下步骤假定您已安装了适用于 Mac 和 Linux 的 Windows Azure 命令行工具。</p>
+</blockquote>
+<ol>
+<li><p>打开<strong>“终端”</strong>控制台并且执行以下命令以便下载您的帐户的<strong>“发布设置”</strong>文件。此时将弹出一个新的浏览器窗口。使用与您的 Windows Azure 订阅相关联的 <strong>Microsoft 帐户</strong>凭据进行登录。</p>
+
+<span class="codelanguage">终端</span><pre><code class="Terminal">azure account download
+</code></pre>
+
+<p>您的发布设置将下载到浏览器的默认下载文件夹（通常为 ~/Downloads），并将显示一个新页面，其中提供了相关的信息。</p>
+
+<p><img src="images/download-publishsettings.png?raw=true" alt="下载发布设置文件" title="下载发布设置文件" />
+</p>
+
+<p><em>下载发布设置文件</em></p></li>
+<li><p>返回到<strong>“终端”</strong>控制台，通过运行以下命令导入在上一个步骤中下载的文件，并且在 <em>{publish_settings_file}</em> 占位符中指定<strong>“发布设置”</strong>文件位置。</p>
+
+<span class="codelanguage">终端</span><pre><code class="Terminal">azure account import {publish_settings_file}
+</code></pre></li>
+<li><p>执行<a href="#Ex1Task2">练习 1 中的任务 2</a> 以便创建一个 Node.js 网站，但将文件放置于其他文件夹中。</p></li>
+<li><p>返回到<strong>“终端”</strong>控制台，更改目录以便转到放置了文件的文件夹。</p></li>
+<li><p>在启用了<strong>“GIT 发布”</strong>功能的情况下，运行以下命令以创建 Windows Azure 网站。</p>
+
+<span class="codelanguage">终端</span><pre><code class="Terminal">azure site create --git
+</code></pre>
+
+<p>在系统提示时提供一个网站名称，例如 <strong>nodejsappOSXcli</strong>。然后，选择一个区域并继续。</p>
+
+<p><img src="images/new-web-site-cli.png?raw=true" alt="创建新网站并启用 GIT 发布" title="创建新网站并启用 GIT 发布" />
+</p>
+
+<p><em>创建新网站并启用 GIT 发布</em></p>
+<blockquote>
+<p><strong>注意：</strong>在运行命令 <strong>site create</strong> 时通过指定 <strong>--git</strong>，您无需运行附加的命令来初始化 Git 存储库或添加远程 Git，因为这两个任务将由 Windows Azure 命令行工具自动完成。</p>
+</blockquote></li>
+<li><p>现在，您将应用程序文件添加到 Git 存储库并且将它们推送到 Windows Azure 网站。为此，返回到命令提示符并且执行以下命令。出现提示时，提供您的部署凭据。</p>
+
+<span class="codelanguage">终端</span><pre><code class="Terminal">git add . git commit -m &quot;initial commit&quot; git push azure master
+</code></pre>
+
+<p><img src="images/push-site.png?raw=true" alt="推送网站文件" title="推送网站文件" />
+</p>
+
+<p><em>推送网站文件</em></p>
+<blockquote>
+<p><strong>注意：</strong>部署凭据不同于与您的 Windows Azure 订阅关联的 <strong>Microsoft 帐户</strong>，并适用于与您的订阅关联的所有 Windows Azure 网站。如果您不知道自己的部署凭据，使用管理门户可以轻松重置它们。打开网站的<strong>“仪表板”</strong>页，单击<strong>“重置部署凭据”</strong>链接。提供一个新密码，然后单击“确定”。</p>
+
+<p><img src="images/deployment-credentials.png?raw=true" alt="重置部署凭据" title="重置部署凭据" />
+</p>
+
+<p><em>重置部署凭据</em></p>
+</blockquote></li>
+<li><p>运行以下命令以便在 Windows Azure 门户中打开您的网站的已发布部署。</p>
+
+<span class="codelanguage">终端</span><pre><code class="Terminal">azure site portal
+</code></pre>
+
+<p>在 Windows Azure 门户中，从列表中选择您的网站，然后打开网站的<strong>“部署”</strong>页。签出最新的部署。</p>
+
+<p><img src="images/site-deployments.png?raw=true" alt="网站部署" title="网站部署" />
+</p>
+
+<p><em>网站部署</em></p></li>
+<li><p>执行以下命令以便浏览到已发布网站并且确保其正常工作。</p>
+
+<span class="codelanguage">终端</span><pre><code class="Terminal">azure site browse
+</code></pre>
+
+<p><img src="images/website-working-cli.png?raw=true" alt="网站正常工作" title="网站正常工作" />
+</p>
+
+<p><em>网站正常工作</em></p></li>
+</ol> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-NodejsAzureWebSites-OSX/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

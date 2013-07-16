@@ -1,0 +1,1022 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 将 ASP.NET 应用程序迁移到 Windows Azure</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-MigratingAspNetApps" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-MigratingAspNetApps" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="HOLTop"></a></p>
+
+<h1 id="Migrating_ASPNET_Applications_to_Windows_Azure">将 ASP.NET 应用程序迁移到 Windows Azure</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>ASP.NET 针对成员资格、角色、配置文件和会话管理，支持不同的应用程序提供程序实现。大多数提供程序都提供基于 SQL Database 的版本，或者是对提供程序所管理的数据使用内存中表示形式的版本。Windows Azure 示例中包含一些利用可扩展且可靠 blob 和表存储服务的提供程序实现。此外，这些提供程序还能处理在 Windows Azure 结构内各种不同计算机上承载 Web 应用程序所产生的问题。在 Windows Azure 数据中心部署 Web 应用程序时，表和 blob 的存储服务现成可用，因此可以轻松从您的应用程序访问它们。</p>
+<blockquote>
+<p><strong>注意：</strong>在最新版本的 <a href="http://bit.ly/WindowsAzureTK">Windows Azure 培训包</a>或 <a href="https://github.com/WindowsAzure-TrainingKit/HOL-MigratingAspNetApps-VS2012">GitHub</a> 中可以找到此动手实验的 Visual Studio 2012 版本。</p>
+</blockquote>
+<p><a name="objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>将 ASP.NET Web 窗体和 MVC 应用程序迁移到 Windows Azure</li>
+<li>将窗体身份验证用于 Windows Azure</li>
+<li>将 Azure ASP.NET 提供程序用于成员资格、角色和会话状态支持</li>
+</ul>
+
+<p>该实验说明如何为 ASP.NET Web 窗体和 ASP.NET MVC 应用程序使用这些功能，并针对每种技术提供了专门的练习。因为两个练习使用相同的情形并涉及相同的资料，请选择与您的需求最相关的练习。</p>
+
+<p><a name="prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li><a href="http://go.microsoft.com/fwlink/?linkid=186916">Microsoft .NET Framework 4.0</a></li>
+<li><a href="http://msdn.microsoft.com/vstudio/products/">Microsoft Visual Studio 2010</a></li>
+<li><a href="http://www.microsoft.com/windowsazure/sdk/">Windows Azure SDK 和 Windows Azure Tools for Microsoft Visual Studio 1.8</a></li>
+<li><a href="http://www.asp.net/mvc/mvc4/">ASP.NET MVC 4</a></li>
+<li>Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>本实验设计为使用 Windows 7 操作系统。</p>
+</blockquote>
+<p><a name="setup"></a></p>
+
+<h3 id="Setup">设置</h3>
+
+<p>为了执行此动手实验中的各项练习，需要对环境进行设置。</p>
+
+<ol>
+<li><p>打开 Windows 资源管理器窗口，浏览到此实验的 <strong>Source</strong> 文件夹。</p></li>
+<li><p>右键单击 <strong>Setup.cmd</strong> 文件，然后单击<strong>“以管理员身份运行”</strong>。这将启动安装过程，该过程将配置环境并安装此实验的 Visual Studio 代码段。</p></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>您首次启动 Visual Studio 时，必须选择一个预定义的设置集合。每个预定义的集合在设计上都对应于特定的开发风格，能够确定窗口布局、编辑器行为、IntelliSense 代码段和对话框选项。此实验中的过程介绍了在使用<strong>“常规开发设置”</strong>集合时，在 Visual Studio 中完成指定任务所需的操作。如果您为开发环境选择其他设置集合，需要考虑可能的过程差异。</p>
+</blockquote>
+<p><a name="usingcodesnippets"></a></p>
+
+<h3 id="Using_the_Code_Snippets">使用代码段</h3>
+
+<p>实验文档将指导您插入代码块。为方便起见，大部分代码是以 Visual Studio 代码段的形式提供的，您可以在 Visual Studio 2010 中使用而不必手动添加。</p>
+
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><a href="#Exercise1">将 Web 应用程序移到云</a></li>
+<li><a href="#Exercise2">将 Azure ASP.NET 提供程序用于 MVC 应用程序</a></li>
+<li><a href="#Exercise3">将 Azure ASP.NET 提供程序用于 Web 窗体应用程序</a></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>每个练习都附带一个起始解决方案，它位于练习的 Begin 文件夹中，允许您独立执行每个练习。请注意，在练习期间添加的代码段不包含在这些起始解决方案中，在您完成练习前，这些代码段不一定起作用。在练习的源代码内，您还会看到一个 End 文件夹，其中包含在完成相应练习中的步骤之后所生成的 Visual Studio 解决方案代码。如果在进行此动手实验时需要更多帮助，可以使用这些解决方案作为指南。</p>
+</blockquote>
+<p>完成此实验的估计时间：<strong>45 分钟</strong>。</p>
+
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Moving_a_Web_Application_to_the_Cloud">练习 1：将 Web 应用程序移到云</h3>
+
+<p>在此练习中，您将配置使用 ASP.NET 实现的示例购物车应用程序以在 Windows Azure 中运行。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Preparing_the_Application_to_Run_in_Windows_Azure">任务 1 - 准备要在 Windows Azure 中运行的应用程序</h4>
+
+<p>Azure 应用商店是模仿简单商业应用程序的标准 ASP.NET 示例。它显示用户可选择并添加到其购物车的产品列表。</p>
+
+<p>在开始前，您可能要生成并运行该解决方案以熟悉其操作。在初始状态中，该应用程序在计算模拟器外部运行。</p>
+
+<p>在此任务中，您在 Visual Studio 中创建一个 Windows Azure 项目以准备要在 Windows Azure 中运行的应用程序。</p>
+
+<ol>
+<li>通过从<strong>“开始”|“所有程序”|“Microsoft Visual Studio 2010”</strong>中，右键单击 <strong>Microsoft Visual Studio 2010</strong> 快捷方式，然后选择<strong>“以管理员身份运行”</strong>，在提升的管理员模式下打开 Visual Studio。</li>
+<li>如果显示<strong>“用户帐户控制”</strong>对话框，请单击<strong>“是”</strong>。</li>
+<li><p>在<strong>“文件”</strong>菜单中，选择<strong>“打开”</strong>，然后选择<strong>“项目/解决方案”</strong>。在“打开项目”对话框中，浏览到实验的 Source 文件夹中的 <strong>Ex1-MovingMVCAppsToAzure\Begin</strong> 或 <strong>Ex1-MovingWebAppsToAzure\Begin</strong>，选择 <strong>Begin.sln</strong>，然后单击<strong>“打开”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>根据您的需要，您可能要了解如何将 ASP.NET MVC 或 ASP.NET Web 窗体应用程序迁移到 Windows Azure。此练习中的过程对两种应用程序是通用的。选择最合适的解决方案。</p>
+</blockquote></li>
+<li><p>接下来，创建一个新的云服务项目并将它添加到该解决方案。在<strong>“文件”</strong>菜单中，指向<strong>“添加”</strong>，然后选择<strong>“新建项目”</strong>。在<strong>“添加新项目”</strong>对话框中，展开<strong>“已安装的模板”</strong>列表中的 Visual C#，然后选择<strong>“云”</strong>。选择<strong>“Windows Azure 项目”</strong>模板，将项目的<strong>名称</strong>设置为 <strong>CloudShopService</strong>，保留解决方案文件夹中的建议位置不变，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="Images/configuring-the-application-to-run-in-windows.png?raw=true" alt="配置要在 Windows Azure 中运行的应用程序" />
+</p>
+
+<p><em>配置要在 Windows Azure 中运行的应用程序</em></p></li>
+<li><p>在<strong>“新建 Windows Azure 项目”</strong>对话框中，单击<strong>“确定”</strong>而不将新角色添加到解决方案，因为您将使用现有应用程序作为 Web 角色。</p>
+
+<p><img src="Images/no-additional-roles-are-required.png?raw=true" alt="不需要其他角色" />
+</p>
+
+<p><em>不需要其他角色</em></p></li>
+<li><p>将 ASP.NET 项目关联到云项目。在<strong>“解决方案资源管理器”</strong>中，右键单击 <strong>CloudShopService</strong> 项目中的<strong>“角色”</strong>节点，指向<strong>“添加”</strong>，然后选择<strong>“解决方案中的 Web 角色项目”</strong>。</p>
+
+<p><img src="Images/associating-the-web-role-project.png?raw=true" alt="与 Web 角色项目关联" />
+</p>
+
+<p><em>与 Web 角色项目关联</em></p></li>
+<li><p>在<strong>“与角色项目关联”</strong>对话框中，选择 <strong>CloudShop</strong> 项目，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="Images/associating-the-web-role-project2.png?raw=true" alt="与 Web 角色项目 2 关联" />
+</p>
+
+<p><em>与 Web 角色项目关联</em></p>
+<blockquote>
+<p><strong>注意：</strong>关联新角色时，Visual Studio 更新 <strong>ServiceDefinition.csdef</strong> 和 <strong>ServiceConfiguration.cscfg</strong> 文件。如果当前打开其中一个文件，请确保保存它以保留这些更改。</p>
+</blockquote></li>
+<li><p>配置 <strong>TraceListener</strong> 以启用应用程序的诊断日志记录。为此，打开 <strong>CloudShop</strong> 项目的 <strong>Web.config</strong> 文件并按以下所示（突出显示的部分）插入 <strong>system.diagnostics</strong> 部分。</p>
+
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex1 DiagnosticMonitorTraceListener</em>）</p>
+
+<!--mark: 3-12 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+  ...
+<strong class="markLine">  <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.diagnostics</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">trace</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">listeners</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">            <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">type</span>=<span style="color:#0000FF">&quot;Microsoft.WindowsAzure.Diagnostics.DiagnosticMonitorTraceListener, Microsoft.WindowsAzure.Diagnostics, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35&quot;</span></strong>
+<strong class="markLine">  <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;AzureDiagnostics&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">                <span style="color:#0000FF">&lt;</span><span style="color:#800000">filter</span> <span style="color:#FF0000">type</span>=<span style="color:#0000FF">&quot;&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">            <span style="color:#0000FF">&lt;/</span><span style="color:#800000">add</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;/</span><span style="color:#800000">listeners</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">trace</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.diagnostics</span><span style="color:#0000FF">&gt;</span></strong>
+
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>system.diagnostics</strong> 部分中的这些设置配置针对 Windows Azure 的跟踪侦听器，该侦听器使用 <a href="http://msdn.microsoft.com/zh-CN/library/system.diagnostics.trace.aspx">System.Diagnostics.Trace</a> 类中的类和方法使应用程序可以跟踪代码执行情况。此步骤对于在 Visual Studio 中创建的角色通常不是必要的，因为这些角色在其角色模板中已经包含必要的设置。</p>
+</blockquote></li>
+<li><p>在 Web 角色的 <strong>Global.asax</strong> 文件中，声明以下命名空间。</p>
+
+<!--mark: 1,2 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure;</strong>
+<strong class="markLine"><span style="color:#0000FF">using</span> Microsoft.WindowsAzure.ServiceRuntime;</strong>
+</code></pre></li>
+<li><p>接下来，找到 <strong>Application_Start</strong> 方法，并在该方法开头插入以下（突出显示的）代码，以初始化配置设置发布服务器。</p>
+
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex1 SetConfigurationSettingPublisher</em>）</p>
+
+<!--mark: 3-7 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Application_Start(<span style="color:#0000FF">object</span> sender, EventArgs e) {
+<strong class="markLine">    Microsoft.WindowsAzure.CloudStorageAccount.SetConfigurationSettingPublisher((configName, configSetter) =&gt;</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">        configSetter(RoleEnvironment.GetConfigurationSettingValue(configName));</strong>
+<strong class="markLine">    });</strong>
+<strong class="markLine"></strong>
+  ... }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>配置设置发布服务器简化了存储帐户配置设置的检索。应用程序只需要使用 <strong>CloudStorageAccount.SetConfigurationSettingPublisher</strong> 设置发布服务器一次，然后，每当应用程序需要访问存储帐户时，只需要使用相应设置的名称即可通过 <strong>CloudStorageAccount.FromConfigurationSetting</strong> 访问存储帐户。</p>
+
+<p>Web 角色可以定义具有角色入口点的 <strong>WebRole</strong> 类。此类包含 Windows Azure 在角色生命周期的各个阶段调用的方法，例如在角色启动时调用 <strong>OnStart</strong> 方法。您可以使用此方法来初始化角色。但是，请注意，对于在完全 IIS 模式下执行的 Web 角色，Internet Information Server 在单独的进程 (w3wp.exe) 中承载 Web 应用程序，同时角色入口点在另一进程 (WaIISHost.exe) 中执行。这样，大多数 Web 角色初始化任务需要在 ASP.NET <strong>Application_Start</strong> 方法中执行。</p>
+</blockquote></li>
+<li><p>对于<strong>“ASP.NET MVC 项目”</strong>，确保将 <strong>System.Web.MVC</strong> 程序集包含在部署到 Windows Azure 的服务包中。为此，对于 <strong>CloudShop</strong> 项目，展开<strong>“解决方案资源管理器”</strong>中的<strong>“引用”</strong>节点，右键单击 <strong>System.Web.MVC</strong> 程序集，然后选择<strong>“属性”</strong>。将<strong>“复制本地”</strong>设置的值更改为 <em>True</em>。</p>
+
+<p><img src="Images/including-assemblies-in-the-service-package-d.png?raw=true" alt="将程序集包含在部署到 Windows Azure 的服务包" />
+</p>
+
+<p><em>将程序集包含在部署到 Windows Azure 的服务包</em></p>
+<blockquote>
+<p><strong>注意：</strong>通常，对于默认情况下未在 Windows Azure 虚拟机上安装的所有程序集，请将<strong>“复制本地”</strong>设置为 True，以确保这些程序集能够随着您的应用程序一起部署。</p>
+</blockquote></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>根据您为刚完成的练习选择的应用程序类型，您可能要继续完成“练习 2：将 Azure ASP.NET 提供程序用于 MVC 应用程序”或“练习 3：将 Azure ASP.NET 提供程序用于 Web 窗体应用程序”。</p>
+</blockquote>
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Using_the_Azure_ASPNET_Providers_with_MVC_Applications">练习 2：将 Azure ASP.NET 提供程序用于 MVC 应用程序</h3>
+
+<p>在此练习中，您将修改 ASP.NET MVC 应用程序以使用 Windows Azure 示例中的 ASP.NET 提供程序。首先，使用成员资格提供程序在网站中添加身份验证机制。然后，实现角色提供程序以将用户分类并自定义应用程序提供的产品。最后，配置会话状态提供程序以存储购物车的内容。</p>
+
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_-_Configuring_Authenticated_Access_to_the_Application">任务 1 - 为应用程序配置经过身份验证的访问</h4>
+
+<p>在此任务中，您将应用程序配置为要求对实现购物车的页进行经过身份验证的访问。</p>
+
+<ol>
+<li>如果需要，请通过从<strong>“开始”|“所有程序”|“Microsoft Visual Studio 2010”</strong>中，右键单击 <strong>Microsoft Visual Studio 2010</strong> 快捷方式，然后选择<strong>“以管理员身份运行”</strong>，在提升的管理员模式下打开 Visual Studio。</li>
+<li>在<strong>“文件”</strong>菜单中，选择<strong>“打开”</strong>，然后选择<strong>“项目/解决方案”</strong>。在<strong>“打开项目”</strong>对话框中，浏览到实验的 <strong>Source</strong> 文件夹中的 <strong>Ex2-UsingAzureProvidersWithMVCApps\Begin</strong>，选择 <strong>Begin.sln</strong>，然后单击<strong>“打开”</strong>。</li>
+<li><p>在<strong>“控制器”</strong>文件夹中打开 <strong>HomeController.cs</strong>，然后使用 <strong>Authorize</strong> 属性修饰该类。这会将应用程序配置为对此控制器上的每个可用操作要求经过身份验证的访问。</p>
+
+<!--mark: 2 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#">[HandleError] 
+<strong class="markLine">[Authorize]</strong>
+<span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> HomeController : Controller { ... }
+</code></pre></li>
+<li><p>保存 <strong>HomeController.cs</strong> 文件。</p></li>
+</ol>
+
+<p><a name="Ex2Task2"></a></p>
+
+<h4 id="Task_2_-_Configuring_Membership_Support_Using_the_Azure__TableStorageMembershipProvider">任务 2 - 使用 Azure TableStorageMembershipProvider 配置成员资格支持</h4>
+
+<p>在此任务中，您将为成员资格、角色和会话添加和配置 Azure ASP.NET 提供程序。</p>
+
+<ol>
+<li><p>将 Windows Azure ASP.NET 提供程序项目添加到解决方案。在<strong>解决方案资源管理器</strong>中，右键单击 <strong>Begin</strong> 解决方案，指向<strong>“添加”</strong>，然后选择<strong>“现有项目”</strong>。浏览到实验的 <strong>Source</strong> 文件夹中的 <strong>Assets\AspProviders</strong>，选择 <strong>AspProviders.csproj</strong> 项目，然后单击<strong>“打开”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong><strong>AspProviders</strong> 项目作为示例提供。为了方便起见，它包含在此培训包中并基于 <a href="http://code.msdn.microsoft.com/windowsazuresamples">MSDN 代码库</a>中的原始源代码。该项目包含针对成员资格、角色、配置文件和会话状态的 ASP.NET 应用程序提供程序的实现。</p>
+</blockquote></li>
+<li><p>在 Web 角色中添加对 <strong>AspProviders</strong> 项目的引用。在<strong>解决方案资源管理器</strong>中，右键单击 <strong>CloudShop</strong> 项目节点，然后单击<strong>“添加引用”</strong>。在<strong>“添加引用”</strong>对话框中，切换到<strong>“项目”</strong>选项卡，选择 <strong>AspProviders</strong> 项目，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="Images/adding-a-reference-to-the-sample-azure-aspnet.png?raw=true" alt="添加对示例 Azure ASP.NET 提供程序项目的引用" />
+</p>
+
+<p><em>添加对示例 Azure ASP.NET 提供程序项目的引用</em></p></li>
+<li><p>更新服务配置以将连接字符串包含在将存储数据的存储帐户。在 <strong>CloudShopService</strong> 项目中，展开<strong>“角色”</strong>节点，然后双击 <strong>CloudShop</strong> 节点以打开此角色的属性窗口。</p></li>
+<li><p>在<strong>“CloudShop[角色]”</strong>属性窗口中，选择<strong>“设置”</strong>选项卡，然后单击<strong>“添加设置”</strong>。将新设置的<strong>“名称”</strong>设置为 <em>DataConnectionString</em> 并将<strong>“类型”</strong>更改为<em>“连接字符串”</em>。然后，在<strong>“值”</strong>列中单击省略号按钮。</p>
+
+<p><img src="Images/creating-a-new-configuration-setting-for-the.png?raw=true" alt="为角色创建新的配置设置" />
+</p>
+
+<p><em>为角色创建新的配置设置</em></p></li>
+<li><p>在<strong>“存储帐户连接字符串”</strong>对话框中，选择<strong>“Windows Azure 存储模拟器”</strong>选项，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="Images/configuring-a-storage-connection-string.png?raw=true" alt="配置存储连接字符串" />
+</p>
+
+<p><em>配置存储连接字符串</em></p></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存对角色配置的更改。</p></li>
+<li><p>打开位于 <strong>CloudShop</strong> 项目根文件夹中的 <strong>Web.config</strong> 文件。</p></li>
+<li><p>（可选）在应用程序配置文件中配置 ASP.NET 提供程序所需的存储帐户信息。为此，请找到 &lt;<strong>appSettings</strong>&gt; 元素，并添加以下（突出显示的）配置块。如果缺少 <strong>appSettings</strong> 元素，则将它作为 &lt;<strong>configuration</strong>&gt; 元素的直接子级插入。</p>
+<blockquote>
+<p><strong>注意：</strong>除了服务配置文件之外，您还可以在应用程序的 <strong>Web.config</strong> 文件中配置 Azure 提供程序。这允许您在 Azure 结构外承载应用程序并仍可以利用 Azure ASP.NET 提供程序和存储区。但是，当应用程序在 Windows Azure 环境中运行时，ASP.NET 提供程序的服务配置文件中的配置设置优先于 <strong>Web.config</strong> 文件中的配置设置。通过使用 Windows Azure 设置，您可以在更改提供程序设置时避免重新部署应用程序。</p>
+</blockquote>
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex2 DataConnectionString</em>）</p>
+
+<!--mark: 5 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+  ...
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">appSettings</span><span style="color:#0000FF">&gt;</span>
+    ...
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">key</span>=<span style="color:#0000FF">&quot;DataConnectionString&quot;</span> <span style="color:#FF0000">value</span>=<span style="color:#0000FF">&quot;UseDevelopmentStorage=true&quot;</span><span style="color:#0000FF">/&gt;</span></strong>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">appSettings</span><span style="color:#0000FF">&gt;</span>
+  ...
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>    
+</code></pre></li>
+<li><p>配置应用程序以使用 <strong>AspProviders</strong> 项目中的成员资格提供程序。为此，使用以下（突出显示的）配置信息替换 &lt;<strong>system.web</strong>&gt; 元素内的现有 &lt;<strong>membership</strong>&gt; 部分。</p>
+<blockquote>
+<p><strong>注意：</strong>Visual Studio 中的默认 ASP.NET MVC 模板创建 <strong>AspNetSqlMembershipProvider</strong> 的配置设置，后者使用 SQL Server 进行存储。</p>
+</blockquote>
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex2 TableStorageMembershipProvider</em>）</p>
+
+<!--mark: 8-24 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+  ...
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+    ...
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">authentication</span> <span style="color:#FF0000">mode</span>=<span style="color:#0000FF">&quot;Forms&quot;</span><span style="color:#0000FF">&gt;</span>
+      ...
+    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">authentication</span><span style="color:#0000FF">&gt;</span>
+<strong class="markLine">    <span style="color:#008000">&lt;!-- Membership Provider Configuration --&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">membership</span> <span style="color:#FF0000">defaultProvider</span>=<span style="color:#0000FF">&quot;TableStorageMembershipProvider&quot;</span> <span style="color:#FF0000">userIsOnlineTimeWindow</span>=<span style="color:#0000FF">&quot;20&quot;</span> <span style="color:#FF0000">hashAlgorithmType</span>=<span style="color:#0000FF">&quot;HMACSHA256&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">clear</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;TableStorageMembershipProvider&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">type</span>=<span style="color:#0000FF">&quot;Microsoft.Samples.ServiceHosting.AspProviders.TableStorageMembershipProvider&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">description</span>=<span style="color:#0000FF">&quot;Membership provider using table storage&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">applicationName</span>=<span style="color:#0000FF">&quot;CloudShop&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">enablePasswordRetrieval</span>=<span style="color:#0000FF">&quot;false&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">enablePasswordReset</span>=<span style="color:#0000FF">&quot;true&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">requiresQuestionAndAnswer</span>=<span style="color:#0000FF">&quot;false&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">minRequiredPasswordLength</span>=<span style="color:#0000FF">&quot;1&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">minRequiredNonalphanumericCharacters</span>=<span style="color:#0000FF">&quot;0&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">requiresUniqueEmail</span>=<span style="color:#0000FF">&quot;true&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">passwordFormat</span>=<span style="color:#0000FF">&quot;Hashed&quot;</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">membership</span><span style="color:#0000FF">&gt;</span></strong>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+  ...
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+<blockquote>
+<p><strong>重要事项：</strong>在执行解决方案前，请确保设置了启动项目和启动页。要设置启动项目，请在<strong>“解决方案资源管理器”</strong>中，右键单击 <strong>CloudShopService</strong> 项目，然后选择<strong>“设为启动项目”</strong>。要指定启动页，请在<strong>解决方案资源管理器</strong>中，右键单击 <strong>CloudShop</strong> 项目，然后选择<strong>“属性”</strong>。在<strong>“属性”</strong>窗口中，选择 <strong>Web</strong> 选项卡，然后在<strong>“启动操作”</strong>中选择<strong>“特定页”</strong>。对于 MVC 项目，将此字段的值设置为空。</p>
+</blockquote></li>
+<li><p>按 <strong>F5</strong> 生成并运行应用程序。在首次执行使用存储模拟器的应用程序时，可能需要进行初始化。如果进行初始化，请等待该过程完成并查看其状态。单击<strong>“确定”</strong>继续。</p>
+
+<p><img src="Images/development-storage-initialization-procedure.png?raw=true" alt="开发存储初始化过程状态" />
+</p>
+
+<p><em>开发存储初始化过程状态</em></p></li>
+<li><p>请注意，应用程序启动时会将您重定向到登录页，因为授权设置现在要求对 Home 控制器进行经过身份验证的访问。成员资格数据库初始为空，因此您首先需要创建一个帐户才能继续操作。在登录页中，单击 <strong>Register</strong>（注册）以访问用户注册表格。</p>
+
+<p><img src="Images/authentication-required-to-proceed.png?raw=true" alt="要求进行身份验证以继续" />
+</p>
+
+<p><em>要求进行身份验证以继续</em></p></li>
+<li><p>填写注册表格，然后单击 <strong>Register</strong>（注册）以创建您的帐户。</p>
+
+<p><img src="Images/creating-a-new-user-account.png?raw=true" alt="创建新用户帐户" />
+</p>
+
+<p><em>创建新用户帐户</em></p></li>
+<li><p>创建您的帐户后，系统自动使您登录并显示产品页。请注意，您的用户名显示在窗口的右上角。</p>
+
+<p><img src="Images/products-page-displaying-the-current-user.png?raw=true" alt="产品页显示当前用户" />
+</p>
+
+<p><em>产品页显示当前用户</em></p></li>
+<li><p>关闭浏览器窗口以停止运行应用程序。</p></li>
+</ol>
+
+<p><a name="Ex2Task3"></a></p>
+
+<h4 id="Task_3_-_Configuring_Role_Support_Using_the_Azure_TableStorageRoleProvider">任务 3 - 使用 Azure TableStorageRoleProvider 配置角色支持</h4>
+
+<p>在此任务中，您将使用 Azure 角色提供程序为应用程序添加角色支持。这要求更新注册过程以捕获用户的角色并配置角色提供程序的设置。为了演示角色的使用，您将更新产品页以基于用户类型筛选产品列表。</p>
+
+<ol>
+<li><p>在启动例程中添加代码以初始化应用程序支持的角色。代码创建了两个角色：<em>Home</em> 和 <em>Enterprise</em>，应用程序使用它们来划分不同类型的用户。打开 <strong>Global.asax.cs</strong> 并将以下（突出显示的）代码插入 <strong>Application_Start</strong> 方法。</p>
+
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex2 Initialize Roles</em>）</p>
+
+<!--mark: 6-15 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Application_Start() { ...
+  <span style="color:#0000FF">this</span>.LoadProducts();
+
+<strong class="markLine">  <span style="color:#008000">// Initialize the application roles </span></strong>
+<strong class="markLine">  <span style="color:#0000FF">if</span> (!System.Web.Security.Roles.RoleExists(<span style="color:#8B0000">&quot;Home&quot;</span>))</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    System.Web.Security.Roles.CreateRole(<span style="color:#8B0000">&quot;Home&quot;</span>);</strong>
+<strong class="markLine">  }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">  <span style="color:#0000FF">if</span> (!System.Web.Security.Roles.RoleExists(<span style="color:#8B0000">&quot;Enterprise&quot;</span>))</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    System.Web.Security.Roles.CreateRole(<span style="color:#8B0000">&quot;Enterprise&quot;</span>);</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>更改 <strong>Index</strong> 操作以基于用户类型筛选产品列表。在<strong>“控制器”</strong>文件夹中，打开 <strong>HomeController.cs</strong> 文件并将以下（突出显示的）代码插入到 <strong>Index</strong> 方法中紧挨声明和初始化 <strong>filteredProducts</strong> 变量的行下面。</p>
+
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex2 Filter Products</em>）</p>
+
+<!--mark: 10-14 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> ActionResult Index() {
+  <span style="color:#0000FF">var</span> products = <span style="color:#0000FF">this</span>.HttpContext.Application[<span style="color:#8B0000">&quot;Products&quot;</span>] <span style="color:#0000FF">as</span> List&lt;<span style="color:#0000FF">string</span>&gt;;
+  <span style="color:#0000FF">var</span> itemsInSession = <span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;Cart&quot;</span>] <span style="color:#0000FF">as</span> List&lt;<span style="color:#0000FF">string</span>&gt; ?? <span style="color:#0000FF">new</span> List&lt;<span style="color:#0000FF">string</span>&gt;();
+
+  <span style="color:#008000">// add all products currently not in session</span>
+  <span style="color:#0000FF">var</span> filteredProducts = products.Where(item =&gt; !itemsInSession.Contains(item));
+
+  <span style="color:#808080">//// Add additional filters here</span>
+<strong class="markLine">  <span style="color:#008000">// filter product list for home users</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">if</span> (User.IsInRole(<span style="color:#8B0000">&quot;Home&quot;</span>))</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    filteredProducts = filteredProducts.Where(item =&gt; item.Contains(<span style="color:#8B0000">&quot;Home&quot;</span>));</strong>
+<strong class="markLine">  }</strong>
+
+  <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.View(filteredProducts); }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>插入的代码为 <em>Home</em> 角色中的用户追加一个额外筛选器，该筛选器仅返回包含文本 Home 的商品。</p>
+</blockquote></li>
+<li><p>配置应用程序以使用 <strong>AspProviders</strong> 项目中的角色提供程序。在 <strong>Web.config</strong> 文件中，使用以下（突出显示的）配置信息<strong>替换</strong> &lt;<strong>system.web</strong>&gt; 元素内的现有 &lt;<strong>roleManager</strong>&gt; 部分。</p>
+<blockquote>
+<p><strong>注意：</strong>Visual Studio 中的默认 ASP.NET MVC 模板创建 <strong>AspNetSqlRoleProvider</strong>（它使用 SQL Server 进行存储）和 <strong>AspNetWindowsTokenRoleProvider</strong>（它使用 Windows 组）的配置设置。</p>
+</blockquote>
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex2 TableStorageRoleProvider</em>）</p>
+
+<!--mark: 5-22 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+  ...
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+    ...
+<strong class="markLine">    <span style="color:#008000">&lt;!-- RoleManager Provider Configuration --&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">roleManager</span> <span style="color:#FF0000">enabled</span>=<span style="color:#0000FF">&quot;true&quot;</span></strong>
+<strong class="markLine">                 <span style="color:#FF0000">defaultProvider</span>=<span style="color:#0000FF">&quot;TableStorageRoleProvider&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cacheRolesInCookie</span>=<span style="color:#0000FF">&quot;true&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cookieName</span>=<span style="color:#0000FF">&quot;.ASPXROLES&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cookieTimeout</span>=<span style="color:#0000FF">&quot;30&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cookiePath</span>=<span style="color:#0000FF">&quot;/&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cookieRequireSSL</span>=<span style="color:#0000FF">&quot;false&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cookieSlidingExpiration</span>=<span style="color:#0000FF">&quot;true&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cookieProtection</span>=<span style="color:#0000FF">&quot;All&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">clear</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;TableStorageRoleProvider&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">type</span>=<span style="color:#0000FF">&quot;Microsoft.Samples.ServiceHosting.AspProviders.TableStorageRoleProvider&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">description</span>=<span style="color:#0000FF">&quot;Role provider using table storage&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">applicationName</span>=<span style="color:#0000FF">&quot;CloudShop&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">roleManager</span><span style="color:#0000FF">&gt;</span></strong>
+    ...
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+  ...
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>按 <strong>Ctrl+F5</strong> 生成并运行应用程序（不调试）。</p></li>
+<li><p>在登录页中，单击 <strong>Register</strong>（注册）以访问用户注册表格。请注意，注册向导现在显示一个指定客户角色的部分。创建新用户并为它分配 <em>Home</em> 客户配置文件。</p>
+
+<p><img src="Images/registration-page-showing-role-information.png?raw=true" alt="注册页显示角色信息" />
+</p>
+
+<p><em>注册页显示角色信息</em></p></li>
+<li><p>以 <em>Home</em> 用户身份登录，继续查看产品页。请注意，产品列表只包含 Home 角色的产品。</p>
+
+<p><img src="Images/products-page-showing-a-filtered-list-of-prod.png?raw=true" alt="产品页显示已基于角色筛选的产品列表" />
+</p>
+
+<p><em>产品页显示已基于角色筛选的产品列表</em></p></li>
+<li><p>单击应用程序窗口右上角的 <strong>Logoff</strong>（注销）链接。</p></li>
+<li><p>注册新帐户并为此用户分配 <em>Enterprise</em> 配置文件。请注意，显示的产品列表不同于 <em>Home</em> 用户所看到的列表。</p>
+
+<p><img src="Images/products-page-showing-enterprise-products.png?raw=true" alt="产品页显示 Enterprise 角色的产品" />
+</p>
+
+<p><em>产品页显示 Enterprise 角色的产品</em></p></li>
+<li><p>从列表中选择一个产品，然后单击 <strong>Add item to cart</strong>（将商品添加到购物车）。您可以重复该过程以在购物车中存储其他商品。</p></li>
+<li><p>单击 <strong>Checkout</strong>（结账）链接以查看购物车的内容。验证您选择的商品显示在列表中。</p>
+
+<p><img src="Images/check-out-page-showing-the-contents-of-the-sh.png?raw=true" alt="结账页显示购物车内容" />
+</p>
+
+<p><em>结账页显示购物车内容</em></p></li>
+<li><p>不要关闭浏览器窗口或离开结账页。</p></li>
+<li><p>在任务栏中，右键单击计算模拟器图标，然后选择<strong>“显示计算模拟器用户界面”</strong>。</p></li>
+<li><p>在<strong>“计算模拟器”</strong>中，右键单击 <strong>CloudShopService</strong> 节点，然后选择<strong>“挂起”</strong>。</p>
+
+<p><img src="Images/suspending-the-service-role-instance.png?raw=true" alt="挂起服务角色实例" />
+</p>
+
+<p><em>挂起服务角色实例</em></p></li>
+<li><p>通过从<strong>“开始”|“所有程序”|“附件”|“命令提示符”</strong>中，右键单击<strong>“命令提示符”</strong>快捷方式，然后选择<strong>“以管理员身份运行”</strong>，在提升的管理员模式下打开命令窗口。在命令提示符处，键入 <em>iisreset</em>。</p>
+
+<p><img src="Images/restarting-internet-information-server.png?raw=true" alt="重新启动 Internet Information Server" />
+</p>
+
+<p><em>重新启动 Internet Information Server</em></p>
+<blockquote>
+<p><strong>注意：</strong>前两个步骤<em>“回收角色”</em>和<em>“重新启动 IIS”</em>模拟重新启动角色实例时将在 Windows Azure 中发生什么。</p>
+</blockquote></li>
+<li><p>返回<strong>“计算模拟器”</strong>，等待服务被<strong>“销毁”</strong>，此时实例图标将变为紫色。现在，再次启动服务实例。为此，右键单击 <strong>CloudShopService</strong> 节点并选择<strong>“运行”</strong>，然后等待服务启动。</p></li>
+<li><p>切换回显示“结帐”页的浏览器窗口，然后单击<strong>“刷新”</strong>。请注意，订单现在显示为空。</p>
+<blockquote>
+<p><strong>注意：</strong>应用程序当前正在使用进程内会话状态，该状态在内存中维护所有会话状态。服务实例在停止时会丢弃所有会话状态，包括购物车的内容。在以下任务中，您将配置应用程序以在存储区中存储会话状态，这允许应用程序在重新启动时和跨承载应用程序的多台计算机时维护会话状态。</p>
+</blockquote></li>
+<li><p>关闭浏览器窗口以停止应用程序。</p></li>
+</ol>
+
+<p><a name="Ex2Task4"></a></p>
+
+<h4 id="Task_4_-_Configuring_Session_Support_Using_the_Azure_TableStorageSessionProvider">任务 4 - 使用 Azure TableStorageSessionProvider 配置会话支持</h4>
+
+<p>Windows Azure 可能在结构内的多台计算机上承载 Web 角色，这使得内存中会话状态对这样的环境不适用。相反，<strong>AspProviders</strong> 项目中的会话状态提供程序使用表存储来存储有关会话的配置信息，并使用 blob 存储来存储会话状态本身。在此任务中，您将配置应用程序以使用 Azure 会话状态提供程序。</p>
+
+<ol>
+<li><p>配置应用程序以使用 <strong>AspProviders</strong> 项目中的会话提供程序。为此，请在 <strong>CloudShop</strong> 项目的 <strong>Web.config</strong> 文件中，使用以下（突出显示的）配置块作为 &lt;<strong>system.web</strong>&gt; 元素的直接子级替换 sessionState 部分。</p>
+
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex2 TableStorageSessionStateProvider</em>）</p>
+
+<!--mark: 5-14 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+  ...
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+    ...
+<strong class="markLine">    <span style="color:#008000">&lt;!-- SessionState Provider Configuration --&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">sessionState</span> <span style="color:#FF0000">mode</span>=<span style="color:#0000FF">&quot;Custom&quot;</span></strong>
+<strong class="markLine">                  <span style="color:#FF0000">customProvider</span>=<span style="color:#0000FF">&quot;TableStorageSessionStateProvider&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">clear</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;TableStorageSessionStateProvider&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">type</span>=<span style="color:#0000FF">&quot;Microsoft.Samples.ServiceHosting.AspProviders.TableStorageSessionStateProvider&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">applicationName</span>=<span style="color:#0000FF">&quot;CloudShop&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">sessionState</span><span style="color:#0000FF">&gt;</span></strong>
+    ...
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+  ...
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>按 <strong>Ctrl+F5</strong> 生成并运行应用程序（不调试）。</p></li>
+<li><p>登录并导航到产品页。从列表中选择一个或多个产品，然后单击 <strong>Add item to cart</strong>（将商品添加到购物车）。重复该过程以在购物车中存储其他商品。</p></li>
+<li><p>单击 <strong>Checkout</strong>（结账）链接以查看购物车的内容。验证您选择的商品显示在列表中。</p></li>
+<li><p>不要关闭浏览器窗口或离开结账页。</p></li>
+<li><p>在任务栏中，右键单击计算模拟器图标，然后选择<strong>“显示计算模拟器用户界面”</strong>。</p></li>
+<li><p>在<strong>“计算模拟器”</strong>中，右键单击 <strong>CloudShopService</strong> 节点，然后选择<strong>“挂起”</strong>。等待服务被<strong>销毁</strong>，此时实例图标将变为紫色。</p></li>
+<li><p>通过从<strong>“开始”|“所有程序”|“附件”|“命令提示符”</strong>中，右键单击<strong>“命令提示符”</strong>快捷方式，然后选择<strong>“以管理员身份运行”</strong>，在提升的管理员模式下打开命令窗口。在命令提示符处，键入 <em>iisreset</em>。</p></li>
+<li><p>现在，再次重新启动服务实例。为此，右键单击 <strong>CloudShopService</strong> 节点并选择<strong>“运行”</strong>，然后等待服务启动。</p></li>
+<li><p>切换回显示“结帐”页的浏览器窗口，然后单击<strong>“刷新”</strong>。请注意，订单保持不变。由此可确认，当使用 Azure 提供程序时，会话状态可以在应用程序重新启动过程中保留。</p></li>
+<li><p>关闭浏览器窗口以停止应用程序。</p></li>
+</ol>
+
+<p><a name="Exercise3"></a></p>
+
+<h3 id="Exercise_3_Using_the_Azure_ASPNET_Providers_with_Web_Form_Applications">练习 3：将 Azure ASP.NET 提供程序用于 Web 窗体应用程序</h3>
+
+<p>在此练习中，您将修改 ASP.NET Web 窗体应用程序以使用 Windows Azure 示例中的 ASP.NET 提供程序。首先，使用成员资格提供程序在网站中添加身份验证机制。然后，实现角色提供程序以将用户分类并自定义应用程序提供的产品。最后，配置会话状态提供程序以存储购物车的内容。</p>
+
+<p><a name="Ex3Task1"></a></p>
+
+<h4 id="Task_1_-_Configuring_Authenticated_Access_to_the_Application">任务 1 - 为应用程序配置经过身份验证的访问</h4>
+
+<p>在此任务中，您将应用程序配置为要求对实现购物车的页进行经过身份验证的访问。</p>
+
+<ol>
+<li>如果需要，请通过从<strong>“开始”|“所有程序”|“Microsoft Visual Studio 2010”</strong>中，右键单击 <strong>Microsoft Visual Studio 2010</strong> 快捷方式，然后选择<strong>“以管理员身份运行”</strong>，在提升的管理员模式下打开 Visual Studio。</li>
+<li>在<strong>“文件”</strong>菜单中，选择<strong>“打开”</strong>，然后选择<strong>“项目/解决方案”</strong>。在<strong>“打开项目”</strong>对话框中，浏览到实验的 <strong>Source</strong> 文件夹中的 <strong>Ex3-UsingAzureProvidersWithWebApps\Begin</strong>，选择 <strong>Begin.sln</strong>，然后单击<strong>“打开”</strong>。</li>
+<li><p>将 <strong>Store</strong> 文件夹的授权配置为要求经过身份验证的访问。打开 <strong>CloudShop</strong> 项目的 <strong>Web.config</strong> 文件，将以下（突出显示的）配置块作为 &lt;<strong>configuration</strong>&gt; 元素的直接子级插入。</p>
+
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex3 Configuring Authorization</em>）</p>
+
+<!--mark: 4-11 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;?</span>xml version=&quot;1.0&quot;<span style="color:#0000FF">?&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+  ...
+<strong class="markLine">  <span style="color:#0000FF">&lt;</span><span style="color:#800000">location</span> <span style="color:#FF0000">path</span>=<span style="color:#0000FF">&quot;Store&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span> </strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">authorization</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">deny</span> <span style="color:#FF0000">users</span>=<span style="color:#0000FF">&quot;?&quot;</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">allow</span> <span style="color:#FF0000">users</span>=<span style="color:#0000FF">&quot;*&quot;</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">authorization</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">location</span><span style="color:#0000FF">&gt;</span></strong>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>按 <strong>Ctrl + S</strong> 以保存 <strong>Web.config</strong> 文件。</p></li>
+</ol>
+
+<p><a name="Ex3Task2"></a></p>
+
+<h4 id="Task_2_-_Configuring_Membership_Support_Using_the_Azure_TableStorageMembershipProvider">任务 2 - 使用 Azure TableStorageMembershipProvider 配置成员资格支持</h4>
+
+<p>在此任务中，您将为成员资格、角色和会话添加和配置 Azure ASP.NET 提供程序。</p>
+
+<ol>
+<li><p>将 Windows Azure ASP.NET 提供程序项目添加到解决方案。在<strong>解决方案资源管理器</strong>中，右键单击 <strong>Begin</strong> 解决方案，指向<strong>“添加”</strong>，然后选择<strong>“现有项目”</strong>。浏览到实验的 <strong>Source</strong> 文件夹中的 <strong>Assets\AspProviders</strong>，选择 <strong>AspProviders.csproj</strong> 项目，然后单击<strong>“打开”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong><strong>AspProviders</strong> 项目作为示例提供。为了方便起见，它包含在此培训包中并基于 <a href="http://code.msdn.microsoft.com/windowsazuresamples">MSDN 代码库</a>中的原始源代码。该项目包含针对成员资格、角色、配置文件和会话状态的 ASP.NET 应用程序提供程序的实现。</p>
+</blockquote></li>
+<li><p>在 Web 角色中添加对 <strong>AspProviders</strong> 项目的引用。在<strong>解决方案资源管理器</strong>中，右键单击 <strong>CloudShop</strong> 项目节点，然后单击<strong>“添加引用”</strong>。在<strong>“添加引用”</strong>对话框中，切换到<strong>“项目”</strong>选项卡，选择 <strong>AspProviders</strong> 项目，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="Images/adding-a-reference-to-the-sample-azure-aspnet.png?raw=true" alt="添加对示例 Azure ASP.NET 提供程序项目的引用" />
+</p>
+
+<p><em>添加对示例 Azure ASP.NET 提供程序项目的引用</em></p></li>
+<li><p>更新服务配置以将连接字符串包含在将存储数据的存储帐户。在 <strong>CloudShopService</strong> 项目中，展开<strong>“角色”</strong>节点，然后双击 <strong>CloudShop</strong> 节点以打开此角色的属性窗口。</p></li>
+<li><p>在<strong>“CloudShop[角色]”</strong>属性窗口中，选择<strong>“设置”</strong>选项卡，然后单击<strong>“添加设置”</strong>。将新设置的<strong>“名称”</strong>设置为 <em>DataConnectionString</em> 并将<strong>“类型”</strong>更改为<em>“连接字符串”</em>。然后，在<strong>“值”</strong>列中单击省略号按钮。</p>
+
+<p><img src="Images/creating-a-new-configuration-setting-for-the.png?raw=true" alt="为角色创建新的配置设置" />
+</p>
+
+<p><em>为角色创建新的配置设置</em></p></li>
+<li><p>在<strong>“存储帐户连接字符串”</strong>对话框中，选择<strong>“Windows Azure 存储模拟器”</strong>选项，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="Images/configuring-a-storage-connection-string.png?raw=true" alt="配置存储连接字符串" />
+</p>
+
+<p><em>配置存储连接字符串</em></p></li>
+<li><p>按 <strong>Ctrl + S</strong> 保存对角色配置的更改。</p></li>
+<li><p>打开位于 <strong>CloudShop</strong> 项目根文件夹中的 <strong>Web.config</strong> 文件。</p></li>
+<li><p>（可选）在应用程序配置文件中配置 ASP.NET 提供程序所需的存储帐户信息。为此，请找到 &lt;<strong>appSettings</strong>&gt; 元素，它应是空的，并使用以下（突出显示的）配置块替换它。如果缺少 <strong>appSettings</strong> 元素，则将它作为 &lt;<strong>configuration</strong>&gt; 元素的直接子级插入。</p>
+<blockquote>
+<p><strong>注意：</strong>除了服务配置文件之外，您还可以在应用程序的 <strong>Web.config</strong> 文件中配置 Azure 提供程序。这允许您在 Azure 结构外承载应用程序并仍可以利用 Azure ASP.NET 提供程序和存储区。但是，当应用程序在 Windows Azure 环境中运行时，ASP.NET 提供程序的服务配置文件中的配置设置优先于 <strong>Web.config</strong> 文件中的配置设置。通过使用 Windows Azure 设置，您可以在更改提供程序设置时避免重新部署应用程序。</p>
+</blockquote>
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex3 DataConnectionString</em>）</p>
+
+<!--mark: 3-5 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+  ...
+<strong class="markLine">  <span style="color:#0000FF">&lt;</span><span style="color:#800000">appSettings</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">key</span>=<span style="color:#0000FF">&quot;DataConnectionString&quot;</span> <span style="color:#FF0000">value</span>=<span style="color:#0000FF">&quot;UseDevelopmentStorage=true&quot;</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">appSettings</span><span style="color:#0000FF">&gt;</span></strong>
+  ...
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>配置应用程序以使用 <strong>AspProviders</strong> 项目中的成员资格提供程序。为此，使用以下（突出显示的）配置信息<strong>替换</strong> &lt;<strong>system.web</strong>&gt; 元素内的现有 &lt;<strong>membership</strong>&gt; 部分。</p>
+<blockquote>
+<p><strong>注意：</strong>Visual Studio 中的默认 ASP.NET Web 应用程序模板创建 <strong>AspNetSqlMembershipProvider</strong> 的配置设置，后者使用 SQL Server 进行存储。</p>
+</blockquote>
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex3 TableStorageMembershipProvider</em>）</p>
+
+<!--mark: 9-26 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+  ...
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+    ...
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">authentication</span> <span style="color:#FF0000">mode</span>=<span style="color:#0000FF">&quot;Forms&quot;</span><span style="color:#0000FF">&gt;</span>
+      ...
+    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">authentication</span><span style="color:#0000FF">&gt;</span>
+
+<strong class="markLine">    <span style="color:#008000">&lt;!-- Membership Provider Configuration --&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">membership</span> <span style="color:#FF0000">defaultProvider</span>=<span style="color:#0000FF">&quot;TableStorageMembershipProvider&quot;</span> <span style="color:#FF0000">userIsOnlineTimeWindow</span>=<span style="color:#0000FF">&quot;20&quot;</span> <span style="color:#FF0000">hashAlgorithmType</span>=<span style="color:#0000FF">&quot;HMACSHA256&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">clear</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;TableStorageMembershipProvider&quot;</span></strong>
+<strong class="markLine">         <span style="color:#FF0000">type</span>=<span style="color:#0000FF">&quot;Microsoft.Samples.ServiceHosting.AspProviders.TableStorageMembershipProvider&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">description</span>=<span style="color:#0000FF">&quot;Membership provider using table storage&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">applicationName</span>=<span style="color:#0000FF">&quot;CloudShop&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">enablePasswordRetrieval</span>=<span style="color:#0000FF">&quot;false&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">enablePasswordReset</span>=<span style="color:#0000FF">&quot;true&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">requiresQuestionAndAnswer</span>=<span style="color:#0000FF">&quot;false&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">minRequiredPasswordLength</span>=<span style="color:#0000FF">&quot;1&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">minRequiredNonalphanumericCharacters</span>=<span style="color:#0000FF">&quot;0&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">requiresUniqueEmail</span>=<span style="color:#0000FF">&quot;true&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">passwordFormat</span>=<span style="color:#0000FF">&quot;Hashed&quot;</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">membership</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine"></strong>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+  ...
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+<blockquote>
+<p><strong>重要事项：</strong>在执行解决方案前，请确保设置了启动项目和启动页。要设置启动项目，请在<strong>“解决方案资源管理器”</strong>中，右键单击 <strong>CloudShopService</strong> 项目，然后选择<strong>“设为启动项目”</strong>。</p>
+
+<p>要指定启动页，请在<strong>解决方案资源管理器</strong>中，右键单击 <strong>CloudShop</strong> 项目，然后选择<strong>“属性”</strong>。在<strong>“属性”</strong>窗口中，选择 <strong>Web</strong> 选项卡，然后在<strong>“启动操作”</strong>中选择<strong>“特定页”</strong>。对于 Web 窗体项目，将此字段的值设置为 <strong>Store/Products.aspx</strong>。</p>
+</blockquote></li>
+<li><p>按 <strong>F5</strong> 生成并运行应用程序。在首次执行使用存储模拟器的应用程序时，可能需要进行初始化。如果进行初始化，请等待该过程完成并查看其状态。单击<strong>“确定”</strong>继续。</p>
+
+<p><img src="Images/development-storage-initialization-procedure.png?raw=true" alt="开发存储初始化过程状态" />
+</p>
+
+<p><em>开发存储初始化过程状态</em></p></li>
+<li><p>请注意，应用程序启动时会将您重定向到登录页，因为授权设置现在要求对 Home 控制器进行经过身份验证的访问。成员资格数据库初始为空，因此您首先需要创建一个帐户才能继续操作。在登录页中，单击 <strong>Register</strong>（注册）以访问用户注册表格。</p>
+
+<p><img src="Images/authentication-required-to-proceed2.png?raw=true" alt="要求进行身份验证以继续" />
+</p>
+
+<p><em>要求进行身份验证以继续</em></p></li>
+<li><p>填写注册表格，然后单击<strong>“创建用户”</strong>以注册您的帐户。</p>
+
+<p><img src="Images/creating-a-new-user-account2.png?raw=true" alt="创建新用户帐户" />
+</p>
+
+<p><em>创建新用户帐户</em></p></li>
+<li><p>完成此向导后，应用程序将显示确认消息。单击<strong>“继续”</strong>以查看“产品”页。</p>
+
+<p><img src="Images/account-successfully-created2.png?raw=true" alt="已成功创建帐户" />
+</p>
+
+<p><em>已成功创建帐户</em></p></li>
+<li><p>创建您的帐户后，系统自动使您登录并显示产品页。请注意，您的用户名显示在窗口的右上角。</p>
+
+<p><img src="Images/products-page-displaying-the-current-user2.png?raw=true" alt="产品页显示当前用户" />
+</p>
+
+<p><em>产品页显示当前用户</em></p></li>
+<li><p>关闭浏览器窗口以停止运行应用程序。</p></li>
+</ol>
+
+<p><a name="Ex3Task3"></a></p>
+
+<h4 id="Task_3_-_Configuring_Role_Support_Using_the_Azure_TableStorageRoleProvider">任务 3 - 使用 Azure TableStorageRoleProvider 配置角色支持</h4>
+
+<p>在此任务中，您将使用 Azure 角色提供程序为应用程序添加角色支持。这要求更新注册过程以捕获用户的角色并配置角色提供程序的设置。为了演示角色的使用，您将更新产品页以基于用户类型筛选产品列表。</p>
+
+<ol>
+<li><p>更新注册过程以将一个角色分配给该用户。打开 <strong>Account</strong> 文件夹中的 <strong>Register.aspx</strong>，插入以下（突出显示的）标记以在 <strong>CreateUserWizard</strong> 控件中添加新步骤。</p>
+
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex3 Role WizardStep</em>）</p>
+
+<!--mark: 3-8 -->
+
+<span class="codelanguage">ASP.NET</span><pre><code class="ASP.NET">    ...
+    <span style="color:#0000FF">&lt;</span><span style="color:#800000">WizardSteps</span><span style="color:#0000FF">&gt;</span>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">WizardStep</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">            <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">                Choose a customer profile:<span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">            <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">RadioButtonList</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;roles&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span> <span style="color:#FF0000">RepeatDirection</span>=<span style="color:#0000FF">&quot;Vertical&quot;</span> <span style="color:#FF0000">RepeatLayout</span>=<span style="color:#0000FF">&quot;Flow&quot;</span></strong>
+<strong class="markLine">                <span style="color:#FF0000">CssClass</span>=<span style="color:#0000FF">&quot;role&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;/</span><span style="color:#C71585">asp</span>:<span style="color:#800000">WizardStep</span><span style="color:#0000FF">&gt;</span></strong>
+        <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">CreateUserWizardStep</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;CreateUserWizardStep1&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span><span style="color:#0000FF">&gt;</span>
+        <span style="color:#0000FF">&lt;/</span><span style="color:#C71585">asp</span>:<span style="color:#800000">CreateUserWizardStep</span><span style="color:#0000FF">&gt;</span>
+        <span style="color:#0000FF">&lt;</span><span style="color:#C71585">asp</span>:<span style="color:#800000">CompleteWizardStep</span> <span style="color:#FF0000">ID</span>=<span style="color:#0000FF">&quot;CompleteWizardStep1&quot;</span> <span style="color:#FF0000">runat</span>=<span style="color:#0000FF">&quot;server&quot;</span><span style="color:#0000FF">&gt;</span>
+        <span style="color:#0000FF">&lt;/</span><span style="color:#C71585">asp</span>:<span style="color:#800000">CompleteWizardStep</span><span style="color:#0000FF">&gt;</span>
+    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">WizardSteps</span><span style="color:#0000FF">&gt;</span>
+    ...
+</code></pre></li>
+<li><p>为当向导创建用户时激发的事件添加一个事件处理程序。将 <strong>OnCreatedUser</strong> 属性添加到 <strong>CreateUserWizard</strong> 控件并将事件处理程序的名称设置为 <strong>OnCreatedUser</strong>。</p>
+
+<p><img src="Images/adding-an-event-handler-for-the-createduser-e.png?raw=true" alt="添加 CreatedUser 事件的事件处理程序" />
+</p>
+
+<p><em>添加 CreatedUser 事件的事件处理程序</em></p></li>
+<li><p>在<strong>“解决方案资源管理器”</strong>中，右键单击 <strong>Register.aspx.cs</strong>，然后选择<strong>“查看代码”</strong>以打开代码隐藏文件。插入以下代码以定义 <strong>OnCreatedUser</strong> 事件处理程序。</p>
+
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex3 OnCreatedUser</em>）</p>
+
+<!--mark: 1-8 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><strong class="markLine"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> OnCreatedUser(<span style="color:#0000FF">object</span> sender, EventArgs e)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">  <span style="color:#0000FF">var</span> list = (RadioButtonList)<span style="color:#0000FF">this</span>.CreateUserWizard1.WizardSteps[0].FindControl(<span style="color:#8B0000">&quot;roles&quot;</span>);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">  System.Web.Security.Roles.AddUserToRole(</strong>
+<strong class="markLine">                             <span style="color:#0000FF">this</span>.CreateUserWizard1.UserName,</strong>
+<strong class="markLine">                             list.SelectedItem.Text);</strong>
+<strong class="markLine">}</strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>该代码检索在向导中选择的角色，然后使用配置的角色提供程序将用户添加到此角色。</p>
+</blockquote></li>
+<li><p>将以下突出显示的代码插入 <strong>Page_Load</strong> 方法的主体，以使用应用程序定义的角色初始化 <strong>CreateUserWizard</strong> 控件。</p>
+
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex3 Page_Load</em>）</p>
+
+<!--mark: 4-16 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Page_Load(<span style="color:#0000FF">object</span> sender, EventArgs e) {
+  <span style="color:#0000FF">this</span>.CreateUserWizard1.ContinueDestinationPageUrl = Request.QueryString[<span style="color:#8B0000">&quot;ReturnUrl&quot;</span>];
+<strong class="markLine"></strong>
+<strong class="markLine">  <span style="color:#0000FF">if</span> (!<span style="color:#0000FF">this</span>.IsPostBack)</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    <span style="color:#0000FF">var</span> list = (RadioButtonList)<span style="color:#0000FF">this</span>.CreateUserWizard1.WizardSteps[0].FindControl(<span style="color:#8B0000">&quot;roles&quot;</span>);</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    list.DataSource = System.Web.Security.Roles.GetAllRoles().OrderByDescending(a =&gt; a);</strong>
+<strong class="markLine">    list.DataBind();</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">    <span style="color:#0000FF">if</span> (list.Items.Count &gt; 0)</strong>
+<strong class="markLine">    {</strong>
+<strong class="markLine">      list.Items[0].Selected = <span style="color:#0000FF">true</span>;</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>在启动例程中添加代码以初始化应用程序支持的角色。代码创建了两个角色：<em>Home</em> 和 <em>Enterprise</em>，应用程序使用它们来划分不同类型的用户。打开 <strong>Global.asax.cs</strong> 并将以下（突出显示的）代码插入 <strong>Application_Start</strong> 方法。</p>
+
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex3 Initialize Roles</em>）</p>
+
+<!--mark: 6-15 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Application_Start(<span style="color:#0000FF">object</span> sender, EventArgs e) { ...
+  <span style="color:#0000FF">this</span>.LoadProducts();
+
+<strong class="markLine">  <span style="color:#008000">// Initialize the application roles </span></strong>
+<strong class="markLine">  <span style="color:#0000FF">if</span> (!System.Web.Security.Roles.RoleExists(<span style="color:#8B0000">&quot;Home&quot;</span>))</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    System.Web.Security.Roles.CreateRole(<span style="color:#8B0000">&quot;Home&quot;</span>);</strong>
+<strong class="markLine">  }</strong>
+<strong class="markLine"></strong>
+<strong class="markLine">  <span style="color:#0000FF">if</span> (!System.Web.Security.Roles.RoleExists(<span style="color:#8B0000">&quot;Enterprise&quot;</span>))</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    System.Web.Security.Roles.CreateRole(<span style="color:#8B0000">&quot;Enterprise&quot;</span>);</strong>
+<strong class="markLine">  }</strong>
+}
+</code></pre></li>
+<li><p>更改产品页以基于用户类型筛选产品列表。打开 <strong>Store</strong> 文件夹中的 <strong>Products.aspx.cs</strong> 代码隐藏文件，将以下（突出显示的）代码插入到 <strong>Page_Init</strong> 方法中紧挨声明和初始化 <strong>filteredProducts</strong> 变量的行下面。</p>
+
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex3 Page_Init</em>）</p>
+
+<!--mark: 10-14 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">protected</span> <span style="color:#0000FF">void</span> Page_Init(<span style="color:#0000FF">object</span> sender, EventArgs e) {
+  <span style="color:#0000FF">var</span> products = <span style="color:#0000FF">this</span>.Application[<span style="color:#8B0000">&quot;Products&quot;</span>] <span style="color:#0000FF">as</span> List&lt;<span style="color:#0000FF">string</span>&gt;;
+  <span style="color:#0000FF">var</span> itemsInSession = <span style="color:#0000FF">this</span>.Session[<span style="color:#8B0000">&quot;Cart&quot;</span>] <span style="color:#0000FF">as</span> List&lt;<span style="color:#0000FF">string</span>&gt; ?? <span style="color:#0000FF">new</span> List&lt;<span style="color:#0000FF">string</span>&gt;();
+
+  <span style="color:#008000">// add all products currently not in session</span>
+  <span style="color:#0000FF">var</span> filteredProducts = products.Where(item =&gt; !itemsInSession.Contains(item));
+
+  <span style="color:#808080">//// Add additional filters here</span>
+<strong class="markLine">  <span style="color:#008000">// filter product list for home users</span></strong>
+<strong class="markLine">  <span style="color:#0000FF">if</span> (User.IsInRole(<span style="color:#8B0000">&quot;Home&quot;</span>))</strong>
+<strong class="markLine">  {</strong>
+<strong class="markLine">    filteredProducts = filteredProducts.Where(item =&gt; item.Contains(<span style="color:#8B0000">&quot;Home&quot;</span>));</strong>
+<strong class="markLine">  }</strong>
+
+  <span style="color:#0000FF">foreach</span> (<span style="color:#0000FF">var</span> product <span style="color:#0000FF">in</span> filteredProducts) {
+    <span style="color:#0000FF">this</span>.products.Items.Add(product); } }
+
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>插入的代码为 <em>Home</em> 角色中的用户追加一个额外筛选器，该筛选器仅返回包含文本 <em>Home</em> 的商品。</p>
+</blockquote></li>
+<li><p>配置应用程序以使用 <strong>AspProviders</strong> 项目中的角色提供程序。在 <strong>Web.config</strong> 文件中，使用以下（突出显示的）配置信息<strong>替换</strong> &lt;<strong>system.web</strong>&gt; 元素内的现有 &lt;<strong>roleManager</strong>&gt; 部分。</p>
+<blockquote>
+<p><strong>注意：</strong>Visual Studio 中的默认 ASP.NET Web 应用程序模板创建 <strong>AspNetSqlRoleProvider</strong>（它使用 SQL Server 进行存储）和 <strong>AspNetWindowsTokenRoleProvider</strong>（它使用 Windows 组）的配置设置。</p>
+</blockquote>
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex3 TableStorageRoleProvider</em>）</p>
+
+<!--mark: 5-22 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+  ...
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+    ...
+<strong class="markLine">    <span style="color:#008000">&lt;!-- RoleManager Provider Configuration --&gt;</span></strong>
+<strong class="markLine">   <span style="color:#0000FF">&lt;</span><span style="color:#800000">roleManager</span> <span style="color:#FF0000">enabled</span>=<span style="color:#0000FF">&quot;true&quot;</span></strong>
+<strong class="markLine">                 <span style="color:#FF0000">defaultProvider</span>=<span style="color:#0000FF">&quot;TableStorageRoleProvider&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cacheRolesInCookie</span>=<span style="color:#0000FF">&quot;true&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cookieName</span>=<span style="color:#0000FF">&quot;.ASPXROLES&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cookieTimeout</span>=<span style="color:#0000FF">&quot;30&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cookiePath</span>=<span style="color:#0000FF">&quot;/&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cookieRequireSSL</span>=<span style="color:#0000FF">&quot;false&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cookieSlidingExpiration</span>=<span style="color:#0000FF">&quot;true&quot;</span> </strong>
+<strong class="markLine">                 <span style="color:#FF0000">cookieProtection</span>=<span style="color:#0000FF">&quot;All&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">clear</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;TableStorageRoleProvider&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">type</span>=<span style="color:#0000FF">&quot;Microsoft.Samples.ServiceHosting.AspProviders.TableStorageRoleProvider&quot;</span></strong>
+<strong class="markLine">         <span style="color:#FF0000">description</span>=<span style="color:#0000FF">&quot;Role provider using table storage&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">applicationName</span>=<span style="color:#0000FF">&quot;CloudShop&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">roleManager</span><span style="color:#0000FF">&gt;</span></strong>
+    ...
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+  ...
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>按 <strong>Ctrl+F5</strong> 生成并运行应用程序（不调试）。</p></li>
+<li><p>在登录页中，单击 <strong>Register</strong>（注册）以访问用户注册表格。请注意，注册向导现在显示一个指定客户角色的部分。创建新用户并为它分配 <em>Home</em> 客户配置文件。</p>
+
+<p><img src="Images/registration-page-showing-role-information2.png?raw=true" alt="注册页显示角色信息" />
+</p>
+
+<p><em>注册页显示角色信息</em></p></li>
+<li><p>以 <em>Home</em> 用户身份登录，继续查看产品页。请注意，产品列表只包含 Home 角色的产品。</p>
+
+<p><img src="Images/products-page-showing-a-filtered-list-of-prod2.png?raw=true" alt="产品页显示已基于角色筛选的产品列表" />
+</p>
+
+<p><em>产品页显示已基于角色筛选的产品列表</em></p></li>
+<li><p>单击应用程序窗口左上角的 <strong>Logout</strong>（注销）链接。</p></li>
+<li><p>注册新帐户并为此用户分配 <em>Enterprise</em> 配置文件。请注意，显示的产品列表不同于 <em>Enterprise</em> 用户所看到的列表。</p>
+
+<p><img src="Images/products-page-showing-enterprise-products2.png?raw=true" alt="产品页显示 Enterprise 角色的产品" />
+</p>
+
+<p><em>产品页显示 Enterprise 角色的产品</em></p></li>
+<li><p>从列表中选择一个产品，然后单击 <strong>Add item to cart</strong>（将商品添加到购物车）。您可以重复该过程以在购物车中存储其他商品。</p></li>
+<li><p>单击 <strong>Checkout</strong>（结账）链接以查看购物车的内容。验证您选择的商品显示在列表中。</p>
+
+<p><img src="Images/check-out-page-showing-the-contents-of-the-sh2.png?raw=true" alt="结账页显示购物车内容" />
+</p>
+
+<p><em>结账页显示购物车内容</em></p></li>
+<li><p>不要关闭浏览器窗口或离开结账页。</p></li>
+<li><p>在任务栏中，右键单击计算模拟器图标，然后选择<strong>“显示计算模拟器用户界面”</strong>。</p></li>
+<li><p>在<strong>“计算模拟器”</strong>中，右键单击 <strong>CloudShopService</strong> 节点，然后选择<strong>“挂起”</strong>。</p>
+
+<p><img src="Images/suspending-the-service-role-instance.png?raw=true" alt="挂起服务角色实例" />
+</p>
+
+<p><em>挂起服务角色实例</em></p></li>
+<li><p>通过从<strong>“开始”|“所有程序”|“附件”|“命令提示符”</strong>中，右键单击<strong>“命令提示符”</strong>快捷方式，然后选择<strong>“以管理员身份运行”</strong>，在提升的管理员模式下打开命令窗口。在命令提示符处，键入 <em>iisreset</em>。</p>
+
+<p><img src="Images/restarting-internet-information-server.png?raw=true" alt="重新启动 Internet Information Server" />
+</p>
+
+<p><em>重新启动 Internet Information Server</em></p>
+<blockquote>
+<p><strong>注意：</strong>“回收角色”和“重新启动 IIS”这两个步骤模拟重新启动角色实例时将在 Windows Azure 中发生什么。</p>
+</blockquote></li>
+<li><p>返回<strong>“计算模拟器”</strong>，等待服务被<strong>“销毁”</strong>，此时实例图标将变为紫色。现在，再次重新启动服务实例。为此，右键单击 <strong>CloudShopService</strong> 节点并选择<strong>“运行”</strong>，然后等待服务启动。</p></li>
+<li><p>切换回显示“结帐”页的浏览器窗口，然后单击<strong>“刷新”</strong>。请注意，订单现在显示为空。</p>
+<blockquote>
+<p><strong>注意：</strong>应用程序当前正在使用进程内会话状态，该状态在内存中维护所有会话状态。服务实例在停止时会丢弃所有会话状态，包括购物车的内容。在以下任务中，您将配置应用程序以在存储区中存储会话状态，这允许应用程序在重新启动时和跨承载应用程序的多台计算机时维护会话状态。</p>
+</blockquote></li>
+<li><p>关闭浏览器窗口以停止应用程序。</p></li>
+</ol>
+
+<p><a name="Ex3Task4"></a></p>
+
+<h4 id="Task_4_-_Configuring_Session_Support_Using_the_Azure_TableStorageSessionProvider">任务 4 - 使用 Azure TableStorageSessionProvider 配置会话支持</h4>
+
+<p>Windows Azure 可能在结构内的多台计算机上承载 Web 角色，这使得内存中会话状态对这样的环境不适用。相反，<strong>AspProviders</strong> 项目中的会话状态提供程序使用表存储来存储有关会话的配置信息，并使用 blob 存储来存储会话状态本身。在此任务中，您配置应用程序以使用 Windows Azure 会话状态提供程序。</p>
+
+<ol>
+<li><p>配置应用程序以使用 <strong>AspProviders</strong> 项目中的会话提供程序。为此，请在 <strong>CloudShop</strong> 项目的 <strong>Web.config</strong> 文件中，将具有以下（突出显示的）配置块的 sessionState 部分作为 &lt;<strong>system.web</strong>&gt; 元素的直接子级添加。</p>
+
+<p>（代码段 - <em>Migrating ASP.NET Applications - Ex3 TableStorageSessionStateProvider</em>）</p>
+
+<!--mark: 5-14 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+  ...
+  <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+    ...
+<strong class="markLine">    <span style="color:#008000">&lt;!-- SessionState Provider Configuration --&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">sessionState</span> <span style="color:#FF0000">mode</span>=<span style="color:#0000FF">&quot;Custom&quot;</span></strong>
+<strong class="markLine">                  <span style="color:#FF0000">customProvider</span>=<span style="color:#0000FF">&quot;TableStorageSessionStateProvider&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">clear</span><span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">        <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;TableStorageSessionStateProvider&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">type</span>=<span style="color:#0000FF">&quot;Microsoft.Samples.ServiceHosting.AspProviders.TableStorageSessionStateProvider&quot;</span></strong>
+<strong class="markLine">             <span style="color:#FF0000">applicationName</span>=<span style="color:#0000FF">&quot;CloudShop&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">      <span style="color:#0000FF">&lt;/</span><span style="color:#800000">providers</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">    <span style="color:#0000FF">&lt;/</span><span style="color:#800000">sessionState</span><span style="color:#0000FF">&gt;</span></strong>
+    ...
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.web</span><span style="color:#0000FF">&gt;</span>
+  ...
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">configuration</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>按 <strong>Ctrl+F5</strong> 生成并运行应用程序（不调试）。</p></li>
+<li><p>登录并导航到产品页。从列表中选择一个或多个产品，然后单击 <strong>Add item to cart</strong>（将商品添加到购物车）。重复该过程以在购物车中存储其他商品。</p></li>
+<li><p>单击 <strong>Checkout</strong>（结账）链接以查看购物车的内容。验证您选择的商品显示在列表中。</p></li>
+<li><p>不要关闭浏览器窗口或离开结账页。</p></li>
+<li><p>在任务栏中，右键单击计算模拟器图标，然后选择<strong>“显示计算模拟器用户界面”</strong>。</p></li>
+<li><p>在<strong>“计算模拟器”</strong>中，右键单击 <strong>CloudShopService</strong> 节点，然后选择<strong>“挂起”</strong>。等待服务被<strong>销毁</strong>，此时实例图标将变为紫色。</p></li>
+<li><p>通过从<strong>“开始”|“所有程序”|“附件”|“命令提示符”</strong>中，右键单击<strong>“命令提示符”</strong>快捷方式，然后选择<strong>“以管理员身份运行”</strong>，在提升的管理员模式下打开命令窗口。在命令提示符处，键入 <em>iisreset</em>。</p></li>
+<li><p>现在，再次重新启动服务实例。为此，右键单击 <strong>CloudShopService</strong> 节点并选择<strong>“运行”</strong>，然后等待服务启动。</p></li>
+<li><p>切换回显示“结帐”页的浏览器窗口，然后单击<strong>“刷新”</strong>。请注意，订单保持不变。由此可确认，当使用 Azure 提供程序时，会话状态可以在应用程序重新启动过程中保留。</p></li>
+<li><p>关闭浏览器窗口以停止应用程序。</p></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>如果要在 Windows Azure 中部署 ASP.NET Web 窗体应用程序，需要在 Web 角色项目中设置起始页。为此，请打开 Web.Config 文件并在 System.WebServer 部分的末尾添加以下行：</p>
+
+<span class="codelanguage">XML</span><pre><code class="XML">  <span style="color:#0000FF">&lt;</span><span style="color:#800000">system.webServer</span><span style="color:#0000FF">&gt;</span>
+   . . .
+   <span style="color:#0000FF">&lt;</span><span style="color:#800000">defaultDocument</span><span style="color:#0000FF">&gt;</span>
+         <span style="color:#0000FF">&lt;</span><span style="color:#800000">files</span><span style="color:#0000FF">&gt;</span>
+              <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">value</span>=<span style="color:#0000FF">&quot;Store/Products.aspx&quot;</span> <span style="color:#0000FF">/&gt;</span>
+         <span style="color:#0000FF">&lt;/</span><span style="color:#800000">files</span><span style="color:#0000FF">&gt;</span>
+   <span style="color:#0000FF">&lt;/</span><span style="color:#800000">defaultDocument</span><span style="color:#0000FF">&gt;</span>
+  <span style="color:#0000FF">&lt;/</span><span style="color:#800000">system.webServer</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+
+<p>有关此问题的详细信息，请访问此 <a href="http://blogs.msdn.com/b/cesardelatorre/archive/2010/07/22/how-to-set-a-default-page-to-a-windows-azure-web-role-app-silverlight-asp-net-etc.aspx">msdn 博客</a>。</p>
+</blockquote>
+<hr />
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>通过完成此动手实验，您了解了在 Windows Azure 环境中运行现有 ASP.NET 应用程序所需进行的更改。您探索了身份验证功能，并了解了如何使用基于可扩展的可靠 blob 和表存储服务的成员资格、角色和会话状态提供程序来处理在 Windows Azure 结构内多台计算机上运行的应用程序。</p> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-MigratingAspNetApps/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,778 @@
+﻿<!DOCTYPE html>
+
+<html class="no-js" lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head id="ContentPlaceHolderDefault_Head1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+    <meta charset=UTF-8" />
+    <title>Windows Azure 培训包 - 使用 ASP.NET 和 SQL Server 的 Windows Azure 网站和虚拟机</title>
+    <link rel="Stylesheet" type="text/css" media="all" href="styles/master.css" />
+</head>
+<body id="top" class="page-">
+    <div id="page">
+        <div id="wrapper" class="landingPage getStartedPage">            
+            <div class="header">								
+				<img alt="Windows Azure" src="images/azure-logo.png" /> <span class="mainHomepageSubTitle">培训包 - 2012 年 12 月更新</span>								
+			</div>			
+			<div class="nav-menu-header">
+				<nav>
+					<ul>
+						<li class="MenuLink-Selected">
+							<a href="#">内容</a>
+						</li>
+												<li class="MenuLink">
+							<a href="Source">设置</a>
+						</li>
+											</ul>
+				
+										
+						<span id="github-btn" class="github-btn"> <a id="gh-btn" title="在 GitHub 中复制此存储库的分支" href="https://github.com/WindowsAzure-TrainingKit/HOL-ASPNETAzureWebSitesVMSQL" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">分支</span> </a> </span> <span id="github-btn" class="github-btn github-watchers"> <a id="gh-btn" title="在 GitHub 中关注此存储库" href="https://github.com/WindowsAzure-TrainingKit/HOL-ASPNETAzureWebSitesVMSQL" target="_blank" class="gh-btn"> <span class="gh-ico"></span> <span id="gh-text" class="gh-text">关注</span> </a> </span>
+						
+									
+				</nav>
+			</div>	        
+		</span>
+			<div id="content" class="textpage">
+            <section id="content-container">
+				<div id="content" class="textpage">
+			    <a name="top"></a>
+				
+				
+
+		<div class="content">
+			<?xml version="1.0" encoding="iso-8859-1"?><span><p><a name="handsonlab"></a></p>
+
+<h1 id="Windows_Azure_Web_Sites_and_Virtual_Machines_using_ASPNET_and_SQL_Server">使用 ASP.NET 和 SQL Server 的 Windows Azure 网站和虚拟机</h1>
+
+<hr />
+
+<p><a name="Overview"></a></p>
+
+<h2 id="Overview">概述</h2>
+
+<p>在此实验中，您将学习如何创建与 Windows Azure 中运行的虚拟机连接的 ASP.NET Web 应用程序。首先，将使用 Windows Azure 管理门户创建安装了 SQL Server 2012 的虚拟机，并将它配置为允许外部连接。然后，您将使用实体框架创建一个简单的 ASP.NET MVC 4 Web 应用程序来访问 SQL Server 虚拟机中的数据库。Web 应用程序将利用 SQL Server 2012 中的全文搜索功能搜索联系人数据。最后，使用 Visual Studio 将该应用程序部署到 Windows Azure 网站以完成此实验。</p>
+<blockquote>
+<p><strong>注意：</strong>在最新版本的 <a href="http://bit.ly/WindowsAzureTK">Windows Azure 培训包</a>或 <a href="https://github.com/WindowsAzure-TrainingKit/HOL-ASPNETAzureWebSitesVMSQL-VS2012">GitHub</a> 中可以找到此动手实验的 Visual Studio 2012 版本。</p>
+</blockquote>
+<p><a name="Objectives"></a></p>
+
+<h3 id="Objectives">目标</h3>
+
+<p>在此动手实验中，您将学习如何执行以下操作：</p>
+
+<ul>
+<li>在 Windows Azure 中创建并配置 SQL Server 2012 虚拟机</li>
+<li>为虚拟机创建一个公共端点以允许 Web 应用程序访问</li>
+<li>使用实体框架创建一个与 SQL Server 虚拟机连接的 ASP.NET Web 应用程序</li>
+<li>在 SQL Server 2012 数据库中配置全文搜索并从 Web 应用程序执行全文搜索查询</li>
+<li>使用 Visual Studio 发布功能将 Web 应用程序发布到 Windows Azure 网站</li>
+</ul>
+
+<p><a name="Prerequisites"></a></p>
+
+<h3 id="Prerequisites">先决条件</h3>
+
+<p>下面是完成此动手实验需要满足的先决条件：</p>
+
+<ul>
+<li><a href="http://msdn.microsoft.com/vstudio/products/">Microsoft Visual Studio 2010</a> Service Pack 1</li>
+<li><a href="http://www.asp.net/mvc/mvc4">ASP.NET MVC 4</a></li>
+<li>启用了网站和虚拟机预览的 Windows Azure 订阅 - <a href="http://aka.ms/WATK-FreeTrial">注册以免费试用</a></li>
+<li><a href="http://www.microsoft.com/web/gallery/install.aspx?appid=WebToolsExtensionPublishingVS2010_Only_1_0">Microsoft Web Publish for Visual Studio 2010（2012 年 6 月）</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong>本实验设计为使用 Windows 7 操作系统。</p>
+</blockquote>
+<p><a name="Setup"></a></p>
+
+<h3 id="Setup">设置</h3>
+
+<p>为了执行此动手实验中的各项练习，需要对环境进行设置。</p>
+
+<ol>
+<li><p>打开 Windows 资源管理器窗口，浏览到此实验的 <strong>Source</strong> 文件夹。</p></li>
+<li><p>使用管理员权限执行 <strong>Setup.cmd</strong> 以启动设置过程，该过程将配置您的环境并安装此实验的 Visual Studio 代码段。</p></li>
+<li><p>如果显示“用户帐户控制”对话框，请确认操作以继续。</p></li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>请务必在运行安装程序前检查此实验的所有依赖项。</p>
+</blockquote>
+<p><a name="UsingCodeSnippets"></a></p>
+
+<h3 id="Using_the_Code_Snippets">使用代码段</h3>
+
+<p>实验文档将指导您插入代码块。为方便起见，大部分代码是以 Visual Studio 代码段的形式提供的，您可以在 Visual Studio 2010 中使用而不必手动添加。</p>
+
+<hr />
+
+<p><a name="Exercises"></a></p>
+
+<h2 id="Exercises">练习</h2>
+
+<p>此动手实验包括以下练习：</p>
+
+<ol>
+<li><p><a href="#Exercise1">设置包含 SQL Server 2012 的 Windows Server 虚拟机</a></p></li>
+<li><p><a href="#Exercise2">创建与 SQL Server 2012 虚拟机连接的 MVC 4 Web 应用程序</a></p></li>
+</ol>
+
+<p>完成此实验的估计时间：<strong>60 分钟</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>每个练习都附带一个起始解决方案，它位于练习的 Begin 文件夹中，允许您独立执行每个练习。请注意，在练习期间添加的代码段不包含在这些起始解决方案中，在您完成练习前，这些代码段不一定起作用。在练习的源代码内，您还会看到一个 End 文件夹，其中包含在完成相应练习中的步骤之后所生成的 Visual Studio 解决方案代码。如果在进行此动手实验时需要更多帮助，可以使用这些解决方案作为指南。</p>
+
+<p>您首次启动 Visual Studio 时，必须选择一个预定义的设置集合。每个预定义的集合在设计上都对应于特定的开发风格，能够确定窗口布局、编辑器行为、IntelliSense 代码段和对话框选项。此实验中的过程介绍了在使用<strong>“常规开发设置”</strong>集合时，在 Visual Studio 中完成指定任务所需的操作。如果您为开发环境选择其他设置集合，需要考虑可能的过程差异。</p>
+</blockquote>
+<p><a name="Exercise1"></a></p>
+
+<h3 id="Exercise_1_Creating_a_SQL_Server_2012_Virtual_Machine">练习 1：创建 SQL Server 2012 虚拟机</h3>
+
+<p>在此练习中，您将新建一个包含 SQL Server 的虚拟机，并配置一个公用端点以便对它进行远程访问。然后使用远程桌面连接数据库，在服务器中创建并配置一个数据库。</p>
+
+<p>还要在 SQL Server 中创建一个数据库，<a href="#Ex2">练习 2</a> 中所创建的 MVC 4 应用程序会用到该数据库。</p>
+
+<p><a name="Ex1Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_a_Virtual_Machine_Using_the_Windows_Azure_Portal">任务 1 - 使用 Windows Azure 门户创建虚拟机</h4>
+
+<p>在此任务中，您将使用 Windows Azure 门户创建一个新的虚拟机。</p>
+
+<p>Windows Azure 中的虚拟机是云中您可以控制和管理的服务器。在 Windows Azure 中创建虚拟机后，您随时可以根据需要启动、停止和删除它，并且可以像访问办公室中的服务器一样访问它。</p>
+
+<ol>
+<li><p>转到 <a href="https://manage.windowsazure.com">Windows Azure 管理门户</a>并使用您的 Windows 帐户登录。</p></li>
+<li><p>单击<strong>“新建”</strong>，选择<strong>“虚拟机”</strong>选项，然后选择<strong>“快速创建”</strong>。选择 <strong>SQL Server 2012 Evaluation</strong> 虚拟机，为该虚拟机键入一个可用的<strong>“DNS 名称”</strong>（如 <em>SQLServer12</em>），并提供密码。最后，单击<strong>“创建虚拟机”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>后面的步骤中将使用该密码通过远程桌面连接虚拟机。</p>
+</blockquote>
+<p><img src="images/creating-a-new-vm.png?raw=true" alt="新建虚拟机" title="新建虚拟机" />
+</p>
+
+<p><em>新建虚拟机</em></p></li>
+<li><p>在<strong>“虚拟机”</strong>部分，您将看到所创建的虚拟机显示<em>“正在配置”</em>状态。等待状态变为<em>“正在运行”</em>，然后再继续后面的步骤。</p>
+<blockquote>
+<p><strong>注意：</strong>配置过程可能需要一段时间才能完成。</p>
+</blockquote>
+<p><img src="images/vm-running.png?raw=true" alt="运行中的新虚拟机" title="运行中的新虚拟机" />
+</p>
+
+<p><em>运行中的新虚拟机</em></p></li>
+<li><p>在<strong>“虚拟机”</strong>部分，找到刚刚创建的虚拟机并单击该虚拟机的名称。进入<strong>“仪表板”</strong>页以后，单击<strong>“端点”</strong>。</p>
+
+<p>虚拟机使用端点在 Windows Azure 中通信并与 Internet 上的其他资源通信。在 Windows Azure 中创建的所有虚拟机可以与同一云服务或虚拟网络中的其他虚拟机自动通信。不过，您需要为机器添加一个端点，才能使 Internet 上或其他虚拟网络上的其他资源（如 Web 应用程序）与之通信。</p></li>
+<li><p>单击<strong>“添加端点”</strong>，选择<strong>“添加端点”</strong>，然后单击“下一步”按钮继续。</p>
+
+<p>在此实验中，您将创建一个与虚拟机中的 SQL Server 通信的 Web 应用程序，因此现在要创建一个端点以允许进行外部连接。</p>
+
+<p><img src="images/adding-a-new-endpoint.png?raw=true" alt="添加新端点" title="添加新端点" />
+</p>
+
+<p><em>添加新端点</em></p></li>
+<li><p>在<strong>“指定端点详细信息”</strong>页上，将<strong>“名称”</strong>设置为 <em>sqlserver</em>，<strong>“协议”</strong>设置为 <em>TCP</em>，<strong>“公用端口”</strong>设置为 57501，<strong>“专用端口”</strong>设置为 1433。</p>
+
+<p>如果愿意，您也可以使用其他公用端口号，但请记下它，因为在练习 2 中创建 Web 应用程序时会用到。Internet 编号分配机构 (IANA) 建议的动态或专用端口范围为 49152 到 65535。1433 专用端口与 SQL Server 用来接受传入 TCP 连接的默认端口匹配。</p>
+
+<p><img src="images/new-endpoint-details.png?raw=true" alt="新端点详细信息" title="新端点详细信息" />
+</p>
+
+<p><em>新端点详细信息</em></p>
+<blockquote>
+<p><strong>注意：</strong>端点由一个公用端口和一个专用端口定义。公用端口用于从 Internet 访问虚拟机。专用端口用于通过防火墙控制对虚拟机的内部访问。在后面的实验中，您将配置防火墙以允许通过专用端口进行连接。公用端口和专用端口可以是同一端口。在本例中，专用端口设置为 SQL Server 用来接受传入 TCP 连接的默认端口。</p>
+
+<p>可以将多个特定端口和一种协议与端点关联。在本例的练习 2 中所创建的 Web 应用程序将使用 TCP 协议与 SQL Server 通信。请注意，TCP 协议还包含 HTTP 和 HTTPS 通信。</p>
+</blockquote></li>
+<li><p>等待端点配置完成。</p></li>
+</ol>
+
+<p><a name="Ex1Task2"></a></p>
+
+<h4 id="Task_2_-_Configuring_the_Virtual_Machine_and_SQL_Server_2012_for_External_Access">任务 2 - 配置虚拟机和 SQL Server 2012 以允许外部访问</h4>
+
+<p>在此任务中，您将安装 SQL Server 并将其配置为启用外部访问。这意味着您将确保 SQL Server 启用 TCP/IP 协议，并配置虚拟机防火墙以允许到 SQL 端口的外部连接。</p>
+
+<ol>
+<li><p>在 Windows Azure 管理门户中，单击左侧菜单上的<strong>“虚拟机”</strong>。</p>
+
+<p><img src="./images/Windows-Azure-Portal.png?raw=true" alt="Windows Azure 门户" title="Windows Azure 门户" />
+</p>
+
+<p><em>Windows Azure 门户</em></p></li>
+<li><p>从虚拟机列表中单击在上一任务中创建的虚拟机所在的行，然后单击下方命令栏中的<strong>“连接”</strong>，以使用远程桌面连接进行连接。在看到系统提示时，下载并打开 <em>.rdp</em> 文件。</p>
+<blockquote>
+<p><strong>注意</strong>：您可以通过远程方式连接到虚拟机来访问虚拟机上运行的程序。例如，运行 Windows Server 2008 R2 的虚拟机可以使用远程桌面连接，运行 Linux 的虚拟机可以使用安全 Shell (SSH) 连接。</p>
+</blockquote></li>
+<li><p>当出现有关发布服务器远程连接的警告时，单击<strong>“连接”</strong>。</p></li>
+<li><p>提示输入凭据时，键入创建虚拟机时配置的密码。等待远程连接就绪。</p>
+
+<p><img src="./images/entering-vm-credentials.png?raw=true" alt="输入虚拟机凭据" title="Windows Azure 门户" />
+</p>
+
+<p><em>输入虚拟机凭据</em></p></li>
+<li><p>出现关于远程计算机标识的警告时，单击<strong>“是”</strong>进行连接。</p></li>
+<li><p>连接到虚拟机后，从<strong>“开始”|“所有程序”|“Microsoft SQL Server 2012”|“配置工具”</strong>中打开<strong>“SQL Server 配置管理器”</strong>。</p></li>
+<li><p>展开<strong>“SQL Server 网络配置”</strong>节点，选择<strong>“MSSQLSERVER 的协议”</strong>。确保启用了 <strong>Shared Memory</strong>、<strong>Named Pipes</strong> 和 <strong>TCP/IP</strong> 协议。要启用某一协议，请右键单击协议名称并选择<strong>“启用”</strong>。</p>
+
+<p><img src="./images/Enabling-SQL-Server-Protocols.png?raw=true" alt="启用 SQL Server 协议" title="启用 SQL Server 协议" />
+</p>
+
+<p><em>启用 SQL Server 协议</em></p>
+<blockquote>
+<p><strong>注意：</strong>有关 SQL Server 网络配置的详细信息，请参阅 <a href="http://msdn.microsoft.com/zh-CN/library/ms189083.aspx">http://msdn.microsoft.com/zh-CN/library/ms189083.aspx</a>。</p>
+</blockquote></li>
+<li><p>转到<strong>“SQL Server 服务”</strong>节点，右键单击 <strong>SQL Server (MSSQLSERVER)</strong> 项并选择<strong>“重新启动”</strong>。</p></li>
+<li><p>要允许 Internet 应用程序通过 Windows 防火墙访问虚拟机上的 SQL Server 实例，必须配置防火墙规则。为此，您需要在<strong>“Windows 防火墙”</strong>中为 SQL Server 请求添加一条<strong>“入站规则”</strong>。为此，请从<strong>“开始”|“所有程序”|“管理工具”</strong>中打开<strong>“高级安全 Windows 防火墙”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>默认情况下，Microsoft Windows 将启用 Windows 防火墙，这会关闭端口 1433，从而防止 Internet 计算机连接到任何计算机上的默认 SQL Server 实例。重新打开端口 1433 之后，才可以使用 TCP/IP 连接到默认实例。有关 SQL Server 和 Window 防火墙的详细信息，请参阅 <a href="http://msdn.microsoft.com/zh-CN/library/ms175043.aspx">http://msdn.microsoft.com/zh-CN/library/ms175043.aspx</a></p>
+</blockquote></li>
+<li><p>右键单击<strong>“入站规则”</strong>节点，选择<strong>“新建规则”</strong>。</p>
+
+<p><img src="./images/Creating-an-Inbound-Rule.png?raw=true" alt="创建入站规则" title="创建入站规则" />
+</p>
+
+<p><em>创建入站规则</em></p></li>
+<li><p>在<strong>“新建入站规则向导”</strong>中选择<em>“端口”</em>作为<strong>“规则类型”</strong>，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/new-inbound-rule-type.png?raw=true" alt="新入站规则类型" title="入站规则类型" />
+</p>
+
+<p><em>入站规则的类型</em></p></li>
+<li><p>在<strong>“协议和端口”</strong>步骤中，选择<strong>“特定本地端口”</strong>并将其值设置为 <em>1433</em>。单击<strong>“下一步”</strong>继续。</p>
+
+<p><img src="images/inbound-rules-local-port.png?raw=true" alt="入站规则的本地端口" title="入站规则的本地端口" />
+</p>
+
+<p><em>入站规则的本地端口</em></p></li>
+<li><p>在<strong>“操作”</strong>步骤中，确保选中<strong>“允许连接”</strong>并单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/inbound-rules-action.png?raw=true" alt="入站规则的操作" title="入站规则的操作" />
+</p>
+
+<p><em>入站规则的操作</em></p></li>
+<li><p>在<strong>“配置文件”</strong>步骤中，保留默认值，然后单击<strong>“下一步”</strong>。</p></li>
+<li><p>最后，将入站规则的<strong>“名称”</strong>设置为<em>“SQL Server 规则”</em>并单击<strong>“完成”</strong>。</p>
+
+<p><img src="images/new-inbound-rule.png?raw=true" alt="新入站规则" title="新入站规则" />
+</p>
+
+<p><em>新入站规则</em></p></li>
+<li><p>关闭<strong>“高级安全 Windows 防火墙”</strong>窗口。</p></li>
+</ol>
+
+<p><a name="Ex1Task3"></a></p>
+
+<h4 id="Task_3_-_Creating_the_Web_Application_Database_in_the_Virtual_Machine">任务 3 - 在虚拟机中创建 Web 应用程序数据库</h4>
+
+<p>在此任务中，您将创建并填充 MVC 4 应用程序需要使用的示例数据库。</p>
+
+<ol>
+<li><p>在虚拟机上，从<strong>“开始”|“所有程序”|“Microsoft SQL Server 2012”|“SQL Server Management Studio”</strong>打开 SQL Server Management Studio。在<strong>“连接到服务器”</strong>对话框中，单击<strong>“连接”</strong>使用 Windows 身份验证连接到 SQL Server。</p></li>
+<li><p>按 <strong>Ctrl+N</strong> 打开一个新的查询窗口。转到此实验的 <strong>\Source\Assets</strong> 文件夹并复制 <strong>CreateDatabase.sql</strong> 文件的所有内容。然后将文件内容粘贴到新查询窗口中。</p>
+<blockquote>
+<p><strong>注意：</strong>远程桌面连接允许跨不同计算机复制粘贴。</p>
+</blockquote></li>
+<li><p>按 <strong>F5</strong> 运行该脚本。这将创建 <strong>ContactManagerDb</strong> 数据库，其中只有一个 <em>Contacts</em> 表。此操作还会用示例数据填充 <em>Contacts</em> 表。</p>
+
+<p><img src="images/running-the-create-database-script.png?raw=true" alt="运行创建数据库脚本" />
+</p>
+
+<p><em>运行创建数据库脚本</em></p>
+
+<p>现在，您将配置数据库表以允许全文搜索查询。在下一练习中生成的 Web 应用程序中将使用此功能。</p>
+<blockquote>
+<p><strong>注意：</strong>SQL Server 中的全文搜索可让用户和应用程序针对 SQL Server 表中基于字符的数据运行全文查询。您可以在以下文章中了解有关全文搜索的详细信息：<a href="http://msdn.microsoft.com/zh-CN/library/ms142497.aspx">http://msdn.microsoft.com/zh-CN/library/ms142497.aspx</a></p>
+</blockquote></li>
+<li><p>为数据库创建全文目录。为此，在对象资源管理器中，展开 <strong>ContactManagerDb</strong> 数据库中的<strong>“存储”</strong>节点。</p>
+
+<p>全文目录是配置全文搜索所需的逻辑概念。它组合了一组全文索引。</p></li>
+<li><p>右键单击<strong>“全文目录”</strong>文件夹，选择<strong>“新建全文目录”</strong>。</p>
+
+<p><img src="images/new-full-text-catalog.png?raw=true" alt="新建全文目录" title="新建全文目录" />
+</p>
+
+<p><em>新建全文目录</em></p></li>
+<li><p>在<strong>“新建全文目录”</strong>对话框中，将<strong>“名称”</strong>值设置为 <em>ContactManagerCatalog</em>，然后单击<strong>“确定”</strong>。</p>
+
+<p><img src="images/new-full-text-catalog-name.png?raw=true" alt="新全文目录名称" title="新全文目录名称" />
+</p>
+
+<p><em>全文目录名称</em></p></li>
+<li><p>右键单击 <strong>ContactManagerCatalog</strong> 并选择<strong>“属性”</strong>。选择<strong>“表/视图”</strong>菜单项。将 <strong>Contacts</strong> 表添加到<strong>“分配给该目录的表/视图对象”</strong>列表中。从<strong>“合格列”</strong>中选中 <em>FirstName</em>、<em>LastName</em> 和 <em>Company</em>，然后单击<strong>“确定”</strong>。</p>
+
+<p>这会将 FirstName、LastName 和 Company 列添加到全文目录中，从而允许您对这些列中的文本执行全文查询。</p>
+
+<p><img src="images/full-text-catalog-properties.png?raw=true" alt="全文目录属性" title="全文目录属性" />
+</p>
+
+<p><em>全文目录属性</em></p></li>
+<li><p>添加一个新用户，该用户将使用在下面练习中部署的 Web 应用程序连接到数据库。为此，请在对象资源管理器中展开 SQL Server 实例节点中的<strong>“安全性”</strong>文件夹。右键单击<strong>“登录”</strong>文件夹，然后选择<strong>“新建登录名”</strong>。</p>
+
+<p><img src="./images/create-new-login.png?raw=true" alt="创建新登录名" title="创建新登录名" />
+</p>
+
+<p><em>创建新登录名</em></p></li>
+<li><p>在<strong>“常规”</strong>部分，键入一个<strong>“登录名”</strong>，例如 <em>TestUser</em>。选择<strong>“SQL Server 身份验证”</strong>选项并设置<strong>“密码”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>请记下用户名和密码，在下一练习中，您需要使用该用户名和密码更新所用 MVC 4 应用程序的 web.config 文件，以使值匹配。</p>
+</blockquote></li>
+<li><p>取消选中<strong>“强制实施密码策略”</strong>选项以避免首次登录时必须更改用户密码的需要，并将<strong>“默认数据库”</strong>设置为 <em>ContactManagerDb</em>。</p>
+
+<p><img src="images/new-logins-general-settings.png?raw=true" alt="新登录名的常规设置" title="新登录名的常规设置" />
+</p>
+
+<p><em>创建新登录名</em></p></li>
+<li><p>转到<strong>“用户映射”</strong>部分。将用户映射到 <em>ContactManagerDb</em> 数据库，为该登录名选择 <strong>db_owner</strong> 角色，再单击<strong>“确定”</strong>。</p>
+
+<p><img src="./images/Mapping-the-new-User.png?raw=true" alt="将新用户映射到 AdventureWorks 数据库" title="将新用户映射到 AdventureWorks 数据库" />
+</p>
+
+<p><em>将新用户映射到 ContactManagerDb 数据库</em></p></li>
+<li><p>现在，您需要确保数据库服务器启用了 SQL Server 身份验证，允许使用 SQL 登录名的用户名和密码进行连接。为此，请在对象资源管理器中右键单击数据库服务器节点，然后单击<strong>“属性”</strong>打开服务器属性。</p>
+<blockquote>
+<p><strong>注意：</strong>要了解有关 SQL Server 身份验证模式的详细信息，请参阅文章 <a href="http://technet.microsoft.com/zh-CN/library/ms144284.aspx">http://technet.microsoft.com/zh-CN/library/ms144284.aspx</a></p>
+</blockquote></li>
+<li><p>选择<strong>“安全性”</strong>页，确保<strong>“服务器身份验证”</strong>设置为<strong>“SQL Server 和 Windows 身份验证模式”</strong>。</p>
+
+<p><img src="./images/enabling-sqlserver-authentication.png?raw=true" alt="启用 SQL Server 身份验证" title="启用 SQL Server 身份验证" />
+</p>
+
+<p><em>启用 SQL Server 身份验证</em></p></li>
+<li><p>要应用更改，您需要重新启动 SQL Server 服务。为此，请从<strong>“开始”|“所有程序”|“Microsoft SQL Server 2012”|“配置工具”</strong>中打开<strong>“SQL Server 配置管理器”</strong>。转到<strong>“SQL Server 服务”</strong>节点，右键单击 <strong>SQL Server (MSSQLSERVER)</strong> 项并选择<strong>“重新启动”</strong>。</p></li>
+<li><p>最后，您将创建一个<em>存储过程</em> 供 Web 应用程序使用，以便通过<strong>“全文搜索”</strong>执行搜索。为此，请将以下代码复制到一个新查询窗口中并运行。</p>
+
+<span class="codelanguage">T-SQL</span><pre><code class="T-SQL">USE [ContactManagerDb] GO CREATE PROCEDURE SearchContacts (@searchQuery nvarchar(4000)) AS BEGIN SET NOCOUNT ON; SELECT * FROM [dbo].Contacts WHERE CONTAINS((FirstName, LastName, Company), @searchQuery); END GO
+</code></pre></li>
+<li><p>关闭 <strong>SQL Server Management Studio</strong> 并关闭远程桌面连接。</p></li>
+</ol>
+
+<hr />
+
+<p><a name="Exercise2"></a></p>
+
+<h3 id="Exercise_2_Creating_an_MVC_4_Web_Application_that_Connects_to_the_SQL_Server_2012_Virtual_Machine">练习 2：创建与 SQL Server 2012 虚拟机连接的 MVC 4 Web 应用程序</h3>
+
+<p>在此练习中，您将创建一个简单的 ASP.NET MVC 4 Web 应用程序，它将使用公用端点连接到之前创建的 SQL Server。练习结束时，您将使用 Visual Studio 发布功能和 Web 部署将该应用程序部署到 Windows Azure 网站。</p>
+<blockquote>
+<p><strong>注意：</strong>要减少键入操作，可以右键单击要插入源代码的位置，依次选择“插入代码段”和“我的代码段”，然后选择与当前练习步骤对应的条目。</p>
+</blockquote>
+<p><a name="Ex2Task1"></a></p>
+
+<h4 id="Task_1_-_Creating_the_Web_Application">任务 1 - 创建 Web 应用程序</h4>
+
+<p>在此任务中，您将创建一个简单的 MVC 4 Web 应用程序。</p>
+
+<ol>
+<li><p>从<strong>“开始”|“所有程序”| Microsoft Visual Studio 2010 | Microsoft Visual Studio 2010</strong> 打开 Microsoft Visual Studio 2010。</p></li>
+<li><p>从本实验的 <strong>Source\Ex2-CreatingMVCWebSite\Begin</strong> 文件夹打开 <strong>Begin.sln</strong> 起始解决方案。</p></li>
+<li><p>按 <strong>Ctrl+Shift+B</strong> 生成解决方案，并下载所需的 NuGet 包。</p></li>
+<li><p>在 ContactManager.Web 项目的<strong>“模型”</strong>文件夹下创建一个新类。为此，请右键单击该文件夹，选择<strong>“添加”</strong>，然后选择<strong>“类”</strong>。在<strong>“添加新项”</strong>对话框中，将类名设置为 <strong>Contact</strong>。</p>
+
+<!-- build to download dependencies --></li>
+<li><p>使用下面的代码替换该类中的所有代码。</p>
+
+<p>（代码段 - Web Sites and Virtual Machines using ASP.NET - <em>Ex2 Contact class</em>）</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">namespace</span> ContactManager.Web.Models {
+     <span style="color:#0000FF">using</span> System.ComponentModel;
+     <span style="color:#0000FF">using</span> System.ComponentModel.DataAnnotations;
+
+     <span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> Contact {        
+          <span style="color:#0000FF">public</span> <span style="color:#0000FF">int</span> Id { <span style="color:#0000FF">get</span>; <span style="color:#0000FF">set</span>; } [Required] [DisplayName(<span style="color:#8B0000">&quot;First Name&quot;</span>)]
+          <span style="color:#0000FF">public</span> <span style="color:#0000FF">string</span> FirstName { <span style="color:#0000FF">get</span>; <span style="color:#0000FF">set</span>; } [DisplayName(<span style="color:#8B0000">&quot;Last Name&quot;</span>)] [Required]        
+          <span style="color:#0000FF">public</span> <span style="color:#0000FF">string</span> LastName { <span style="color:#0000FF">get</span>; <span style="color:#0000FF">set</span>; } [DataType(DataType.EmailAddress)] [StringLength(50)]
+          <span style="color:#0000FF">public</span> <span style="color:#0000FF">string</span> Email { <span style="color:#0000FF">get</span>; <span style="color:#0000FF">set</span>; } [StringLength(50, MinimumLength = 3, ErrorMessage = <span style="color:#8B0000">&quot;Must have a minimum length of 3.&quot;</span>)]
+          <span style="color:#0000FF">public</span> <span style="color:#0000FF">string</span> Company { <span style="color:#0000FF">get</span>; <span style="color:#0000FF">set</span>; } [DisplayName(<span style="color:#8B0000">&quot;Business Phone&quot;</span>)] [DataType(DataType.PhoneNumber)]        
+          <span style="color:#0000FF">public</span> <span style="color:#0000FF">string</span> BusinessPhone { <span style="color:#0000FF">get</span>; <span style="color:#0000FF">set</span>; } [DisplayName(<span style="color:#8B0000">&quot;Mobile Phone&quot;</span>)] [DataType(DataType.PhoneNumber)]        
+          <span style="color:#0000FF">public</span> <span style="color:#0000FF">string</span> MobilePhone { <span style="color:#0000FF">get</span>; <span style="color:#0000FF">set</span>; } [StringLength(50, MinimumLength = 3, ErrorMessage = <span style="color:#8B0000">&quot;Must have a minimum length of 3.&quot;</span>)] [DataType(DataType.Text)]
+          <span style="color:#0000FF">public</span> <span style="color:#0000FF">string</span> Address { <span style="color:#0000FF">get</span>; <span style="color:#0000FF">set</span>; } [StringLength(50, MinimumLength = 3, ErrorMessage = <span style="color:#8B0000">&quot;Must have a minimum length of 3.&quot;</span>)] [DataType(DataType.Text)]
+          <span style="color:#0000FF">public</span> <span style="color:#0000FF">string</span> City { <span style="color:#0000FF">get</span>; <span style="color:#0000FF">set</span>; } [StringLength(10)] [DataType(DataType.Text)]        
+          <span style="color:#0000FF">public</span> <span style="color:#0000FF">string</span> Zip { <span style="color:#0000FF">get</span>; <span style="color:#0000FF">set</span>; } } }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>此类使用数据注释向实体框架（和 MVC 4）提供有关它们映射到的类和数据库的详细信息。例如，您可以指定一个属性用作主键，或者也可以设置一个文本字段的长度（将覆盖默认长度）。这些数据注释也将用作您的模型验证规则。实体框架 Code First 允许使用 System.ComponentModel.DataAnnotations 命名空间提供有关类、属性和验证规则的详细信息。</p>
+</blockquote></li>
+<li><p>在<strong>“模型”</strong>文件夹下创建一个新类。为此，请右键单击<strong>“模型”</strong>文件夹，然后选择<strong>“添加”|“类”</strong>。在<strong>“添加新项”</strong>对话框中，将类名设置为 <strong>ContactContext</strong>。</p></li>
+<li><p>使用下面的代码替换该类中的所有代码。</p>
+
+<p>（代码段 - Web Sites and Virtual Machines using ASP.NET - <em>Ex2 ContactContext class</em>）</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">namespace</span> ContactManager.Web.Models {
+     <span style="color:#0000FF">using</span> System.Collections.Generic;
+     <span style="color:#0000FF">using</span> System.Data.Entity;
+     <span style="color:#0000FF">using</span> System.Data.SqlClient;        
+
+     <span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> ContactContext : DbContext {
+          <span style="color:#0000FF">public</span> ContactContext() : <span style="color:#0000FF">base</span>(<span style="color:#8B0000">&quot;ContactManagerDb&quot;</span>) { }
+
+          <span style="color:#0000FF">public</span> DbSet&lt;Contact&gt; Contacts { <span style="color:#0000FF">get</span>; <span style="color:#0000FF">set</span>; } } }
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>上面的 <em>ContactContext</em> 类是用来在 <em>Contact</em> 类与数据库之间进行映射的上下文类。该类派生自实体框架提供的 DbContext 基类，并为模型的根实体公开 <em>DbSet</em> 属性。创建 <em>ContactContext</em> 类实例时，此设置自动初始化。DbContext 包装 ObjectContext 并使用更简单直观的 API 公开最常用的 ObjectContext 功能。</p>
+</blockquote></li>
+<li><p>现在，您将创建一个方法来调用执行<strong>全文搜索</strong>的存储过程。为此，请将突出显示的代码添加到 <strong>ContactContext</strong> 类末尾。</p>
+
+<p>（代码段 - Web Sites and Virtual Machines using ASP.NET - <em>Ex2 SearchContacts method</em>）</p>
+
+<!-- mark:5-9 -->
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">public</span> <span style="color:#0000FF">class</span> ContactContext : DbContext { ...
+
+<strong class="markLine">    <span style="color:#0000FF">public</span> IEnumerable&lt;Contact&gt; SearchContacts(<span style="color:#0000FF">string</span> searchQuery)</strong>
+<strong class="markLine">    {            </strong>
+<strong class="markLine">        <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.Database.SqlQuery&lt;Contact&gt;(<span style="color:#8B0000">&quot;EXECUTE [dbo].[SearchContacts] @searchQuery&quot;</span>, <span style="color:#0000FF">new</span> SqlParameter(<span style="color:#8B0000">&quot;searchQuery&quot;</span>, searchQuery ?? <span style="color:#0000FF">string</span>.Empty));</strong>
+<strong class="markLine">    }</strong>
+<strong class="markLine">}</strong>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>DbContext.Database.SqlQuery()</strong> 方法提供了对数据库执行 SQL 命令的方式，并将返回结果集映射到一个强类型对象或是强类型对象的列表，而这些强类型对象的属性与查询所返回的列具有相同的名称。</p>
+</blockquote></li>
+<li><p>在<strong>解决方案资源管理器</strong>中，右键单击<strong>“控制器”</strong>文件夹，然后选择<strong>“添加”|“控制器”</strong>。</p></li>
+<li><p>在<strong>“添加控制器”</strong>对话框中，将控制器名称设置为 <strong>ContactController</strong>，选择<strong>“空控制器”</strong>模板，然后单击<strong>“添加”</strong>。</p>
+
+<p><img src="images/adding-a-controller.png?raw=true" alt="添加控制器" title="添加控制器" />
+</p>
+
+<p><em>添加控制器</em></p></li>
+<li><p>添加以下 using 语句。</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#0000FF">using</span> ContactManager.Web.Models;    
+</code></pre></li>
+<li><p>将以下代码添加到 <strong>ContactController</strong> 类末尾，以创建一个根据搜索条件返回联系人列表的方法。</p>
+
+<p>（代码段 - Web Sites and Virtual Machines using ASP.NET - <em>Ex2 List Contacts Controller Method</em>）</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#008000">// GET: /Contact/List</span>
+<span style="color:#0000FF">public</span> ActionResult List(<span style="color:#0000FF">string</span> searchQuery) { IEnumerable&lt;Contact&gt; contacts;
+
+     <span style="color:#0000FF">using</span> (ContactContext context = <span style="color:#0000FF">new</span> ContactContext()) {
+          <span style="color:#0000FF">if</span> (!<span style="color:#0000FF">string</span>.IsNullOrEmpty(searchQuery)) { contacts = context.SearchContacts(searchQuery).ToList(); }
+          <span style="color:#0000FF">else</span>
+          { contacts = context.Contacts.ToList(); } }
+
+     <span style="color:#0000FF">return</span> View(contacts); }
+</code></pre></li>
+<li><p>生成项目。为此，请在<strong>解决方案资源管理器</strong>中右键单击应用程序项目，然后选择<strong>“生成”</strong>。</p>
+
+<p><img src="images/build-application.png?raw=true" alt="生成项目" title="生成项目" />
+</p>
+
+<p><em>生成项目</em></p></li>
+<li><p>现在，您将创建一个使用<strong>基架</strong> MVC 功能的新视图。右键单击刚刚创建的 <strong>List</strong> 方法，从上下文菜单中选择<strong>“添加视图...”</strong>。</p>
+
+<p><img src="images/adding-a-new-view.png?raw=true" alt="添加新视图" title="添加新视图" />
+</p>
+
+<p><em>添加新视图</em></p></li>
+<li><p>在<strong>“添加视图”</strong>对话框中，选中<strong>“创建强类型视图”</strong>选项，然后从<em>“模型类”</em>列表中选择 <strong>Contact</strong>。从<strong>“支架模板:”</strong>下拉列表中选择 <strong>List</strong> 选项。单击<strong>“添加”</strong>创建视图。</p>
+
+<p><img src="images/new-view-properties.png?raw=true" alt="新视图属性" title="新视图属性" />
+</p>
+
+<p><em>新视图属性</em></p></li>
+<li><p>从 <strong>List</strong> 视图中删除以下代码。</p>
+
+<!-- strike:1-5 -->
+
+<span class="codelanguage">HTML</span><pre><code class="HTML"><span class="strikeLine" style="text-decoration:line-through;"><span style="color:#0000FF">&lt;</span><span style="color:#800000">h2</span><span style="color:#0000FF">&gt;</span>List<span style="color:#0000FF">&lt;/</span><span style="color:#800000">h2</span><span style="color:#0000FF">&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;"></span>
+<span class="strikeLine" style="text-decoration:line-through;"><span style="color:#0000FF">&lt;</span><span style="color:#800000">p</span><span style="color:#0000FF">&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">     @Html.ActionLink(&quot;Create New&quot;, &quot;Create&quot;)</span>
+<span class="strikeLine" style="text-decoration:line-through;"><span style="color:#0000FF">&lt;/</span><span style="color:#800000">p</span><span style="color:#0000FF">&gt;</span></span>
+</code></pre></li>
+<li><p>将突出显示的代码添加到刚刚创建的 <strong>List</strong> 视图中以添加标题和搜索文本框。</p>
+
+<!-- mark:5-25 -->
+
+<span class="codelanguage">HTML</span><pre><code class="HTML">@{ ViewBag.Title = &quot;List&quot;; }
+
+<strong class="markLine"><span style="color:#0000FF">&lt;</span><span style="color:#800000">section</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;featured&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">     <span style="color:#0000FF">&lt;</span><span style="color:#800000">div</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;content-wrapper&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">          <span style="color:#0000FF">&lt;</span><span style="color:#800000">hgroup</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;title&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">                <span style="color:#0000FF">&lt;</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span>Contact Manager Sample<span style="color:#0000FF">&lt;/</span><span style="color:#800000">h1</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">                <span style="color:#0000FF">&lt;</span><span style="color:#800000">h2</span><span style="color:#0000FF">&gt;</span>for Windows Azure Web Sites<span style="color:#0000FF">&lt;/</span><span style="color:#800000">h2</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">hgroup</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">          <span style="color:#0000FF">&lt;</span><span style="color:#800000">p</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">              Create and search for contacts using Full-Text Search in SQL Server 2012 - try queries like &amp;quot;Joh*&amp;quot; (with the quotation marks) and john OR smith OR contoso</strong>
+<strong class="markLine">          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">p</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">     <span style="color:#0000FF">&lt;/</span><span style="color:#800000">div</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine"><span style="color:#0000FF">&lt;/</span><span style="color:#800000">section</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine"></strong>
+<strong class="markLine">@using (Html.BeginForm())</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">     <span style="color:#0000FF">&lt;</span><span style="color:#800000">fieldset</span> <span style="color:#FF0000">class</span>=<span style="color:#0000FF">&quot;search&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">          <span style="color:#0000FF">&lt;</span><span style="color:#800000">label</span><span style="color:#0000FF">&gt;</span>Search Contacts by First Name/Last Name/Company: <span style="color:#0000FF">&lt;/</span><span style="color:#800000">label</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">          @Html.TextBox(&quot;searchQuery&quot;)</strong>
+<strong class="markLine">          <span style="color:#0000FF">&lt;</span><span style="color:#800000">input</span> <span style="color:#FF0000">type</span>=<span style="color:#0000FF">&quot;submit&quot;</span> <span style="color:#FF0000">value</span>=<span style="color:#0000FF">&quot;Search&quot;</span> <span style="color:#0000FF">/&gt;</span></strong>
+<strong class="markLine">     <span style="color:#0000FF">&lt;/</span><span style="color:#800000">fieldset</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">}</strong>
+<strong class="markLine"></strong>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">h3</span><span style="color:#0000FF">&gt;</span>Results<span style="color:#0000FF">&lt;/</span><span style="color:#800000">h3</span><span style="color:#0000FF">&gt;</span>
+<span style="color:#0000FF">&lt;</span><span style="color:#800000">table</span><span style="color:#0000FF">&gt;</span>
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">tr</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">th</span><span style="color:#0000FF">&gt;</span>
+                @Html.DisplayNameFor(model =&gt; model.FirstName) ...
+</code></pre></li>
+<li><p>删除突出显示的代码行，因为本例中不使用操作链接。</p>
+
+<!-- strike:30-34 -->
+
+<span class="codelanguage">CSHTML</span><pre><code class="CSHTML">@foreach (var item in Model) {
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">tr</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+                @Html.DisplayFor(modelItem =&gt; item.FirstName)
+          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+                @Html.DisplayFor(modelItem =&gt; item.LastName)
+          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+                @Html.DisplayFor(modelItem =&gt; item.Email)
+          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+                @Html.DisplayFor(modelItem =&gt; item.Company)
+          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+                @Html.DisplayFor(modelItem =&gt; item.BusinessPhone)
+          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+                @Html.DisplayFor(modelItem =&gt; item.MobilePhone)
+          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+                @Html.DisplayFor(modelItem =&gt; item.Address)
+          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+                @Html.DisplayFor(modelItem =&gt; item.City)
+          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+                @Html.DisplayFor(modelItem =&gt; item.Zip)
+          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span>
+<span class="strikeLine" style="text-decoration:line-through;">          <span style="color:#0000FF">&lt;</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span></span>
+<span class="strikeLine" style="text-decoration:line-through;">                @Html.ActionLink(&quot;Edit&quot;, &quot;Edit&quot;, new { id=item.Id }) |</span>
+<span class="strikeLine" style="text-decoration:line-through;">                @Html.ActionLink(&quot;Details&quot;, &quot;Details&quot;, new { id=item.Id }) |</span>
+<span class="strikeLine" style="text-decoration:line-through;">                @Html.ActionLink(&quot;Delete&quot;, &quot;Delete&quot;, new { id=item.Id })</span>
+<span class="strikeLine" style="text-decoration:line-through;">          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span></span>
+     <span style="color:#0000FF">&lt;/</span><span style="color:#800000">tr</span><span style="color:#0000FF">&gt;</span>
+}
+</code></pre></li>
+<li><p>添加突出显示的代码以在没有结果时显示消息。</p>
+
+<!-- mark:3-10 -->
+
+<span class="codelanguage">HTML</span><pre><code class="HTML">     <span style="color:#0000FF">&lt;/</span><span style="color:#800000">tr</span><span style="color:#0000FF">&gt;</span>
+}
+<strong class="markLine">@if (Model.Count() == 0)</strong>
+<strong class="markLine">{</strong>
+<strong class="markLine">     <span style="color:#0000FF">&lt;</span><span style="color:#800000">tr</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">          <span style="color:#0000FF">&lt;</span><span style="color:#800000">td</span> <span style="color:#FF0000">colspan</span>=<span style="color:#0000FF">&quot;10&quot;</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">                No contacts found</strong>
+<strong class="markLine">          <span style="color:#0000FF">&lt;/</span><span style="color:#800000">td</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">     <span style="color:#0000FF">&lt;/</span><span style="color:#800000">tr</span><span style="color:#0000FF">&gt;</span></strong>
+<strong class="markLine">}</strong>
+
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">table</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>将以下代码添加到视图末尾。</p>
+
+<span class="codelanguage">HTML</span><pre><code class="HTML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">p</span><span style="color:#0000FF">&gt;</span>
+@Html.ActionLink(&quot;Create New&quot;, &quot;Create&quot;)
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">p</span><span style="color:#0000FF">&gt;</span>
+</code></pre></li>
+<li><p>按 <strong>Ctrl+Shift+S</strong> 以保存更改。</p></li>
+<li><p>打开 <strong>ContactController</strong> 类，添加以下代码以创建处理 <strong>Create</strong> 操作的方法。</p>
+
+<p>（代码段 - Web Sites and Virtual Machines using ASP.NET - <em>Ex2 Create Contact Controller Method</em>）</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#008000">// GET: /Contact/Create</span>
+<span style="color:#0000FF">public</span> ActionResult Create() {
+     <span style="color:#0000FF">return</span> View(); }
+
+<span style="color:#008000">// POST: /Contact/Create</span>
+[HttpPost] [ValidateAntiForgeryToken]
+<span style="color:#0000FF">public</span> ActionResult Create(Contact contact) {
+     <span style="color:#0000FF">if</span> (!ModelState.IsValid) {
+          <span style="color:#0000FF">return</span> View(contact); }
+
+     <span style="color:#0000FF">using</span> (ContactContext context = <span style="color:#0000FF">new</span> ContactContext()) { context.Contacts.Add(contact); context.SaveChanges(); }
+
+     <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.RedirectToAction(<span style="color:#8B0000">&quot;List&quot;</span>); }
+</code></pre></li>
+<li><p>右键单击刚刚创建的 <strong>Create</strong> 方法，从上下文菜单中选择<strong>“添加视图...”</strong>。</p>
+
+<p><img src="images/adding-a-new-view2.png?raw=true" alt="添加新视图" title="添加新视图" />
+</p>
+
+<p><em>添加新视图</em></p></li>
+<li><p>在<strong>“添加视图”</strong>对话框中，选中<strong>“创建强类型视图”</strong>选项，然后从<em>“模型类”</em>列表中选择 <strong>Contact</strong>。从<strong>“支架模板:”</strong>列表中选择 <strong>Create</strong> 选项。单击<strong>“添加”</strong>按钮创建视图。</p>
+
+<p><img src="images/new-view-properties2.png?raw=true" alt="新视图属性" title="新视图属性" />
+</p>
+
+<p><em>新视图属性</em></p></li>
+<li><p>如下所示添加 <strong>AntiForgeryToken</strong> 验证。</p>
+
+<!-- mark: 5 -->
+
+<span class="codelanguage">HTML</span><pre><code class="HTML">... @using (Html.BeginForm()) { @Html.ValidationSummary(true)
+<strong class="markLine">     @Html.AntiForgeryToken()</strong>
+
+     <span style="color:#0000FF">&lt;</span><span style="color:#800000">fieldset</span><span style="color:#0000FF">&gt;</span>
+          <span style="color:#0000FF">&lt;</span><span style="color:#800000">legend</span><span style="color:#0000FF">&gt;</span>Contact<span style="color:#0000FF">&lt;/</span><span style="color:#800000">legend</span><span style="color:#0000FF">&gt;</span>
+
+...
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><strong>AntiForgery</strong> 标记在回发期间呈现一个经过验证的隐藏标记，确保您的应用程序能够防御跨网站请求伪造。</p>
+</blockquote></li>
+<li><p>按 <strong>Ctrl+Shift+S</strong> 以保存更改。</p></li>
+<li><p>打开 <strong>ContactController</strong> 类，用以下代码替换 <strong>Index</strong> 方法，以便在加载该网站时显示联系人列表。</p>
+
+<p>（代码段 - Web Sites and Virtual Machines using ASP.NET - <em>Ex2 Index Controller Method</em>）</p>
+
+<span class="codelanguage">C#</span><pre><code class="C#"><span style="color:#008000">// GET: /Contact/</span>
+<span style="color:#0000FF">public</span> ActionResult Index() {
+     <span style="color:#0000FF">return</span> <span style="color:#0000FF">this</span>.RedirectToActionPermanent(<span style="color:#8B0000">&quot;List&quot;</span>); }
+</code></pre></li>
+<li><p>最后，您将配置<strong>连接字符串</strong>，它将提供有关您的 SQL Server 和数据库的<strong>实体框架</strong>信息。为此，请打开 <strong>Web.config</strong> 文件，找到 <strong>configuration</strong> 部分的以下代码。将 <strong>{yourServerAdress}</strong> 标记替换为您的 SQL Server 虚拟机公用 URL，<strong>{yourPort}</strong> 标记替换为分配给虚拟机公用端点的端口号，<strong>{username}</strong> 和 <strong>{password}</strong> 标记替换为在练习 1 中创建的数据库用户的相应数据。</p>
+
+<!-- mark:3 -->
+
+<span class="codelanguage">XML</span><pre><code class="XML"><span style="color:#0000FF">&lt;</span><span style="color:#800000">connectionStrings</span><span style="color:#0000FF">&gt;</span>    
+<span style="color:#008000">&lt;!-- SQL Azure Connection String --&gt;</span>
+<strong class="markLine">    <span style="color:#0000FF">&lt;</span><span style="color:#800000">add</span> <span style="color:#FF0000">name</span>=<span style="color:#0000FF">&quot;ContactManagerDb&quot;</span> <span style="color:#FF0000">connectionString</span>=<span style="color:#0000FF">&quot;Data Source={yourServerAdress},{yourPort};Initial Catalog=ContactManagerDb;User Id={username};Password={password};&quot;</span> <span style="color:#FF0000">providerName</span>=<span style="color:#0000FF">&quot;System.Data.SqlClient&quot;</span> <span style="color:#0000FF">/&gt;</span>       </strong>
+<span style="color:#0000FF">&lt;/</span><span style="color:#800000">connectionStrings</span><span style="color:#0000FF">&gt;</span>
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong>可以从 Windows Azure 门户抓取您的服务器地址，方法是转到<strong>“虚拟机”</strong>，单击您的虚拟机名称，然后转到<strong>“仪表板”</strong>。在那里找到<strong>“速览”</strong>下的<strong>“DNS 名称”</strong>，然后复制 URL，但不复制 <em>http://</em> 前缀。</p>
+
+<p><img src="images/sql-server-vm-dashboard.png?raw=true" alt="SQL Server 虚拟机仪表板" title="SQL Server 虚拟机仪表板" />
+</p>
+
+<p><em>SQL Server 虚拟机仪表板</em></p>
+</blockquote></li>
+<li><p>按 <strong>F5</strong> 运行解决方案并验证网站是否工作正常。</p>
+
+<p><img src="images/application-running-locally.png?raw=true" alt="本地运行的应用程序" title="本地运行的应用程序行" />
+</p>
+
+<p><em>本地运行的应用程序</em></p></li>
+</ol>
+
+<p><a name="Ex2Task2"></a></p>
+
+<h4 id="Task_2_-_Publishing_the_Web_Application_using_Visual_Studio">任务 2 - 使用 Visual Studio 发布 Web 应用程序</h4>
+
+<p>在此任务中，您将使用 Windows Azure 网站发布在前一个任务中创建的 ASP.NET MVC 4 应用程序。为此，您将使用 Visual Studio Web 发布通过 Web 部署来部署该 Web 应用程序。</p>
+
+<ol>
+<li><p>转到 <a href="https://manage.windowsazure.com">Windows Azure 管理门户</a>并使用您的 Windows 帐户凭据登录。</p>
+
+<p><img src="images/login.png?raw=true" alt="登录到 Windows Azure 门户" title="登录到 Windows Azure 门户" />
+</p>
+
+<p><em>登录到 Windows Azure 管理门户</em></p></li>
+<li><p>在命令栏上，单击<strong>“新建”</strong>。单击<strong>“网站”</strong>，然后单击<strong>“快速创建”</strong>。为新网站提供一个可用 URL（例如 <em>contactmanager</em>），然后单击<strong>“创建网站”</strong>。您可以保留<strong>“区域”</strong>的默认设置。</p>
+<blockquote>
+<p><strong>注意：</strong>Windows Azure 网站是一个宿主平台，您可以在该平台上控制和管理云中运行的 Web 应用程序。通过“快速创建”选项，可以从门户外将已完成的 Web 应用程序部署到 Windows Azure 网站。它不包含用于设置数据库的步骤。</p>
+</blockquote>
+<p><img src="images/create-website.png?raw=true" alt="使用“快速创建”创建新网站" title="使用“快速创建”创建新网站" />
+</p>
+
+<p><em>使用“快速创建”创建新网站</em></p>
+<blockquote>
+<p><strong>注意：</strong><strong>“快速创建”</strong>选项并不提供用来设置数据库的选项。在此实验中也不需要设置数据库，因为您使用以 SQL Server 2012 作为数据库服务器的虚拟机。</p>
+</blockquote></li>
+<li><p>等待新网站创建完成。在<strong>“网站”</strong>列表中，单击“名称”列下的新网站以访问<strong>“仪表板”</strong>。</p></li>
+<li><p>在<strong>“仪表板”</strong>页的<strong>“速览”</strong>部分下，单击<strong>“下载发布配置文件”</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong>对于启用的每种发布方法，<em>发布配置文件</em> 包含将 Web 应用程序发布到 Windows Azure 网站所需的全部信息。发布配置文件包含有启用了发布方法的每个端点的 URL，以及连接到这些端点和进行身份验证所需的用户凭据和数据库字符串。<strong>Microsoft Visual Studio</strong> 支持读取发布配置文件以便自动配置这些程序，从而将 Web 应用程序发布到 Windows Azure 网站。</p>
+</blockquote>
+<p><img src="images/download-publish-profile.png?raw=true" alt="下载网站发布配置文件" title="下载网站发布配置文件" />
+</p>
+
+<p><em>下载网站发布配置文件</em></p></li>
+<li><p>将发布配置文件下载到一个已知位置。在本练习稍后部分，您将了解如何使用此文件将 Web 应用程序从 Visual Studio 发布到 Windows Azure 网站。</p>
+
+<p><img src="images/save-link.png?raw=true" alt="保存发布配置文件" title="保存发布配置文件" />
+</p>
+
+<p><em>保存发布配置文件</em></p></li>
+<li><p>打开在上一任务中得到的 MVC 4 应用程序（如果尚未打开）。在<strong>解决方案资源管理器</strong>中，右键单击该网站项目，然后选择<strong>“发布”</strong>。</p>
+
+<p><img src="images/publishing-the-web-site.png?raw=true" alt="发布网站" title="发布网站" />
+</p>
+
+<p><em>发布网站</em></p></li>
+<li><p>在<strong>“配置文件”</strong>页中，单击<strong>“导入”</strong>，然后选择您之前在本练习中下载的配置文件设置文件。单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/importing-the-profile-settings-file.png?raw=true" alt="导入配置文件设置文件" title="导入配置文件设置文件" />
+</p>
+
+<p><em>导入配置文件设置文件</em></p></li>
+<li><p>在<strong>“连接”</strong>页中，保留导入的值，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/setting-up-web-deploy-connection.png?raw=true" alt="设置 Web 部署连接" title="设置 Web 部署连接" />
+</p>
+
+<p><em>设置 Web 部署连接</em></p></li>
+<li><p>在<strong>“设置”</strong>页中，保留默认值，然后单击<strong>“下一步”</strong>。</p>
+
+<p><img src="images/setting-up-additional-settings.png?raw=true" alt="设置其他设置" title="设置其他设置" />
+</p>
+
+<p><em>设置其他设置</em></p></li>
+<li><p>在<strong>“发布”</strong>页上，单击<strong>“发布”</strong>开始应用程序发布过程。</p>
+
+<p><img src="images/publish-web-application-preview-page.png?raw=true" alt="发布 Web 应用程序预览页" title="发布 Web 应用程序预览页" />
+</p>
+
+<p><em>发布 Web 应用程序预览页</em></p>
+<blockquote>
+<p><strong>注意：</strong>如果这是您首次部署该网站，则系统将提示您接受证书。在消息出现后，单击<strong>“接受”</strong>。</p>
+
+<p><img src="images/publish-web-application-certificate.png?raw=true" alt="发布 Web 应用程序证书" title="发布 Web 应用程序证书" />
+</p>
+</blockquote></li>
+<li><p>发布过程结束后，切换回 Windows Azure 管理门户。</p></li>
+<li><p>在网站的<strong>“仪表板”</strong>页中，单击<strong>“速览”</strong>部分下的<strong>“站点 URL”</strong>链接以便浏览到您已发布的网站。</p>
+
+<p><img src="images/opening-the-published-site.png?raw=true" alt="打开已发布网站" title="打开已发布网站" />
+</p>
+
+<p><em>打开已发布网站</em></p></li>
+<li><p>确认该网站已在 Windows Azure 中成功发布，然后关闭浏览器。</p>
+
+<p><img src="images/application-published-to-windows-azure.png?raw=true" alt="发布到 Windows Azure 的应用程序" title="发布到 Windows Azure 的应用程序" />
+</p>
+
+<p><em>发布到 Windows Azure 的应用程序</em></p></li>
+</ol>
+
+<hr />
+
+<p><a name="Summary"></a></p>
+
+<h2 id="Summary">小结</h2>
+
+<p>在此实验中，您学习了如何创建与 Windows Azure 中运行的虚拟机连接的 ASP.NET Web 应用程序。首先，您使用 Windows Azure 管理门户创建了一台安装了 SQL Server 2012 的虚拟机，并将它配置为允许进行外部连接。然后，使用实体框架创建了一个简单的 ASP.NET MVC 4 Web 应用程序来访问 SQL Server 虚拟机中的数据库。该 Web 应用程序利用 SQL Server 2012 中的全文搜索功能搜索联系人数据。最后，您使用 Visual Studio 将该应用程序部署到 Windows Azure 网站完成了此实验。</p> </span>
+		</div>
+	<br/>
+	<p><a href="#top">返回页首</a></p>
+
+
+				</div>
+			</section>
+			<footer>
+				<div class="footer-sitemap" style="border-top:0"></div>
+				<div class="footer-bottom">
+					<ul>
+						<li class="footer-copyright"><a href="http://www.microsoft.com"><img alt="microsoft" src="images/microsoft.png" /></a></li>					
+												<li><a href="https://github.com/WindowsAzure-TrainingKit/HOL-ASPNETAzureWebSitesVMSQL/issues" target="_new">记录问题</a></li>
+												<li><a href="mailto:azcfeed@microsoft.com?subject=Windows Azure Training Kit">联系我们</a></li>
+						<li><a href="EULA.htm">使用条款</a></li>
+						<li><a href=".\">浏览内容</a></li>
+						<li>&copy; 2012 Microsoft</li>
+					</ul>
+				</div>
+			</footer>
+			</div>
+        </div>
+    </div>
+</body>
+</html>
+
